@@ -36,12 +36,12 @@ class GetImageFromCamera(QObject):
     def __GetImageFromCamera(self):
         global frame
         global FaceLocationInImage
-        global NumberFrameNotFace
+        # global NumberFrameNotFace
         # while True:
         ret, frame = self.cameraObj.read()
-        if(NumberFrameNotFace == 2):
-            # self.SignalHideCamera.emit()
-            return
+        # if(NumberFrameNotFace == 2):
+        #     # self.SignalHideCamera.emit()
+        #     return
         if(not ret):
             self.CanNotConnectCamera.emit()
             time.sleep(1000)
@@ -132,18 +132,18 @@ class FaceRecognition(QObject):
     def FaceTracking(self):
         global frame
         global FaceLocationInImage
-        global NumberFrameNotFace
+        # global NumberFrameNotFace
         if(type(frame) is bool):
             return
         localFrame = frame
         # self.imageDetectFace = localFrame[:, :, ::-1]
         FaceLocationInImage = self.__DetectFaceInImage(localFrame)
 
-        if(type(FaceLocationInImage) is bool):
-            if(NumberFrameNotFace < 2):
-                NumberFrameNotFace += 1
-            return
-        NumberFrameNotFace = 0
+        # if(type(FaceLocationInImage) is bool):
+        #     if(NumberFrameNotFace < 2):
+        #         NumberFrameNotFace += 1
+        #     return
+        # NumberFrameNotFace = 0
         
         # self.FaceRecognition()
 

@@ -252,6 +252,7 @@ class SocketClient(QObject):
     
     def __ConvertJsonStringToByteArr(self, jsonString):
         jsonCharArr = []
+        jsonString = jsonString + "\n"
         for i in range(0, len(jsonString)):
             jsonCharArr.append(ord(jsonString[i]))
         return bytes(jsonCharArr)
@@ -262,7 +263,7 @@ class SocketClient(QObject):
     def SendResultsFaceRecognize(self, ID ,confirmTrueOrFalse, nameOfPhotoTaked):
         resultFrame = self.__ConvertJsonStringToByteArr(self.__BuildResultToSend(ID))
         self.__SendDataViaSocket(bytes(resultFrame))
-        self.ftpObj.SendImageToFTPserver(nameOfPhotoTaked, FTP_FILE_PATH_TO_UPLOAD + str(ID) + ".jpg")
+        self.ftpObj.SendImageToFTPserver(nameOfPhotoTaked, FTP_FILE_PATH_TO_UPLOAD +"/"+ datetime.now().strftime("%Y%m%d") + '/' + str(ID)+"_"+datetime.now().strftime("%H%M%S")+ ".jpg")
 
 #endregion
     

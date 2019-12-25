@@ -6,14 +6,17 @@ from   PyQt5.QtGui      import QPixmap,QColor
 from   PyQt5            import QtCore, QtGui
 import time
 
-
 Camera_Number = 0
 Camera_Object = cv2.VideoCapture(Camera_Number)
 frame = False
 FaceLocationInImage = False
+NumberFrameNotFace = 0
+
 class GetImageFromCamera(QObject):
     CanNotConnectCamera = pyqtSignal()
     PixmapFromCamera = pyqtSignal(QPixmap)
+    SignalHideCamera = pyqtSignal()
+
     def __init__(self, frameCut = ((180, 460), (0, 480)), size = (300, 300), scale = 0.4, time = 50, labelObject = ""):
         super().__init__()
         self.cameraObj = Camera_Object
@@ -33,8 +36,12 @@ class GetImageFromCamera(QObject):
     def __GetImageFromCamera(self):
         global frame
         global FaceLocationInImage
+        global NumberFrameNotFace
         # while True:
         ret, frame = self.cameraObj.read()
+        if(NumberFrameNotFace == 2):
+            # self.SignalHideCamera.emit()
+            return
         if(not ret):
             self.CanNotConnectCamera.emit()
             time.sleep(1000)
@@ -83,7 +90,6 @@ class FaceRecognition(QObject):
         self.cameraObj = Camera_Object 
         self.timerForFaceRecognition = QTimer(self)
         self.timerForFaceRecognition.timeout.connect(self.__StartThreadFaceRecognize)
-        self.faceStill = False
         self.imageDetectFace = ""
         self.FRthreshold = 0.4
         self.timerFaceTracking = QTimer(self)
@@ -114,7 +120,7 @@ class FaceRecognition(QObject):
         threadFaceRecognize = threading.Thread(target = self.FaceRecognition, args=(), daemon = True)
         threadFaceRecognize.start()
 
-
+    
     def __DetectFaceInImage(self, image):
         faceLocInImage = face_recognition.face_locations(image)
         if(len(faceLocInImage) == 0):
@@ -126,6 +132,7 @@ class FaceRecognition(QObject):
     def FaceTracking(self):
         global frame
         global FaceLocationInImage
+        global NumberFrameNotFace
         if(type(frame) is bool):
             return
         localFrame = frame
@@ -133,9 +140,11 @@ class FaceRecognition(QObject):
         FaceLocationInImage = self.__DetectFaceInImage(localFrame)
 
         if(type(FaceLocationInImage) is bool):
-            self.faceStill = False
-        elif(len(FaceLocationInImage) != 1):
-            self.faceStill = False
+            if(NumberFrameNotFace < 2):
+                NumberFrameNotFace += 1
+            return
+        NumberFrameNotFace = 0
+        
         # self.FaceRecognition()
 
     def __FaceRecognition(self, image):
@@ -159,7 +168,6 @@ class FaceRecognition(QObject):
                     ret, jpgData = cv2.imencode(".jpg", image)
                     jpgData = jpgData.tobytes()
                     self.StudentRecognized.emit(student, jpgData)
-                    self.faceStill = True
                     print(i)
                     return True
         
@@ -167,9 +175,6 @@ class FaceRecognition(QObject):
         
     def FaceRecognition(self):
         global frame
-        
-        if(self.faceStill):
-            return
         localFrame = frame
         #rgb_small_frame = localFrame[:, :, ::-1]
         self.__FaceRecognition(localFrame)

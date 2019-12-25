@@ -53,17 +53,18 @@ def ConvertStringToByteArray(string):
 # x.extend([3,4,5])
 # print(x)
 
-dictData = {
-    "cardNumber":2,
-    "time":datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
-    "imageLength":0
-}
-dictToSend = {
-    "success":"true",
-    "code":2,
-    "massage":"",
-    "checksum":0,
-    "data":dictData
-}
-print(json.dumps(dictToSend))
+# dictData = {
+#     "cardNumber":2,
+#     "time":datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
+#     "imageLength":0
+# }
+# dictToSend = {
+#     "success":"true",
+#     "code":2,
+#     "massage":"",
+#     "checksum":0,
+#     "data":dictData
+# }
+# print(json.dumps(dictToSend))
 
+print(datetime.now().strftime("%d_%m_%Y"))

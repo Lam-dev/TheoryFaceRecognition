@@ -19,7 +19,7 @@ import       os
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-
+        self.HideCameraPixmap = QtGui.QPixmap("icon/imageFaceRecognition.png")
         self.mainScreenObj = MainScreen(self)
         self.cameraObj = GetImageFromCamera(labelObject= self.mainScreenObj.label_showCamera)
         self.lstStudent = GetDataFromDatabase().GetListStudent()
@@ -41,6 +41,7 @@ class MainWindow(QMainWindow):
         self.cameraObj.PixmapFromCamera.connect(self.__ShowImageFromCamera)
         self.cameraObj.CanNotConnectCamera.connect(self.mainScreenObj.ShowCanNotConnectCamera)
         self.cameraObj.StartReadImage()
+        self.cameraObj.SignalHideCamera.connect(self.__HideCamera)
 
         self.faceRecognitionObj.StudentRecognized.connect(self.__RecognizedStudent)
         self.faceRecognitionObj.StudentNotRecognized.connect(self.__NotRecognized)
@@ -58,8 +59,21 @@ class MainWindow(QMainWindow):
         self.socketObject.SignalWaitForUpdateDatabase.connect(self.WaitForUpdateDatabase)
         self.socketObject.SignalUpdateDatabaseSuccess.connect(self.UpdateDatabaseSuccess)
         self.socketObject.SignalNumberStudentParsed.connect(self.NumberStudentParsed)
-    
+
 #endregion
+        self.timerReopenReadCam = QTimer(self)
+        self.timerReopenReadCam.timeout.connect(self.__ReopenReadCamera)
+
+    def __ReopenReadCamera(self):
+        self.mainScreenObj.ClearStudentRecognizedInfomation()
+        self.cameraObj.StartReadImage()
+        self.faceRecognitionObj.StartFaceRecognize()
+        self.faceRecognitionObj.StartFaceTracking()
+        self.timerReopenReadCam.stop()
+    
+
+    def __HideCamera(self):
+        self.mainScreenObj.label_showCamera.setPixmap(self.HideCameraPixmap)
 
     def __ModifyImageQuality(self, quality):
         print(quality)
@@ -78,7 +92,7 @@ class MainWindow(QMainWindow):
         self.lstStudent.extend(listStudents)
         self.faceRecognitionObj.StartFaceRecognize()
         self.cameraObj.StartReadImage()
-        self.mainScreenObj.HideUpdateScreen()
+        self.mainScreenObj.fateScreen()
 
     def WaitForUpdateDatabase(self, filePath):
         self.faceRecognitionObj.StopFaceRecognize()
@@ -117,6 +131,12 @@ class MainWindow(QMainWindow):
                 return
                 
     def __RecognizedStudent(self, studentObj, faceImageJpgData):
+        self.cameraObj.StopReadImage()
+        self.faceRecognitionObj.StopFaceTracking()
+        self.faceRecognitionObj.StopFaceRecognize()
+        self.__HideCamera()
+        self.timerReopenReadCam.start(1500)
+
         if(self.settingFindOrConfirmStudent == "C"):
             # self.soundObj.ThreadPlayBipBipBip()
             # self.soundObj.ThreadPlayMoiTSlenXe()

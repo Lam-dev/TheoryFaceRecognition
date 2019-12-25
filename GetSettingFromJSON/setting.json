@@ -1,1 +1,1 @@
-{"FTPserverPort": 21, "FTPaccount": "etm", "FTPserverIP": "192.168.1.107", "SocketServerIP": "192.168.1.22", "ServerImageDir": "files/ImageUploadFile/", "FTPpassword": "1", "SocketServerPort": 8000}
+{"FTPserverPort": 21, "FTPaccount": "etm", "FTPserverIP": "192.168.1.107", "SocketServerIP": "192.168.1.15", "ServerImageDir": "/files/AnhThiSinh", "FTPpassword": "1", "SocketServerPort": 2019}

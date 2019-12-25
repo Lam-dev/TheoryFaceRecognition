@@ -47,7 +47,7 @@ class FTPclient(QObject):
             self.ftpObj.login(FTP_ACCOUNT, FTP_PASSWORD)
             return True
 
-        except:
+        except NameError:
             return False
 
     def GetListStudentImage(self, fileDir):

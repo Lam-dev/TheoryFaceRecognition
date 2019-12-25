@@ -38,7 +38,7 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         self.pixmapOkIcon = QtGui.QPixmap("icon/iconOk.png")
         self.pixmapFailIcon = QtGui.QPixmap("icon/iconFail.png")
         self.pixmapWarningIcon = QtGui.QPixmap("icon/iconWarning.png")
-
+        self.pixmapNotRecognized = QtGui.QPixmap("icon/iconImageRepresent.png")
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("icon/iconShutdown.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.pushButton_shutdown.setIcon(icon)
@@ -47,6 +47,7 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         self.label_7.mouseDoubleClickEvent = lambda event: self.__OpenOutdoor()
         self.timerFlickerWarning = QTimer(self)
         self.timerFlickerWarning.timeout.connect(self.__FlickerWarning)
+    
 
     def __OpenOutdoor(self):
         self.outdoorScreenShadow = QtWidgets.QFrame(self.centralWidget)
@@ -98,7 +99,10 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         self.label_forShowName.setText(student.HoVaTen.upper())
         self.label_forShowNumberCard.setText(student.SBD)
         self.label_forShowIdentNumber.setText(student.SoCMTND)
-        
+    
+    def ClearStudentRecognizedInfomation(self):
+        self.label_regisImage.setPixmap(self.pixmapNotRecognized)
+        self.label_forShowName.setText("Chưa nhận được thí sinh")
 
     def SetGeometryForLabelShowCamera(self, cameraWidth, cameraHeight):
         x = (self.frame_containLabelShowCamera.width() - cameraWidth)/2
@@ -139,7 +143,7 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         self.updateScreenObj = UpdateScreen(self.frameUpdateScreen, filePath)
         self.updateSettingShadow.raise_()
         self.updateSettingShadow.show()
-
+    
     def ShowSettingScreen(self):
         self.settingScreenShadow = QtWidgets.QFrame(self.centralWidget)
         self.settingScreenShadow.setGeometry(QtCore.QRect(0, 0, 800, 480))

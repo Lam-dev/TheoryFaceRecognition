@@ -3,7 +3,6 @@ from    PyQt5.QtCore            import pyqtSlot, pyqtSignal,QTimer, QDateTime,Qt
 from    SocketConnect.FTPclient import FTPclient 
 from    CameraAndFaceRecognition.CameraAndFaceRecognition     import GetFaceEncodingFromImage
 from    DatabaseAccess.DatabaseAccess    import *
-from    ParseXML.ParseXML                import ParseXML
 from    GetSettingFromJSON      import GetSetting
 import  json
 from    collections import namedtuple

@@ -10,10 +10,10 @@ from    GetSettingFromJSON    import GetSetting
 import json
 
 
-# SERVER_IP                                           = "192.168.1.254"
-# SERVER_PORT                                         = 6363
-SERVER_IP                                           = GetSetting.GetSetting("--SocketServerIP")
-SERVER_PORT                                         = GetSetting.GetSetting("--SocketServerPort")
+SETTING_DICT                                        = GetSetting.LoadSettingFromFile()
+SERVER_IP                                           = SETTING_DICT["serverIP"]
+SERVER_PORT                                         = int(SETTING_DICT["serverPort"])
+
 
 CODE_RECIPT_DATA_FROM_SERVER = "3"
 CODE_UPLOAD_DATA_TO_SERVER = "2"
@@ -34,12 +34,15 @@ class SocketClient(QObject):
     SignalNumberStudentParsed = pyqtSignal(int, int)
     SignalConnectNewServer = pyqtSignal(dict)
     SignalConnectNewFTP = pyqtSignal(dict)
+    __SignalConnected = pyqtSignal()
 
     def __init__(self):
         super().__init__()
         self.ftpObj = FTPclient()
         self.timerPingPong = QTimer(self)
         self.timerPingPong.timeout.connect(self.__PingPong)
+
+        self.__SignalConnected.connect(self.__ServerConnected)
 
         self.processReciptDataObj = ProcessReciptData()
         self.processReciptDataObj.ShowStudentForConfirm.connect(self.__ShowStudentForConfirmSlot)
@@ -49,18 +52,40 @@ class SocketClient(QObject):
         self.processReciptDataObj.SignalNumberStudentParsed.connect(self.__NumberStudentParsed)
         self.chuaXuLy = b''
 
+        self.TimerWaitForServerConfirm = QTimer(self)
+        self.TimerWaitForServerConfirm.timeout.connect(self.__ThreadCreateConnect)
+        self.TimerWaitForServerConfirm.start(2000)
+
         self.FlagServerConfirmedForConnect = False
         self.FlagServerISconnect = False
         self.clientObj = ""
-        self.TimerWaitForServerConfirm = QTimer(self)
-        self.TimerWaitForServerConfirm.timeout.connect(self.CreateConnect)
-        self.TimerWaitForServerConfirm.start(1000)
+        
         self.ThreadWaitForReciptData()
         self.__TimerSendPingPong = QTimer(self)
         self.__TimerSendPingPong.timeout.connect(self.__SendPingPong)
-        self.__TimerSendPingPong.start(10000)
         self.__SignalRecreateConnect.connect(self.__RecreateConnect)
         self.__FlagSendPingPong = True
+        self.waitingForConnect = False
+    
+    def __ServerConnected(self):
+        try:
+            self.FlagServerISconnect = True
+            self.TimerWaitForServerConfirm.stop()
+            self.ThreadWaitForReciptData()
+            self.timerPingPong.start(30000)
+        except:
+            pass
+
+    def __ThreadCreateConnect(self):
+        if(self.waitingForConnect):
+            return
+        thread = threading.Thread(target=self.CreateConnect, args=(), daemon = True)
+        thread.start()
+
+    def __RecreateConnect(self):
+        self.FlagServerISconnect = False
+        if(not self.TimerWaitForServerConfirm.isActive()):
+            self.TimerWaitForServerConfirm.start(2000)
 
     def ConnectNewServer(self, serverInfoDict):
         global SERVER_IP, SERVER_PORT
@@ -68,6 +93,23 @@ class SocketClient(QObject):
         SERVER_PORT = int(serverInfoDict["serverPort"])
         self.FlagServerISconnect = False
         self.CreateConnect()
+
+    def CreateConnect(self):
+        global SERVER_IP, SERVER_PORT
+        self.waitingForConnect = True
+        try:
+            if(not self.FlagServerISconnect):
+                self.clientObj = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                self.clientObj.connect((SERVER_IP, SERVER_PORT))
+                self.clientObj.send(self.__DungKhungGiaoTiep(MAC_ADDRESS, CLIENT_REQUEST_CONNECT)[0])
+                self.SignalServerConnected.emit()
+                self.__SignalConnected.emit()
+
+        except:
+            self.SignalServerNotConnect.emit()
+            print("khong the ket noi") #test
+            self.FlagServerISconnect = False
+        self.waitingForConnect = False
 
     def __SendPingPong(self):
         if(self.__FlagSendPingPong):
@@ -89,8 +131,9 @@ class SocketClient(QObject):
         self.SignalWaitForUpdateDatabase.emit(remoteFilePath)
 
     def __RecreateConnect(self):
+        self.FlagServerISconnect = False
         if(not self.TimerWaitForServerConfirm.isActive()):
-            self.TimerWaitForServerConfirm.start(1000)
+            self.TimerWaitForServerConfirm.start(2000)
 
     def __SendDataViaSocket(self, data):
         try:
@@ -115,18 +158,15 @@ class SocketClient(QObject):
                 print(recvData)
                 len(recvData)
                 if(recvData == b''):
-                    while True:
-                        self.FlagServerISconnect = False
-                        if(self.CreateConnect()):
-                            break
-                        time.sleep(1)
+                    self.__SignalRecreateConnect.emit()
+                    return
                 else: 
                     self.__FlagSendPingPong = False
                     self.__PhanTichKhungNhan(recvData)
             
             except:
                 self.__SignalRecreateConnect.emit()
-                time.sleep(0.5)
+                return
                          
     def __PhanTichKhungNhan(self, khungNhan):
         try:
@@ -208,17 +248,32 @@ class SocketClient(QObject):
             self.FlagServerISconnect = False
             return False
 
+    def CreateConnect(self):
+        global SERVER_IP, SERVER_PORT
+        self.waitingForConnect = True
+        try:
+            if(not self.FlagServerISconnect):
+                self.clientObj = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                self.clientObj.connect((SERVER_IP, SERVER_PORT))
+                self.__SendPingPong()
+                self.SignalServerConnected.emit()
+                self.__SignalConnected.emit()
+
+        except:
+            self.SignalServerNotConnect.emit()
+            print("khong the ket noi") #test
+            self.FlagServerISconnect = False
+        self.waitingForConnect = False
+
+
     def __ServerConfirmedConnect(self):
         self.FlagServerConfirmedForConnect = True
         self.TimerWaitForServerConfirm.stop()
 
 
     def __PingPong(self):
-        try:
             framePing = self.__ConvertJsonStringToByteArr(self.__BuildFramePingPong())
             self.clientObj.sendall(framePing)
-        except:
-            self.__SignalRecreateConnect.emit()
 
     def __BuildFramePingPong(self):
         dictData = {

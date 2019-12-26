@@ -15,9 +15,9 @@ class KeyBoard(Ui_ContainKeyBoard, QObject):
         self.ShowKeyBoard()
         self.widgetTakeInput = widgetTakeInput
         self.stringEditting = self.widgetTakeInput.text()
-        # icon = QtGui.QIcon()
-        # icon.addPixmap(QtGui.QPixmap("icon/iconVietNamese.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
-        # self.pushButton_chooseLanguge.setIcon(icon)
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap("icon/iconVietNamese.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
+        self.pushButton_chooseLanguge.setIcon(icon)
         ##################for cursor alway focus to inputwidget#############
         self.pushButton_a.setFocusPolicy(Qt.NoFocus)
         self.pushButton_b.setFocusPolicy(Qt.NoFocus)
@@ -54,6 +54,21 @@ class KeyBoard(Ui_ContainKeyBoard, QObject):
         self.pushButton_enter1.setFocusPolicy(Qt.NoFocus)
         self.pushButton_enter1.setFocusPolicy(Qt.NoFocus)
         self.pushButton_chooseLanguge.setFocusPolicy(Qt.NoFocus)
+
+        self.pushButton_dot.setFocusPolicy(Qt.NoFocus)
+        self.pushButton_1.setFocusPolicy(Qt.NoFocus)
+        self.pushButton_2.setFocusPolicy(Qt.NoFocus)
+        self.pushButton_3.setFocusPolicy(Qt.NoFocus)
+        self.pushButton_4.setFocusPolicy(Qt.NoFocus)
+        self.pushButton_5.setFocusPolicy(Qt.NoFocus)
+        self.pushButton_6.setFocusPolicy(Qt.NoFocus)
+        self.pushButton_7.setFocusPolicy(Qt.NoFocus)
+        self.pushButton_8.setFocusPolicy(Qt.NoFocus)
+        self.pushButton_9.setFocusPolicy(Qt.NoFocus)
+        self.pushButton_0.setFocusPolicy(Qt.NoFocus)
+        self.pushButton_xo.setFocusPolicy(Qt.NoFocus)
+        self.pushButton_acong.setFocusPolicy(Qt.NoFocus)
+
         ####################################################################
 
         self.keyboardObj = Controller()
@@ -84,7 +99,19 @@ class KeyBoard(Ui_ContainKeyBoard, QObject):
         self.pushButton_y.clicked.connect(lambda:self.__ButtonAnphabetClick("y", self.pushButton_y))
         self.pushButton_z.clicked.connect(lambda:self.__ButtonAnphabetClick("z", self.pushButton_z))
         self.pushButton_dot.clicked.connect(lambda:self.__ButtonAnphabetClick(".", self.pushButton_dot))
-  
+        self.pushButton_1.clicked.connect(lambda:self.__ButtonAnphabetClick("1", self.pushButton_1))
+        self.pushButton_2.clicked.connect(lambda:self.__ButtonAnphabetClick("2", self.pushButton_2))
+        self.pushButton_3.clicked.connect(lambda:self.__ButtonAnphabetClick("3", self.pushButton_3))
+        self.pushButton_4.clicked.connect(lambda:self.__ButtonAnphabetClick("4", self.pushButton_4))
+        self.pushButton_5.clicked.connect(lambda:self.__ButtonAnphabetClick("5", self.pushButton_5))
+        self.pushButton_6.clicked.connect(lambda:self.__ButtonAnphabetClick("6", self.pushButton_6))
+        self.pushButton_7.clicked.connect(lambda:self.__ButtonAnphabetClick("7", self.pushButton_7))
+        self.pushButton_8.clicked.connect(lambda:self.__ButtonAnphabetClick("8", self.pushButton_8))
+        self.pushButton_9.clicked.connect(lambda:self.__ButtonAnphabetClick("9", self.pushButton_9))
+        self.pushButton_0.clicked.connect(lambda:self.__ButtonAnphabetClick("0", self.pushButton_0))
+        self.pushButton_xo.clicked.connect(lambda:self.__ButtonAnphabetClick('/', self.pushButton_xo))
+        self.pushButton_acong.clicked.connect(lambda:self.__ButtonAnphabetClick("@", self.pushButton_acong))
+
         self.pushButton_close.clicked.connect(lambda:self.__ButtonControlClick("close", self.pushButton_close))
         self.pushButton_backSpace.clicked.connect(lambda:self.__ButtonControlClick("backspace", self.pushButton_backSpace))
         self.pushButton_shift.clicked.connect(lambda:self.__ButtonControlClick("shift",  self.pushButton_shift))

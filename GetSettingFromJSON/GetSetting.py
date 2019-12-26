@@ -18,6 +18,11 @@ def GetSetting(arg):
     if(arg == "--SocketServerPort"):
         return setting["SocketServerPort"]
 
+def LoadSettingFromFile():
+    with open('GetSettingFromJSON/systemSetting.json') as json_file:
+        setting = json.load(json_file)
+    return setting
+
 def UpdateServerImageDir(dir):
     with open('GetSettingFromJSON/setting.json') as json_file:
         setting = json.load(json_file)

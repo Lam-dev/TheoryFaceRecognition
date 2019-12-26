@@ -33,6 +33,7 @@ class SystemSettingContent(Ui_widget_containSettingContent, QObject):
         self.comboBox_forChooserImageQuality.currentIndexChanged.connect(self.ChangedImageQuality)
         self.checkFailPixmap = QtGui.QPixmap("icon/iconCheckFail.png")
         self.checkOKpixmap = QtGui.QPixmap("icon/iconCheckOk.png")
+        self.label_iconSocketStatus.setPixmap(QtGui.QPixmap("icon/iconConnected.png"))
         self.lineEdit_forInputIP.textChanged.connect(lambda:self.__CheckIPrule(self.lineEdit_forInputIP.text(), self.label_iconCheckServerIP))
         self.lineEdit_forInputPort.textChanged.connect(lambda:self.__CheckPortRule(self.lineEdit_forInputPort.text(), self.label_iconCheckServerPort))
         self.lineEdit_forInputAccount.textChanged.connect(lambda:self.__CheckAccount(self.lineEdit_forInputAccount.text(), self.label_iconCheckServerAccount))
@@ -42,10 +43,11 @@ class SystemSettingContent(Ui_widget_containSettingContent, QObject):
         self.lineEdit_forInputFTPaccount.textChanged.connect(lambda:self.__CheckAccount(self.lineEdit_forInputFTPaccount.text(), self.label_iconCheckFTPaccount))
         self.lineEdit_forInputFPTpassword.textChanged.connect(lambda:self.__CheckPassword(self.lineEdit_forInputFPTpassword.text(), self.label_iconCheckFTPpassword))
         self.pushButton_connectNewServer.clicked.connect(self.__ConnectNewServer)
-        self.pushButton_connectNewFTP.clicked.connect(self.__ConnectNewServer)
+        self.pushButton_connectNewFTP.clicked.connect(self.__ConnectNewFTPserver)
         self.GetAndShowSetting()
-
+        
     def __ConnectNewServer(self):
+        
         serverInfoDict  ={
             "serverIP"     : self.lineEdit_forInputIP.text(),
             "serverPort"   : self.lineEdit_forInputPort.text(),
@@ -55,13 +57,14 @@ class SystemSettingContent(Ui_widget_containSettingContent, QObject):
         self.SignalConnectNewServer.emit(serverInfoDict)
 
     def __ConnectNewFTPserver(self):
+        
         FTPserverDict = {
             "ftpIP" : self.lineEdit_forInputFTPIP.text(),
             "ftpPort" : self.lineEdit_forInputFTPport.text(),
             "ftpAccount" : self.lineEdit_forInputFTPaccount.text(),
             "ftpPassword" : self.lineEdit_forInputFPTpassword.text()
         }
-        self.SignalConncetNewFTPserver.emit(FTPserverDict)
+        self.SignalConnectNewFTPserver.emit(FTPserverDict)
 
     def GetAndShowSetting(self):
         settingDict = GetSetting.GetSystemSetting()

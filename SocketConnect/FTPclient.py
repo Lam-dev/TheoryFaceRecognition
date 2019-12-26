@@ -26,10 +26,12 @@ from   GetSettingFromJSON       import GetSetting
 # for f in files:
 #     print(f)
 
-FTP_IP       =  GetSetting.GetSetting("--FTPserverIP")
-FTP_PORT     =  GetSetting.GetSetting("--FTPserverPort")
-FTP_ACCOUNT  =  GetSetting.GetSetting("--FTPaccount")
-FTP_PASSWORD =  GetSetting.GetSetting("--FTPpassword")
+SETTING_DICT = GetSetting.LoadSettingFromFile()
+FTP_IP       =  SETTING_DICT["ftpIP"]
+FTP_PORT     =  SETTING_DICT["ftpPort"]
+FTP_ACCOUNT  =  SETTING_DICT["ftpAccount"]
+FTP_PASSWORD =  SETTING_DICT["ftpPassword"]
+
 LOCAL_PATH_CONTAIN_DATA_UPDATE = "DataUpdate/"
 FTP_SERVER_DOWLOAD_IMAGE_FILE_PATH = "files/TS/"
 
@@ -47,8 +49,17 @@ class FTPclient(QObject):
             self.ftpObj.login(FTP_ACCOUNT, FTP_PASSWORD)
             return True
 
-        except NameError:
+        except:
             return False
+
+    def ConnectNewFTPserver(self, inforDict):
+        global FTP_IP, FTP_PORT, FTP_ACCOUNT, FTP_PASSWORD
+        FTP_IP = inforDict["ftpIP"]
+        FTP_PORT = int(inforDict["ftpPort"])
+        FTP_ACCOUNT = inforDict["ftpAccount"]
+        FTP_PASSWORD  = inforDict["ftpPassword"]
+        return self.__CreateConnect()
+
 
     def GetListStudentImage(self, fileDir):
         for i in range(0, 3):

@@ -7,6 +7,7 @@ import      io
 from    UpdateScreen.UpdateScreen  import UpdateScreen
 from    Outdoor.OutDoor          import OutDoor
 from    SettingScreen.SettingScreen   import SettingScreen
+from    KeyBoard.KeyBoard        import KeyBoard
 
 class MainScreen(QObject, Ui_Frame_MainScreen):
     SignalGoToDesktop = pyqtSignal()
@@ -15,7 +16,7 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
     SignalModifyImageQuality = pyqtSignal(int)
     SignalConnectNewServer = pyqtSignal(dict)
     SignalConnectNewFTPserver = pyqtSignal(dict)
-
+    SignalSettingScreenHiden = pyqtSignal()
     def __init__(self, MainWindow):
         QObject.__init__(self)
         Ui_Frame_MainScreen.__init__(self)
@@ -30,6 +31,7 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         self.centralWidget.setGeometry(QtCore.QRect(0, 0, 800, 480))
 
         self.centralFrame = QtWidgets.QFrame(self.centralWidget)
+        self.__keyBoardOpened = False
         
         self.setupUi(self.centralFrame)
         # self.label_logoEcotek.setPixmap(QtGui.QPixmap("icon/logo_.png"))
@@ -69,10 +71,28 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
 
     def ShowNotConnect(self):
         self.label_showConnectOrDisconnect.setStyleSheet("background-color: rgb(170, 0, 0);")
+        self.FlagSocketConnected = False
+        try:
+            self.settingScreenObj.ShowConnectStatusToSettingScreen("Đang kết nối ...", False)
+        except:
+            pass
 
     def ShowConnected(self):
+        self.FlagSocketConnected = True
+        try:
+            self.settingScreenObj.ShowConnectStatusToSettingScreen("Đã kết nối", True)
+        except:
+            pass
         self.label_showConnectOrDisconnect.setStyleSheet("background-color: rgb(0, 170, 0);")
-    
+
+    def ShowFTPserverConnectAvailabel(self, connectAvailable):
+        try:
+            if(connectAvailable):
+                self.settingScreenObj.ShowConnectFTPserverStatusToSettingScreen("Máy chủ đang hoạt động", True)
+            else:
+                self.settingScreenObj.ShowConnectFTPserverStatusToSettingScreen("Máy chủ không hoạt động", False)
+        except:
+            pass
 
     def ShowCanNotConnectCamera(self):
         self.label_showCamera.setPixmap(self.pixmapNoCamera)
@@ -148,16 +168,40 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         self.settingScreenShadow = QtWidgets.QFrame(self.centralWidget)
         self.settingScreenShadow.setGeometry(QtCore.QRect(0, 0, 800, 480))
         self.settingScreenShadow.setStyleSheet("background-color: rgba(0, 0, 0, 100);")
+        self.settingScreenShadow.mousePressEvent = lambda event: self.__HideSettingScreen()
         self.frameContainUpdateScreen = QtWidgets.QFrame(self.settingScreenShadow)
+        self.frameContainUpdateScreen.mousePressEvent = lambda event: self.__EventDontUse()
         self.settingScreenObj = SettingScreen(self.frameContainUpdateScreen)
         self.settingScreenObj.SignalModifyFaceMark.connect(self.__ModifyFaceMark)
         self.settingScreenObj.SignalModifyFRthreshold.connect(self.__ModifyFRthreadhold)
         self.settingScreenObj.SignalModifyImageQuality.connect(self.__SignalModifyImageQuality)
-        self.settingScreenObj.SignalConnectNewServer.connect(self.SignalConnectNewServer.emit)
+        self.settingScreenObj.RequestOpenKeyBoard.connect(self.__ShowKeyBoard)
         self.settingScreenObj.SignalConnectNewFTPserver.connect(self.SignalConnectNewFTPserver.emit)
-
+        self.settingScreenObj.SignalConnectNewServer.connect(self.SignalConnectNewServer.emit)
         self.settingScreenShadow.show()
         self.settingScreenShadow.raise_()
+
+    def __EventDontUse(self):
+        pass
+
+    def __ShowKeyBoard(self, widgetTakeInput):
+        if(not self.__keyBoardOpened):
+            self.frameContainKeyBoard = QtWidgets.QFrame(self.centralWidget)
+            self.frameContainKeyBoard.setGeometry(0, 0, 480, 220)
+            self.keyBoardObject = KeyBoard(widgetTakeInput, self.frameContainKeyBoard)
+            self.keyBoardObject.CloseKeyBoardSignal.connect(self.__CloseKeyBoard)
+            self.__keyBoardOpened = True
+
+    def __CloseKeyBoard(self):
+        self.frameContainKeyBoard.deleteLater()
+        self.keyBoardObject.deleteLater()
+        self.__keyBoardOpened = False
+
+    def __HideSettingScreen(self):
+        self.settingScreenShadow.hide()
+        self.settingScreenShadow.deleteLater()
+        self.settingScreenObj.deleteLater()
+        self.SignalSettingScreenHiden.emit()
 
     def __ModifyFaceMark(self, mark):
         self.SignalModifyFaceMark.emit(mark)

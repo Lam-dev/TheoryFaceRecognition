@@ -7,6 +7,7 @@ from SettingScreen.ScreenSettingContent   import ScreenSettingContent
 from SettingScreen.SystemSettingContent   import SystemSettingContent
 from SettingScreen.SoundSettingContent    import SoundSettingContent
 from KeyBoard               import KeyBoard
+
 class SettingScreen(Ui_frame_settingScreen, QObject):
     RequestOpenDatabaseScreen = pyqtSignal()
     RequestOpenKeyBoard = pyqtSignal(object)
@@ -15,7 +16,7 @@ class SettingScreen(Ui_frame_settingScreen, QObject):
     SignalModifyImageQuality = pyqtSignal(int)
     SignalConnectNewServer = pyqtSignal(dict)
     SignalConnectNewFTPserver = pyqtSignal(dict)
-
+    
     def __init__(self, Frame):
         
         Ui_frame_settingScreen.__init__(self)
@@ -30,6 +31,10 @@ class SettingScreen(Ui_frame_settingScreen, QObject):
         self.ScrollArea.setGeometry(0, 0, 440, 440)
         self.frameContainSettingScreen  = Frame
         self.keyboardIsShow = False
+        
+        self.pixmapConnected = QtGui.QPixmap("icon/iconConnected.png")
+        self.pixmapWaitForConnect = QtGui.QPixmap("icon/iconWaitForConnect.png")
+
         self.lb_textScreenSetting.enterEvent = lambda event: self.MouseEnterItems(self.lb_textScreenSetting)
         self.lb_iconScreenSetting.enterEvent = lambda event: self.MouseEnterItems(self.lb_textScreenSetting)
         self.lb_textSoundSetting.enterEvent = lambda event: self.MouseEnterItems(self.lb_textSoundSetting)
@@ -69,15 +74,25 @@ class SettingScreen(Ui_frame_settingScreen, QObject):
         self.lb_iconSystemSetting.setPixmap(QtGui.QPixmap("icon/iconSystem.png"))
         self.content = False
         self.ChooseScreenSetting(1)
+        self.settingNumber = 1
+    
+    def ShowConnectFTPserverStatusToSettingScreen(self, statusStr, connectAvailalbe):
+        if(self.settingNumber == 3):
+            self.content.label_showFTPconnectStatus.setText(statusStr)
+            if(connectAvailalbe):
+                self.content.label_forShowIconFTPstatus.setPixmap(self.pixmapConnected)
+            else:
+                self.content.label_forShowIconFTPstatus.setPixmap(self.pixmapWaitForConnect)
+    
+    def ShowConnectStatusToSettingScreen(self, statusStr, connected):
+        if(self.settingNumber == 3):
+            self.content.label_showSocketConnectStatus.setText(statusStr)
+            if(connected):
+                self.content.label_iconSocketStatus.setPixmap(self.pixmapConnected)
+            else:
+                self.content.label_iconSocketStatus.setPixmap(self.pixmapWaitForConnect)
+
     def __OpenKeyboard(self, widgetTakeInput):
-        # if(self.keyboardIsShow):
-        #     return
-        # frameContainKeyBoard = QtWidgets.QFrame(self.frameContainSettingScreen.parentWidget().parentWidget())
-        # frameContainKeyBoard.setGeometry(0, 480, 800, 480)
-        # keyBoardObj = KeyBoard(widgetTakeInput, frameContainKeyBoard)
-        # keyBoardObj.ShowKeyBoard()
-        # self.keyboardIsShow = True
-        # keyBoardObj.CloseKeyBoardSignal.connect(self.__KeyBoardClosed)
         self.RequestOpenKeyBoard.emit(widgetTakeInput)
 
     def __ChangedFRpoint(self, threadHold):
@@ -99,6 +114,7 @@ class SettingScreen(Ui_frame_settingScreen, QObject):
         sender.setFont(self.noBoldFont)
 
     def ChooseScreenSetting(self, settingNumber):
+        self.settingNumber = settingNumber
         if(type(self.content) is not bool):
             self.content.SaveSetting()
 
@@ -120,11 +136,25 @@ class SettingScreen(Ui_frame_settingScreen, QObject):
             self.content.GetTextFromKeyBoard.connect(self.__OpenKeyboard)
             widgetContent = self.content.GetWidgetContent()
             self.ScrollArea.SetContent(widgetContent)
+            
             self.content.SignalModifyFRpoint.connect(self.__ChangedFRpoint)
             self.content.SignalModifyFaceMark.connect(self.__ChangeImageFaceMark)
             self.content.SignalModifyImageQuality.connect(self.__ChangeImageQuality)
             self.content.SignalConnectNewServer.connect(self.SignalConnectNewServer.emit)
             self.content.SignalConnectNewFTPserver.connect(self.SignalConnectNewFTPserver.emit)
+
+            self.content.lineEdit_forInputIP.mousePressEvent = lambda event:self.__OpenKeyboard(self.content.lineEdit_forInputIP)
+            self.content.lineEdit_forInputPort.mousePressEvent = lambda event:self.__OpenKeyboard(self.content.lineEdit_forInputPort)
+            self.content.lineEdit_forInputAccount.mousePressEvent = lambda event:self.__OpenKeyboard(self.content.lineEdit_forInputAccount)
+            self.content.lineEdit_forInputPassword.mousePressEvent = lambda event:self.__OpenKeyboard(self.content.lineEdit_forInputPassword)
+            self.content.lineEdit_forInputFTPIP.mousePressEvent = lambda event:self.__OpenKeyboard(self.content.lineEdit_forInputFTPIP)
+            self.content.lineEdit_forInputFTPport.mousePressEvent = lambda event:self.__OpenKeyboard(self.content.lineEdit_forInputFTPport)
+            self.content.lineEdit_forInputFTPaccount.mousePressEvent = lambda event:self.__OpenKeyboard(self.content.lineEdit_forInputFTPaccount)
+            self.content.lineEdit_forInputFPTpassword.mousePressEvent = lambda event:self.__OpenKeyboard(self.content.lineEdit_forInputFPTpassword)
+
+            
+            
+            
             # self.ScrollArea.GetTextFromKeyBoard.connect(self.__OpenKeyboard())
       
         elif(settingNumber == 4):
@@ -136,8 +166,7 @@ class SettingScreen(Ui_frame_settingScreen, QObject):
         else: 
             self.lb_textDatabaseSetting.setFont(self.boldFont)
             self.RequestOpenDatabaseScreen.emit()
-
-      
+    
 class MyScrollArea(QtWidgets.QScrollArea):
     def __init__(self, frameContain):
         super().__init__(frameContain)

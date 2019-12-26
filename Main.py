@@ -26,7 +26,7 @@ class MainWindow(QMainWindow):
         self.faceRecognitionObj = FaceRecognition(self.lstStudent)
         self.socketObject = SocketClient() #comment test came
         self.mainScreenObj.SetGeometryForLabelShowCamera(273,381)
-        # self.mainScreenObj.pushButton_shutdown.clicked.connect(lambda:os.system('sudo shutdown now'))
+        # self.mainScree-nObj.pushButton_shutdown.clicked.connect(lambda:os.system('sudo shutdown now'))
         self.mainScreenObj.pushButton_shutdown.clicked.connect(self.__ShowSettingScreen)
         # self.mainScreenObj.ShowNotStudentInformation()
         self.mainScreenObj.SignalGoToDesktop.connect(self.close)
@@ -34,7 +34,8 @@ class MainWindow(QMainWindow):
         self.mainScreenObj.SignalModifyFaceMark.connect(self.__ModifyFaceMark)
         self.mainScreenObj.SignalModifyFRthreshold.connect(self.__ModifyFRthreshold)
         self.mainScreenObj.SignalConnectNewServer.connect(self.socketObject.ConnectNewServer)
-        # self.mainScreenObj.SignalConnectNewFTPserver.connect(self.socketObject)
+        self.mainScreenObj.SignalConnectNewFTPserver.connect(self.__ConnectNewFTPserver)
+        self.mainScreenObj.SignalSettingScreenHiden.connect(self.__SettingScreenHiden)
         # self.soundObj = Sound()
 #region   dieu khien signal tu camera
 
@@ -63,6 +64,11 @@ class MainWindow(QMainWindow):
 #endregion
         self.timerReopenReadCam = QTimer(self)
         self.timerReopenReadCam.timeout.connect(self.__ReopenReadCamera)
+    
+    def __SettingScreenHiden(self):
+        self.cameraObj.StartReadImage()
+        self.faceRecognitionObj.StartFaceTracking()
+        self.faceRecognitionObj.StartFaceRecognize()
 
     def __ReopenReadCamera(self):
         self.mainScreenObj.ClearStudentRecognizedInfomation()
@@ -71,6 +77,9 @@ class MainWindow(QMainWindow):
         self.faceRecognitionObj.StartFaceTracking()
         self.timerReopenReadCam.stop()
     
+    def __ConnectNewFTPserver(self, ftpServerDict):
+        connectAvailabel = self.socketObject.ftpObj.ConnectNewFTPserver(ftpServerDict)
+        self.mainScreenObj.ShowFTPserverConnectAvailabel(connectAvailabel)
 
     def __HideCamera(self):
         self.mainScreenObj.label_showCamera.setPixmap(self.HideCameraPixmap)

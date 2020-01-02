@@ -9,7 +9,7 @@
 import socket
 from   datetime     import datetime
 import json
-SERVER_IP                                           = "192.168.1.38"
+SERVER_IP                                           = "192.168.1.15"
 SERVER_PORT                                         = 2019
 def __DungKhungGiaoTiep(noiDung, malenh):
         
@@ -67,4 +67,36 @@ def ConvertStringToByteArray(string):
 # }
 # print(json.dumps(dictToSend))
 
-print(datetime.now().strftime("%d_%m_%Y"))
+# print(datetime.now().strftime("%d_%m_%Y"))
+course = {
+    "IDKhoaThi": 1,
+    "TenKhoaThi":"KhoaThi 2/1/2020",
+    "NgayTao":"13:32:32 02/01/2020",
+    "DuongDanLuuAnh":""
+
+}
+lstName = ["Nguyễn Hồng Lâm", "Nguyễn Xuân Lộc", "Bùi Văn Trung", "Đỗ Mạnh Cường", "Đinh Trọng Tiến"]
+lstStudent = []
+for i in range(1, 5):
+    student = {
+        "CardNumber":i,
+        "TraineeName":lstName[i]
+    }
+    lstStudent.append(student)
+
+dic = {
+    "success":"True",
+    "code":3,
+    "data":{
+        "CourseInfo":course,
+        "CardNumber":lstStudent,
+        "action":"newCourse",
+    },
+    "message":12,
+    "checksum":21
+}
+
+jsonStr = json.dumps(dic)
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client.connect((SERVER_IP, SERVER_PORT))
+client.send(ConvertStringToByteArray(jsonStr))

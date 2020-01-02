@@ -6,6 +6,7 @@ from SettingScreen.SettingScreenUI    import Ui_frame_settingScreen
 from SettingScreen.ScreenSettingContent   import ScreenSettingContent
 from SettingScreen.SystemSettingContent   import SystemSettingContent
 from SettingScreen.SoundSettingContent    import SoundSettingContent
+from SettingScreen.DatabaseManagerScreen  import DatabaseManagerScreen
 from KeyBoard               import KeyBoard
 
 class SettingScreen(Ui_frame_settingScreen, QObject):
@@ -166,7 +167,7 @@ class SettingScreen(Ui_frame_settingScreen, QObject):
         else: 
             self.lb_textDatabaseSetting.setFont(self.boldFont)
             self.RequestOpenDatabaseScreen.emit()
-    
+
 class MyScrollArea(QtWidgets.QScrollArea):
     def __init__(self, frameContain):
         super().__init__(frameContain)

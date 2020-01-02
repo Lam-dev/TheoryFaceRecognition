@@ -9,6 +9,7 @@ import time
 Camera_Number = 0
 Camera_Object = cv2.VideoCapture(Camera_Number)
 frame = False
+frameNoFaceMark = False
 FaceLocationInImage = False
 NumberFrameNotFace = 0
 
@@ -17,11 +18,12 @@ class GetImageFromCamera(QObject):
     PixmapFromCamera = pyqtSignal(QPixmap)
     SignalHideCamera = pyqtSignal()
 
-    def __init__(self, frameCut = ((180, 460), (0, 480)), size = (300, 300), scale = 0.4, time = 50, labelObject = ""):
+    def __init__(self, frameCut = ((180, 460), (0, 480)), size = (280, 480), scale = 0.4, time = 50, labelObject = ""):
         super().__init__()
         self.cameraObj = Camera_Object
         self.frameCut = frameCut
         self.scale = scale
+        self.size = size
         self.time = time
         self.toBeReadImage = False
         self.timerReadImage = QTimer(self)
@@ -29,16 +31,21 @@ class GetImageFromCamera(QObject):
         self.labelObject = labelObject
         # self.StartReadImage()
 
+    def TakeAphoto(self):
+        global frameNoFaceMark
+        return frameNoFaceMark
+
+
     def __ThreadReadCamera(self):
         threadReadCam = threading.Thread(target= self.__GetImageFromCamera, args=(), daemon=True)
         threadReadCam.start()
 
     def __GetImageFromCamera(self):
-        global frame
+        global frame, frameNoFaceMark
         global FaceLocationInImage
         # global NumberFrameNotFace
         # while True:
-        ret, frame = self.cameraObj.read()
+        ret, frameFullSize = self.cameraObj.read()
         # if(NumberFrameNotFace == 2):
         #     # self.SignalHideCamera.emit()
         #     return
@@ -46,8 +53,10 @@ class GetImageFromCamera(QObject):
             self.CanNotConnectCamera.emit()
             time.sleep(1000)
         else:
-            frame = frame[self.frameCut[1][0]:self.frameCut[1][1], self.frameCut[0][0]:self.frameCut[0][1]]
+            frame = frameFullSize[self.frameCut[1][0]:self.frameCut[1][1], self.frameCut[0][0]:self.frameCut[0][1]]
             frame = cv2.resize(frame, (0, 0), fx = self.scale, fy = self.scale)
+            frameNoFaceMark = frame.copy()
+
             if(type(FaceLocationInImage) is not bool):
                 # for (top, right, bottom, left) in FaceLocationInImage[0]:
                 top = FaceLocationInImage[0][0]
@@ -61,7 +70,7 @@ class GetImageFromCamera(QObject):
                                             QtGui.QImage.Format_RGB888)
             convertToQtFormat = QtGui.QPixmap.fromImage(convertToQtFormat)
             pixmap = QPixmap(convertToQtFormat)
-            resizeImage = pixmap.scaled(280, 480, QtCore.Qt.KeepAspectRatio)
+            resizeImage = pixmap.scaled(self.size[0], self.size[1], QtCore.Qt.KeepAspectRatio)
             # self.PixmapFromCamera.emit(resizeImage)
             # time.sleep(0.05)
             # if(not self.toBeReadImage):
@@ -164,6 +173,7 @@ class FaceRecognition(QObject):
             i = i + 1
             for encoding in faceEncodings:
                 match = face_recognition.compare_faces(student.NhanDienKhuonMat, encoding, self.FRthreshold)
+                match.extend(face_recognition.compare_faces(student.NhanDienKhuonMatThem, encoding, self.FRthreshold))
                 if True in match:
                     ret, jpgData = cv2.imencode(".jpg", image)
                     jpgData = jpgData.tobytes()
@@ -196,7 +206,7 @@ class GetFaceEncodingFromImage():
     def GetFaceEncodingStr(self, image):
         faceEncodings = self.__GetFaceEncoding(image)
         faceEncodeStr = ",".join(str(elem) for elem in faceEncodings[0])
-        return faceEncodeStr
+        return faceEncodeStr, faceEncodings
 
     def GetFaceEncodingFromImageFile(self, fileName):
         try:

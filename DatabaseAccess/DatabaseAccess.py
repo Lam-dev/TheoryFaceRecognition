@@ -63,7 +63,7 @@ class LayDuLieuTrongDataBase:
                 thiSinh.SoCMTND = results[i][5]
                 thiSinh.NgayDangKy = results[i][6]
                 thiSinh.AnhDangKy = results[i][7]
-                
+
                 lstDSdacTrung = results[i][8].split(';')
                 for k in range (0, len(lstDSdacTrung)):
                     lstDacTrung = lstDSdacTrung[k].split(',')
@@ -72,6 +72,17 @@ class LayDuLieuTrongDataBase:
                         for j in range (0,128):
                             thiSinh.NhanDienKhuonMat[k].append(j)
                             thiSinh.NhanDienKhuonMat[k][j] =  float(lstDacTrung[j])
+                
+                if(results[i][11] != None):
+                    lstDSdacTrung = results[i][11].split(';')
+                    for k in range (0, len(lstDSdacTrung)):
+                        lstDacTrung = lstDSdacTrung[k].split(',')
+                        thiSinh.NhanDienKhuonMatThem.append([])
+                        if(len(lstDacTrung) == 128):
+                            for j in range (0,128):
+                                thiSinh.NhanDienKhuonMatThem[k].append(j)
+                                thiSinh.NhanDienKhuonMatThem[k][j] =  float(lstDacTrung[j])
+                    
                 listThiSinh.append(thiSinh)
                 thiSinh.MaDK = results[i][10]
                 del thiSinh   
@@ -176,6 +187,7 @@ class ThongTinThiSinh:
         self.IDKhoaThi = ""
         self.NgayDangKy = ""
         self.AnhDangKy = ""
+        self.NhanDienKhuonMatThem = []
 
 class GetDataFromDatabase():
     def __init__(self):

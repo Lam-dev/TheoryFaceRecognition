@@ -43,8 +43,8 @@ background-color: rgb(255, 255, 235);</string>
      <rect>
       <x>12</x>
       <y>22</y>
-      <width>171</width>
-      <height>347</height>
+      <width>190</width>
+      <height>337</height>
      </rect>
     </property>
     <layout class="QFormLayout" name="formLayout">

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Frame_AddFGP</class>
+ <widget class="QFrame" name="Frame_AddFGP">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>493</width>
+    <height>351</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Frame</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(255, 255, 255);</string>
+  </property>
+  <property name="frameShape">
+   <enum>QFrame::StyledPanel</enum>
+  </property>
+  <property name="frameShadow">
+   <enum>QFrame::Raised</enum>
+  </property>
+  <widget class="QLabel" name="label_ThemVanTayThiSinh">
+   <property name="geometry">
+    <rect>
+     <x>158</x>
+     <y>4</y>
+     <width>209</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Thêm vân tay cho thí sinh</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_forShowIconAddFingerPrint">
+   <property name="geometry">
+    <rect>
+     <x>102</x>
+     <y>40</y>
+     <width>287</width>
+     <height>209</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>TextLabel</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_forShowAnoument">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>252</y>
+     <width>375</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(26, 26, 26);
+font: 75 bold 14pt &quot;Ubuntu&quot;;</string>
+   </property>
+   <property name="text">
+    <string>Đặt tay lên cảm biến</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_skipAddFGP">
+   <property name="geometry">
+    <rect>
+     <x>394</x>
+     <y>304</y>
+     <width>85</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Bỏ qua</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

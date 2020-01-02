@@ -36,6 +36,7 @@ class MainWindow(QMainWindow):
         self.mainScreenObj.SignalConnectNewServer.connect(self.socketObject.ConnectNewServer)
         self.mainScreenObj.SignalConnectNewFTPserver.connect(self.__ConnectNewFTPserver)
         self.mainScreenObj.SignalSettingScreenHiden.connect(self.__SettingScreenHiden)
+        self.mainScreenObj.SignalAddFaceEncoding.connect(self.__AddFaceEncoding)
         # self.soundObj = Sound()
 #region   dieu khien signal tu camera
 
@@ -65,6 +66,20 @@ class MainWindow(QMainWindow):
         self.timerReopenReadCam = QTimer(self)
         self.timerReopenReadCam.timeout.connect(self.__ReopenReadCamera)
     
+    def __AddFaceEncoding(self, infoDict):
+        khoThiSinh = ThiSinhRepository()
+        khoThiSinh.capNhatTruong(("NhanDienKhuonMatThem", ), (infoDict["faceEncodingStr"], ), "ID = %s"%(str(infoDict["student"].ID)))
+        for thiSinh in self.lstStudent:
+            if(thiSinh.ID == infoDict["student"].ID):
+                thiSinh.NhanDienKhuonMatThem = infoDict["faceEncodingArr"]
+                break
+        self.mainScreenObj.databaseScreenObj.ShowAddDataDialog()
+        sendDict = {
+            "ID":infoDict["student"].ID,
+            "FaceEncoding":infoDict["faceEncodingStr"]
+        }
+        self.socketObject.SendAddFaceAndFGP(sendDict)
+     
     def __SettingScreenHiden(self):
         self.cameraObj.StartReadImage()
         self.faceRecognitionObj.StartFaceTracking()
@@ -110,6 +125,7 @@ class MainWindow(QMainWindow):
 
     def __ShowSettingScreen(self):
         self.faceRecognitionObj.StopFaceRecognize()
+        self.faceRecognitionObj.StopFaceTracking()
         self.cameraObj.StopReadImage()
         self.mainScreenObj.ShowSettingScreen()
 

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Frame_AddFace</class>
+ <widget class="QFrame" name="Frame_AddFace">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>493</width>
+    <height>351</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Frame</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(255, 255, 255);</string>
+  </property>
+  <property name="frameShape">
+   <enum>QFrame::StyledPanel</enum>
+  </property>
+  <property name="frameShadow">
+   <enum>QFrame::Raised</enum>
+  </property>
+  <widget class="QLabel" name="label_themKhuonMatThiSinh">
+   <property name="geometry">
+    <rect>
+     <x>76</x>
+     <y>12</y>
+     <width>323</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(35, 35, 35);
+font: 75 bold 16pt &quot;Ubuntu&quot;;</string>
+   </property>
+   <property name="text">
+    <string>Thêm khuôn mặt thí sinh</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_forShowCamera">
+   <property name="geometry">
+    <rect>
+     <x>50</x>
+     <y>52</y>
+     <width>237</width>
+     <height>285</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_countdownTime">
+   <property name="geometry">
+    <rect>
+     <x>384</x>
+     <y>40</y>
+     <width>29</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(0, 170, 255);
+font: 75 bold 26pt &quot;Ubuntu&quot;;</string>
+   </property>
+   <property name="text">
+    <string>3</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_changeImage">
+   <property name="geometry">
+    <rect>
+     <x>364</x>
+     <y>272</y>
+     <width>93</width>
+     <height>69</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(0, 170, 255);</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

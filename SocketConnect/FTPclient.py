@@ -33,7 +33,7 @@ FTP_ACCOUNT  =  SETTING_DICT["ftpAccount"]
 FTP_PASSWORD =  SETTING_DICT["ftpPassword"]
 
 LOCAL_PATH_CONTAIN_DATA_UPDATE = "DataUpdate/"
-FTP_SERVER_DOWLOAD_IMAGE_FILE_PATH = "files/TS/"
+FTP_SERVER_DOWLOAD_IMAGE_FILE_PATH = "syncimage/"
 
 class FTPclient(QObject):
     SignalFTPnotConnect = pyqtSignal()

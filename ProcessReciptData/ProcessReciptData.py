@@ -8,15 +8,18 @@ import  json
 from    collections import namedtuple
 import  numpy
 from    PIL         import Image
-import io
+from    datetime    import datetime
+import  io
 
-CODE_RECIPT_DATA_FROM_SERVER = "3"
+CODE_GET_DATABASE = "4"
+CODE_RECIPT_DATA_FROM_SERVER = 3
 CODE_UPLOAD_DATA_TO_SERVER = "2"
 CODE_PING_PING = "1"
 
 MAC_ADDRESS_LENGTH                                  = 8
 LOCAL_PATH_CONTAIN_DATA_UPDATE                      = "DataUpdate/"
 FTP_FILE_PATH_TO_UPLOAD                             = GetSetting.GetSetting("--ServerImageDir")
+
 
 class ProcessReciptData(QObject):
     ShowStudentForConfirm = pyqtSignal(str)
@@ -25,7 +28,8 @@ class ProcessReciptData(QObject):
     ResponseRequestUpdataFromServer = pyqtSignal(str)
     SignalUpdateDataBaseSuccess = pyqtSignal(list)
     SignalNumberStudentParsed = pyqtSignal(int, int)
-
+    SignalSendFile = pyqtSignal(str)
+    SignalSendMessage = pyqtSignal(str)
     def __init__(self):
         super().__init__()
         # self.ftpObj = FTPclient()
@@ -46,10 +50,13 @@ class ProcessReciptData(QObject):
                 
                 elif(reciptObj.code == CODE_PING_PING):
                     self.__ServerAcceptConnect(self.__CatLayPhanDataTrongFrame(khungNhan))
-
+                
+                elif(reciptObj.code == CODE_GET_DATABASE):
+                    self.__ServerRequestDatabaseCheck(reciptObj)
         except:
+
             pass
-    
+
     def __ServerAcceptConnect(self, frame):
         self.ServerConfirmedConnect.emit()
 
@@ -110,6 +117,80 @@ class ProcessReciptData(QObject):
         #         npArrayImage = numpy.array(image)
         #         hocVien.NhanDienKhuonMatStr = GetFaceEncodingFromImage().GetFaceEncodingStr(npArrayImage)
 
+    def __ServerRequestDatabaseCheck(self, messageObj):
+        target = messageObj.target
+        if(target == "listCourse"):
+            khoKhoaThi = KhoaThiRepository()
+            lstKhoaThi = khoKhoaThi.layDanhSach(" 1 = 1 ")
+            listCourseID = []
+            for khoaThi in lstKhoaThi:
+                listCourseID.append(khoaThi.IDKhoaThi)
+            jsonSaveIntoFile = {
+                "MAC":"12345", 
+                "ListCourse":listCourseID,
+            }
+            fileName  = datetime.now().strftime("%d_%m_%Y-%H_%M_%S")+".json"
+            with open(fileName, 'w') as outfile:
+                json.dump(jsonSaveIntoFile, outfile)
+            messageForSendToServer = {
+                "MAC":"12345",
+                "code":CODE_GET_DATABASE,
+                "target":target,
+                "fileName":fileName,
+                "checkSum":""
+            }
+            self.SignalSendFile.emit(fileName)
+            self.SignalSendMessage.emit(json.dumps(messageForSendToServer))
+
+        elif(target == "listStudent"):
+            try:
+                course = messageObj.detail["course"]
+                khoThiSinh = ThiSinhRepository()
+                lstThiSinh = khoThiSinh.layDanhSach(" IDKhoaThi = %s"%(course))
+                listStudentID = []
+                for thiSinh in lstThiSinh:
+                    listStudentID.append("thiSinh.ID")
+                jsonSaveIntoFile = {
+                    "MAC":"12345",
+                    "Course":"",
+                    "ListStudent":listStudentID,
+                    }
+                fileName  = datetime.now().strftime("%d_%m_%Y-%H_%M_%S")+".json"
+                with open(fileName, 'w') as outfile:
+                    json.dump(jsonSaveIntoFile, outfile)
+
+                messageForSendToServer = {
+                    "MAC":"12345",
+                    "code":CODE_GET_DATABASE,
+                    "target":target,
+                    "fileName":fileName,
+                    "checkSum":""
+                }
+                self.SignalSendFile.emit(fileName)
+                self.SignalSendMessage(messageForSendToServer)
+            except:
+                pass
+
+        elif(target == "deleteCourse"):
+            course = messageObj.detail["course"]
+            khoThiSinh = ThiSinhRepository()
+            khoThiSinh.xoaBanGhi(" IDKhoaThi = %s "%(course))
+            khoKhoaThi = messageObj.detail["course"]
+            khoKhoaThi.xoaBanGhi(" IDKhoaThi = %s"%( "IDKhoaThi  = %s"%(course)))
+
+        
+        # detailForGetListStudent = {
+        #     "course":"id Khoa hoc"
+        # }        
+                
+        # databaseCheck = {
+        #     "code" : "4",
+        #     "target":"listCourse",
+        #     "detail": ,
+        #     "checksum":,
+        # } 
+        
+
     def __NumberStudentParsed(self, number, all):
         self.SignalNumberStudentParsed.emit(number, all)
 
@@ -118,7 +199,11 @@ class ProcessReciptData(QObject):
         if(len(lstStudent) == 0):
             return
         if(reciptObj.data.action == "update"):
-            self.__AddStudent(lstStudent)
+            self.__AddStudent(lstStudent, 1)
+
+        elif(reciptObj.data.action == "newCourse"):
+            self.__CreateAndAddNewCourse(reciptObj)
+
         elif(reciptObj.data.action == "getBy"):
             pass
         elif(reciptObj.data.action == "getAll"):
@@ -127,27 +212,47 @@ class ProcessReciptData(QObject):
             self.__DeleteStudentByNumber(lstStudent)
         elif(reciptObj.data.action == "deleteAll"):
             self.__DeleteAllStudent()
+
+    def __CreateAndAddNewCourse(self, dataObj):
+        khoaThi = ThongTinKhoaThi()
+        khoaThi.IDKhoaThi = dataObj.data.CourseInfo.IDKhoaThi
+        khoaThi.TenKhoaThi = dataObj.data.CourseInfo.TenKhoaThi
+        khoaThi.DuongDanLuuAnh = ""
+        khoaThi.NgayTao = dataObj.data.CourseInfo.NgayTao
+        khoKhoaThi = KhoaThiRepository()
+        idKhoaThi = khoKhoaThi.ghiDuLieu(khoaThi)
+        self.__AddStudent(dataObj.data.CardNumber, idKhoaThi)
+
+    def __AddStudent(self, lstStudentNumber, IDCourse):
         
-    def __AddStudent(self, lstStudentNumber):
         lstImage = []
-        for stNumber in lstStudentNumber:
-            lstImage.append(stNumber+".jpg")
+        try:
+            for stNumber in lstStudentNumber:
+                imageName = str(stNumber.CardNumber) + ".jpg"
+                lstImage.append(imageName)
+
+        except NameError as e:
+            print(e)
+            pass
         ftpObj = FTPclient()
         lstImageGrapped = ftpObj.GetListFileFromServer(lstImage)
         khoThiSinh = ThiSinhRepository()
+        i = 0
         for image in lstImage:
             try:
                 student = ThongTinThiSinh()
                 fp = open(LOCAL_PATH_CONTAIN_DATA_UPDATE + image, 'rb')
                 student.ID = image.split(".")[0]
                 student.AnhDangKy = fp.read()
-                image = Image.open(io.BytesIO(student.AnhDangKy))
-                image = image.convert("RGB")
-                npArrayImage = numpy.array(image)
-                student.NhanDienKhuonMatStr = GetFaceEncodingFromImage().GetFaceEncodingStr(npArrayImage)
+                imagePil = Image.open(io.BytesIO(student.AnhDangKy))
+                imagePil = imagePil.convert("RGB")
+                npArrayImage = numpy.array(imagePil)
+                student.NhanDienKhuonMatStr = GetFaceEncodingFromImage().GetFaceEncodingStr(npArrayImage)[0]
+                student.HoVaTen = lstStudentNumber[i].TraineeName
+                student.IDKhoaThi = IDCourse
                 khoThiSinh.ghiDuLieu(student)
                 del student
-            except:
+            except NameError:
                 pass
     
     def __DeleteStudentByNumber(self, lstStudentNumber):
@@ -161,7 +266,6 @@ class ProcessReciptData(QObject):
     def __DeleteAllStudent(self):
         khoThiSinh = ThiSinhRepository()
         khoThiSinh.xoaBanGhi(" 1 = 1 ")
-           
 
     def __CatLayPhanDataTrongFrame(self, frameNhan):
         lstChar = []

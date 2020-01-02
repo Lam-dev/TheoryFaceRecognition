@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Frame</class>
+ <widget class="QFrame" name="Frame">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>493</width>
+    <height>351</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Frame</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(255, 255, 255);</string>
+  </property>
+  <property name="frameShape">
+   <enum>QFrame::StyledPanel</enum>
+  </property>
+  <property name="frameShadow">
+   <enum>QFrame::Raised</enum>
+  </property>
+  <widget class="QLabel" name="label_forShowStudentImage">
+   <property name="geometry">
+    <rect>
+     <x>16</x>
+     <y>58</y>
+     <width>151</width>
+     <height>179</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(170, 170, 255);</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_thongTinHocVien">
+   <property name="geometry">
+    <rect>
+     <x>176</x>
+     <y>10</y>
+     <width>209</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Thông tin học viên</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_nameOfStudent">
+   <property name="geometry">
+    <rect>
+     <x>184</x>
+     <y>66</y>
+     <width>275</width>
+     <height>75</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(38, 38, 38);
+font: 75 bold 16pt &quot;Ubuntu&quot;;</string>
+   </property>
+   <property name="text">
+    <string>Chọn một thí sinh</string>
+   </property>
+   <property name="wordWrap">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_ngaySinh">
+   <property name="geometry">
+    <rect>
+     <x>178</x>
+     <y>160</y>
+     <width>97</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Ngày sinh</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_forShowDateOfBird">
+   <property name="geometry">
+    <rect>
+     <x>292</x>
+     <y>162</y>
+     <width>189</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>TextLabel</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_soCMTND">
+   <property name="geometry">
+    <rect>
+     <x>178</x>
+     <y>188</y>
+     <width>97</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Số CMTND</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_forShowIDnumber">
+   <property name="geometry">
+    <rect>
+     <x>292</x>
+     <y>190</y>
+     <width>189</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>cmtnd</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_faceIcon">
+   <property name="geometry">
+    <rect>
+     <x>34</x>
+     <y>256</y>
+     <width>39</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_FGPicon">
+   <property name="geometry">
+    <rect>
+     <x>34</x>
+     <y>296</y>
+     <width>39</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_nhanDienKhuonMat">
+   <property name="geometry">
+    <rect>
+     <x>90</x>
+     <y>256</y>
+     <width>181</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Nhận diện khuôn mặt:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_nhanDienVanTay">
+   <property name="geometry">
+    <rect>
+     <x>90</x>
+     <y>296</y>
+     <width>181</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Nhận diện vân tay:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_forShowNumberFaceAdded">
+   <property name="geometry">
+    <rect>
+     <x>288</x>
+     <y>258</y>
+     <width>129</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_forShowNumberFGPadded">
+   <property name="geometry">
+    <rect>
+     <x>288</x>
+     <y>296</y>
+     <width>129</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

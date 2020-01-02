@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Frame_containDatabaseScreen</class>
+ <widget class="QFrame" name="Frame_containDatabaseScreen">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>480</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Frame</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(167, 200, 191);
+</string>
+  </property>
+  <property name="frameShape">
+   <enum>QFrame::StyledPanel</enum>
+  </property>
+  <property name="frameShadow">
+   <enum>QFrame::Raised</enum>
+  </property>
+  <widget class="QFrame" name="frame_tabarScreen">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>801</width>
+     <height>45</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(85, 170, 127);</string>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::StyledPanel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Raised</enum>
+   </property>
+   <widget class="QPushButton" name="pushButton_closeDatabaseScreen">
+    <property name="geometry">
+     <rect>
+      <x>752</x>
+      <y>2</y>
+      <width>43</width>
+      <height>39</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">margin: 1px; padding: 7px;
+background-color: rgb(255, 255, 255);
+color: rgba(0,190,255,255);
+border-style: solid;
+border-radius: 3px;
+border-width: 1px;
+border-color: rgba(0,140,255,255);</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QFrame" name="frame_2">
+   <property name="geometry">
+    <rect>
+     <x>6</x>
+     <y>50</y>
+     <width>287</width>
+     <height>63</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(255, 255, 255);
+border-style:solid;
+border-radius:3px;</string>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::StyledPanel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Raised</enum>
+   </property>
+   <widget class="QLabel" name="label_luaChonKhoaHoc">
+    <property name="geometry">
+     <rect>
+      <x>64</x>
+      <y>4</y>
+      <width>207</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Lựa chọn khóa học </string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="comboBox_showListCourser">
+    <property name="geometry">
+     <rect>
+      <x>12</x>
+      <y>30</y>
+      <width>265</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">margin: 1px; padding: 7px;
+background-color: rgb(255, 255, 255);
+color: rgba(0,190,255,255);
+border-style: solid;
+border-radius: 3px;
+border-width: 1px;
+border-color: rgba(0,140,255,255);</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QFrame" name="frame_3">
+   <property name="geometry">
+    <rect>
+     <x>6</x>
+     <y>120</y>
+     <width>287</width>
+     <height>353</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(255, 255, 255);
+border-style:solid;
+border-radius:3px;</string>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::StyledPanel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Raised</enum>
+   </property>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>46</x>
+      <y>6</y>
+      <width>207</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Danh sách học viên khóa học</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_forInputTextToSearch">
+    <property name="geometry">
+     <rect>
+      <x>56</x>
+      <y>310</y>
+      <width>219</width>
+      <height>27</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_forShowIconSearch">
+    <property name="geometry">
+     <rect>
+      <x>14</x>
+      <y>308</y>
+      <width>31</width>
+      <height>29</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+   </widget>
+   <widget class="QListWidget" name="listWidget_showListStudent">
+    <property name="geometry">
+     <rect>
+      <x>14</x>
+      <y>42</y>
+      <width>261</width>
+      <height>261</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(190, 190, 190);</string>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>0</width>
+      <height>0</height>
+     </size>
+    </property>
+    <property name="spacing">
+     <number>5</number>
+    </property>
+    <property name="batchSize">
+     <number>100</number>
+    </property>
+    <item>
+     <property name="text">
+      <string>New Item</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>New Item</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>New Item</string>
+     </property>
+    </item>
+   </widget>
+  </widget>
+  <widget class="QFrame" name="frame_containAddInformationStep">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>50</y>
+     <width>493</width>
+     <height>423</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(255, 255, 255);
+border-style:solid;
+border-radius:3px;</string>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::StyledPanel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Raised</enum>
+   </property>
+   <widget class="QWidget" name="horizontalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>184</x>
+      <y>388</y>
+      <width>91</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0">
+     <property name="spacing">
+      <number>20</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="label_step1HighLight">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(0, 170, 127);
+border-radius:7px</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_step2HighLight">
+       <property name="styleSheet">
+        <string notr="true">border-radius:7px;
+border-color:rgb(0, 170, 255);
+border-width:2px</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_step3HighLight">
+       <property name="styleSheet">
+        <string notr="true">border-radius:7px;
+border-color:rgb(0, 170, 255);
+border-width:2px</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QFrame" name="frame">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>493</width>
+      <height>373</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton">
+    <property name="geometry">
+     <rect>
+      <x>374</x>
+      <y>388</y>
+      <width>111</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(0, 135, 202);</string>
+    </property>
+    <property name="text">
+     <string>Thêm vân tay</string>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

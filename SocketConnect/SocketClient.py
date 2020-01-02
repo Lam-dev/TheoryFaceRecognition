@@ -14,6 +14,7 @@ SETTING_DICT                                        = GetSetting.LoadSettingFrom
 SERVER_IP                                           = SETTING_DICT["serverIP"]
 SERVER_PORT                                         = int(SETTING_DICT["serverPort"])
 
+MAC                                                 = "1234"
 
 CODE_RECIPT_DATA_FROM_SERVER = "3"
 CODE_UPLOAD_DATA_TO_SERVER = "2"
@@ -139,7 +140,7 @@ class SocketClient(QObject):
         try:
             self.clientObj.send(data)
             self.__FlagSendPingPong = False
-        except NameError as e:
+        except:
             self.FlagServerISconnect
             self.__SignalRecreateConnect.emit()
 
@@ -283,7 +284,7 @@ class SocketClient(QObject):
             "success":"true",
             "code":1,
             "message":"",
-            "checksum":0,
+            "checksum":len(json.dumps(dictData)),
             "data":dictData
         }
         return json.dumps(dictToSend)
@@ -299,7 +300,7 @@ class SocketClient(QObject):
             "success":"true",
             "code":2,
             "massage":"",
-            "checksum":0,
+            "checksum":len(json.dumps(dictData)),
             "data":dictData
         }
         return json.dumps(dictToSend)
@@ -322,6 +323,19 @@ class SocketClient(QObject):
 
 #endregion
     
+    def SendAddFaceAndFGP(self, info):
+        
+        with open('data.txt', 'w') as outfile:
+            json.dump(info, outfile)
+        self.ftpObj.SendImageToFTPserver("data.txt", FTP_FILE_PATH_TO_UPLOAD +"/"+"data.txt")
+        dictToServer = {
+            "mac":MAC,
+            "code":4,
+            "fileName":"data.txt"
+        }
+        jsonStr = json.dumps(dictToServer)
+        resultFrame = self.__ConvertJsonStringToByteArr(jsonStr)
+        self.__SendDataViaSocket(bytes(resultFrame))
 
 class HangDoi(QObject):
     DangCho = pyqtSignal()

@@ -1,19 +1,20 @@
 from    CameraAndFaceRecognition.CameraAndFaceRecognition  import GetImageFromCamera, FaceRecognition
-from    MainScreen.MainScreen   import MainScreen
+from    MainScreen.MainScreen                   import MainScreen
 
-from    DatabaseAccess.DatabaseAccess    import *
-from    PyQt5                   import QtCore, QtGui, QtWidgets, Qt
-from    PyQt5.QtCore            import pyqtSlot, pyqtSignal,QTimer, QDateTime,Qt, QObject
-from         PyQt5              import QtCore, QtGui, QtWidgets
-from         PyQt5              import QtGui
-from         PyQt5              import QtWidgets
-from         PyQt5.QtGui        import QPixmap,QColor
-from         PyQt5.QtWidgets    import *
+from        DatabaseAccess.DatabaseAccess       import *
+from        PyQt5                               import QtCore, QtGui, QtWidgets, Qt
+from        PyQt5.QtCore                        import pyqtSlot, pyqtSignal,QTimer, QDateTime,Qt, QObject
+from         PyQt5                              import QtCore, QtGui, QtWidgets
+from         PyQt5                              import QtGui
+from         PyQt5                              import QtWidgets
+from         PyQt5.QtGui                        import QPixmap,QColor
+from         PyQt5.QtWidgets                    import *
 import       sys
-from         datetime           import datetime
-from         Sound.OrangePiSound  import Sound
-from         SocketConnect.SocketClient   import SocketClient
+from         datetime                           import datetime
+from         Sound.OrangePiSound                import Sound
+from         SocketConnect.SocketClient         import SocketClient
 import       os
+from         FingerPrintSensor.FingerPrint      import Fingerprint
 
 # from   Sound.Sound              import Sound
 class MainWindow(QMainWindow):
@@ -36,7 +37,7 @@ class MainWindow(QMainWindow):
         self.mainScreenObj.SignalConnectNewServer.connect(self.socketObject.ConnectNewServer)
         self.mainScreenObj.SignalConnectNewFTPserver.connect(self.__ConnectNewFTPserver)
         self.mainScreenObj.SignalSettingScreenHiden.connect(self.__SettingScreenHiden)
-        self.mainScreenObj.SignalAddFaceEncoding.connect(self.__AddFaceEncoding)
+        self.mainScreenObj.SignalAddFaceEncodeAndFGP.connect(self.__AddFaceEncodingAndFGP)
         # self.soundObj = Sound()
 #region   dieu khien signal tu camera
 
@@ -50,7 +51,9 @@ class MainWindow(QMainWindow):
         self.faceRecognitionObj.StartFaceTracking()
         self.faceRecognitionObj.StartFaceRecognize()
         
+        
 #endregion
+
 #region cac cai dat
         self.settingFindOrConfirmStudent = "C" # che do tim mot hoc vien hoac xac nhan hoc vien gui xuong
 #endregion 
@@ -65,21 +68,47 @@ class MainWindow(QMainWindow):
 #endregion
         self.timerReopenReadCam = QTimer(self)
         self.timerReopenReadCam.timeout.connect(self.__ReopenReadCamera)
-    
-    def __AddFaceEncoding(self, infoDict):
+
+        self.FGPobj = Fingerprint()
+        self.FGPobj.SignalRecognizedFGP.connect(self.RecognizedFGP)
+        self.FGPobj.BatLayVanTayDangNhap()
+
+    def RecognizedFGP(self, studentID):
+        self.__OffCameraTemporary()
+        for student in self.lstStudent:
+            if(student.ID == studentID):
+                self.mainScreenObj.ShowStudentInfomation(student)
+                self.socketObject.SendResultsFGPrecognition(studentID)
+                break
+        
+
+    def __AddFaceEncodingAndFGP(self, faceDict, FGPdict):
         khoThiSinh = ThiSinhRepository()
-        khoThiSinh.capNhatTruong(("NhanDienKhuonMatThem", ), (infoDict["faceEncodingStr"], ), "ID = %s"%(str(infoDict["student"].ID)))
+        khoThiSinh.capNhatTruong(("NhanDienKhuonMatThem", ), (faceDict["faceEncodingStr"], ), "ID = %s"%(str(faceDict["student"].ID)))
+        
+        idVaVanTay = AnhXaIDvaVanTay()
+        idVaVanTay.IDThiSinh = faceDict["student"].ID
+        idVaVanTay.ViTriVanTay = FGPdict["FGPsavePos"]
+        featureStrArr = [str(elem) for elem in FGPdict["FGPfeature"]]
+        featureStr = ",".join(featureStrArr)
+        idVaVanTay.DacTrungVanTay = featureStr
+        khoIDvaVanTay = IDvaVanTayRepository()
+        khoIDvaVanTay.ghiDuLieu(idVaVanTay)
+        
         for thiSinh in self.lstStudent:
-            if(thiSinh.ID == infoDict["student"].ID):
-                thiSinh.NhanDienKhuonMatThem = infoDict["faceEncodingArr"]
+            if(thiSinh.ID == faceDict["student"].ID):
+                thiSinh.NhanDienKhuonMatThem = faceDict["faceEncodingArr"]
                 break
         self.mainScreenObj.databaseScreenObj.ShowAddDataDialog()
         sendDict = {
-            "ID":infoDict["student"].ID,
-            "FaceEncoding":infoDict["faceEncodingStr"]
+            "ID":faceDict["student"].ID,
+            "FaceEncoding":faceDict["faceEncodingStr"],
+            "FGPEncoding":featureStr
         }
         self.socketObject.SendAddFaceAndFGP(sendDict)
-     
+
+
+
     def __SettingScreenHiden(self):
         self.cameraObj.StartReadImage()
         self.faceRecognitionObj.StartFaceTracking()
@@ -126,6 +155,7 @@ class MainWindow(QMainWindow):
     def __ShowSettingScreen(self):
         self.faceRecognitionObj.StopFaceRecognize()
         self.faceRecognitionObj.StopFaceTracking()
+        self.FGPobj.TatLayVanTayDangNhap()
         self.cameraObj.StopReadImage()
         self.mainScreenObj.ShowSettingScreen()
 
@@ -156,12 +186,7 @@ class MainWindow(QMainWindow):
                 return
                 
     def __RecognizedStudent(self, studentObj, faceImageJpgData):
-        self.cameraObj.StopReadImage()
-        self.faceRecognitionObj.StopFaceTracking()
-        self.faceRecognitionObj.StopFaceRecognize()
-        self.__HideCamera()
-        self.timerReopenReadCam.start(1500)
-
+        self.__OffCameraTemporary()
         if(self.settingFindOrConfirmStudent == "C"):
             # self.soundObj.ThreadPlayBipBipBip()
             # self.soundObj.ThreadPlayMoiTSlenXe()
@@ -170,6 +195,13 @@ class MainWindow(QMainWindow):
             self.mainScreenObj.ShowStudentInfomation(studentObj)
             # self.mainScreenObj.ShowFaceRecognizeOK()
             self.socketObject.SendResultsFaceRecognize(studentObj.ID, "T", "imageTosend.jpg")
+
+    def __OffCameraTemporary(self):
+        self.cameraObj.StopReadImage()
+        self.faceRecognitionObj.StopFaceTracking()
+        self.faceRecognitionObj.StopFaceRecognize()
+        self.__HideCamera()
+        self.timerReopenReadCam.start(1500)
 
     def __ShowImageFromCamera(self, pixmap):
         self.mainScreenObj.label_showCamera.setPixmap(pixmap)

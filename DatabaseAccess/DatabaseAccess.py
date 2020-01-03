@@ -88,7 +88,7 @@ class LayDuLieuTrongDataBase:
                 del thiSinh   
             return listThiSinh
 
-        if(self.tenBang == "LichSuDiemDanh"):
+        elif(self.tenBang == "LichSuDiemDanh"):
             lstLichSu = []
             for i in range(0, len(results)):
                 lichSu = ThongTinLichSuDiemDanh()
@@ -99,7 +99,7 @@ class LayDuLieuTrongDataBase:
                 del lichSu
             return lstLichSu
 
-        if(self.tenBang == "ThongTinKhoaThi"):
+        elif(self.tenBang == "ThongTinKhoaThi"):
             lstKhoaThi = []
             for i in range(0, len(results)):
                 khoaThi = ThongTinKhoaThi()
@@ -111,6 +111,18 @@ class LayDuLieuTrongDataBase:
                 del khoaThi
             return lstKhoaThi
 
+        elif(self.tenBang == "AnhXaIDvaVanTay"):
+            lstIDvaVanTay = []
+            for i in range(0, len(results)):
+                idVaVanTay = AnhXaIDvaVanTay()
+                idVaVanTay.IDThiSinh = results[i][0]
+                idVaVanTay.ViTriVanTay = results[i][1]
+                idVaVanTay.DacTrungVanTay = results[i][2]
+                idVaVanTay.AnhVanTay = results[i][3]
+                lstIDvaVanTay.append(idVaVanTay)
+                del idVaVanTay
+            return lstIDvaVanTay
+
     def ghiDuLieu(self, thongTin):
         try:
             cursor = self.CSDL.cursor()
@@ -119,16 +131,21 @@ class LayDuLieuTrongDataBase:
                 print(cursor.execute(sql, (sqlite3.Binary(thongTin.AnhDangKy), )))
                 self.CSDL.commit()
 
-            if(self.tenBang == "LichSuDiemDanh"):
+            elif(self.tenBang == "LichSuDiemDanh"):
                 sql = 'INSERT INTO `LichSuDiemDanh`(`IDThiSinh`, `ThoiGian`, `Anh`) VALUES ("%s", "%s", ?)'%(thongTin.IDThiSinh, thongTin.ThoiGian)
                 print(cursor.execute(sql, (sqlite3.Binary(thongTin.Anh), )))
                 self.CSDL.commit()
 
-            if(self.tenBang == "ThongTinKhoaThi"):
+            elif(self.tenBang == "ThongTinKhoaThi"):
                 sql = 'INSERT INTO `ThongTinKhoaThi`(`NgayTao`, `TenKhoaThi`, `ThuMucLuuAnh`) VALUES ("%s", "%s", "%s")'%(thongTin.NgayTao, thongTin.TenKhoaThi, thongTin.DuongDanLuuAnh)
                 key = cursor.execute(sql).lastrowid
                 self.CSDL.commit()
                 return key
+
+            elif(self.tenBang == "AnhXaIDvaVanTay"):
+                sql = 'INSERT INTO `AnhXaIDvaVanTay`(`IDThiSinh`, `ViTriVanTay`, `DacTrungVanTay`) VALUES ("%s", "%s", "%s")'%(thongTin.IDThiSinh, thongTin.ViTriVanTay, thongTin.DacTrungVanTay)
+                cursor.execute(sql)
+                self.CSDL.commit()
 
         except sqlite3.Error as e:
             print(e)
@@ -160,6 +177,11 @@ class KhoaThiRepository(LayDuLieuTrongDataBase):
         super().__init__(duongDanTepSqlite, "ThongTinKhoaThi")
         return
 
+class IDvaVanTayRepository(LayDuLieuTrongDataBase):
+    def __init__(self, duongDanTepSqlite = "DatabaseAccess/Database"):
+        super().__init__(duongDanTepSqlite, "AnhXaIDvaVanTay")
+        return
+
 class ThongTinLichSuDiemDanh:
     def __init__(self):
         self.IDThiSinh = ""
@@ -172,6 +194,14 @@ class ThongTinKhoaThi:
         self.NgayTao = ""
         self.TenKhoaThi = ""
         self.DuongDanLuuAnh = ""
+
+
+class AnhXaIDvaVanTay:
+    def __init__(self):
+        self.IDThiSinh = ""
+        self.ViTriVanTay = ""
+        self.DacTrungVanTay = ""
+        self.AnhVanTay = ""
 
 class ThongTinThiSinh:
     def __init__(self):

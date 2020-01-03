@@ -40,19 +40,19 @@ class ProcessReciptData(QObject):
     
     def ProcessDataFrame(self, khungNhan):
         try:
-                reciptObj = self.json2obj(self.__CatLayPhanDataTrongFrame(khungNhan))
+            reciptObj = self.json2obj(self.__CatLayPhanDataTrongFrame(khungNhan))
 
-                if(reciptObj.code == CODE_RECIPT_DATA_FROM_SERVER):
-                    self.__ProcessRequestUpdateDatabase(reciptObj)
+            if(reciptObj.code == CODE_RECIPT_DATA_FROM_SERVER):
+                self.__ProcessRequestUpdateDatabase(reciptObj)
 
-                elif(reciptObj.code == CODE_UPLOAD_DATA_TO_SERVER):
-                    self.ServerRequestTakePicture.emit()
-                
-                elif(reciptObj.code == CODE_PING_PING):
-                    self.__ServerAcceptConnect(self.__CatLayPhanDataTrongFrame(khungNhan))
-                
-                elif(reciptObj.code == CODE_GET_DATABASE):
-                    self.__ServerRequestDatabaseCheck(reciptObj)
+            elif(reciptObj.code == CODE_UPLOAD_DATA_TO_SERVER):
+                self.ServerRequestTakePicture.emit()
+            
+            elif(reciptObj.code == CODE_PING_PING):
+                self.__ServerAcceptConnect(self.__CatLayPhanDataTrongFrame(khungNhan))
+            
+            elif(reciptObj.code == CODE_GET_DATABASE):
+                self.__ServerRequestDatabaseCheck(reciptObj)
         except:
 
             pass

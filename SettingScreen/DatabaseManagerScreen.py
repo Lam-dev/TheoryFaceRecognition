@@ -8,9 +8,12 @@ from SettingScreen.StepShowStudentInformation import StepShowStudentInformation
 from SettingScreen.AddFace                    import AddFaceScreen
 from SettingScreen.AddFGP                     import AddFGP
 from SettingScreen.AddDataResult              import AddDataResults
+
+
 class DatabaseManagerScreen(Ui_Frame_containDatabaseScreen, QObject):
     SignalCloseDatabaseScreen = pyqtSignal()
-    SignalAddFaceEncode = pyqtSignal(dict)
+    SignalAddFaceEncodeAndFGP = pyqtSignal(dict, dict)
+
     def __init__(self, frameContain):
         Ui_Frame_containDatabaseScreen.__init__(self)
         QObject.__init__(self)
@@ -31,16 +34,29 @@ class DatabaseManagerScreen(Ui_Frame_containDatabaseScreen, QObject):
         self.frameContainAddFGP = QtWidgets.QFrame(self.frame_containAddInformationStep)
         self.frameContainAddFGP.setGeometry(QtCore.QRect(self.frame_containAddInformationStep.width(), 0, 0, 0))
         self.addFGPobj = AddFGP(self.frameContainAddFGP)
-        
+
         self.frameContainAddFace = QtWidgets.QFrame(self.frame_containAddInformationStep)
         self.frameContainAddFace.setGeometry(QtCore.QRect(self.frame_containAddInformationStep.width(), 0, 0, 0))
         self.addFaceObj = AddFaceScreen(self.frameContainAddFace)
         self.addFaceObj.SignalGrappedImage.connect(self.GrappedFaceImage)
-        
+        self.choseStudent = object
+
+
         self.faceAdded = object
         self.FGPadded = object
 
         self.currentStep = 1
+
+    def AddFGPtoDatabase(self, pos, feature):
+        idVaVanTay = IDvaVanTayRepository()
+        idVaVanTay.IDThiSinh = self.choseStudent.ID
+        idVaVanTay.ViTriVanTay = pos
+        featureStrArr = [str(elem) for elem in feature]
+        featureStr = ",".join(featureStrArr)
+        idVaVanTay.DacTrungVanTay = featureStr
+        khoIDvaVanTay = IDvaVanTayRepository()
+        khoIDvaVanTay.ghiDuLieu(idVaVanTay)
+
 
     def ShowAddDataDialog(self):
         self.dialogShadow = QtWidgets.QFrame(self.frameContainDatabaseScreen )
@@ -73,17 +89,20 @@ class DatabaseManagerScreen(Ui_Frame_containDatabaseScreen, QObject):
             self.addFGPobj.ShowStepStudentInformationAnim(self.frame)
             self.currentStep = 2
             self.Step2HightLight()
+            self.addFGPobj.StartReciptFGP()
             self.pushButton_nextStep.setText("Thêm khuôn mặt")
 
         elif(self.currentStep == 2):
             self.addFaceObj.ShowStepStudentInformationAnim(self.frameContainAddFGP)
             self.currentStep = 3
             self.Step3HightLight()
+            self.FGPsensorObj.TatThemVanTay()
             self.pushButton_nextStep.setText("Hoàn tất")
-
+            
         else:
             faceEncodeDict = self.addFaceObj.GetFaceEncodingImageGrapped()
-            self.SignalAddFaceEncode.emit(faceEncodeDict)
+            FGPdict = self.addFGPobj.GetFGPsavePosAndFeature()
+            self.SignalAddFaceEncodeAndFGP.emit(faceEncodeDict, FGPdict)
             return
             # self.addFaceObj.StopCamera()
             # self.studentInfoObj.ShowStepStudentInformationAnim(self.frameContainAddFace)
@@ -110,6 +129,8 @@ class DatabaseManagerScreen(Ui_Frame_containDatabaseScreen, QObject):
         self.studentInfoObj.ShowStudentInformation(self.lstStudent[row])
         self.pushButton_nextStep.show()
         self.addFaceObj.addForStudent = self.lstStudent[row]
+        self.addFGPobj.studentForAdd = self.lstStudent[row]
+        self.choseStudent = self.lstStudent[row]
 
     def GetAndShowListCourse(self):
         khoKhoaHoc = KhoaThiRepository()

@@ -18,18 +18,20 @@ class Ui_Frame_AddFGP(object):
         Frame_AddFGP.setFrameShape(QtWidgets.QFrame.StyledPanel)
         Frame_AddFGP.setFrameShadow(QtWidgets.QFrame.Raised)
         self.label_ThemVanTayThiSinh = QtWidgets.QLabel(Frame_AddFGP)
-        self.label_ThemVanTayThiSinh.setGeometry(QtCore.QRect(158, 4, 209, 17))
+        self.label_ThemVanTayThiSinh.setGeometry(QtCore.QRect(70, 6, 335, 33))
+        self.label_ThemVanTayThiSinh.setStyleSheet("color: rgb(29, 29, 29);\n"
+"font: 57 bold 16pt \"Ubuntu\";")
         self.label_ThemVanTayThiSinh.setObjectName("label_ThemVanTayThiSinh")
         self.label_forShowIconAddFingerPrint = QtWidgets.QLabel(Frame_AddFGP)
-        self.label_forShowIconAddFingerPrint.setGeometry(QtCore.QRect(102, 40, 287, 209))
+        self.label_forShowIconAddFingerPrint.setGeometry(QtCore.QRect(102, 50, 287, 209))
         self.label_forShowIconAddFingerPrint.setObjectName("label_forShowIconAddFingerPrint")
         self.label_forShowAnoument = QtWidgets.QLabel(Frame_AddFGP)
-        self.label_forShowAnoument.setGeometry(QtCore.QRect(60, 252, 375, 41))
-        self.label_forShowAnoument.setStyleSheet("color: rgb(26, 26, 26);\n"
+        self.label_forShowAnoument.setGeometry(QtCore.QRect(60, 264, 375, 41))
+        self.label_forShowAnoument.setStyleSheet("color: rgb(216, 0, 0);\n"
 "font: 75 bold 14pt \"Ubuntu\";")
         self.label_forShowAnoument.setObjectName("label_forShowAnoument")
         self.label_skipAddFGP = QtWidgets.QLabel(Frame_AddFGP)
-        self.label_skipAddFGP.setGeometry(QtCore.QRect(394, 304, 85, 31))
+        self.label_skipAddFGP.setGeometry(QtCore.QRect(394, 308, 85, 31))
         self.label_skipAddFGP.setObjectName("label_skipAddFGP")
 
         self.retranslateUi(Frame_AddFGP)
@@ -38,9 +40,9 @@ class Ui_Frame_AddFGP(object):
     def retranslateUi(self, Frame_AddFGP):
         _translate = QtCore.QCoreApplication.translate
         Frame_AddFGP.setWindowTitle(_translate("Frame_AddFGP", "Frame"))
-        self.label_ThemVanTayThiSinh.setText(_translate("Frame_AddFGP", "Thêm vân tay cho thí sinh"))
+        self.label_ThemVanTayThiSinh.setText(_translate("Frame_AddFGP", "THÊM VÂN TAY CHO THÍ SINH"))
         self.label_forShowIconAddFingerPrint.setText(_translate("Frame_AddFGP", "TextLabel"))
-        self.label_forShowAnoument.setText(_translate("Frame_AddFGP", "Đặt tay lên cảm biến"))
+        self.label_forShowAnoument.setText(_translate("Frame_AddFGP", "ĐẶT TAY LÊN CẢM BIẾN"))
         self.label_skipAddFGP.setText(_translate("Frame_AddFGP", "Bỏ qua"))
 
 

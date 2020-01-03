@@ -321,6 +321,10 @@ class SocketClient(QObject):
         self.__SendDataViaSocket(bytes(resultFrame))
         self.ftpObj.SendImageToFTPserver(nameOfPhotoTaked, FTP_FILE_PATH_TO_UPLOAD +"/"+ datetime.now().strftime("%Y%m%d") + '/' + str(ID)+"_"+datetime.now().strftime("%H%M%S")+ ".jpg")
 
+    def SendResultsFGPrecognition(self, ID):
+        resultFrame = self.__ConvertJsonStringToByteArr(self.__BuildResultToSend(ID))
+        self.__SendDataViaSocket(bytes(resultFrame))
+
 #endregion
     
     def SendAddFaceAndFGP(self, info):

@@ -18,7 +18,7 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
     SignalConnectNewServer = pyqtSignal(dict)
     SignalConnectNewFTPserver = pyqtSignal(dict)
     SignalSettingScreenHiden = pyqtSignal()
-    SignalAddFaceEncoding  = pyqtSignal(dict)
+    SignalAddFaceEncodeAndFGP  = pyqtSignal(dict, dict)
 
     def __init__(self, MainWindow):
         QObject.__init__(self)
@@ -188,7 +188,7 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
     def OpenDatabaseManagerScreen(self):
         self.frameContainDatabaseScreen = QtWidgets.QFrame(self.centralWidget)
         self.databaseScreenObj = DatabaseManagerScreen(self.frameContainDatabaseScreen)
-        self.databaseScreenObj.SignalAddFaceEncode.connect(self.SignalAddFaceEncoding.emit)
+        self.databaseScreenObj.SignalAddFaceEncodeAndFGP.connect(self.SignalAddFaceEncodeAndFGP.emit)
         self.databaseScreenObj.SignalCloseDatabaseScreen.connect(self.CloseDatabaseScreen)
 
         self.frameContainDatabaseScreen.show()

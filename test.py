@@ -68,6 +68,7 @@ def ConvertStringToByteArray(string):
 # print(json.dumps(dictToSend))
 
 # print(datetime.now().strftime("%d_%m_%Y"))
+####### create course and update listStuden##################################
 course = {
     "IDKhoaThi": 1,
     "TenKhoaThi":"KhoaThi 2/1/2020",
@@ -100,3 +101,5 @@ jsonStr = json.dumps(dic)
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.connect((SERVER_IP, SERVER_PORT))
 client.send(ConvertStringToByteArray(jsonStr))
+############################################################
+

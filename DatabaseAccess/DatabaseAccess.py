@@ -95,6 +95,7 @@ class LayDuLieuTrongDataBase:
                 lichSu.IDThiSinh = results[i][0]
                 lichSu.ThoiGian = results[i][1]
                 lichSu.Anh = results[i][2]
+                lichSu.KhuonMatHayVanTay = results[i][3]
                 lstLichSu.append(lichSu)
                 del lichSu
             return lstLichSu
@@ -132,7 +133,7 @@ class LayDuLieuTrongDataBase:
                 self.CSDL.commit()
 
             elif(self.tenBang == "LichSuDiemDanh"):
-                sql = 'INSERT INTO `LichSuDiemDanh`(`IDThiSinh`, `ThoiGian`, `Anh`) VALUES ("%s", "%s", ?)'%(thongTin.IDThiSinh, thongTin.ThoiGian)
+                sql = 'INSERT INTO `LichSuDiemDanh`(`IDThiSinh`, `ThoiGian`, `KhuonMatHayVanTay`, `Anh`) VALUES ("%s", "%s","%s", ?)'%(thongTin.IDThiSinh, thongTin.ThoiGian, thongTin.KhuonMatHayVanTay)
                 print(cursor.execute(sql, (sqlite3.Binary(thongTin.Anh), )))
                 self.CSDL.commit()
 
@@ -152,7 +153,7 @@ class LayDuLieuTrongDataBase:
     
     def xoaBanGhi(self, dieuKien):
         try:
-            cursor = self.CSDL.cursor();
+            cursor = self.CSDL.cursor()
             if(self.tenBang == "ThongTinThiSinh"):
                 sql = 'DELETE FROM `ThongTinThiSinh` WHERE %s'%(dieuKien)
 
@@ -187,6 +188,7 @@ class ThongTinLichSuDiemDanh:
         self.IDThiSinh = ""
         self.ThoiGian = ""
         self.Anh = ""
+        self.KhuonMatHayVanTay= ""
 
 class ThongTinKhoaThi:
     def __init__(self):

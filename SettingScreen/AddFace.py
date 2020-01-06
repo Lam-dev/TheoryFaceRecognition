@@ -57,14 +57,14 @@ class AddFaceScreen(Ui_Frame_AddFace, QObject):
         pixmap = QPixmap(convertToQtFormat)
         resizeImage = pixmap.scaled(280, 480, QtCore.Qt.KeepAspectRatio)
         self.label_forShowCamera.setPixmap(resizeImage)
-
-
+    
     def StartCamera(self):
         self.cameraObj.StartReadImage()
         self.faceRecognitionObj.StartFaceTracking()
         self.timer3sCountdown.start(1000)
 
     def StopCamera(self):
+        self.timer3sCountdown.stop()
         self.cameraObj.StopReadImage()
         self.faceRecognitionObj.StopFaceTracking()
         
@@ -84,3 +84,4 @@ class AddFaceScreen(Ui_Frame_AddFace, QObject):
         self.preStepGoToLeftAnim.start()
         self.currentStepToLeftAnim.start()
         self.currentStepToLeftAnim.finished.connect(self.StartCamera)
+    

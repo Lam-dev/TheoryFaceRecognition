@@ -41,14 +41,19 @@
   <widget class="QLabel" name="label_thongTinHocVien">
    <property name="geometry">
     <rect>
-     <x>176</x>
+     <x>100</x>
      <y>10</y>
-     <width>209</width>
-     <height>17</height>
+     <width>323</width>
+     <height>29</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(33, 33, 33);
+font: 75 bold 18pt &quot;Ubuntu&quot;;
+</string>
+   </property>
    <property name="text">
-    <string>Thông tin học viên</string>
+    <string>THÔNG TIN HỌC VIÊN</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_nameOfStudent">
@@ -88,7 +93,7 @@ font: 75 bold 16pt &quot;Ubuntu&quot;;</string>
    <property name="geometry">
     <rect>
      <x>292</x>
-     <y>162</y>
+     <y>160</y>
      <width>189</width>
      <height>17</height>
     </rect>
@@ -114,7 +119,7 @@ font: 75 bold 16pt &quot;Ubuntu&quot;;</string>
    <property name="geometry">
     <rect>
      <x>292</x>
-     <y>190</y>
+     <y>186</y>
      <width>189</width>
      <height>17</height>
     </rect>
@@ -180,7 +185,7 @@ font: 75 bold 16pt &quot;Ubuntu&quot;;</string>
     <rect>
      <x>288</x>
      <y>258</y>
-     <width>129</width>
+     <width>181</width>
      <height>29</height>
     </rect>
    </property>
@@ -193,7 +198,7 @@ font: 75 bold 16pt &quot;Ubuntu&quot;;</string>
     <rect>
      <x>288</x>
      <y>296</y>
-     <width>129</width>
+     <width>179</width>
      <height>29</height>
     </rect>
    </property>

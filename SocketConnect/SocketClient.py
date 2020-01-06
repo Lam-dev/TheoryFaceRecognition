@@ -297,6 +297,7 @@ class SocketClient(QObject):
             "imageLength":0
         }
         dictToSend = {
+            "mac":MAC,
             "success":"true",
             "code":2,
             "massage":"",

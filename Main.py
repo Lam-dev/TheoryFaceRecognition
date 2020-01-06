@@ -38,6 +38,8 @@ class MainWindow(QMainWindow):
         self.mainScreenObj.SignalConnectNewFTPserver.connect(self.__ConnectNewFTPserver)
         self.mainScreenObj.SignalSettingScreenHiden.connect(self.__SettingScreenHiden)
         self.mainScreenObj.SignalAddFaceEncodeAndFGP.connect(self.__AddFaceEncodingAndFGP)
+
+        self.khoLichSu = LichSuRepository()
         # self.soundObj = Sound()
 #region   dieu khien signal tu camera
 
@@ -80,9 +82,12 @@ class MainWindow(QMainWindow):
                 self.mainScreenObj.ShowStudentInfomation(student)
                 self.socketObject.SendResultsFGPrecognition(studentID)
                 break
-        
+        self.__SaveHistory("FGP", studentID)
+
+
 
     def __AddFaceEncodingAndFGP(self, faceDict, FGPdict):
+
         khoThiSinh = ThiSinhRepository()
         khoThiSinh.capNhatTruong(("NhanDienKhuonMatThem", ), (faceDict["faceEncodingStr"], ), "ID = %s"%(str(faceDict["student"].ID)))
         
@@ -94,7 +99,8 @@ class MainWindow(QMainWindow):
         idVaVanTay.DacTrungVanTay = featureStr
         khoIDvaVanTay = IDvaVanTayRepository()
         khoIDvaVanTay.ghiDuLieu(idVaVanTay)
-        
+        self.FGPobj.ThemIDvaVanTayVaoDanhSachDaLay(faceDict["student"].ID, FGPdict["FGPsavePos"])
+
         for thiSinh in self.lstStudent:
             if(thiSinh.ID == faceDict["student"].ID):
                 thiSinh.NhanDienKhuonMatThem = faceDict["faceEncodingArr"]
@@ -113,6 +119,7 @@ class MainWindow(QMainWindow):
         self.cameraObj.StartReadImage()
         self.faceRecognitionObj.StartFaceTracking()
         self.faceRecognitionObj.StartFaceRecognize()
+        self.FGPobj.BatLayVanTayDangNhap()
 
     def __ReopenReadCamera(self):
         self.mainScreenObj.ClearStudentRecognizedInfomation()
@@ -193,6 +200,7 @@ class MainWindow(QMainWindow):
             fp = open("imageTosend.jpg", 'wb')
             fp.write(faceImageJpgData)
             self.mainScreenObj.ShowStudentInfomation(studentObj)
+            self.__SaveHistory("Face", studentObj.ID)
             # self.mainScreenObj.ShowFaceRecognizeOK()
             self.socketObject.SendResultsFaceRecognize(studentObj.ID, "T", "imageTosend.jpg")
 
@@ -201,10 +209,18 @@ class MainWindow(QMainWindow):
         self.faceRecognitionObj.StopFaceTracking()
         self.faceRecognitionObj.StopFaceRecognize()
         self.__HideCamera()
-        self.timerReopenReadCam.start(1500)
+        self.timerReopenReadCam.start(2000)
 
     def __ShowImageFromCamera(self, pixmap):
         self.mainScreenObj.label_showCamera.setPixmap(pixmap)
+
+    def __SaveHistory(self, FGPorFace, IDThiSinh):
+        lichSu = ThongTinLichSuDiemDanh()
+        lichSu.IDThiSinh = IDThiSinh
+        lichSu.KhuonMatHayVanTay = FGPorFace
+        lichSu.ThoiGian = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        lichSu.Anh = b''
+        self.khoLichSu.ghiDuLieu(lichSu)
 
 def main():
     app = QApplication(sys.argv)

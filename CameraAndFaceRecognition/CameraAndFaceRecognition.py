@@ -18,7 +18,7 @@ class GetImageFromCamera(QObject):
     PixmapFromCamera = pyqtSignal(QPixmap)
     SignalHideCamera = pyqtSignal()
 
-    def __init__(self, frameCut = ((180, 460), (0, 480)), size = (280, 480), scale = 0.4, time = 50, labelObject = ""):
+    def __init__(self, frameCut = ((180, 460), (0, 480)), size = (280, 480), scale = 0.3, time = 50, labelObject = ""):
         super().__init__()
         self.cameraObj = Camera_Object
         self.frameCut = frameCut
@@ -41,6 +41,7 @@ class GetImageFromCamera(QObject):
         threadReadCam.start()
 
     def __GetImageFromCamera(self):
+
         global frame, frameNoFaceMark
         global FaceLocationInImage
         # global NumberFrameNotFace
@@ -76,7 +77,8 @@ class GetImageFromCamera(QObject):
             # if(not self.toBeReadImage):
             #     return
             self.labelObject.setPixmap(resizeImage)
-      
+
+            
     def StopReadImage(self):
         self.timerReadImage.stop()
 

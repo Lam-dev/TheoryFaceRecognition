@@ -20,9 +20,14 @@ class DatabaseManagerScreen(Ui_Frame_containDatabaseScreen, QObject):
         frameContain.setGeometry(0, 0, 800, 480)
         self.frameContainDatabaseScreen = frameContain
         self.setupUi(frameContain)
-        self.pushButton_closeDatabaseScreen.clicked.connect(self.SignalCloseDatabaseScreen.emit)
+        self.pushButton_closeDatabaseScreen.clicked.connect(self.__CloseDatabaseScreen)
         self.pushButton_nextStep.clicked.connect(self.NextStep)
         self.pushButton_nextStep.hide()
+
+        self.pushButton_preStep.clicked.connect(self.PreStep)
+        self.pushButton_preStep.hide()
+
+
         self.comboBox_showListCourser.currentIndexChanged.connect(self.ChooserCourse)
         self.lstStudent = []
         self.lstKhoaThi = []
@@ -46,6 +51,11 @@ class DatabaseManagerScreen(Ui_Frame_containDatabaseScreen, QObject):
         self.FGPadded = object
 
         self.currentStep = 1
+
+    def __CloseDatabaseScreen(self):
+        self.addFGPobj.StopReciptFGP()
+        self.addFaceObj.StopCamera()
+        self.SignalCloseDatabaseScreen.emit()
 
     def AddFGPtoDatabase(self, pos, feature):
         idVaVanTay = IDvaVanTayRepository()
@@ -84,6 +94,9 @@ class DatabaseManagerScreen(Ui_Frame_containDatabaseScreen, QObject):
     def GrappedFGP(self, FGPdict):
         self.FGPadded = FGPdict
 
+    def PreStep(self):
+        pass
+
     def NextStep(self):
         if(self.currentStep == 1):
             self.addFGPobj.ShowStepStudentInformationAnim(self.frame)
@@ -96,7 +109,7 @@ class DatabaseManagerScreen(Ui_Frame_containDatabaseScreen, QObject):
             self.addFaceObj.ShowStepStudentInformationAnim(self.frameContainAddFGP)
             self.currentStep = 3
             self.Step3HightLight()
-            self.FGPsensorObj.TatThemVanTay()
+            self.addFGPobj.StopReciptFGP()
             self.pushButton_nextStep.setText("Hoàn tất")
             
         else:

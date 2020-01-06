@@ -13,7 +13,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Frame_containDatabaseScreen(object):
     def setupUi(self, Frame_containDatabaseScreen):
         Frame_containDatabaseScreen.setObjectName("Frame_containDatabaseScreen")
-        Frame_containDatabaseScreen.resize(800, 478)
+        Frame_containDatabaseScreen.resize(800, 480)
         Frame_containDatabaseScreen.setStyleSheet("background-color: rgb(167, 200, 191);\n"
 "")
         Frame_containDatabaseScreen.setFrameShape(QtWidgets.QFrame.StyledPanel)
@@ -48,8 +48,7 @@ class Ui_Frame_containDatabaseScreen(object):
         self.label_luaChonKhoaHoc.setObjectName("label_luaChonKhoaHoc")
         self.comboBox_showListCourser = QtWidgets.QComboBox(self.frame_2)
         self.comboBox_showListCourser.setGeometry(QtCore.QRect(12, 30, 265, 27))
-        self.comboBox_showListCourser.setStyleSheet("margin: 1px; padding: 7px;\n"
-"background-color: rgb(255, 255, 255);\n"
+        self.comboBox_showListCourser.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 "color: rgba(0,190,255,255);\n"
 "border-style: solid;\n"
 "border-radius: 3px;\n"
@@ -94,7 +93,7 @@ class Ui_Frame_containDatabaseScreen(object):
         self.frame_containAddInformationStep.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_containAddInformationStep.setObjectName("frame_containAddInformationStep")
         self.horizontalLayoutWidget = QtWidgets.QWidget(self.frame_containAddInformationStep)
-        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(196, 390, 87, 16))
+        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(222, 392, 87, 17))
         self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
@@ -126,9 +125,13 @@ class Ui_Frame_containDatabaseScreen(object):
         self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame.setObjectName("frame")
         self.pushButton_nextStep = QtWidgets.QPushButton(self.frame_containAddInformationStep)
-        self.pushButton_nextStep.setGeometry(QtCore.QRect(374, 384, 111, 27))
+        self.pushButton_nextStep.setGeometry(QtCore.QRect(374, 386, 111, 27))
         self.pushButton_nextStep.setStyleSheet("background-color: rgb(0, 135, 202);")
         self.pushButton_nextStep.setObjectName("pushButton_nextStep")
+        self.pushButton_preStep = QtWidgets.QPushButton(self.frame_containAddInformationStep)
+        self.pushButton_preStep.setGeometry(QtCore.QRect(28, 384, 111, 27))
+        self.pushButton_preStep.setStyleSheet("background-color: rgb(0, 135, 202);")
+        self.pushButton_preStep.setObjectName("pushButton_preStep")
 
         self.retranslateUi(Frame_containDatabaseScreen)
         QtCore.QMetaObject.connectSlotsByName(Frame_containDatabaseScreen)
@@ -149,6 +152,7 @@ class Ui_Frame_containDatabaseScreen(object):
         item.setText(_translate("Frame_containDatabaseScreen", "New Item"))
         self.listWidget_showListStudent.setSortingEnabled(__sortingEnabled)
         self.pushButton_nextStep.setText(_translate("Frame_containDatabaseScreen", "Thêm vân tay"))
+        self.pushButton_preStep.setText(_translate("Frame_containDatabaseScreen", "Thêm vân tay"))
 
 
 if __name__ == "__main__":

@@ -20,22 +20,29 @@ class Fingerprint(QObject):
         self.password = password
         try:
             self.fingerprintObj = PyFingerprint(port, baudRate, address, password)
-            self.fingerprintObj.verifyPassword()
+            # self.fingerprintObj.verifyPassword()
         except:
             self.fingerprintObj = False
         
         self.TimerThemVanTay = QTimer()
         self.TimerThemVanTay.timeout.connect(self.ThemVanTay)
         self.TimerLayVanTayDangNhap = QTimer()
-        self.TimerLayVanTayDangNhap.timeout.connect(self.ThreadLayVanTayDangNhap)
+        self.TimerLayVanTayDangNhap.timeout.connect(self.LayVanTayDangNhap)
         self.lstIDvaVanTay = []
         self.viTriDaChonChuaLuu = []
         self.LayDanhSachIDvaVanTay()
+        self.FlagFGPfree = True
 
     def LayDanhSachIDvaVanTay(self):
         khoIDvaVanTay = IDvaVanTayRepository()
         self.lstIDvaVanTay = khoIDvaVanTay.layDanhSach(" 1 = 1 ")
-        
+
+    def ThemIDvaVanTayVaoDanhSachDaLay(self, IDthiSinh, viTriVanTay):
+        idVaVanTay = AnhXaIDvaVanTay()
+        idVaVanTay.IDThiSinh = IDthiSinh
+        idVaVanTay.ViTriVanTay = viTriVanTay
+        self.lstIDvaVanTay.append(idVaVanTay)
+
     def BatThemVanTay(self):
         if(not self.TimerThemVanTay.isActive()):
             self.TimerThemVanTay.start(300)
@@ -45,8 +52,8 @@ class Fingerprint(QObject):
             self.TimerThemVanTay.stop()
     
     def BatLayVanTayDangNhap(self):
-        if(not self.TimerLayVanTayDangNhap.isActive()):
-            self.TimerLayVanTayDangNhap.start(1000)
+        self.TimerLayVanTayDangNhap.stop()
+        self.TimerLayVanTayDangNhap.start(1500)
     
     def TatLayVanTayDangNhap(self):
         if(self.TimerLayVanTayDangNhap.isActive()):
@@ -117,27 +124,28 @@ class Fingerprint(QObject):
     #     for i in range(0, 5000):
 
     def ThreadLayVanTayDangNhap(self):
-        thread = threading.Thread(target = self.LayVanTayDangNhap, args=(), daemon= True)
-        thread.start()
-
+        if(self.FlagFGPfree):
+            self.FlagFGPfree = False
+            thread = threading.Thread(target = self.LayVanTayDangNhap, args=(), daemon= True)
+            thread.start()
+    
     def LayVanTayDangNhap(self):
+        
         try:
-            if(type(self.fingerprintObj) is not bool):
-                if(self.fingerprintObj.readImage()):
-                    self.fingerprintObj.convertImage(0x01)
-                    ketqua = self.fingerprintObj.searchTemplate()
-                    if(len(ketqua) == 2):
-                        for idVaVanTay in self.lstIDvaVanTay:
-                            if(idVaVanTay.ViTriVanTay == ketqua[0]):
-                                self.SignalRecognizedFGP.emit(idVaVanTay.IDThiSinh)
-                                return
-                    self.SignalFGPnotFind.emit()
-            else:
-                self.fingerprintObj = PyFingerprint(self.port, self.baudRate, self.address, self.password)
-                self.fingerprintObj.verifyPassword()
+            if(self.fingerprintObj.readImage()):
+                self.fingerprintObj.convertImage(0x01)
+                ketqua = self.fingerprintObj.searchTemplate()
+                if(len(ketqua) == 2):
+                    for idVaVanTay in self.lstIDvaVanTay:
+                        if(idVaVanTay.ViTriVanTay == ketqua[0]):
+                            self.SignalRecognizedFGP.emit(idVaVanTay.IDThiSinh)
+                            return
+                self.SignalFGPnotFind.emit()
+
         except:
-            self.fingerprintObj = False
-          
+            pass
+        self.FlagFGPfree = True
+
     def NapLaiDuLieuChoCamBienVanTay(self):
         try:
             if(type(self.fingerprintObj) is not bool):

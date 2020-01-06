@@ -27,9 +27,13 @@ class StepShowStudentInformation(QObject, Ui_Frame):
         self.label_forShowIDnumber.setText(student.SoCMTND)
         # self.label_forShowDateOfBird.setText(student.SoCMTND)
         if(len(student.NhanDienKhuonMatThem) == 0):
-            self.label_forShowNumberFaceAdded.setText("Chưa thêm khuôn mặt")
+            self.label_forShowNumberFaceAdded.setStyleSheet("color:rgb(200, 0, 0)")
+            self.label_forShowNumberFaceAdded.setText("Chưa thêm")
         else:
-            self.label_forShowNumberFaceAdded.setText("Đã thêm khuôn mặt")
+            self.label_forShowNumberFaceAdded.setStyleSheet("color:rgb(30, 30, 30)")
+            self.label_forShowNumberFaceAdded.setText("Đã thêm")
+        
+
 
 
     def ShowStepStudentInformationAnim(self, frameOfPreStep):

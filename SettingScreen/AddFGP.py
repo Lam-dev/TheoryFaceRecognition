@@ -68,4 +68,5 @@ class AddFGP(Ui_Frame_AddFGP, QObject):
     def StartReciptFGP(self):
         self.FGPsensorObj.BatThemVanTay()
 
-       
+    def StopReciptFGP(self):
+        self.FGPsensorObj.TatThemVanTay()

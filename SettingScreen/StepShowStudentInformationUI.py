@@ -23,7 +23,7 @@ class Ui_Frame(object):
         self.label_forShowStudentImage.setText("")
         self.label_forShowStudentImage.setObjectName("label_forShowStudentImage")
         self.label_thongTinHocVien = QtWidgets.QLabel(Frame)
-        self.label_thongTinHocVien.setGeometry(QtCore.QRect(100, 10, 323, 29))
+        self.label_thongTinHocVien.setGeometry(QtCore.QRect(100, 10, 323, 31))
         self.label_thongTinHocVien.setStyleSheet("color: rgb(33, 33, 33);\n"
 "font: 75 bold 18pt \"Ubuntu\";\n"
 "")
@@ -47,27 +47,53 @@ class Ui_Frame(object):
         self.label_forShowIDnumber.setGeometry(QtCore.QRect(292, 186, 189, 17))
         self.label_forShowIDnumber.setObjectName("label_forShowIDnumber")
         self.label_faceIcon = QtWidgets.QLabel(Frame)
-        self.label_faceIcon.setGeometry(QtCore.QRect(34, 256, 39, 31))
+        self.label_faceIcon.setGeometry(QtCore.QRect(20, 256, 39, 31))
         self.label_faceIcon.setText("")
         self.label_faceIcon.setObjectName("label_faceIcon")
         self.label_FGPicon = QtWidgets.QLabel(Frame)
-        self.label_FGPicon.setGeometry(QtCore.QRect(34, 296, 39, 31))
+        self.label_FGPicon.setGeometry(QtCore.QRect(20, 296, 39, 31))
         self.label_FGPicon.setText("")
         self.label_FGPicon.setObjectName("label_FGPicon")
         self.label_nhanDienKhuonMat = QtWidgets.QLabel(Frame)
-        self.label_nhanDienKhuonMat.setGeometry(QtCore.QRect(90, 256, 181, 31))
+        self.label_nhanDienKhuonMat.setGeometry(QtCore.QRect(76, 256, 181, 31))
         self.label_nhanDienKhuonMat.setObjectName("label_nhanDienKhuonMat")
         self.label_nhanDienVanTay = QtWidgets.QLabel(Frame)
-        self.label_nhanDienVanTay.setGeometry(QtCore.QRect(90, 296, 181, 31))
+        self.label_nhanDienVanTay.setGeometry(QtCore.QRect(74, 300, 181, 31))
         self.label_nhanDienVanTay.setObjectName("label_nhanDienVanTay")
         self.label_forShowNumberFaceAdded = QtWidgets.QLabel(Frame)
-        self.label_forShowNumberFaceAdded.setGeometry(QtCore.QRect(288, 258, 181, 29))
+        self.label_forShowNumberFaceAdded.setGeometry(QtCore.QRect(270, 258, 149, 29))
         self.label_forShowNumberFaceAdded.setText("")
         self.label_forShowNumberFaceAdded.setObjectName("label_forShowNumberFaceAdded")
         self.label_forShowNumberFGPadded = QtWidgets.QLabel(Frame)
-        self.label_forShowNumberFGPadded.setGeometry(QtCore.QRect(288, 296, 179, 29))
+        self.label_forShowNumberFGPadded.setGeometry(QtCore.QRect(270, 300, 149, 29))
         self.label_forShowNumberFGPadded.setText("")
         self.label_forShowNumberFGPadded.setObjectName("label_forShowNumberFGPadded")
+        self.pushButton_deleteFaceAdded = QtWidgets.QPushButton(Frame)
+        self.pushButton_deleteFaceAdded.setGeometry(QtCore.QRect(448, 252, 39, 39))
+        self.pushButton_deleteFaceAdded.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+"color: rgba(0,190,255,255);\n"
+"border-style: solid;\n"
+"border-radius: 3px;\n"
+"border-width: 0px;\n"
+"border-color: rgba(0,140,255,255);")
+        self.pushButton_deleteFaceAdded.setText("")
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap("../../../icon/iconDelete.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pushButton_deleteFaceAdded.setIcon(icon)
+        self.pushButton_deleteFaceAdded.setIconSize(QtCore.QSize(38, 38))
+        self.pushButton_deleteFaceAdded.setObjectName("pushButton_deleteFaceAdded")
+        self.pushButton_deleteFGPadded = QtWidgets.QPushButton(Frame)
+        self.pushButton_deleteFGPadded.setGeometry(QtCore.QRect(448, 296, 39, 39))
+        self.pushButton_deleteFGPadded.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+"color: rgba(0,190,255,255);\n"
+"border-style: solid;\n"
+"border-radius: 0px;\n"
+"border-width: 0px;\n"
+"border-color: rgba(0,140,255,255);")
+        self.pushButton_deleteFGPadded.setText("")
+        self.pushButton_deleteFGPadded.setIcon(icon)
+        self.pushButton_deleteFGPadded.setIconSize(QtCore.QSize(38, 38))
+        self.pushButton_deleteFGPadded.setObjectName("pushButton_deleteFGPadded")
 
         self.retranslateUi(Frame)
         QtCore.QMetaObject.connectSlotsByName(Frame)

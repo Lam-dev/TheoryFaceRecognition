@@ -44,7 +44,29 @@
    <widget class="QPushButton" name="pushButton_closeDatabaseScreen">
     <property name="geometry">
      <rect>
-      <x>752</x>
+      <x>754</x>
+      <y>2</y>
+      <width>43</width>
+      <height>39</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">margin: 1px; padding: 7px;
+background-color: rgb(255, 255, 255);
+color: rgba(0,190,255,255);
+border-style: solid;
+border-radius: 3px;
+border-width: 1px;
+border-color: rgba(0,140,255,255);</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_reloadDatabase">
+    <property name="geometry">
+     <rect>
+      <x>694</x>
       <y>2</y>
       <width>43</width>
       <height>39</height>
@@ -238,7 +260,7 @@ border-radius:3px;</string>
      <rect>
       <x>222</x>
       <y>392</y>
-      <width>87</width>
+      <width>85</width>
       <height>17</height>
      </rect>
     </property>

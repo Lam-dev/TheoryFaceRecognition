@@ -23,7 +23,15 @@ class AddFGP(Ui_Frame_AddFGP, QObject):
         self.timerHoldHandAnounment = QTimer(self)
         self.timerHoldHandAnounment.timeout.connect(self.HoldHandAnounment)
 
+        self.feature = False
+        self.pos = False
+
+    def ClearAddAdded(self):
+        self.feature = False
+        self.pos = False
+     
     def FGPsavedInSensor(self, pos, feature):
+        
         self.pos = pos
         self.feature = feature
         self.SignalAddedFGP.emit()

@@ -22,6 +22,11 @@ class AddFaceScreen(Ui_Frame_AddFace, QObject):
         self.pushButton_changeImage.clicked.connect(self.ChangeImage)
         self.imageGrapped = False
         self.addForStudent = False
+        
+
+    def ClearAddAdded(self):
+        self.imageGrapped = False
+        self.countdownTime = 3
 
     def GetFaceEncodingImageGrapped(self):
         faceEcodingStr, faceEncodingArr = GetFaceEncodingFromImage().GetFaceEncodingStr(self.imageGrapped)

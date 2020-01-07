@@ -73,7 +73,7 @@ class LayDuLieuTrongDataBase:
                             thiSinh.NhanDienKhuonMat[k].append(j)
                             thiSinh.NhanDienKhuonMat[k][j] =  float(lstDacTrung[j])
                 
-                if(results[i][11] != None):
+                if((results[i][11] != None) & (results[i][11] != "")):
                     lstDSdacTrung = results[i][11].split(';')
                     for k in range (0, len(lstDSdacTrung)):
                         lstDacTrung = lstDSdacTrung[k].split(',')
@@ -82,7 +82,9 @@ class LayDuLieuTrongDataBase:
                             for j in range (0,128):
                                 thiSinh.NhanDienKhuonMatThem[k].append(j)
                                 thiSinh.NhanDienKhuonMatThem[k][j] =  float(lstDacTrung[j])
-                    
+                else:
+                    thiSinh.NhanDienKhuonMatThem = None  
+
                 listThiSinh.append(thiSinh)
                 thiSinh.MaDK = results[i][10]
                 del thiSinh   
@@ -157,6 +159,9 @@ class LayDuLieuTrongDataBase:
             if(self.tenBang == "ThongTinThiSinh"):
                 sql = 'DELETE FROM `ThongTinThiSinh` WHERE %s'%(dieuKien)
 
+            if(self.tenBang == "AnhXaIDvaVanTay"):
+                sql = 'DELETE FROM `AnhXaIDvaVanTay` WHERE %s'%(dieuKien)
+                
             print(cursor.execute(sql))
             self.CSDL.commit()
             cursor.close()

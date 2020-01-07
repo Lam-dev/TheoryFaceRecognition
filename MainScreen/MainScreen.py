@@ -19,6 +19,8 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
     SignalConnectNewFTPserver = pyqtSignal(dict)
     SignalSettingScreenHiden = pyqtSignal()
     SignalAddFaceEncodeAndFGP  = pyqtSignal(dict, dict)
+    SignalDeleteFaceAdded = pyqtSignal(int)
+    SignalDeleteFGPadded = pyqtSignal(int)
 
     def __init__(self, MainWindow):
         QObject.__init__(self)
@@ -190,6 +192,9 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         self.databaseScreenObj = DatabaseManagerScreen(self.frameContainDatabaseScreen)
         self.databaseScreenObj.SignalAddFaceEncodeAndFGP.connect(self.SignalAddFaceEncodeAndFGP.emit)
         self.databaseScreenObj.SignalCloseDatabaseScreen.connect(self.CloseDatabaseScreen)
+        self.databaseScreenObj.SignalDeleteFaceAdded.connect(self.SignalDeleteFaceAdded.emit)
+        self.databaseScreenObj.SignalDeleteFGPadded.connect(self.SignalDeleteFGPadded.emit)
+
 
         self.frameContainDatabaseScreen.show()
         self.frameContainDatabaseScreen.raise_()
@@ -217,6 +222,7 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         self.__keyBoardOpened = False
 
     def __HideSettingScreen(self):
+        self.settingScreenObj.SaveSetting()
         self.settingScreenShadow.hide()
         self.settingScreenShadow.deleteLater()
         self.settingScreenObj.deleteLater()

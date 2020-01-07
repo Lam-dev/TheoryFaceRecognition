@@ -43,6 +43,10 @@ class Fingerprint(QObject):
         idVaVanTay.ViTriVanTay = viTriVanTay
         self.lstIDvaVanTay.append(idVaVanTay)
 
+    def LayLaiDanhSachIDvaVanTay(self, IDthiSinh):
+        khoIDvaVanTay = IDvaVanTayRepository()
+        self.lstIDvaVanTay = khoIDvaVanTay.layDanhSach( " 1 = 1 ")
+
     def BatThemVanTay(self):
         if(not self.TimerThemVanTay.isActive()):
             self.TimerThemVanTay.start(300)

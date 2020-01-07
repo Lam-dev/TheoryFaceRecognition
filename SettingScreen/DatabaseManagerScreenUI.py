@@ -25,7 +25,7 @@ class Ui_Frame_containDatabaseScreen(object):
         self.frame_tabarScreen.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_tabarScreen.setObjectName("frame_tabarScreen")
         self.pushButton_closeDatabaseScreen = QtWidgets.QPushButton(self.frame_tabarScreen)
-        self.pushButton_closeDatabaseScreen.setGeometry(QtCore.QRect(752, 2, 43, 39))
+        self.pushButton_closeDatabaseScreen.setGeometry(QtCore.QRect(754, 2, 43, 39))
         self.pushButton_closeDatabaseScreen.setStyleSheet("margin: 1px; padding: 7px;\n"
 "background-color: rgb(255, 255, 255);\n"
 "color: rgba(0,190,255,255);\n"
@@ -35,6 +35,17 @@ class Ui_Frame_containDatabaseScreen(object):
 "border-color: rgba(0,140,255,255);")
         self.pushButton_closeDatabaseScreen.setText("")
         self.pushButton_closeDatabaseScreen.setObjectName("pushButton_closeDatabaseScreen")
+        self.pushButton_reloadDatabase = QtWidgets.QPushButton(self.frame_tabarScreen)
+        self.pushButton_reloadDatabase.setGeometry(QtCore.QRect(694, 2, 43, 39))
+        self.pushButton_reloadDatabase.setStyleSheet("margin: 1px; padding: 7px;\n"
+"background-color: rgb(255, 255, 255);\n"
+"color: rgba(0,190,255,255);\n"
+"border-style: solid;\n"
+"border-radius: 3px;\n"
+"border-width: 1px;\n"
+"border-color: rgba(0,140,255,255);")
+        self.pushButton_reloadDatabase.setText("")
+        self.pushButton_reloadDatabase.setObjectName("pushButton_reloadDatabase")
         self.frame_2 = QtWidgets.QFrame(Frame_containDatabaseScreen)
         self.frame_2.setGeometry(QtCore.QRect(6, 50, 287, 63))
         self.frame_2.setStyleSheet("background-color: rgb(255, 255, 255);\n"
@@ -93,7 +104,7 @@ class Ui_Frame_containDatabaseScreen(object):
         self.frame_containAddInformationStep.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_containAddInformationStep.setObjectName("frame_containAddInformationStep")
         self.horizontalLayoutWidget = QtWidgets.QWidget(self.frame_containAddInformationStep)
-        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(222, 392, 87, 17))
+        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(222, 392, 85, 17))
         self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)

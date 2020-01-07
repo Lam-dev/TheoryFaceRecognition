@@ -74,8 +74,8 @@ course = {
     "TenKhoaThi":"KhoaThi 2/1/2020",
     "NgayTao":"13:32:32 02/01/2020",
     "DuongDanLuuAnh":""
-
 }
+
 lstName = ["Nguyễn Hồng Lâm", "Nguyễn Xuân Lộc", "Bùi Văn Trung", "Đỗ Mạnh Cường", "Đinh Trọng Tiến"]
 lstStudent = []
 for i in range(1, 5):

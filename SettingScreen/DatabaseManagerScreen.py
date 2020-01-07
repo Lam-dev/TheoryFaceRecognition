@@ -13,6 +13,8 @@ from SettingScreen.AddDataResult              import AddDataResults
 class DatabaseManagerScreen(Ui_Frame_containDatabaseScreen, QObject):
     SignalCloseDatabaseScreen = pyqtSignal()
     SignalAddFaceEncodeAndFGP = pyqtSignal(dict, dict)
+    SignalDeleteFaceAdded = pyqtSignal(int)
+    SignalDeleteFGPadded = pyqtSignal(int)
 
     def __init__(self, frameContain):
         Ui_Frame_containDatabaseScreen.__init__(self)
@@ -27,6 +29,7 @@ class DatabaseManagerScreen(Ui_Frame_containDatabaseScreen, QObject):
         self.pushButton_preStep.clicked.connect(self.PreStep)
         self.pushButton_preStep.hide()
 
+        self.pushButton_reloadDatabase.clicked.connect(self.__ReloadScreen)
 
         self.comboBox_showListCourser.currentIndexChanged.connect(self.ChooserCourse)
         self.lstStudent = []
@@ -35,6 +38,8 @@ class DatabaseManagerScreen(Ui_Frame_containDatabaseScreen, QObject):
         self.GetAndShowListCourse()
         self.listWidget_showListStudent.currentRowChanged.connect(self.ChooseStudent)
         self.studentInfoObj = StepShowStudentInformation(self.frame)
+        self.studentInfoObj.SignalRequestDeleteFaceAdded.connect(self.__DeleteFaceAdded)
+        self.studentInfoObj.SignalRequestDeleteFGPadded.connect(self.__DeleteFGPadded)
 
         self.frameContainAddFGP = QtWidgets.QFrame(self.frame_containAddInformationStep)
         self.frameContainAddFGP.setGeometry(QtCore.QRect(self.frame_containAddInformationStep.width(), 0, 0, 0))
@@ -46,11 +51,36 @@ class DatabaseManagerScreen(Ui_Frame_containDatabaseScreen, QObject):
         self.addFaceObj.SignalGrappedImage.connect(self.GrappedFaceImage)
         self.choseStudent = object
 
-
         self.faceAdded = object
         self.FGPadded = object
 
         self.currentStep = 1
+
+    def __DeleteFaceAdded(self):
+        try:
+            khoThiSinh = ThiSinhRepository()
+            khoThiSinh.capNhatTruong(("NhanDienKhuonMatThem",),("", ), " ID = %s "%(self.choseStudent.ID))
+            self.choseStudent.NhanDienKhuonMatThem = None
+            self.studentInfoObj.ShowStudentInformation(self.choseStudent)
+            self.SignalDeleteFaceAdded.emit(self.choseStudent.ID)
+        except:
+            pass
+
+    def __DeleteFGPadded(self):
+        try:
+            khoTSvaVanTay = IDvaVanTayRepository()
+            khoTSvaVanTay.xoaBanGhi(" IDThiSinh = %s "%(self.choseStudent.ID))
+            self.studentInfoObj.ShowStudentInformation(self.choseStudent)
+            self.SignalDeleteFGPadded.emit(self.choseStudent.ID)
+        except:
+            pass
+
+
+    def __ReloadScreen(self):
+        self.listWidget_showListStudent.clear()
+        self.comboBox_showListCourser.clear()
+        self.GetAndShowListCourse()
+        self.__ReturnStep1()
 
     def __CloseDatabaseScreen(self):
         self.addFGPobj.StopReciptFGP()
@@ -66,7 +96,6 @@ class DatabaseManagerScreen(Ui_Frame_containDatabaseScreen, QObject):
         idVaVanTay.DacTrungVanTay = featureStr
         khoIDvaVanTay = IDvaVanTayRepository()
         khoIDvaVanTay.ghiDuLieu(idVaVanTay)
-
 
     def ShowAddDataDialog(self):
         self.dialogShadow = QtWidgets.QFrame(self.frameContainDatabaseScreen )
@@ -88,7 +117,7 @@ class DatabaseManagerScreen(Ui_Frame_containDatabaseScreen, QObject):
         self.studentInfoObj.ShowStepStudentInformationAnim(self.frameContainAddFace)
 
     def GrappedFaceImage(self, iamgeDict):
-        
+
         self.pushButton_nextStep.setText("Hoàn tất")
 
     def GrappedFGP(self, FGPdict):
@@ -113,6 +142,7 @@ class DatabaseManagerScreen(Ui_Frame_containDatabaseScreen, QObject):
             self.pushButton_nextStep.setText("Hoàn tất")
             
         else:
+            self.currentStep == 1
             faceEncodeDict = self.addFaceObj.GetFaceEncodingImageGrapped()
             FGPdict = self.addFGPobj.GetFGPsavePosAndFeature()
             self.SignalAddFaceEncodeAndFGP.emit(faceEncodeDict, FGPdict)
@@ -138,12 +168,36 @@ class DatabaseManagerScreen(Ui_Frame_containDatabaseScreen, QObject):
         self.label_step2HighLight.setStyleSheet("border-radius:7px;border-color:rgb(0, 170, 255);border-width:2px")
 
     def ChooseStudent(self):
+        if(self.currentStep != 1):
+            self.addFGPobj.StopReciptFGP()
+            self.addFaceObj.StopCamera()
+            if(self.currentStep == 2):
+                self.studentInfoObj.ShowStepStudentInformationAnim(self.frameContainAddFGP)
+            else:
+                self.studentInfoObj.ShowStepStudentInformationAnim(self.frameContainAddFace)
+        self.currentStep = 1
+        self.addFaceObj.ClearAddAdded()
+        self.addFGPobj.ClearAddAdded()
+
         row = self.listWidget_showListStudent.currentRow()
         self.studentInfoObj.ShowStudentInformation(self.lstStudent[row])
         self.pushButton_nextStep.show()
         self.addFaceObj.addForStudent = self.lstStudent[row]
         self.addFGPobj.studentForAdd = self.lstStudent[row]
         self.choseStudent = self.lstStudent[row]
+
+    def __ReturnStep1(self):
+        if(self.currentStep != 1):
+            self.addFGPobj.StopReciptFGP()
+            self.addFaceObj.StopCamera()
+            if(self.currentStep == 2):
+                self.studentInfoObj.ShowStepStudentInformationAnim(self.frameContainAddFGP)
+            else:
+                self.studentInfoObj.ShowStepStudentInformationAnim(self.frameContainAddFace)
+        self.currentStep = 1
+        self.addFaceObj.ClearAddAdded()
+        self.addFGPobj.ClearAddAdded()
+
 
     def GetAndShowListCourse(self):
         khoKhoaHoc = KhoaThiRepository()

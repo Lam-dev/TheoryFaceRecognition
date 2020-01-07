@@ -320,7 +320,7 @@ class SocketClient(QObject):
     def SendResultsFaceRecognize(self, ID ,confirmTrueOrFalse, nameOfPhotoTaked):
         resultFrame = self.__ConvertJsonStringToByteArr(self.__BuildResultToSend(ID))
         self.__SendDataViaSocket(bytes(resultFrame))
-        self.ftpObj.SendImageToFTPserver(nameOfPhotoTaked, FTP_FILE_PATH_TO_UPLOAD +"/"+ datetime.now().strftime("%Y%m%d") + '/' + str(ID)+"_"+datetime.now().strftime("%H%M%S")+ ".jpg")
+        # self.ftpObj.SendImageToFTPserver(nameOfPhotoTaked, FTP_FILE_PATH_TO_UPLOAD +"/"+ datetime.now().strftime("%Y%m%d") + '/' + str(ID)+"_"+datetime.now().strftime("%H%M%S")+ ".jpg")
 
     def SendResultsFGPrecognition(self, ID):
         resultFrame = self.__ConvertJsonStringToByteArr(self.__BuildResultToSend(ID))
@@ -329,14 +329,15 @@ class SocketClient(QObject):
 #endregion
     
     def SendAddFaceAndFGP(self, info):
-        
-        with open('data.txt', 'w') as outfile:
+        fileName = "TTND_" + datetime.now().strftime("%Y_%m_%d_%H_%M_%S") + ".json"
+        with open(fileName, 'w') as outfile:
             json.dump(info, outfile)
-        self.ftpObj.SendImageToFTPserver("data.txt", FTP_FILE_PATH_TO_UPLOAD +"/"+"data.txt")
+
+        self.ftpObj.SendImageToFTPserver(fileName, FTP_FILE_PATH_TO_UPLOAD +"/"+fileName)
         dictToServer = {
             "mac":MAC,
             "code":4,
-            "fileName":"data.txt"
+            "fileName": fileName
         }
         jsonStr = json.dumps(dictToServer)
         resultFrame = self.__ConvertJsonStringToByteArr(jsonStr)

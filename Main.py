@@ -38,7 +38,8 @@ class MainWindow(QMainWindow):
         self.mainScreenObj.SignalConnectNewFTPserver.connect(self.__ConnectNewFTPserver)
         self.mainScreenObj.SignalSettingScreenHiden.connect(self.__SettingScreenHiden)
         self.mainScreenObj.SignalAddFaceEncodeAndFGP.connect(self.__AddFaceEncodingAndFGP)
-
+        self.mainScreenObj.SignalDeleteFaceAdded.connect(self.__DeleteFaceAdded)
+        self.mainScreenObj.SignalDeleteFGPadded.connect(self.__DeleteFGPadded)
         self.khoLichSu = LichSuRepository()
         # self.soundObj = Sound()
 #region   dieu khien signal tu camera
@@ -84,8 +85,6 @@ class MainWindow(QMainWindow):
                 break
         self.__SaveHistory("FGP", studentID)
 
-
-
     def __AddFaceEncodingAndFGP(self, faceDict, FGPdict):
 
         khoThiSinh = ThiSinhRepository()
@@ -106,6 +105,7 @@ class MainWindow(QMainWindow):
                 thiSinh.NhanDienKhuonMatThem = faceDict["faceEncodingArr"]
                 break
         self.mainScreenObj.databaseScreenObj.ShowAddDataDialog()
+
         sendDict = {
             "ID":faceDict["student"].ID,
             "FaceEncoding":faceDict["faceEncodingStr"],
@@ -113,8 +113,15 @@ class MainWindow(QMainWindow):
         }
         self.socketObject.SendAddFaceAndFGP(sendDict)
 
+    def __DeleteFaceAdded(self, idStudent):
+        for student in self.lstStudent:
+            if(student.ID == idStudent):
+                student.NhanDienKhuonMatThem = ""
+                return
 
-
+    def __DeleteFGPadded(self):
+        self.FGPobj.LayDanhSachIDvaVanTay()
+   
     def __SettingScreenHiden(self):
         self.cameraObj.StartReadImage()
         self.faceRecognitionObj.StartFaceTracking()

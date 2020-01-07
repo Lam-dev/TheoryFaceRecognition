@@ -170,7 +170,10 @@ class SettingScreen(Ui_frame_settingScreen, QObject):
         else: 
             self.lb_textDatabaseSetting.setFont(self.boldFont)
             self.RequestOpenDatabaseScreen.emit()
-
+    
+    def SaveSetting(self):
+        self.content.SaveSetting()
+        
 class MyScrollArea(QtWidgets.QScrollArea):
     def __init__(self, frameContain):
         super().__init__(frameContain)
@@ -195,7 +198,7 @@ class MyScrollArea(QtWidgets.QScrollArea):
         self.setWidgetResizable(False)
         self.setGeometry(0, 0, 421, 421)
 
-    
+
 
 
 

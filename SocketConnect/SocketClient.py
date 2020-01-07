@@ -101,6 +101,8 @@ class SocketClient(QObject):
         try:
             if(not self.FlagServerISconnect):
                 self.clientObj = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                self.clientObj.settimeout(0.5)
+                self.clientObj.setblocking(1)
                 self.clientObj.connect((SERVER_IP, SERVER_PORT))
                 self.clientObj.send(self.__DungKhungGiaoTiep(MAC_ADDRESS, CLIENT_REQUEST_CONNECT)[0])
                 self.SignalServerConnected.emit()

@@ -1,4 +1,4 @@
-from    pyfingerprint.pyfingerprint import PyFingerprint
+from    FingerPrintSensor.FingerprintLib    import PyFingerprint
 from    PyQt5.QtCore       import QRect, QPropertyAnimation, QTimer, pyqtSignal, pyqtSlot, QObject
 from    DatabaseAccess.DatabaseAccess   import *
 import  time

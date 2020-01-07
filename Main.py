@@ -51,7 +51,7 @@ class MainWindow(QMainWindow):
 
         self.faceRecognitionObj.StudentRecognized.connect(self.__RecognizedStudent)
         self.faceRecognitionObj.StudentNotRecognized.connect(self.__NotRecognized)
-        self.faceRecognitionObj.StartFaceTracking()
+        # self.faceRecognitionObj.StartFaceTracking()
         self.faceRecognitionObj.StartFaceRecognize()
         
         
@@ -124,7 +124,7 @@ class MainWindow(QMainWindow):
    
     def __SettingScreenHiden(self):
         self.cameraObj.StartReadImage()
-        self.faceRecognitionObj.StartFaceTracking()
+        # self.faceRecognitionObj.StartFaceTracking()
         self.faceRecognitionObj.StartFaceRecognize()
         self.FGPobj.BatLayVanTayDangNhap()
 
@@ -132,7 +132,8 @@ class MainWindow(QMainWindow):
         self.mainScreenObj.ClearStudentRecognizedInfomation()
         self.cameraObj.StartReadImage()
         self.faceRecognitionObj.StartFaceRecognize()
-        self.faceRecognitionObj.StartFaceTracking()
+        # self.faceRecognitionObj.StartFaceTracking()
+        self.FGPobj.BatLayVanTayDangNhap()
         self.timerReopenReadCam.stop()
     
     def __ConnectNewFTPserver(self, ftpServerDict):
@@ -168,7 +169,7 @@ class MainWindow(QMainWindow):
 
     def __ShowSettingScreen(self):
         self.faceRecognitionObj.StopFaceRecognize()
-        self.faceRecognitionObj.StopFaceTracking()
+        # self.faceRecognitionObj.StopFaceTracking()
         self.FGPobj.TatLayVanTayDangNhap()
         self.cameraObj.StopReadImage()
         self.mainScreenObj.ShowSettingScreen()
@@ -212,8 +213,9 @@ class MainWindow(QMainWindow):
             self.socketObject.SendResultsFaceRecognize(studentObj.ID, "T", "imageTosend.jpg")
 
     def __OffCameraTemporary(self):
+        self.FGPobj.TatLayVanTayDangNhap()
         self.cameraObj.StopReadImage()
-        self.faceRecognitionObj.StopFaceTracking()
+        # self.faceRecognitionObj.StopFaceTracking()
         self.faceRecognitionObj.StopFaceRecognize()
         self.__HideCamera()
         self.timerReopenReadCam.start(2000)

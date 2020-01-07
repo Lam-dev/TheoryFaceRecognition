@@ -159,9 +159,9 @@ class FaceRecognition(QObject):
         # self.FaceRecognition()
 
     def __FaceRecognition(self, image):
-        
-        faceLocInImages = self.__DetectFaceInImage(image)
-        if(type(faceLocInImages) is bool):
+        global FaceLocationInImage
+        FaceLocationInImage = self.__DetectFaceInImage(image)
+        if(type(FaceLocationInImage) is bool):
             return
         self.numberFaceRecognize += 1
         # if(self.numberFaceRecognize == 4):
@@ -169,7 +169,7 @@ class FaceRecognition(QObject):
         #     self.numberFaceRecognize = 0
         #     jpgData = jpgData.tobytes()
         #     self.StudentNotRecognized.emit(self.lstStudent[0], jpgData)
-        faceEncodings = face_recognition.face_encodings(image, faceLocInImages)
+        faceEncodings = face_recognition.face_encodings(image, FaceLocationInImage)
         i = 0
         for student in self.lstStudent:
             i = i + 1

@@ -159,7 +159,7 @@ class PyFingerprint(object):
         self.__password = password
 
         ## Initialize PySerial connection
-        self.__serial = serial.Serial(port = port, baudrate = baudRate, bytesize = serial.EIGHTBITS, timeout = 0.5)
+        self.__serial = serial.Serial(port = port, baudrate = baudRate, bytesize = serial.EIGHTBITS, timeout = 2)
 
         if ( self.__serial.isOpen() == True ):
             self.__serial.close()

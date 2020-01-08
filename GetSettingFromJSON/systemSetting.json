@@ -1,1 +1,1 @@
-{"autoShutdown": 2, "serverPassword": "2121996", "serverIP": "192.168.1.15", "ftpPassword": "admin@123", "imageQuality": 1, "FRthreshold": 4, "faceMark": 1, "ftpAccount": "ecotek", "serverPort": "2019", "ftpPort": "21", "ftpIP": "192.168.1.86", "serverAccount": "lam96pt"}
+{"serverAccount": "lam96pt", "autoShutdown": 2, "faceMark": 1, "FRthreshold": 4, "ftpAccount": "ecotek", "ftpPort": "21", "ftpPassword": "admin@123", "serverPassword": "2121996", "serverIP": "192.168.1.15", "serverPort": "2019", "ftpIP": "192.168.1.86", "imageQuality": 1}

@@ -146,6 +146,8 @@ class PyFingerprint(object):
         @param integer(4 bytes) password
         """
 
+        self.timeReadNoData = 0
+
         if ( baudRate < 9600 or baudRate > 115200 or baudRate % 9600 != 0 ):
             raise ValueError('The given baudrate is invalid!')
 
@@ -159,7 +161,7 @@ class PyFingerprint(object):
         self.__password = password
 
         ## Initialize PySerial connection
-        self.__serial = serial.Serial(port = port, baudrate = baudRate, bytesize = serial.EIGHTBITS, timeout = 2)
+        self.__serial = serial.Serial(port = port, baudrate = baudRate, bytesize = serial.EIGHTBITS, timeout = 0.5)
 
         if ( self.__serial.isOpen() == True ):
             self.__serial.close()
@@ -287,18 +289,18 @@ class PyFingerprint(object):
 
         receivedPacketData = []
         i = 0
-
+        self.timeReadNoData = 0
         while ( True ):
-
             ## Read one byte
             receivedFragment = self.__serial.read()
-
             if ( len(receivedFragment) != 0 ):
                 receivedFragment = self.__stringToByte(receivedFragment)
-            else:
-                return False
+                self.timeReadNoData = 0
                 ## print 'Received packet fragment = ' + hex(receivedFragment)
-
+            else:
+                self.timeReadNoData += 1
+                if(self.timeReadNoData == 3):
+                    return
             ## Insert byte if packet seems valid
             receivedPacketData.insert(i, receivedFragment)
             i += 1

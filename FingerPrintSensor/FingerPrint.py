@@ -139,6 +139,7 @@ class Fingerprint(QObject):
             if(self.fingerprintObj.readImage()):
                 self.fingerprintObj.convertImage(0x01)
                 ketqua = self.fingerprintObj.searchTemplate()
+                print("ket qua = %s"%(ketqua[0]))
                 if(len(ketqua) == 2):
                     for idVaVanTay in self.lstIDvaVanTay:
                         if(idVaVanTay.ViTriVanTay == ketqua[0]):

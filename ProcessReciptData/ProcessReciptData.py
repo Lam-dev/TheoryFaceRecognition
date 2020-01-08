@@ -129,7 +129,7 @@ class ProcessReciptData(QObject):
                 "MAC":"12345", 
                 "ListCourse":listCourseID,
             }
-            fileName  = datetime.now().strftime("%d_%m_%Y-%H_%M_%S")+".json"
+            fileName  = "DSKT_" + datetime.now().strftime("%d_%m_%Y-%H_%M_%S")+".json"
             with open(fileName, 'w') as outfile:
                 json.dump(jsonSaveIntoFile, outfile)
             messageForSendToServer = {
@@ -166,6 +166,7 @@ class ProcessReciptData(QObject):
                     "fileName":fileName,
                     "checkSum":""
                 }
+                
                 self.SignalSendFile.emit(fileName)
                 self.SignalSendMessage(messageForSendToServer)
             except:

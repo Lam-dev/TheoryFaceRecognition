@@ -202,15 +202,14 @@ class MainWindow(QMainWindow):
                 
     def __RecognizedStudent(self, studentObj, faceImageJpgData):
         self.__OffCameraTemporary()
-        if(self.settingFindOrConfirmStudent == "C"):
-            # self.soundObj.ThreadPlayBipBipBip()
-            # self.soundObj.ThreadPlayMoiTSlenXe()
-            fp = open("imageTosend.jpg", 'wb')
-            fp.write(faceImageJpgData)
-            self.mainScreenObj.ShowStudentInfomation(studentObj)
-            self.__SaveHistory("Face", studentObj.ID)
-            # self.mainScreenObj.ShowFaceRecognizeOK()
-            self.socketObject.SendResultsFaceRecognize(studentObj.ID, "T", "imageTosend.jpg")
+        # self.soundObj.ThreadPlayBipBipBip()
+        # self.soundObj.ThreadPlayMoiTSlenXe()
+        fp = open("imageTosend.jpg", 'wb')
+        fp.write(faceImageJpgData)
+        self.mainScreenObj.ShowStudentInfomation(studentObj)
+        # self.__SaveHistory("Face", studentObj.ID)
+        # self.mainScreenObj.ShowFaceRecognizeOK()
+        self.socketObject.SendResultsFaceRecognize(studentObj.ID, "T", "imageTosend.jpg")
 
     def __OffCameraTemporary(self):
         self.FGPobj.TatLayVanTayDangNhap()

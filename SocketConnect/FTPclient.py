@@ -87,7 +87,7 @@ class FTPclient(QObject):
             path,filename = os.path.split(remotefile)
             print("creating directory: " + remotefile)
             self.ftpObj.mkd(path)
-            self.SendImageToFTPserver(localfile, remotefile)
+            self.ftpObj.storbinary('STOR %s' % remotefile, fp, 1024)
             fp.close()
             return
         fp.close()

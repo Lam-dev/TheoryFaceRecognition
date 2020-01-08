@@ -8,7 +8,7 @@ import  time
 from    SocketConnect.FTPclient import FTPclient
 from    GetSettingFromJSON    import GetSetting
 import json
-
+import  os
 
 SETTING_DICT                                        = GetSetting.LoadSettingFromFile()
 SERVER_IP                                           = SETTING_DICT["serverIP"]
@@ -291,12 +291,14 @@ class SocketClient(QObject):
         }
         return json.dumps(dictToSend)
         
-    def __BuildResultToSend(self, studentNumberCard):
+    def __BuildResultToSend(self, studentNumberCard, imageFileName, RecBy):
 
         dictData = {
             "cardNumber":studentNumberCard,
             "time":datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
-            "imageLength":0
+            "imageLength":0,
+            "imageDir": imageFileName,
+            "recBy": RecBy
         }
         dictToSend = {
             "mac":MAC,
@@ -320,12 +322,16 @@ class SocketClient(QObject):
 #region nhom ham gui thong tin cho server
 
     def SendResultsFaceRecognize(self, ID ,confirmTrueOrFalse, nameOfPhotoTaked):
-        resultFrame = self.__ConvertJsonStringToByteArr(self.__BuildResultToSend(ID))
+        imageFileName = FTP_FILE_PATH_TO_UPLOAD +"/"+ datetime.now().strftime("%Y%m%d") + '/' + str(ID)+"_"+datetime.now().strftime("%H%M%S")+ ".jpg"
+        resultFrame = self.__ConvertJsonStringToByteArr(self.__BuildResultToSend(ID, imageFileName, "Face"))
         self.__SendDataViaSocket(bytes(resultFrame))
+        thread = threading.Thread(target = self.ftpObj.SendImageToFTPserver, args = (nameOfPhotoTaked, imageFileName), daemon= True)
+        thread.start()
         # self.ftpObj.SendImageToFTPserver(nameOfPhotoTaked, FTP_FILE_PATH_TO_UPLOAD +"/"+ datetime.now().strftime("%Y%m%d") + '/' + str(ID)+"_"+datetime.now().strftime("%H%M%S")+ ".jpg")
 
+
     def SendResultsFGPrecognition(self, ID):
-        resultFrame = self.__ConvertJsonStringToByteArr(self.__BuildResultToSend(ID))
+        resultFrame = self.__ConvertJsonStringToByteArr(self.__BuildResultToSend(ID, "", "FGP"))
         self.__SendDataViaSocket(bytes(resultFrame))
 
 #endregion
@@ -336,6 +342,7 @@ class SocketClient(QObject):
             json.dump(info, outfile)
 
         self.ftpObj.SendImageToFTPserver(fileName, FTP_FILE_PATH_TO_UPLOAD +"/"+fileName)
+        os.remove(fileName)
         dictToServer = {
             "mac":MAC,
             "code":4,

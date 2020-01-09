@@ -226,8 +226,8 @@ class ProcessReciptData(QObject):
         khoaThi.DuongDanLuuAnh = ""
         khoaThi.NgayTao = dataObj.data.CourseInfo.NgayTao
         khoKhoaThi = KhoaThiRepository()
-        idKhoaThi = khoKhoaThi.ghiDuLieu(khoaThi)
-        self.__AddStudent(dataObj.data.CardNumber, idKhoaThi)
+        khoKhoaThi.ghiDuLieu(khoaThi)
+        self.__AddStudent(dataObj.data.CardNumber, khoaThi.IDKhoaThi)
 
     def __AddStudent(self, lstStudentNumber, IDCourse):
         

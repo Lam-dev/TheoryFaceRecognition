@@ -140,7 +140,7 @@ class LayDuLieuTrongDataBase:
                 self.CSDL.commit()
 
             elif(self.tenBang == "ThongTinKhoaThi"):
-                sql = 'INSERT INTO `ThongTinKhoaThi`(`NgayTao`, `TenKhoaThi`, `ThuMucLuuAnh`) VALUES ("%s", "%s", "%s")'%(thongTin.NgayTao, thongTin.TenKhoaThi, thongTin.DuongDanLuuAnh)
+                sql = 'INSERT INTO `ThongTinKhoaThi`(`IDKhoaThi`,`NgayTao`, `TenKhoaThi`, `ThuMucLuuAnh`) VALUES ("%s", "%s", "%s", "%s")'%(str(thongTin.IDKhoaThi) ,thongTin.NgayTao, thongTin.TenKhoaThi, thongTin.DuongDanLuuAnh)
                 key = cursor.execute(sql).lastrowid
                 self.CSDL.commit()
                 return key

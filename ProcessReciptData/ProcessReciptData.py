@@ -196,11 +196,14 @@ class ProcessReciptData(QObject):
         self.SignalNumberStudentParsed.emit(number, all)
 
     def __ProcessRequestUpdateDatabase(self, reciptObj):
-        lstStudent = reciptObj.data.CardNumber
-        if(len(lstStudent) == 0):
-            return
+
+
         if(reciptObj.data.action == "update"):
-            self.__AddStudent(lstStudent, 1)
+            lstStudent = reciptObj.data.CardNumber
+            idCourse = reciptObj.data.IDKhoaThi
+            if(len(lstStudent) == 0):
+                return
+            self.__AddStudent(lstStudent, idCourse)
 
         elif(reciptObj.data.action == "newCourse"):
             self.__CreateAndAddNewCourse(reciptObj)
@@ -210,6 +213,8 @@ class ProcessReciptData(QObject):
         elif(reciptObj.data.action == "getAll"):
             pass
         elif(reciptObj.data.action == "deleteBy"):
+            if(len(lstStudent) == 0):
+                return
             self.__DeleteStudentByNumber(lstStudent)
         elif(reciptObj.data.action == "deleteAll"):
             self.__DeleteAllStudent()

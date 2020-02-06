@@ -33,7 +33,8 @@ FTP_ACCOUNT  =  SETTING_DICT["ftpAccount"]
 FTP_PASSWORD =  SETTING_DICT["ftpPassword"]
 
 LOCAL_PATH_CONTAIN_DATA_UPDATE = "DataUpdate/"
-FTP_SERVER_DOWLOAD_IMAGE_FILE_PATH = "syncimage/"
+FTP_SERVER_DOWLOAD_IMAGE_FILE_PATH = "files/syncimage/"
+FTP_FILE_PATH_TO_UPLOAD            = GetSetting.GetSetting("--ServerImageDir")
 
 class FTPclient(QObject):
     SignalFTPnotConnect = pyqtSignal()
@@ -104,7 +105,7 @@ class FTPclient(QObject):
         os.mkdir("DataUpdate")
         self.ftpObj.cwd(FTP_SERVER_DOWLOAD_IMAGE_FILE_PATH)
         for f in lstFile:
-            if(not f.__contains__(".jpg")):
+            if((not f.__contains__(".jpg")) & (not f.__contains__(".json"))):
                 continue
             try:
                 self.ftpObj.retrbinary("RETR " + f ,open(LOCAL_PATH_CONTAIN_DATA_UPDATE + f, 'wb').write)

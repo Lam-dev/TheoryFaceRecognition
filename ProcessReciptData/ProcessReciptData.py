@@ -30,6 +30,8 @@ class ProcessReciptData(QObject):
     SignalNumberStudentParsed = pyqtSignal(int, int)
     SignalSendFile = pyqtSignal(str)
     SignalSendMessage = pyqtSignal(str)
+    SignalUpdateOrSyncStudentInfo = pyqtSignal(dict)
+
     def __init__(self):
         super().__init__()
         # self.ftpObj = FTPclient()
@@ -196,14 +198,16 @@ class ProcessReciptData(QObject):
         self.SignalNumberStudentParsed.emit(number, all)
 
     def __ProcessRequestUpdateDatabase(self, reciptObj):
-
-
+        
         if(reciptObj.data.action == "update"):
             lstStudent = reciptObj.data.CardNumber
             idCourse = reciptObj.data.IDKhoaThi
             if(len(lstStudent) == 0):
                 return
             self.__AddStudent(lstStudent, idCourse)
+        
+        elif(reciptObj.data.action == "sync"):
+            self.__UpdateSyncData(reciptObj.data.fileName)
 
         elif(reciptObj.data.action == "newCourse"):
             self.__CreateAndAddNewCourse(reciptObj)
@@ -218,6 +222,28 @@ class ProcessReciptData(QObject):
             self.__DeleteStudentByNumber(lstStudent)
         elif(reciptObj.data.action == "deleteAll"):
             self.__DeleteAllStudent()
+
+    def __UpdateSyncData(self, fileName):
+        lstFileName = []
+        lstFileName.append(fileName)
+        ftpObj = FTPclient()
+        ftpObj.GetListFileFromServer(lstFileName)
+        updateFilePath = LOCAL_PATH_CONTAIN_DATA_UPDATE + fileName
+        with open(updateFilePath) as json_file:
+            jsonDict = json.load(json_file)
+        khoThiSinh = ThiSinhRepository()
+        khoThiSinh.capNhatTruong(("NhanDienKhuonMatThem", "NhanDienVanTay"),(jsonDict["FaceEncoding"], jsonDict["FGPEncoding"]), " ID = %s "%(jsonDict["ID"]))
+        faceEncodingStringArr = jsonDict["FaceEncoding"].split(",")
+        faceEncodingArr = [float(elem) for elem in faceEncodingStringArr]
+        FGPencodingStringArr = jsonDict["FGPEncoding"].split(",")
+        FGPencodingArr = [int(elem) for elem in FGPencodingStringArr]
+
+        faceInfoDict = {
+            "faceEncodingArr": faceEncodingArr,
+            "FGPencoding":FGPencodingArr,
+            "idStudent" : jsonDict["ID"],
+        }
+        self.SignalUpdateOrSyncStudentInfo.emit(faceInfoDict)
 
     def __CreateAndAddNewCourse(self, dataObj):
         khoaThi = ThongTinKhoaThi()

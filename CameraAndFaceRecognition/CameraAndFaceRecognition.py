@@ -35,7 +35,6 @@ class GetImageFromCamera(QObject):
         global frameNoFaceMark
         return frameNoFaceMark
 
-
     def __ThreadReadCamera(self):
         threadReadCam = threading.Thread(target= self.__GetImageFromCamera, args=(), daemon=True)
         threadReadCam.start()

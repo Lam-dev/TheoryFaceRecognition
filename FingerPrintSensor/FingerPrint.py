@@ -27,7 +27,7 @@ class Fingerprint(QObject):
         self.TimerThemVanTay = QTimer()
         self.TimerThemVanTay.timeout.connect(self.ThemVanTay)
         self.TimerLayVanTayDangNhap = QTimer()
-        self.TimerLayVanTayDangNhap.timeout.connect(self.LayVanTayDangNhap)
+        self.TimerLayVanTayDangNhap.timeout.connect(self.ThreadLayVanTayDangNhap)
         self.lstIDvaVanTay = []
         self.viTriDaChonChuaLuu = []
         self.LayDanhSachIDvaVanTay()
@@ -84,7 +84,14 @@ class Fingerprint(QObject):
                 self.fingerprintObj.verifyPassword()
         except NameError:
             self.fingerprintObj = False
-            
+    
+    def NapVanTayTuThietBiVaoCamBien(self, FGPencoding):
+        self.fingerprintObj.uploadCharacteristics(characteristicsData= FGPencoding)
+        viTriTrong = self.TimKhoangTrong()
+        self.fingerprintObj.storeTemplate(viTriTrong, 0x01)
+        return viTriTrong
+
+
     def TimViTriLuu(self):
         for i in range(0,4):
             lstViTri =  self.fingerprintObj.getTemplateIndex(i)
@@ -144,6 +151,7 @@ class Fingerprint(QObject):
                     for idVaVanTay in self.lstIDvaVanTay:
                         if(idVaVanTay.ViTriVanTay == ketqua[0]):
                             self.SignalRecognizedFGP.emit(idVaVanTay.IDThiSinh)
+                            self.FlagFGPfree = True
                             return
                 self.SignalFGPnotFind.emit()
 

@@ -9,14 +9,14 @@
 import socket
 from   datetime     import datetime
 import json
-SERVER_IP                                           = "192.168.1.15"
+SERVER_IP                                           = "192.168.1.45"
 SERVER_PORT                                         = 2019
 def __DungKhungGiaoTiep(noiDung, malenh):
         
         if(type(noiDung) is not str): 
             return False, False
         highChieuDaiTen = int(len(noiDung) / 256)
-        lowChieuDaiTen = int(len(noiDung) % 256)
+        lowChieuDaiTen = int(len(noiDung) % 256)                                                                                                                                                                                                                                                                                    
         khungTruyen = [0x45, 0x53, 0x4D, malenh,lowChieuDaiTen, highChieuDaiTen]
         tong = malenh + lowChieuDaiTen + highChieuDaiTen
         j = 0
@@ -69,29 +69,30 @@ def ConvertStringToByteArray(string):
 
 # print(datetime.now().strftime("%d_%m_%Y"))
 ####### create course and update listStuden##################################
-course = {
-    "IDKhoaThi": 1,
-    "TenKhoaThi":"KhoaThi 2/1/2020",
-    "NgayTao":"13:32:32 02/01/2020",
-    "DuongDanLuuAnh":""
-}
+# course = {
+#     "IDKhoaThi": 1,
+#     "TenKhoaThi":"KhoaThi 2/1/2020",
+#     "NgayTao":"13:32:32 02/01/2020",
+#     "DuongDanLuuAnh":""
+# }
 
-lstName = ["Nguyễn Hồng Lâm", "Nguyễn Xuân Lộc", "Bùi Văn Trung", "Đỗ Mạnh Cường", "Đinh Trọng Tiến"]
-lstStudent = []
-for i in range(1, 5):
-    student = {
-        "CardNumber":i,
-        "TraineeName":lstName[i]
-    }
-    lstStudent.append(student)
+# lstName = ["Nguyễn Hồng Lâm", "Nguyễn Xuân Lộc", "Bùi Văn Trung", "Đỗ Mạnh Cường", "Đinh Trọng Tiến"]
+# lstStudent = []
+# for i in range(1, 5):
+#     student = {
+#         "CardNumber":i,
+#         "TraineeName":lstName[i]
+#     }
+#     lstStudent.append(student)
 
 dic = {
     "success":"True",
     "code":3,
     "data":{
-        "CourseInfo":course,
-        "CardNumber":lstStudent,
-        "action":"newCourse",
+        # "CourseInfo":course,
+        # "CardNumber":lstStudent,
+        "fileName":"TTND_2020_02_05_09_47_23.json",
+        "action":"sync",
     },
     "message":12,
     "checksum":21

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 # Form implementation generated from reading ui file 'ThemKhuonMatThiSinh.ui'
 #
@@ -18,27 +17,20 @@ class Ui_Frame_AddFace(object):
         Frame_AddFace.setFrameShape(QtWidgets.QFrame.StyledPanel)
         Frame_AddFace.setFrameShadow(QtWidgets.QFrame.Raised)
         self.label_themKhuonMatThiSinh = QtWidgets.QLabel(Frame_AddFace)
-        self.label_themKhuonMatThiSinh.setGeometry(QtCore.QRect(76, 12, 323, 17))
+        self.label_themKhuonMatThiSinh.setGeometry(QtCore.QRect(82, 12, 323, 17))
         self.label_themKhuonMatThiSinh.setStyleSheet("color: rgb(35, 35, 35);\n"
 "font: 75 bold 16pt \"Ubuntu\";")
+        self.label_themKhuonMatThiSinh.setAlignment(QtCore.Qt.AlignCenter)
         self.label_themKhuonMatThiSinh.setObjectName("label_themKhuonMatThiSinh")
         self.label_forShowCamera = QtWidgets.QLabel(Frame_AddFace)
-        self.label_forShowCamera.setGeometry(QtCore.QRect(50, 52, 237, 285))
+        self.label_forShowCamera.setGeometry(QtCore.QRect(36, 62, 425, 267))
         self.label_forShowCamera.setText("")
         self.label_forShowCamera.setObjectName("label_forShowCamera")
-        self.label_skip = QtWidgets.QLabel(Frame_AddFace)
-        self.label_skip.setGeometry(QtCore.QRect(374, 232, 85, 31))
-        self.label_skip.setObjectName("label_skip")
         self.label_countdownTime = QtWidgets.QLabel(Frame_AddFace)
-        self.label_countdownTime.setGeometry(QtCore.QRect(368, 40, 29, 41))
+        self.label_countdownTime.setGeometry(QtCore.QRect(428, 0, 49, 47))
         self.label_countdownTime.setStyleSheet("color: rgb(0, 170, 255);\n"
 "font: 75 bold 26pt \"Ubuntu\";")
         self.label_countdownTime.setObjectName("label_countdownTime")
-        self.pushButton_changeImage = QtWidgets.QPushButton(Frame_AddFace)
-        self.pushButton_changeImage.setGeometry(QtCore.QRect(364, 272, 93, 69))
-        self.pushButton_changeImage.setStyleSheet("background-color: rgb(0, 170, 255);")
-        self.pushButton_changeImage.setText("")
-        self.pushButton_changeImage.setObjectName("pushButton_changeImage")
 
         self.retranslateUi(Frame_AddFace)
         QtCore.QMetaObject.connectSlotsByName(Frame_AddFace)
@@ -47,7 +39,6 @@ class Ui_Frame_AddFace(object):
         _translate = QtCore.QCoreApplication.translate
         Frame_AddFace.setWindowTitle(_translate("Frame_AddFace", "Frame"))
         self.label_themKhuonMatThiSinh.setText(_translate("Frame_AddFace", "Thêm khuôn mặt thí sinh"))
-        self.label_skip.setText(_translate("Frame_AddFace", "Bỏ qua"))
         self.label_countdownTime.setText(_translate("Frame_AddFace", "3"))
 
 

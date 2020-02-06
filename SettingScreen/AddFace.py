@@ -14,15 +14,16 @@ class AddFaceScreen(Ui_Frame_AddFace, QObject):
         QObject.__init__(self)
         self.setupUi(Frame)
         self.frameContainCurrentStep = Frame
-        self.cameraObj = GetImageFromCamera(labelObject = self.label_forShowCamera, size = (180, 320))
+        self.cameraObj = GetImageFromCamera(labelObject = self.label_forShowCamera, size = (350, 425), frameCut = ((0, 640), (0, 480)))
         self.timer3sCountdown = QTimer(self)
         self.timer3sCountdown.timeout.connect(self.CountDown)
         self.countdownTime = 3
         self.faceRecognitionObj = FaceRecognition()
-        self.pushButton_changeImage.clicked.connect(self.ChangeImage)
+        # self.pushButton_changeImage.clicked.connect(self.ChangeImage)
         self.imageGrapped = False
         self.addForStudent = False
-        
+        self.reloadPixmap = QtGui.QPixmap("icon/iconReadFace.png")
+        self.label_countdownTime.mouseReleaseEvent = lambda event : self.ChangeImage()
 
     def ClearAddAdded(self):
         self.imageGrapped = False
@@ -43,6 +44,8 @@ class AddFaceScreen(Ui_Frame_AddFace, QObject):
             self.timer3sCountdown.stop()
             self.cameraObj.StopReadImage()
             self.faceRecognitionObj.StopFaceTracking()
+            self.label_countdownTime.setText("")
+            self.label_countdownTime.setPixmap(self.reloadPixmap)
             self.GrapImage()
             return
         self.countdownTime -= 1

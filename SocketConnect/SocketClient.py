@@ -35,6 +35,7 @@ class SocketClient(QObject):
     SignalNumberStudentParsed = pyqtSignal(int, int)
     SignalConnectNewServer = pyqtSignal(dict)
     SignalConnectNewFTP = pyqtSignal(dict)
+    SignalUpdateOrSyncStudentInfo = pyqtSignal(dict)
     __SignalConnected = pyqtSignal()
 
     def __init__(self):
@@ -51,6 +52,7 @@ class SocketClient(QObject):
         self.processReciptDataObj.ResponseRequestUpdataFromServer.connect(self.__ResponseResquestUpdateDatabaseFromServer)
         self.processReciptDataObj.SignalUpdateDataBaseSuccess.connect(self.__UpdateDataBaseSuccess)
         self.processReciptDataObj.SignalNumberStudentParsed.connect(self.__NumberStudentParsed)
+        self.processReciptDataObj.SignalUpdateOrSyncStudentInfo.connect(self.SignalUpdateOrSyncStudentInfo.emit)
         self.chuaXuLy = b''
 
         self.TimerWaitForServerConfirm = QTimer(self)

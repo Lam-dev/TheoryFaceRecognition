@@ -27,7 +27,7 @@ class MainWindow(QMainWindow):
         self.faceRecognitionObj = FaceRecognition(self.lstStudent)
         self.socketObject = SocketClient() #comment test came
         self.mainScreenObj.SetGeometryForLabelShowCamera(273,381)
-        # self.mainScree-nObj.pushButton_shutdown.clicked.connect(lambda:os.system('sudo shutdown now'))
+        # self.mainScree-nObj.pushButton_shutdown.clicked.connect(lambda:os.system('sudo shutdown now'))\
         self.mainScreenObj.pushButton_shutdown.clicked.connect(self.__ShowSettingScreen)
         # self.mainScreenObj.ShowNotStudentInformation()
         self.mainScreenObj.SignalGoToDesktop.connect(self.close)
@@ -67,6 +67,7 @@ class MainWindow(QMainWindow):
         self.socketObject.SignalWaitForUpdateDatabase.connect(self.WaitForUpdateDatabase)
         self.socketObject.SignalUpdateDatabaseSuccess.connect(self.UpdateDatabaseSuccess)
         self.socketObject.SignalNumberStudentParsed.connect(self.NumberStudentParsed)
+        self.socketObject.SignalUpdateOrSyncStudentInfo.connect(self.AddStudentInfomation)
 
 #endregion
         self.timerReopenReadCam = QTimer(self)
@@ -76,6 +77,17 @@ class MainWindow(QMainWindow):
         self.FGPobj.SignalRecognizedFGP.connect(self.RecognizedFGP)
         self.FGPobj.BatLayVanTayDangNhap()
 
+    def AddStudentInfomation(self, infoDict):
+        self.ThemKhuonMatVaoDanhSachDaLay(infoDict["idStudent"], infoDict["faceEncodingArr"])
+        self.faceRecognitionObj.SetListStudent(self.lstStudent)
+        viTri = self.FGPobj.NapVanTayTuThietBiVaoCamBien(infoDict["FGPencoding"])
+        idVaVanTay = AnhXaIDvaVanTay()
+        idVaVanTay.IDThiSinh = infoDict["idStudent"]
+        idVaVanTay.ViTriVanTay = viTri
+        khoIDvaVanTay = IDvaVanTayRepository()
+        khoIDvaVanTay.ghiDuLieu(idVaVanTay)
+        self.FGPobj.ThemIDvaVanTayVaoDanhSachDaLay(infoDict["idStudent"], viTri)
+    
     def RecognizedFGP(self, studentID):
         self.__OffCameraTemporary()
         for student in self.lstStudent:
@@ -99,11 +111,8 @@ class MainWindow(QMainWindow):
         khoIDvaVanTay = IDvaVanTayRepository()
         khoIDvaVanTay.ghiDuLieu(idVaVanTay)
         self.FGPobj.ThemIDvaVanTayVaoDanhSachDaLay(faceDict["student"].ID, FGPdict["FGPsavePos"])
-
-        for thiSinh in self.lstStudent:
-            if(thiSinh.ID == faceDict["student"].ID):
-                thiSinh.NhanDienKhuonMatThem = faceDict["faceEncodingArr"]
-                break
+        self.ThemKhuonMatVaoDanhSachDaLay(faceDict["student"].ID, faceDict["faceEncodingArr"])
+        self.faceRecognitionObj.SetListStudent(self.lstStudent)
         self.mainScreenObj.databaseScreenObj.ShowAddDataDialog()
 
         sendDict = {
@@ -112,6 +121,13 @@ class MainWindow(QMainWindow):
             "FGPEncoding":featureStr
         }
         self.socketObject.SendAddFaceAndFGP(sendDict)
+    
+    def ThemKhuonMatVaoDanhSachDaLay(self, idStudent, faceEncoding):
+        for student in self.lstStudent:
+            if(student.ID == idStudent):
+                student.NhanDienKhuonMatThem = []
+                student.NhanDienKhuonMatThem.append(faceEncoding)
+                return
 
     def __DeleteFaceAdded(self, idStudent):
         for student in self.lstStudent:
@@ -207,7 +223,7 @@ class MainWindow(QMainWindow):
         fp = open("imageTosend.jpg", 'wb')
         fp.write(faceImageJpgData)
         self.mainScreenObj.ShowStudentInfomation(studentObj)
-        # self.__SaveHistory("Face", studentObj.ID)
+        self.__SaveHistory("Face", studentObj.ID)
         # self.mainScreenObj.ShowFaceRecognizeOK()
         self.socketObject.SendResultsFaceRecognize(studentObj.ID, "T", "imageTosend.jpg")
 

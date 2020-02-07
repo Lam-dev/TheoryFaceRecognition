@@ -20,7 +20,7 @@ CODE_RECIPT_DATA_FROM_SERVER = "3"
 CODE_UPLOAD_DATA_TO_SERVER = "2"
 CODE_PING_PING = "1"
 
-MAC_ADDRESS                                         = "123456"#[0xC8, 0X93, 0X46, 0X4E,0X5D,0XD9]C8-93-46-4E-5D-D9
+MAC_ADDRESS                                         = "11111"#[0xC8, 0X93, 0X46, 0X4E,0X5D,0XD9]C8-93-46-4E-5D-D9
 IMAGE_TO_SEND_SERVER_PATH                           = "/StudentRecognize/SocketConnect/"
 FTP_FILE_PATH_TO_UPLOAD                             = GetSetting.GetSetting("--ServerImageDir")
 
@@ -285,6 +285,7 @@ class SocketClient(QObject):
             "ping":"1"
         }
         dictToSend = {
+            "mac":MAC_ADDRESS,
             "success":"true",
             "code":1,
             "message":"",
@@ -303,7 +304,7 @@ class SocketClient(QObject):
             "recBy": RecBy
         }
         dictToSend = {
-            "mac":MAC,
+            "mac":MAC_ADDRESS,
             "success":"true",
             "code":2,
             "massage":"",
@@ -346,7 +347,7 @@ class SocketClient(QObject):
         self.ftpObj.SendImageToFTPserver(fileName, FTP_FILE_PATH_TO_UPLOAD +"/"+fileName)
         os.remove(fileName)
         dictToServer = {
-            "mac":MAC,
+            "mac":MAC_ADDRESS,
             "code":4,
             "fileName": fileName
         }

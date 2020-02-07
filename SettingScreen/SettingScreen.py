@@ -73,6 +73,8 @@ class SettingScreen(Ui_frame_settingScreen, QObject):
         # self.lb_iconSecuritySetting.setPixmap(QtGui.QPixmap("icon/iconSecurity.png"))
         self.lb_iconSoundSetting.setPixmap(QtGui.QPixmap("icon/iconSound.png"))
         self.lb_iconSystemSetting.setPixmap(QtGui.QPixmap("icon/iconSystem.png"))
+
+        self.pushButton_goToHideSetting.clicked.connect(self.HideSettingScreen)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("icon/iconShutdown.png"), QtGui.QIcon.Disabled, QtGui.QIcon.On)
         self.pushButton_shutdown.setIcon(icon)
@@ -80,6 +82,9 @@ class SettingScreen(Ui_frame_settingScreen, QObject):
         self.ChooseScreenSetting(1)
         self.settingNumber = 1
     
+    def HideSettingScreen(self):
+        pass
+
     def ShowConnectFTPserverStatusToSettingScreen(self, statusStr, connectAvailalbe):
         if(self.settingNumber == 3):
             self.content.label_showFTPconnectStatus.setText(statusStr)

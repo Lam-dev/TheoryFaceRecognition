@@ -92,7 +92,7 @@ class MainWindow(QMainWindow):
         self.__OffCameraTemporary()
         for student in self.lstStudent:
             if(student.ID == studentID):
-                self.mainScreenObj.ShowStudentInfomation(student)
+                self.mainScreenObj.ShowStudentInfomation(student) 
                 self.socketObject.SendResultsFGPrecognition(studentID)
                 break
         self.__SaveHistory("FGP", studentID)

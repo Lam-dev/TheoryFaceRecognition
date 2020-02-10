@@ -3,7 +3,7 @@ from    MainScreen.MainScreen                   import MainScreen
 
 from        DatabaseAccess.DatabaseAccess       import *
 from        PyQt5                               import QtCore, QtGui, QtWidgets, Qt
-from        PyQt5.QtCore                        import pyqtSlot, pyqtSignal,QTimer, QDateTime,Qt, QObject
+from        PyQt5.QtCore                       import pyqtSlot, pyqtSignal,QTimer, QDateTime,Qt, QObject
 from         PyQt5                              import QtCore, QtGui, QtWidgets
 from         PyQt5                              import QtGui
 from         PyQt5                              import QtWidgets
@@ -132,8 +132,7 @@ class MainWindow(QMainWindow):
     def ThemKhuonMatVaoDanhSachDaLay(self, idStudent, faceEncoding):
         for student in self.lstStudent:
             if(student.ID == idStudent):
-                student.NhanDienKhuonMatThem = []
-                student.NhanDienKhuonMatThem.append(faceEncoding)
+                student.NhanDienKhuonMatThem = faceEncoding
                 return
 
     def __DeleteFaceAdded(self, idStudent):

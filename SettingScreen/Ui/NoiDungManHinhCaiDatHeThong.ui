@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>422</width>
-    <height>1436</height>
+    <width>416</width>
+    <height>1512</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -717,8 +717,8 @@ font: 25 10pt &quot;Ubuntu&quot;;</string>
   <widget class="QFrame" name="frame_containFirmwareInformation">
    <property name="geometry">
     <rect>
-     <x>0</x>
-     <y>1202</y>
+     <x>2</x>
+     <y>1208</y>
      <width>421</width>
      <height>211</height>
     </rect>
@@ -919,19 +919,6 @@ border-color: rgba(0,140,255,255);
     <rect>
      <x>22</x>
      <y>666</y>
-     <width>371</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Horizontal</enum>
-   </property>
-  </widget>
-  <widget class="Line" name="line_8">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>1190</y>
      <width>371</width>
      <height>16</height>
     </rect>
@@ -1264,21 +1251,19 @@ font: 25 10pt &quot;Ubuntu&quot;;</string>
     <enum>Qt::Horizontal</enum>
    </property>
   </widget>
-  <zorder>frame_autoShutdown</zorder>
-  <zorder>frame_serverInfomation</zorder>
-  <zorder>frame_containFTPserverInfomation</zorder>
-  <zorder>frame_containMemoryInfomation</zorder>
-  <zorder>frame_containFirmwareInformation</zorder>
-  <zorder>line_8</zorder>
-  <zorder>line_3</zorder>
-  <zorder>line_4</zorder>
-  <zorder>line_5</zorder>
-  <zorder>line_7</zorder>
-  <zorder>label</zorder>
-  <zorder>frame_containFaceRecognitionPoint</zorder>
-  <zorder>frame_imageQuality</zorder>
-  <zorder>line_9</zorder>
-  <zorder>line_10</zorder>
+  <widget class="Line" name="line_11">
+   <property name="geometry">
+    <rect>
+     <x>22</x>
+     <y>1192</y>
+     <width>371</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+  </widget>
  </widget>
  <tabstops>
   <tabstop>lineEdit_forInputPassword</tabstop>

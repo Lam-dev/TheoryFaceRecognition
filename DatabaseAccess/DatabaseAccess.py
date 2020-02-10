@@ -126,6 +126,27 @@ class LayDuLieuTrongDataBase:
                 del idVaVanTay
             return lstIDvaVanTay
 
+        elif(self.tenBang == "TaiKhoanQuanLy"):
+            lstTaiKhoanQuanLy = []
+            for i in range(0, len(results)):
+                taiKhoanVaMatKhau = ThongTinTaiKhoanQuanLy()
+                taiKhoanVaMatKhau.IDtaiKhoan = results[i][0]
+                taiKhoanVaMatKhau.TaiKhoan = results[i][1]
+                taiKhoanVaMatKhau.MatKhau = results[i][2]
+                lstTaiKhoanQuanLy.append(taiKhoanVaMatKhau)
+                del taiKhoanVaMatKhau
+            return lstTaiKhoanQuanLy
+
+        elif(self.tenBang == "HocVienTuongUngTaiKhoanQuanLy"):
+            lstHocVienTuongUngTaiKhoan = []
+            for i in range(0, len(results)):
+                hocVienVaTaiKhoanQuanLy = HocVienTuongUngTaiKhoanQuanLy()
+                hocVienVaTaiKhoanQuanLy.IDthiSinh = results[i][0]
+                hocVienVaTaiKhoanQuanLy.IDtaiKhoan = results[i][1]
+                lstHocVienTuongUngTaiKhoan.append(hocVienVaTaiKhoanQuanLy)
+                del lstHocVienTuongUngTaiKhoan
+            return lstHocVienTuongUngTaiKhoan
+
     def ghiDuLieu(self, thongTin):
         try:
             cursor = self.CSDL.cursor()
@@ -150,6 +171,16 @@ class LayDuLieuTrongDataBase:
                 cursor.execute(sql)
                 self.CSDL.commit()
 
+            elif(self.tenBang == "TaiKhoanQuanLy"):
+                sql = 'INSERT INTO `TaiKhoanQuanLy`(`TaiKhoan`, `MatKhau`) VALUES ("%s", "%s")'%(thongTin.TaiKhoan, thongTin.MatKhau)
+                cursor.execute(sql)
+                self.CSDL.commit()
+
+            elif(self.tenBang == "HocVienTuongUngTaiKhoanQuanLy"):
+                sql = 'INSERT INTO `HocVienTuongUngTaiKhoanQuanLy`(`IDThiSinh`, `IDTaiKhoanQuanLy`) VALUES ("%s", "%s")'%(thongTin.IDthiSinh, thongTin.IDtaiKhoan)
+                cursor.execute(sql)
+                self.CSDL.commit()
+            
         except sqlite3.Error as e:
             print(e)
     
@@ -188,6 +219,16 @@ class IDvaVanTayRepository(LayDuLieuTrongDataBase):
         super().__init__(duongDanTepSqlite, "AnhXaIDvaVanTay")
         return
 
+class TaiKhoanQuanLyRepository(LayDuLieuTrongDataBase):
+    def __init__(self, duongDanTepSqlite = "DatabaseAccess/Database"):
+        super().__init__(duongDanTepSqlite, "TaiKhoanQuanLy")
+        return
+
+class DanhSachThiSinhTuongUngTaiKhoanRepository(LayDuLieuTrongDataBase):
+    def __init__(self, duongDanTepSqlite = "DatabaseAccess/Database"):
+        super().__init__(duongDanTepSqlite, "HocVienTuongUngTaiKhoanQuanLy")
+        return
+
 class ThongTinLichSuDiemDanh:
     def __init__(self):
         self.IDThiSinh = ""
@@ -202,6 +243,11 @@ class ThongTinKhoaThi:
         self.TenKhoaThi = ""
         self.DuongDanLuuAnh = ""
 
+class ThongTinTaiKhoanQuanLy:
+    def __init__(self):
+        self.IDtaiKhoan = ""
+        self.TaiKhoan = ""
+        self.MatKhau = ""
 
 class AnhXaIDvaVanTay:
     def __init__(self):
@@ -225,6 +271,11 @@ class ThongTinThiSinh:
         self.NgayDangKy = ""
         self.AnhDangKy = ""
         self.NhanDienKhuonMatThem = []
+
+class HocVienTuongUngTaiKhoanQuanLy:
+    def __init__(self):
+        self.IDthiSinh = ""
+        self.IDtaiKhoan = ""
 
 class GetDataFromDatabase():
     def __init__(self):

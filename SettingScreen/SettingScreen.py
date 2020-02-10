@@ -7,6 +7,7 @@ from SettingScreen.ScreenSettingContent   import ScreenSettingContent
 from SettingScreen.SystemSettingContent   import SystemSettingContent
 from SettingScreen.SoundSettingContent    import SoundSettingContent
 from SettingScreen.DatabaseManagerScreen  import DatabaseManagerScreen
+from SettingScreen.HideSettingScreenAction import HideSettingScreen
 from KeyBoard               import KeyBoard
 
 class SettingScreen(Ui_frame_settingScreen, QObject):
@@ -17,7 +18,8 @@ class SettingScreen(Ui_frame_settingScreen, QObject):
     SignalModifyImageQuality = pyqtSignal(int)
     SignalConnectNewServer = pyqtSignal(dict)
     SignalConnectNewFTPserver = pyqtSignal(dict)
-    
+    SignalOpenHideSettingScreen = pyqtSignal()
+
     def __init__(self, Frame):
         
         Ui_frame_settingScreen.__init__(self)
@@ -74,17 +76,16 @@ class SettingScreen(Ui_frame_settingScreen, QObject):
         self.lb_iconSoundSetting.setPixmap(QtGui.QPixmap("icon/iconSound.png"))
         self.lb_iconSystemSetting.setPixmap(QtGui.QPixmap("icon/iconSystem.png"))
 
-        self.pushButton_goToHideSetting.clicked.connect(self.HideSettingScreen)
+        self.pushButton_goToHideSetting.clicked.connect(self.SignalOpenHideSettingScreen)
+        
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("icon/iconShutdown.png"), QtGui.QIcon.Disabled, QtGui.QIcon.On)
         self.pushButton_shutdown.setIcon(icon)
         self.content = False
         self.ChooseScreenSetting(1)
         self.settingNumber = 1
-    
-    def HideSettingScreen(self):
-        pass
 
+        
     def ShowConnectFTPserverStatusToSettingScreen(self, statusStr, connectAvailalbe):
         if(self.settingNumber == 3):
             self.content.label_showFTPconnectStatus.setText(statusStr)

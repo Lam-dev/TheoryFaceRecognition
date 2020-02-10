@@ -9,20 +9,21 @@ from    SocketConnect.FTPclient import FTPclient
 from    GetSettingFromJSON    import GetSetting
 import json
 import  os
+import getmac
 
 SETTING_DICT                                        = GetSetting.LoadSettingFromFile()
 SERVER_IP                                           = SETTING_DICT["serverIP"]
 SERVER_PORT                                         = int(SETTING_DICT["serverPort"])
 
-MAC                                                 = "1234"
 
 CODE_RECIPT_DATA_FROM_SERVER = "3"
 CODE_UPLOAD_DATA_TO_SERVER = "2"
 CODE_PING_PING = "1"
 
-MAC_ADDRESS                                         = "11111"#[0xC8, 0X93, 0X46, 0X4E,0X5D,0XD9]C8-93-46-4E-5D-D9
+MAC_ADDRESS                                         = getmac.get_mac_address()
 IMAGE_TO_SEND_SERVER_PATH                           = "/StudentRecognize/SocketConnect/"
 FTP_FILE_PATH_TO_UPLOAD                             = GetSetting.GetSetting("--ServerImageDir")
+FTP_SERVER_SYNC_FILE                                = "files/"
 
 class SocketClient(QObject):
     
@@ -160,6 +161,8 @@ class SocketClient(QObject):
         while True:
             try:
                 recvData = self.clientObj.recv(1024)
+                if(recvData.__str__().__contains__("TTND")):
+                    print(datetime.now())
                 print(recvData)
                 len(recvData)
                 if(recvData == b''):

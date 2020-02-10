@@ -19,7 +19,7 @@ CODE_PING_PING = "1"
 MAC_ADDRESS_LENGTH                                  = 8
 LOCAL_PATH_CONTAIN_DATA_UPDATE                      = "DataUpdate/"
 FTP_FILE_PATH_TO_UPLOAD                             = GetSetting.GetSetting("--ServerImageDir")
-
+FTP_SERVER_SYNC_DIR                                = "files/"
 
 class ProcessReciptData(QObject):
     ShowStudentForConfirm = pyqtSignal(str)
@@ -38,7 +38,7 @@ class ProcessReciptData(QObject):
 
     def _json_object_hook(self, d): return namedtuple('X', d.keys())(*d.values())
 
-    def json2obj(self, data): return json.loads(data, object_hook=self._json_object_hook)
+    def json2obj(self, data): return json.loads(data, object_hook=self._json_object_hook, encoding= "utf-8")
     
     def ProcessDataFrame(self, khungNhan):
         try:
@@ -180,7 +180,6 @@ class ProcessReciptData(QObject):
             khoThiSinh.xoaBanGhi(" IDKhoaThi = %s "%(course))
             khoKhoaThi = messageObj.detail["course"]
             khoKhoaThi.xoaBanGhi(" IDKhoaThi = %s"%( "IDKhoaThi  = %s"%(course)))
-
         
         # detailForGetListStudent = {
         #     "course":"id Khoa hoc"
@@ -227,7 +226,7 @@ class ProcessReciptData(QObject):
         lstFileName = []
         lstFileName.append(fileName)
         ftpObj = FTPclient()
-        ftpObj.GetListFileFromServer(lstFileName)
+        ftpObj.GetListFileFromServer(lstFile = lstFileName, ftpFilePath = FTP_SERVER_SYNC_DIR)
         updateFilePath = LOCAL_PATH_CONTAIN_DATA_UPDATE + fileName
         with open(updateFilePath) as json_file:
             jsonDict = json.load(json_file)
@@ -255,6 +254,14 @@ class ProcessReciptData(QObject):
         khoKhoaThi.ghiDuLieu(khoaThi)
         self.__AddStudent(dataObj.data.CardNumber, khoaThi.IDKhoaThi)
 
+    def __ConvertStringToUTF8String(self, string):
+        x = []
+        for elem in string:
+            x.append(ord(elem))
+        return(bytes(x).decode("utf8", "ignore"))
+
+
+
     def __AddStudent(self, lstStudentNumber, IDCourse):
         
         lstImage = []
@@ -280,11 +287,12 @@ class ProcessReciptData(QObject):
                 imagePil = imagePil.convert("RGB")
                 npArrayImage = numpy.array(imagePil)
                 student.NhanDienKhuonMatStr = GetFaceEncodingFromImage().GetFaceEncodingStr(npArrayImage)[0]
-                student.HoVaTen = lstStudentNumber[i].TraineeName
+                student.HoVaTen = self.__ConvertStringToUTF8String(lstStudentNumber[i].TraineeName)
                 student.IDKhoaThi = IDCourse
                 khoThiSinh.ghiDuLieu(student)
                 del student
-            except NameError:
+            except NameError as e:
+                print(e)
                 pass
     
     def __DeleteStudentByNumber(self, lstStudentNumber):

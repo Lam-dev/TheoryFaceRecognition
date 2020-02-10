@@ -12,7 +12,8 @@ class Fingerprint(QObject):
     SignalRecognizedFGP = pyqtSignal(int)
     SignalFGPnotFind = pyqtSignal()
     SignalHandPushed = pyqtSignal()
-    def __init__(self, port = '/dev/ttyACM0', baudRate = 57600, address = 0xFFFFFFFF, password = 0xFFFFFFFF):
+    
+    def __init__(self, port = '/dev/ttyS3', baudRate = 57600, address = 0xFFFFFFFF, password = 0xFFFFFFFF):
         super().__init__()
         self.port = port
         self.baudRate = baudRate
@@ -75,10 +76,14 @@ class Fingerprint(QObject):
                     self.fingerprintObj.readImage()
                     self.fingerprintObj.convertImage(0x02)
                     if(self.fingerprintObj.compareCharacteristics() > 0):
+                        result = self.fingerprintObj.searchTemplate()
                         dacTrungVanTay = self.fingerprintObj.downloadCharacteristics(0x01)
-                        viTriTrong = self.TimKhoangTrong()
-                        self.fingerprintObj.storeTemplate(viTriTrong, 0x01)
-                        self.SignalNewFGPadded.emit(viTriTrong, dacTrungVanTay)
+                        if(result[0] > 0):
+                            viTriLuu = result[0]
+                        else:
+                            viTriLuu = self.TimKhoangTrong()
+                        self.fingerprintObj.storeTemplate(viTriLuu, 0x01)
+                        self.SignalNewFGPadded.emit(viTriLuu, dacTrungVanTay)
             else:
                 self.fingerprintObj = PyFingerprint(self.port, self.baudRate, self.address, self.password)
                 self.fingerprintObj.verifyPassword()
@@ -87,9 +92,13 @@ class Fingerprint(QObject):
     
     def NapVanTayTuThietBiVaoCamBien(self, FGPencoding):
         self.fingerprintObj.uploadCharacteristics(characteristicsData= FGPencoding)
-        viTriTrong = self.TimKhoangTrong()
-        self.fingerprintObj.storeTemplate(viTriTrong, 0x01)
-        return viTriTrong
+        result = self.fingerprintObj.searchTemplate()
+        if(result[0] >= 0):
+            viTriLuu = result[0]
+        else:
+            viTriLuu = self.TimKhoangTrong()
+        self.fingerprintObj.storeTemplate(viTriLuu, 0x01)
+        return viTriLuu
 
 
     def TimViTriLuu(self):

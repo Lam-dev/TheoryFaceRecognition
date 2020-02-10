@@ -11,10 +11,11 @@ from         PyQt5.QtGui                        import QPixmap,QColor
 from         PyQt5.QtWidgets                    import *
 import       sys
 from         datetime                           import datetime
-from         Sound.OrangePiSound                import Sound
+# from         Sound.OrangePiSound                import Sound
 from         SocketConnect.SocketClient         import SocketClient
 import       os
 from         FingerPrintSensor.FingerPrint      import Fingerprint
+from         SocketServerForRFID.SocketServer   import SocketServerForRFID
 
 # from   Sound.Sound              import Sound
 class MainWindow(QMainWindow):
@@ -76,6 +77,12 @@ class MainWindow(QMainWindow):
         self.FGPobj = Fingerprint()
         self.FGPobj.SignalRecognizedFGP.connect(self.RecognizedFGP)
         self.FGPobj.BatLayVanTayDangNhap()
+
+        # self.socketServerForRFIDobj = SocketServerForRFID()
+        # self.socketServerForRFIDobj.SignalRFIDputOn.connect(self.RFIDputOn)
+
+    def RFIDputOn(self):
+        pass
 
     def AddStudentInfomation(self, infoDict):
         self.ThemKhuonMatVaoDanhSachDaLay(infoDict["idStudent"], infoDict["faceEncodingArr"])

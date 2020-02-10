@@ -9,6 +9,7 @@ from    Outdoor.OutDoor          import OutDoor
 from    SettingScreen.SettingScreen   import SettingScreen
 from    SettingScreen.DatabaseManagerScreen  import DatabaseManagerScreen
 from    KeyBoard.KeyBoard        import KeyBoard
+from    SettingScreen.HideSettingScreenAction  import HideSettingScreen
 
 class MainScreen(QObject, Ui_Frame_MainScreen):
     SignalGoToDesktop = pyqtSignal()
@@ -184,8 +185,19 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         self.settingScreenObj.SignalConnectNewFTPserver.connect(self.SignalConnectNewFTPserver.emit)
         self.settingScreenObj.SignalConnectNewServer.connect(self.SignalConnectNewServer.emit)
         self.settingScreenObj.RequestOpenDatabaseScreen.connect(self.OpenDatabaseManagerScreen)
+        self.settingScreenObj.SignalOpenHideSettingScreen.connect(self.OpenHideSettingScreen)
         self.settingScreenShadow.show()
         self.settingScreenShadow.raise_()
+
+
+    def OpenHideSettingScreen(self):
+
+        self.frameContainHideSettingScreen = QtWidgets.QFrame(self.centralWidget)
+        self.frameContainHideSettingScreen.setGeometry(QtCore.QRect(0, 0, 0, 0))
+        self.hideSettingScreenObj = HideSettingScreen(self.frameContainHideSettingScreen)
+        self.frameContainHideSettingScreen.raise_()
+        self.frameContainHideSettingScreen.show()
+
 
     def OpenDatabaseManagerScreen(self):
         self.frameContainDatabaseScreen = QtWidgets.QFrame(self.centralWidget)

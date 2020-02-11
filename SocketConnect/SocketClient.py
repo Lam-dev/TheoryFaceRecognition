@@ -15,10 +15,9 @@ SETTING_DICT                                        = GetSetting.LoadSettingFrom
 SERVER_IP                                           = SETTING_DICT["serverIP"]
 SERVER_PORT                                         = int(SETTING_DICT["serverPort"])
 
-
-CODE_RECIPT_DATA_FROM_SERVER = "3"
-CODE_UPLOAD_DATA_TO_SERVER = "2"
-CODE_PING_PING = "1"
+CODE_SEND_PING_PONG                         = 1
+CODE_RESULT_RECOGNITION                     = 2
+CODE_STUDENT_FEATURE_FILE                   = 4
 
 MAC_ADDRESS                                         = getmac.get_mac_address()
 IMAGE_TO_SEND_SERVER_PATH                           = "/StudentRecognize/SocketConnect/"
@@ -98,25 +97,6 @@ class SocketClient(QObject):
         self.FlagServerISconnect = False
         self.CreateConnect()
 
-    def CreateConnect(self):
-        global SERVER_IP, SERVER_PORT
-        self.waitingForConnect = True
-        try:
-            if(not self.FlagServerISconnect):
-                self.clientObj = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                self.clientObj.settimeout(0.5)
-                self.clientObj.setblocking(1)
-                self.clientObj.connect((SERVER_IP, SERVER_PORT))
-                self.clientObj.send(self.__DungKhungGiaoTiep(MAC_ADDRESS, CLIENT_REQUEST_CONNECT)[0])
-                self.SignalServerConnected.emit()
-                self.__SignalConnected.emit()
-
-        except:
-            self.SignalServerNotConnect.emit()
-            print("khong the ket noi") #test
-            self.FlagServerISconnect = False
-        self.waitingForConnect = False
-
     def __SendPingPong(self):
         if(self.__FlagSendPingPong):
             self.__PingPong()
@@ -161,8 +141,8 @@ class SocketClient(QObject):
         while True:
             try:
                 recvData = self.clientObj.recv(1024)
-                if(recvData.__str__().__contains__("TTND")):
-                    print(datetime.now())
+                # if(recvData.__str__().__contains__("TTND")):
+                #     print(datetime.now())
                 print(recvData)
                 len(recvData)
                 if(recvData == b''):
@@ -170,8 +150,9 @@ class SocketClient(QObject):
                     return
                 else: 
                     self.__FlagSendPingPong = False
-                    self.__PhanTichKhungNhan(recvData)
-            
+                    lstCacKhungNhan = self.__TachCacKhungTruyen(recvData)
+                    for khung in lstCacKhungNhan:
+                        self.__PhanTichKhungNhan(khung)
             except:
                 self.__SignalRecreateConnect.emit()
                 return
@@ -211,7 +192,7 @@ class SocketClient(QObject):
         while True:
             if(i == len(self.chuaXuLy)):
                 break
-            if( self.chuaXuLy[i:i+3].__str__().__contains__("ESM")):
+            if( self.chuaXuLy[i:i+3].__str__().__contains__("ELT")):
                 try:
                     chieuDaiDl = self.chuaXuLy[i+4] + self.chuaXuLy[i+5] * math.pow(2, 7)
                     chieuDaiKhung = i + int(chieuDaiDl) + 7
@@ -228,33 +209,6 @@ class SocketClient(QObject):
                     break
             i = i + 1
         return lstKhungDL
-
-    def CreateConnect(self):
-        # try:
-        #     self.clientObj.send()
-
-        # except:
-        #     try:
-        #         self.clientObj = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        #         self.clientObj.connect((SERVER_IP, SERVER_PORT))
-        #         return False
-        #     except:
-        #         return False
-        try:
-            if(not self.FlagServerISconnect):
-                self.clientObj = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                self.clientObj.settimeout(200)
-                self.clientObj.connect((SERVER_IP, SERVER_PORT))
-                self.__SendPingPong()
-                self.FlagServerISconnect = True
-                self.SignalServerConnected.emit()
-                return True
-
-        except:
-            self.SignalServerNotConnect.emit()
-            print("khong the ket noi") #test
-            self.FlagServerISconnect = False
-            return False
 
     def CreateConnect(self):
         global SERVER_IP, SERVER_PORT
@@ -280,7 +234,7 @@ class SocketClient(QObject):
 
 
     def __PingPong(self):
-            framePing = self.__ConvertJsonStringToByteArr(self.__BuildFramePingPong())
+            framePing = self.__DungKhungGiaoTiep(self.__BuildFramePingPong(), CODE_SEND_PING_PONG)
             self.clientObj.sendall(framePing)
 
     def __BuildFramePingPong(self):
@@ -324,12 +278,40 @@ class SocketClient(QObject):
             jsonCharArr.append(ord(jsonString[i]))
         return bytes(jsonCharArr)
 
+    """
+    khung truyen uart yeu cau module 3g gui file
+    tham so
+        tenFile: ten cua file can gui
+    tra ve
+        khungTruyen: khong truyen de gui cho ETM module
+        tong : checksum cua khung truyen 
+    """
+
+    def __DungKhungGiaoTiep(self, noiDung, maLenh):
+        if(type(noiDung) is not str): 
+            return False, False
+        highChieuDaiTen = int(len(noiDung) / 256)
+        lowChieuDaiTen = int(len(noiDung) % 256)
+        khungTruyen = [0x45, 0x4C, 0x54, maLenh, lowChieuDaiTen, highChieuDaiTen]
+        tong = maLenh + highChieuDaiTen + lowChieuDaiTen
+        j = 0
+        for i in range (len(khungTruyen), len(khungTruyen) + len(noiDung)):
+            khungTruyen.append('')
+            khungTruyen[i] = ord(noiDung[j])
+            tong = tong + ord(noiDung[j])
+            j = j+ 1
+            
+        tong = -(~tong) % 256
+        khungTruyen.append(0x00)
+        khungTruyen[len(khungTruyen)-1] = tong
+        return bytes(khungTruyen)
+
    
 #region nhom ham gui thong tin cho server
 
     def SendResultsFaceRecognize(self, ID ,confirmTrueOrFalse, nameOfPhotoTaked):
         imageFileName = FTP_FILE_PATH_TO_UPLOAD +"/"+ datetime.now().strftime("%Y%m%d") + '/' + str(ID)+"_"+datetime.now().strftime("%H%M%S")+ ".jpg"
-        resultFrame = self.__ConvertJsonStringToByteArr(self.__BuildResultToSend(ID, imageFileName, "Face"))
+        resultFrame = self.__DungKhungGiaoTiep(self.__BuildResultToSend(ID, imageFileName, "Face"), CODE_RESULT_RECOGNITION)
         self.__SendDataViaSocket(bytes(resultFrame))
         thread = threading.Thread(target = self.ftpObj.SendImageToFTPserver, args = (nameOfPhotoTaked, imageFileName), daemon= True)
         thread.start()
@@ -337,7 +319,7 @@ class SocketClient(QObject):
 
 
     def SendResultsFGPrecognition(self, ID):
-        resultFrame = self.__ConvertJsonStringToByteArr(self.__BuildResultToSend(ID, "", "FGP"))
+        resultFrame = self.__DungKhungGiaoTiep(self.__BuildResultToSend(ID, "", "FGP"), CODE_RESULT_RECOGNITION)
         self.__SendDataViaSocket(bytes(resultFrame))
 
 #endregion
@@ -355,7 +337,7 @@ class SocketClient(QObject):
             "fileName": fileName
         }
         jsonStr = json.dumps(dictToServer)
-        resultFrame = self.__ConvertJsonStringToByteArr(jsonStr)
+        resultFrame = self.__DungKhungGiaoTiep(jsonStr, CODE_STUDENT_FEATURE_FILE)
         self.__SendDataViaSocket(bytes(resultFrame))
 
 class HangDoi(QObject):

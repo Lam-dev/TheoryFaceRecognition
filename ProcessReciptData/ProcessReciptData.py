@@ -42,7 +42,8 @@ class ProcessReciptData(QObject):
     
     def ProcessDataFrame(self, khungNhan):
         try:
-            reciptObj = self.json2obj(self.__CatLayPhanDataTrongFrame(khungNhan))
+            data = self.__CatLayPhanDataTrongFrame(khungNhan)
+            reciptObj = self.json2obj(data)
 
             if(reciptObj.code == CODE_RECIPT_DATA_FROM_SERVER):
                 self.__ProcessRequestUpdateDatabase(reciptObj)
@@ -308,11 +309,12 @@ class ProcessReciptData(QObject):
         khoThiSinh.xoaBanGhi(" 1 = 1 ")
 
     def __CatLayPhanDataTrongFrame(self, frameNhan):
-        lstChar = []
+        chieuDaiDl = frameNhan[4] + frameNhan[5] * math.pow(2, 8)
+        duLieu = []
         j = 0
-        for byte in frameNhan:
-            lstChar.append("")
-            lstChar[j] = chr(byte)
+        for i in range(6, int(chieuDaiDl)+6):
+            duLieu.append("")
+            duLieu[j] = chr(frameNhan[i])
             j += 1
-            chuoiDuLieu = ''.join(lstChar)
+            chuoiDuLieu = ''.join(duLieu)
         return chuoiDuLieu

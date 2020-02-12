@@ -149,7 +149,7 @@ class SocketClient(QObject):
                     self.__SignalRecreateConnect.emit()
                     return
                 else: 
-                    self.__FlagSendPingPong = False
+                    # self.__FlagSendPingPong = False
                     lstCacKhungNhan = self.__TachCacKhungTruyen(recvData)
                     for khung in lstCacKhungNhan:
                         self.__PhanTichKhungNhan(khung)
@@ -194,7 +194,7 @@ class SocketClient(QObject):
                 break
             if( self.chuaXuLy[i:i+3].__str__().__contains__("ELT")):
                 try:
-                    chieuDaiDl = self.chuaXuLy[i+4] + self.chuaXuLy[i+5] * math.pow(2, 7)
+                    chieuDaiDl = self.chuaXuLy[i+4] + self.chuaXuLy[i+5] * math.pow(2, 8)
                     chieuDaiKhung = i + int(chieuDaiDl) + 7
                     if(chieuDaiKhung + i <= len(self.chuaXuLy)):
                         lstKhungDL.append(self.chuaXuLy[i:chieuDaiKhung])

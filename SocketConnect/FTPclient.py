@@ -115,7 +115,7 @@ class FTPclient(QObject):
                 print(e.args)
                 pass
         return lstImageGraped
-        
+
 
 # x = FTPclient()
 # x.GetListStudentImage("/files/")

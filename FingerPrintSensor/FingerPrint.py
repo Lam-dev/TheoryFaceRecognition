@@ -9,7 +9,7 @@ import  threading
 
 class Fingerprint(QObject):
     SignalNewFGPadded = pyqtSignal(int, list)
-    SignalRecognizedFGP = pyqtSignal(int)
+    SignalRecognizedFGP = pyqtSignal(str)
     SignalFGPnotFind = pyqtSignal()
     SignalHandPushed = pyqtSignal()
     

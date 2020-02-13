@@ -102,12 +102,12 @@ class MainWindow(QMainWindow):
                 self.mainScreenObj.ShowStudentInfomation(student) 
                 self.socketObject.SendResultsFGPrecognition(studentID)
                 break
-        self.__SaveHistory("FGP", studentID)
+        # self.__SaveHistory("FGP", studentID)
 
     def __AddFaceEncodingAndFGP(self, faceDict, FGPdict):
 
         khoThiSinh = ThiSinhRepository()
-        khoThiSinh.capNhatTruong(("NhanDienKhuonMatThem", ), (faceDict["faceEncodingStr"], ), "ID = %s"%(str(faceDict["student"].ID)))
+        khoThiSinh.capNhatTruong(("NhanDienKhuonMatThem", ), (faceDict["faceEncodingStr"], ), 'ID = "%s"'%(str(faceDict["student"].ID)))
         
         idVaVanTay = AnhXaIDvaVanTay()
         idVaVanTay.IDThiSinh = faceDict["student"].ID

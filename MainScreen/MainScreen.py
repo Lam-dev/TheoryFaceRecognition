@@ -116,7 +116,7 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         # resizeImage = pixmap.scaled(150, 250, QtCore.Qt.KeepAspectRatio)
         # self.label_regisImage.setPixmap(resizeImage)
         # self.label_forShowName.setText(student.HoVaTen)
-        # self.label_forShowNumberCard.setText(student.SBD)
+        #self.label_forShowNumberCard.setText(student.SBD)
         qim = ImageQt.ImageQt(image)
         pix = QtGui.QPixmap.fromImage(qim)
         resizePixmap = pix.scaled(150, 200, QtCore.Qt.KeepAspectRatio)
@@ -124,11 +124,15 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         self.label_regisImage.setPixmap(resizePixmap)
         self.label_forShowName.setText(student.HoVaTen.upper())
         self.label_forShowNumberCard.setText(student.SBD)
+        self.label_dateOfBird.setText(student.NgaySinh)
         self.label_forShowIdentNumber.setText(student.SoCMTND)
     
     def ClearStudentRecognizedInfomation(self):
         self.label_regisImage.setPixmap(self.pixmapNotRecognized)
         self.label_forShowName.setText("Chưa nhận được thí sinh")
+        self.label_forShowNumberCard.setText("")
+        self.label_forShowIdentNumber.setText("")
+        self.label_dateOfBird.setText("")
 
     def SetGeometryForLabelShowCamera(self, cameraWidth, cameraHeight):
         x = (self.frame_containLabelShowCamera.width() - cameraWidth)/2

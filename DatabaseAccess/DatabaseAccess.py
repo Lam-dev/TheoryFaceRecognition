@@ -63,7 +63,7 @@ class LayDuLieuTrongDataBase:
                 thiSinh.SoCMTND = results[i][5]
                 thiSinh.NgayDangKy = results[i][6]
                 thiSinh.AnhDangKy = results[i][7]
-                if((results[i][11] != None) & (results[i][11] != "")):
+                if((results[i][8] != None) & (results[i][11] != "")):
                     lstDSdacTrung = results[i][8].split(';')
                     for k in range (0, len(lstDSdacTrung)):
                         lstDacTrung = lstDSdacTrung[k].split(',')

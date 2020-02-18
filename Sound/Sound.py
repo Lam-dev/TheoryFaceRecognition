@@ -2,8 +2,8 @@ import pyaudio
 import wave
 
 
-filename = '/home/lam/StudentRecognize/Sound/AudioFile/khongNhanDienDuoc.wav'
-fileVLC = '/home/lam/StudentRecognize/Sound/AudioFile/vuiLongCho.wav'
+filename = 'Sound/AudioFile/xinCamOn.wav'
+fileVLC = 'Sound/AudioFile/vuiLongThuLai.wav'
 data = b''
 p = pyaudio.PyAudio()
 # Set chunk size of 1024 samples per data frame

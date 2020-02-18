@@ -26,8 +26,8 @@ class DatabaseManagerScreen(Ui_Frame_containDatabaseScreen, QObject):
         self.pushButton_nextStep.clicked.connect(self.NextStep)
         self.pushButton_nextStep.hide()
 
-        self.pushButton_preStep.clicked.connect(self.PreStep)
-        self.pushButton_preStep.hide()
+        # self.pushButton_preStep.clicked.connect(self.PreStep)
+        #self.pushButton_preStep.hide()
 
         self.pushButton_reloadDatabase.clicked.connect(self.__ReloadScreen)
 

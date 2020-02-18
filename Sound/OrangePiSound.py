@@ -2,37 +2,27 @@ import threading
 import time
 import simpleaudio as sa
 import wave
-fileMoiTSlenXe = 'Sound/AudioFile/xinMoiTSLenXe.wav'
-fileTSkhongTrungKhop = 'Sound/AudioFile/tsKhongTrungKhop.wav'
-fileChucBanKetQuaCao = 'Sound/AudioFile/chucBanKetQuaCao.wav'
+fileXinCamOnPath = 'Sound/AudioFile/xinCamOn.wav'
+fileVuiLongThuLaiPath = 'Sound/AudioFile/vuiLongThuLai.wav'
 
 class Sound():
 
     def __init__(self):
-        self.waveMoiTsLenXe = sa.WaveObject.from_wave_file(fileMoiTSlenXe)
-        self.waveTSkhongTrungKhop = sa.WaveObject.from_wave_file(fileTSkhongTrungKhop)
-        self.waveChucBanKetQuaCao = sa.WaveObject.from_wave_file(fileChucBanKetQuaCao)
+        self.waveXinCamOn = sa.WaveObject.from_wave_file(fileXinCamOnPath)
+        self.waveVuiLongThuLai = sa.WaveObject.from_wave_file(fileVuiLongThuLaiPath)
 
-    def __PlayTSkhongTrungKhop(self):
-        playSound = self.waveTSkhongTrungKhop.play()
+    def __PlayXinCamOn(self):
+        playSound = self.waveXinCamOn.play()
         playSound.wait_done()
 
-    def __PlayMoiTSlenXe(self):
-        playSound = self.waveMoiTsLenXe.play()
+    def __PlayVuiLongThuLai(self):
+        playSound = self.waveVuiLongThuLai.play()
         playSound.wait_done()
 
-    def __PlayChucBanKetQuaCao(self):
-        playSound = self.waveChucBanKetQuaCao.play()
-        playSound.wait_done()
-
-    def ThreadPlayTSkhongTrungKhop(self):
-        thread = threading.Thread(target=self.__PlayTSkhongTrungKhop, args=(), daemon=True)
+    def ThreadPlayXinCamOn(self):
+        thread = threading.Thread(target=self.__PlayXinCamOn, args=(), daemon=True)
         thread.start()
 
-    def ThreadPlayMoiTSlenXe(self):
-        thread = threading.Thread(target = self.__PlayMoiTSlenXe, args = (), daemon = True)
-        thread.start()
-
-    def ThreadPlayChucBanKetQuaCao(self):
-        thread = threading.Thread(target = self.__PlayChucBanKetQuaCao, args = (), daemon = True)
+    def ThreadPlayVuiLongThuLai(self):
+        thread = threading.Thread(target = self.__PlayVuiLongThuLai, args = (), daemon = True)
         thread.start()

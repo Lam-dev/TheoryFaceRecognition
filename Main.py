@@ -135,7 +135,7 @@ class MainWindow(QMainWindow):
     def ThemKhuonMatVaoDanhSachDaLay(self, idStudent, faceEncoding):
         for student in self.lstStudent:
             if(student.ID == idStudent):
-                student.NhanDienKhuonMatThem = faceEncoding
+                student.NhanDienKhuonMatThem.append(faceEncoding)
                 return
 
     def __DeleteFaceAdded(self, idStudent):

@@ -229,18 +229,25 @@ class ProcessReciptData(QObject):
         ftpObj = FTPclient()
         ftpObj.GetListFileFromServer(lstFile = lstFileName, ftpFilePath = FTP_SERVER_SYNC_DIR)
         updateFilePath = LOCAL_PATH_CONTAIN_DATA_UPDATE + fileName
-        with open(updateFilePath) as json_file:
+        with open(updateFilePath, encoding='utf-8-sig') as json_file:
             jsonDict = json.load(json_file)
+
         khoThiSinh = ThiSinhRepository()
         khoThiSinh.capNhatTruong(("NhanDienKhuonMatThem", "NhanDienVanTay"),(jsonDict["FaceEncoding"], jsonDict["FGPEncoding"]), " ID = %s "%(jsonDict["ID"]))
         faceEncodingStringArr = jsonDict["FaceEncoding"].split(",")
         faceEncodingArr = [float(elem) for elem in faceEncodingStringArr]
-        FGPencodingStringArr = jsonDict["FGPEncoding"].split(",")
-        FGPencodingArr = [int(elem) for elem in FGPencodingStringArr]
+        lstMultiFGPfeatureStr = jsonDict["FGPEncoding"].split(";")
+        lstFGP = []
+        for FGPfeatureStr in lstMultiFGPfeatureStr:
+            FGPfeatureStrArr = FGPfeatureStr.split(",")
+            FGPfeatureArr = [int(elem) for elem in FGPfeatureStrArr]
+            lstFGP.append(FGPfeatureArr)
+        # FGPencodingStringArr = jsonDict["FGPEncoding"].split(",")
+        # FGPencodingArr = [int(elem) for elem in FGPencodingStringArr]
 
         faceInfoDict = {
             "faceEncodingArr": faceEncodingArr,
-            "FGPencoding":FGPencodingArr,
+            "FGPencoding":lstFGP,
             "idStudent" : jsonDict["ID"],
         }
         self.SignalUpdateOrSyncStudentInfo.emit(faceInfoDict)

@@ -209,7 +209,7 @@ class GetFaceEncodingFromImage():
     def GetFaceEncodingStr(self, image):
         faceEncodings = self.__GetFaceEncoding(image)
         faceEncodeStr = ",".join(str(elem) for elem in faceEncodings[0])
-        return faceEncodeStr, faceEncodings
+        return faceEncodeStr, list(faceEncodings[0])
 
     def GetFaceEncodingFromImageFile(self, fileName):
         try:

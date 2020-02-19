@@ -9,8 +9,8 @@
 import socket
 from   datetime     import datetime
 import json
-SERVER_IP                                           = "192.168.1.13"
-SERVER_PORT                                         = 2019
+SERVER_IP                                           = "192.168.1.30"
+SERVER_PORT                                         = 8000
 import getmac
 def __DungKhungGiaoTiep(noiDung, malenh):
         
@@ -18,7 +18,7 @@ def __DungKhungGiaoTiep(noiDung, malenh):
             return False, False
         highChieuDaiTen = int(len(noiDung) / 256)
         lowChieuDaiTen = int(len(noiDung) % 256)                                                                                                                                                                                                                                                                                    
-        khungTruyen = [0x45, 0x54, 0x4D, malenh,lowChieuDaiTen, highChieuDaiTen]
+        khungTruyen = [0x45,0x4C, 0x54, malenh,lowChieuDaiTen, highChieuDaiTen]
         tong = malenh + lowChieuDaiTen + highChieuDaiTen
         j = 0
         for i in range (len(khungTruyen), len(khungTruyen) + len(noiDung)):
@@ -86,40 +86,44 @@ def ConvertStringToByteArray(string):
 #     }
 #     lstStudent.append(student)
 
-# dic = {
-#     "success":"True",
-#     "code":3,
-#     "data":{
-#         # "CourseInfo":course,
-#         # "CardNumber":lstStudent,
-#         "fileName":"TTND_2020_02_05_09_47_23.json",
-#         "action":"sync",
-#     },
-#     "message":12,
-#     "checksum":21
-# }
+dic = {
+    "success":"True",
+    "code":3,
+    "data":{
+        # "CourseInfo":course,
+        # "CardNumber":lstStudent,
+        "fileName":"TTND_2020_02_19_CN.json",
+        "action":"sync",
+    },
+    "message":12,
+    "checksum":21
+}
 
-# jsonStr = json.dumps(dic)
-# khungGui, tong = __DungKhungGiaoTiep("21021996", 8)
-# client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-# client.connect((SERVER_IP, SERVER_PORT))
-# client.send(khungGui)
+jsonStr = json.dumps(dic)
+khungGui, tong = __DungKhungGiaoTiep(jsonStr, 3)
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client.connect((SERVER_IP, SERVER_PORT))
+client.send(khungGui)
 
 # ############################################################
-def __ConvertStringToUTF8String(string):
-    x = []
-    for elem in string:
-        x.append(ord(elem))
-    return(bytes(x).decode("utf8", "ignore"))
+# def __ConvertStringToUTF8String(string):
+#     x = []
+#     for elem in string:
+#         x.append(ord(elem))
+#     return(bytes(x).decode("utf8", "ignore"))
 
 
-string = "Nguy\xe1\xbb\x85n V\xc4\x83n A"
+# string = "Nguy\xe1\xbb\x85n V\xc4\x83n A"
 
 
-print(__ConvertStringToUTF8String(string))
+# print(__ConvertStringToUTF8String(string))
 
 # }
 # jsonObj = json.dumps(dicta, ensure_ascii=True)
 # jsonDict =  json.loads(jsonObj)
 # stra = jsonDict["stra"]
 # print(stra)
+# import os
+# strTime = "2020-02-19 11:20:24.166959"
+# os.system('date +%Y%m%d -s "20081128"')
+# os.system('date +%T -s "21:02:00"')

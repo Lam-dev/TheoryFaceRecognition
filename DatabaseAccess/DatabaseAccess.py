@@ -83,7 +83,7 @@ class LayDuLieuTrongDataBase:
                                 thiSinh.NhanDienKhuonMatThem[k].append(j)
                                 thiSinh.NhanDienKhuonMatThem[k][j] =  float(lstDacTrung[j])
                 else:
-                    thiSinh.NhanDienKhuonMatThem = None  
+                    thiSinh.NhanDienKhuonMatThem = []
 
                 listThiSinh.append(thiSinh)
                 thiSinh.MaDK = results[i][10]

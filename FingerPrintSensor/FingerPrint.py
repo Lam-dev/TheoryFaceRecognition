@@ -13,7 +13,7 @@ class Fingerprint(QObject):
     SignalFGPnotFind = pyqtSignal()
     SignalHandPushed = pyqtSignal()
     
-    def __init__(self, port = '/dev/ttyACM0', baudRate = 57600, address = 0xFFFFFFFF, password = 0xFFFFFFFF):
+    def __init__(self, port = '/dev/ttyS3', baudRate = 57600, address = 0xFFFFFFFF, password = 0xFFFFFFFF):
         super().__init__()
         self.port = port
         self.baudRate = baudRate

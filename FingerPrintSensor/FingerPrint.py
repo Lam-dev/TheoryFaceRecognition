@@ -33,6 +33,7 @@ class Fingerprint(QObject):
         self.viTriDaChonChuaLuu = []
         self.LayDanhSachIDvaVanTay()
         self.FlagFGPfree = True
+        
 
     def LayDanhSachIDvaVanTay(self):
         khoIDvaVanTay = IDvaVanTayRepository()
@@ -99,7 +100,6 @@ class Fingerprint(QObject):
             viTriLuu = self.TimKhoangTrong()
         self.fingerprintObj.storeTemplate(viTriLuu, 0x01)
         return viTriLuu
-
 
     def TimViTriLuu(self):
         for i in range(0,4):
@@ -169,6 +169,7 @@ class Fingerprint(QObject):
         self.FlagFGPfree = True
 
     def NapLaiDuLieuChoCamBienVanTay(self):
+        
         try:
             if(type(self.fingerprintObj) is not bool):
                 self.XoaToanBoDatabase()

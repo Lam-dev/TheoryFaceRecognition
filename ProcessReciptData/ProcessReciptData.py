@@ -233,7 +233,7 @@ class ProcessReciptData(QObject):
             jsonDict = json.load(json_file)
 
         khoThiSinh = ThiSinhRepository()
-        khoThiSinh.capNhatTruong(("NhanDienKhuonMatThem", "NhanDienVanTay"),(jsonDict["FaceEncoding"], jsonDict["FGPEncoding"]), " ID = %s "%(jsonDict["ID"]))
+        khoThiSinh.capNhatTruong(("NhanDienKhuonMatThem", "NhanDienVanTay"),(jsonDict["FaceEncoding"], jsonDict["FGPEncoding"]), " ID = '%s' "%(jsonDict["ID"]))
         faceEncodingStringArr = jsonDict["FaceEncoding"].split(",")
         faceEncodingArr = [float(elem) for elem in faceEncodingStringArr]
         lstMultiFGPfeatureStr = jsonDict["FGPEncoding"].split(";")

@@ -1297,6 +1297,10 @@ class PyFingerprint(object):
 
         ## Verify uploaded characteristics
         characterics = self.downloadCharacteristics(charBufferNumber)
+        # for i in range(0, 512):
+        #     print( str(characterics[i]) + "  " + str(characteristicsData[i]))
+        #     if(characterics[i] != characteristicsData[i]):
+        #         print("err " +str(characterics[i]) + '   '+str(characteristicsData[i] ))
         return (characterics == characteristicsData)
 
     def generateRandomNumber(self):

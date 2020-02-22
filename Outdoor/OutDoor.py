@@ -15,6 +15,7 @@ class OutDoor(QObject, Ui_Frame):
         frame.show()
         self.pushButtonEnter.clicked.connect(self.__GoToDesktop)
         self.pushbutton_exit.clicked.connect(self.__HideExitScreen)
+        self.SignalGoToDesktop.emit()
 
     def __GoToDesktop(self):
         if(self.lineEdit_inputNumber.text() == "210296"):

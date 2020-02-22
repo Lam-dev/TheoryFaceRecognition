@@ -86,24 +86,24 @@ def ConvertStringToByteArray(string):
 #     }
 #     lstStudent.append(student)
 
-dic = {
-    "success":"True",
-    "code":3,
-    "data":{
-        # "CourseInfo":course,
-        # "CardNumber":lstStudent,
-        "fileName":"TTND_2020_02_19_CN.json",
-        "action":"sync",
-    },
-    "message":12,
-    "checksum":21
-}
+# dic = {
+#     "success":"True",
+#     "code":3,
+#     "data":{
+#         # "CourseInfo":course,
+#         # "CardNumber":lstStudent,
+#         "fileName":"TTND_2020_02_19_CN.json",
+#         "action":"sync",
+#     },
+#     "message":12,
+#     "checksum":21
+# }
 
-jsonStr = json.dumps(dic)
-khungGui, tong = __DungKhungGiaoTiep(jsonStr, 3)
-client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client.connect((SERVER_IP, SERVER_PORT))
-client.send(khungGui)
+# jsonStr = json.dumps(dic)
+# khungGui, tong = __DungKhungGiaoTiep(jsonStr, 3)
+# client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+# client.connect((SERVER_IP, SERVER_PORT))
+# client.send(khungGui)
 
 # ############################################################
 # def __ConvertStringToUTF8String(string):
@@ -123,7 +123,7 @@ client.send(khungGui)
 # jsonDict =  json.loads(jsonObj)
 # stra = jsonDict["stra"]
 # print(stra)
-# import os
-# strTime = "2020-02-19 11:20:24.166959"
-# os.system('date +%Y%m%d -s "20081128"')
-# os.system('date +%T -s "21:02:00"')
+import os
+strTime = "2020-02-19 11:20:24.166959"
+os.system('date +%Y%m%d -s "20081128"')
+os.system('date +%T -s "21:02:00"')

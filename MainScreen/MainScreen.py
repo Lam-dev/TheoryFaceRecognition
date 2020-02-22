@@ -11,6 +11,7 @@ from    SettingScreen.DatabaseManagerScreen  import DatabaseManagerScreen
 from    KeyBoard.KeyBoard        import KeyBoard
 from    SettingScreen.HideSettingScreenAction  import HideSettingScreen
 
+
 class MainScreen(QObject, Ui_Frame_MainScreen):
     SignalGoToDesktop = pyqtSignal()
     SignalModifyFRthreshold = pyqtSignal(float)
@@ -67,6 +68,14 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         self.outdoorScreenShadow.show()
         self.outdoorObj.SignalHideExitScreen.connect(self.__HideOutdoorScreen)
         self.outdoorObj.SignalGoToDesktop.connect(self.__GoToDesktop)
+
+    def __ShowWaitToSync(self):
+        self.waitShadow = QtWidgets.QFrame(self.centralWidget)
+        self.waitShadow.setGeometry(QtCore.QRect(0, 0, 800, 480))
+        self.waitShadow.setStyleSheet("background-color: rgba(0, 0, 0, 100);")
+        self.frameContainWait = QtWidgets.QFrame(self.waitShadow)
+
+
 
     def __GoToDesktop(self):
         self.SignalGoToDesktop.emit()

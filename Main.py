@@ -43,7 +43,7 @@ class MainWindow(QMainWindow):
         self.mainScreenObj.SignalDeleteFaceAdded.connect(self.__DeleteFaceAdded)
         self.mainScreenObj.SignalDeleteFGPadded.connect(self.__DeleteFGPadded)
         self.khoLichSu = LichSuRepository()
-        #self.soundObj = Sound()
+        self.soundObj = Sound()
 
 #region   dieu khien signal tu camera
 
@@ -89,6 +89,7 @@ class MainWindow(QMainWindow):
         # self.socketServerForRFIDobj = SocketServerForRFID()
         # self.socketServerForRFIDobj.SignalRFIDputOn.connect(self.RFIDputOn)
 
+        self.mainScreenObj.ShowCamera()
     def ShowWaitForUpdateDataScreen(self):
         if(self.__FlagUpdateScreenIsShow):
             self.__FlagNeedWaitContinue = True
@@ -122,7 +123,7 @@ class MainWindow(QMainWindow):
     
     def RecognizedFGP(self, studentID):
         self.__OffCameraTemporary(faceRecognized= False)
-        #self.soundObj.ThreadPlayXinCamOn()
+        self.soundObj.ThreadPlayXinCamOn()
         for student in self.lstStudent:
             if(student.ID == studentID):
                 self.mainScreenObj.ShowStudentInfomation(student) 
@@ -253,7 +254,7 @@ class MainWindow(QMainWindow):
                 
     def __RecognizedStudent(self, studentObj, faceImageJpgData):
         self.__OffCameraTemporary(faceRecognized= True)
-        #self.soundObj.ThreadPlayXinCamOn()
+        self.soundObj.ThreadPlayXinCamOn()
         fp = open("imageTosend.jpg", 'wb')
         fp.write(faceImageJpgData)
         self.mainScreenObj.ShowStudentInfomation(studentObj)

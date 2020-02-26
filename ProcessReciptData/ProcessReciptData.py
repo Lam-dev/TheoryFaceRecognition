@@ -31,6 +31,8 @@ class ProcessReciptData(QObject):
     SignalSendFile = pyqtSignal(str)
     SignalSendMessage = pyqtSignal(str)
     SignalUpdateOrSyncStudentInfo = pyqtSignal(dict)
+    SignalStopForUpdateData = pyqtSignal()
+    
 
     def __init__(self):
         super().__init__()
@@ -46,11 +48,13 @@ class ProcessReciptData(QObject):
             reciptObj = self.json2obj(data)
 
             if(reciptObj.code == CODE_RECIPT_DATA_FROM_SERVER):
+                self.SignalStopForUpdateData.emit()
                 self.__ProcessRequestUpdateDatabase(reciptObj)
+
 
             elif(reciptObj.code == CODE_UPLOAD_DATA_TO_SERVER):
                 self.ServerRequestTakePicture.emit()
-            
+                
             elif(reciptObj.code == CODE_PING_PING):
                 self.__ServerAcceptConnect(self.__CatLayPhanDataTrongFrame(khungNhan))
             

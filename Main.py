@@ -3,7 +3,7 @@ from    MainScreen.MainScreen                   import MainScreen
 
 from        DatabaseAccess.DatabaseAccess       import *
 from        PyQt5                               import QtCore, QtGui, QtWidgets, Qt
-from        PyQt5.QtCore                       import pyqtSlot, pyqtSignal,QTimer, QDateTime,Qt, QObject
+from        PyQt5.QtCore                        import pyqtSlot, pyqtSignal,QTimer, QDateTime,Qt, QObject
 from         PyQt5                              import QtCore, QtGui, QtWidgets
 from         PyQt5                              import QtGui
 from         PyQt5                              import QtWidgets
@@ -71,20 +71,42 @@ class MainWindow(QMainWindow):
         self.socketObject.SignalUpdateDatabaseSuccess.connect(self.UpdateDatabaseSuccess)
         self.socketObject.SignalNumberStudentParsed.connect(self.NumberStudentParsed)
         self.socketObject.SignalUpdateOrSyncStudentInfo.connect(self.AddStudentInfomation)
+        self.socketObject.SignalStopForUpdateData.connect(self.ShowWaitForUpdateDataScreen)
 
 #endregion
         self.timerReopenReadCam = QTimer(self)
         self.timerReopenReadCam.timeout.connect(self.__ReopenReadCamera)
 
+        self.timerWaitForUpdateData = QTimer(self)
+        self.timerWaitForUpdateData.timeout.connect(self.HideWaitForUpdateDataScreen)
+
         self.FGPobj = Fingerprint()
         self.FGPobj.SignalRecognizedFGP.connect(self.RecognizedFGP)
         self.FGPobj.BatLayVanTayDangNhap()
-
+        
+        self.__FlagUpdateScreenIsShow = False
+        self.__FlagNeedWaitContinue = False
         # self.socketServerForRFIDobj = SocketServerForRFID()
         # self.socketServerForRFIDobj.SignalRFIDputOn.connect(self.RFIDputOn)
 
-    def RFIDputOn(self):
-        pass
+    def ShowWaitForUpdateDataScreen(self):
+        if(self.__FlagUpdateScreenIsShow):
+            self.__FlagNeedWaitContinue = True
+            return
+        self.__FlagUpdateScreenIsShow = True    
+        self.__OffCameraTemporary(autoReopen= False)
+        self.timerWaitForUpdateData.start(10000)
+        self.mainScreenObj.ShowWaitForUpdateScreen()
+
+    def HideWaitForUpdateDataScreen(self):
+        if(self.__FlagNeedWaitContinue):
+            #self.timerWaitForUpdateData.start(10000)
+            self.__FlagNeedWaitContinue = False
+        else:
+            self.timerWaitForUpdateData.stop()
+            self.mainScreenObj.HideWaitForUpdateScreen()
+            self.__FlagUpdateScreenIsShow = False
+            self.__ReopenReadCamera()
 
     def AddStudentInfomation(self, infoDict):
         self.ThemKhuonMatVaoDanhSachDaLay(infoDict["idStudent"], infoDict["faceEncodingArr"])
@@ -99,7 +121,7 @@ class MainWindow(QMainWindow):
             self.FGPobj.ThemIDvaVanTayVaoDanhSachDaLay(infoDict["idStudent"], viTri)
     
     def RecognizedFGP(self, studentID):
-        self.__OffCameraTemporary()
+        self.__OffCameraTemporary(faceRecognized= False)
         #self.soundObj.ThreadPlayXinCamOn()
         for student in self.lstStudent:
             if(student.ID == studentID):
@@ -155,6 +177,9 @@ class MainWindow(QMainWindow):
         self.FGPobj.BatLayVanTayDangNhap()
 
     def __ReopenReadCamera(self):
+        if(self.__FlagUpdateScreenIsShow):
+            return
+        self.mainScreenObj.ShowCamera()
         self.mainScreenObj.ClearStudentRecognizedInfomation()
         self.cameraObj.StartReadImage()
         self.faceRecognitionObj.StartFaceRecognize()
@@ -227,22 +252,24 @@ class MainWindow(QMainWindow):
                 return
                 
     def __RecognizedStudent(self, studentObj, faceImageJpgData):
-        self.__OffCameraTemporary()
+        self.__OffCameraTemporary(faceRecognized= True)
         #self.soundObj.ThreadPlayXinCamOn()
         fp = open("imageTosend.jpg", 'wb')
         fp.write(faceImageJpgData)
         self.mainScreenObj.ShowStudentInfomation(studentObj)
-        self.__SaveHistory("Face", studentObj.ID)
+        #self.__SaveHistory("Face", studentObj.ID)
         # self.mainScreenObj.ShowFaceRecognizeOK()
         self.socketObject.SendResultsFaceRecognize(studentObj.ID, "T", "imageTosend.jpg")
 
-    def __OffCameraTemporary(self):
+    def __OffCameraTemporary(self, faceRecognized = True, autoReopen = True):
         self.FGPobj.TatLayVanTayDangNhap()
         self.cameraObj.StopReadImage()
         # self.faceRecognitionObj.StopFaceTracking()
         self.faceRecognitionObj.StopFaceRecognize()
-        self.__HideCamera()
-        self.timerReopenReadCam.start(2000)
+        self.mainScreenObj.HideCamera(faceRecognized)
+        if(autoReopen):
+            self.timerReopenReadCam.start(3000)
+        
 
     def __ShowImageFromCamera(self, pixmap):
         self.mainScreenObj.label_showCamera.setPixmap(pixmap)

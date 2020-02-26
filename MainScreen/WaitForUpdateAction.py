@@ -4,7 +4,7 @@ from        PyQt5.QtGui     import QPixmap
 from        PyQt5           import QtWidgets, QtGui, QtCore
 from        PIL             import Image, ImageQt
 
-class MainScreen(QObject, Ui_Frame_ContainWaitForSync):
+class WaitForUpdateScreen(QObject, Ui_Frame_ContainWaitForSync):
 
     def __init__(self, Frame):
         QObject.__init__(self)

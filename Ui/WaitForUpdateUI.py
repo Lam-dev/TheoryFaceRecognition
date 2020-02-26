@@ -13,13 +13,14 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Frame_ContainWaitForSync(object):
     def setupUi(self, Frame_ContainWaitForSync):
         Frame_ContainWaitForSync.setObjectName("Frame_ContainWaitForSync")
-        Frame_ContainWaitForSync.resize(408, 188)
+        Frame_ContainWaitForSync.resize(408, 185)
+        Frame_ContainWaitForSync.setStyleSheet("background-color: rgb(208, 208, 208);")
         Frame_ContainWaitForSync.setFrameShape(QtWidgets.QFrame.StyledPanel)
         Frame_ContainWaitForSync.setFrameShadow(QtWidgets.QFrame.Raised)
         self.label = QtWidgets.QLabel(Frame_ContainWaitForSync)
         self.label.setGeometry(QtCore.QRect(26, 54, 57, 67))
         self.label.setText("")
-        self.label.setPixmap(QtGui.QPixmap("../icon/iconReadFace.png"))
+        self.label.setPixmap(QtGui.QPixmap("../../../../.designer/icon/iconReadFace.png"))
         self.label.setObjectName("label")
         self.label_2 = QtWidgets.QLabel(Frame_ContainWaitForSync)
         self.label_2.setGeometry(QtCore.QRect(92, 52, 293, 67))

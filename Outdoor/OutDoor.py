@@ -11,13 +11,15 @@ class OutDoor(QObject, Ui_Frame):
         QObject.__init__(self)
         Ui_Frame.__init__(self)
         self.setupUi(frame)
+
         frame.setGeometry((800 - frame.width())/2, (480 - frame.height())/2, frame.width(), frame.height())
         frame.show()
         self.pushButtonEnter.clicked.connect(self.__GoToDesktop)
         self.pushbutton_exit.clicked.connect(self.__HideExitScreen)
-        self.SignalGoToDesktop.emit()
+
 
     def __GoToDesktop(self):
+        self.SignalGoToDesktop.emit()
         if(self.lineEdit_inputNumber.text() == "210296"):
             self.SignalGoToDesktop.emit()
 

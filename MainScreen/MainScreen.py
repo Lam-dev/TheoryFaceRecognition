@@ -1,15 +1,18 @@
 from        MainScreen.MainScreenUi    import Ui_Frame_MainScreen
+from        MainScreen.WaitForUpdateAction   import WaitForUpdateScreen
 from        PyQt5.QtCore    import pyqtSlot, pyqtSignal,QTimer, QDateTime,Qt, QObject
 from        PyQt5.QtGui     import QPixmap
 from        PyQt5           import QtWidgets, QtGui, QtCore
 from        PIL             import Image, ImageQt
 import      io
-from    UpdateScreen.UpdateScreen  import UpdateScreen
-from    Outdoor.OutDoor          import OutDoor
-from    SettingScreen.SettingScreen   import SettingScreen
-from    SettingScreen.DatabaseManagerScreen  import DatabaseManagerScreen
-from    KeyBoard.KeyBoard        import KeyBoard
-from    SettingScreen.HideSettingScreenAction  import HideSettingScreen
+from        datetime        import datetime
+from    UpdateScreen.UpdateScreen               import UpdateScreen
+from    Outdoor.OutDoor                         import OutDoor
+from    SettingScreen.SettingScreen             import SettingScreen
+from    SettingScreen.DatabaseManagerScreen     import DatabaseManagerScreen
+from    KeyBoard.KeyBoard                       import KeyBoard
+from    SettingScreen.HideSettingScreenAction   import HideSettingScreen
+
 
 
 class MainScreen(QObject, Ui_Frame_MainScreen):
@@ -56,7 +59,21 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         self.label_7.mouseDoubleClickEvent = lambda event: self.__OpenOutdoor()
         self.timerFlickerWarning = QTimer(self)
         self.timerFlickerWarning.timeout.connect(self.__FlickerWarning)
+        self.iconFaceRecognized = QtGui.QPixmap("icon/iconFaceRecognized.png")
+        self.iconFGPrecognized = QtGui.QPixmap("icon/iconFingerprintRecognitzed.png")
     
+    def HideCamera(self, faceRecognized = True):
+        self.label_showCamera.hide()
+        if(faceRecognized):
+            self.label_forShowIconFaceRecognized.setPixmap(self.iconFaceRecognized)
+        else:
+            self.label_forShowIconFaceRecognized.setPixmap(self.iconFGPrecognized)
+        self.label_forShowTimeRecognized.setText(datetime.now().strftime("%d/%m/%Y\n%H:%M:%S"))
+    
+    def ShowCamera(self):
+        self.label_showCamera.raise_()
+        self.label_showCamera.show()
+
 
     def __OpenOutdoor(self):
         self.outdoorScreenShadow = QtWidgets.QFrame(self.centralWidget)
@@ -75,7 +92,19 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         self.waitShadow.setStyleSheet("background-color: rgba(0, 0, 0, 100);")
         self.frameContainWait = QtWidgets.QFrame(self.waitShadow)
 
+    def ShowWaitForUpdateScreen(self):
+        self.waitForUpdateShadow = QtWidgets.QFrame(self.centralWidget)
+        self.waitForUpdateShadow.setGeometry(QtCore.QRect(0, 0, 800, 480))
+        self.waitForUpdateShadow.setStyleSheet("background-color: rgba(0, 0, 0, 100);")
+        self.frameContainWaitForUpdateScreen = QtWidgets.QFrame(self.waitForUpdateShadow)
+        self.waitForUpdateScreenObj = WaitForUpdateScreen(self.frameContainWaitForUpdateScreen)
+        self.waitForUpdateShadow .raise_()
+        self.waitForUpdateShadow.show()
 
+    def HideWaitForUpdateScreen(self):
+        self.waitForUpdateScreenObj.deleteLater()
+        self.waitForUpdateShadow.hide()
+        self.waitForUpdateShadow.deleteLater()
 
     def __GoToDesktop(self):
         self.SignalGoToDesktop.emit()

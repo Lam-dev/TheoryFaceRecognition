@@ -9,7 +9,7 @@
 import socket
 from   datetime     import datetime
 import json
-SERVER_IP                                           = "192.168.1.59"
+SERVER_IP                                           = "192.168.1.24"
 SERVER_PORT                                         = 2019
 import getmac
 def __DungKhungGiaoTiep(noiDung, malenh):
@@ -99,11 +99,11 @@ dic = {
     "checksum":21
 }
 
-jsonStr = json.dumps(dic)
-khungGui, tong = __DungKhungGiaoTiep(jsonStr, 3)
-client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client.connect((SERVER_IP, SERVER_PORT))
-client.send(khungGui)
+# jsonStr = json.dumps(dic)
+# khungGui, tong = __DungKhungGiaoTiep(jsonStr, 3)
+# client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+# client.connect((SERVER_IP, SERVER_PORT))
+# client.send(khungGui)
 
 # ############################################################
 # def __ConvertStringToUTF8String(string):
@@ -124,6 +124,30 @@ client.send(khungGui)
 # stra = jsonDict["stra"]
 # print(stra)
 # import os
-# strTime = "2020-02-19 11:20:24.166959"
-# os.system('date +%Y%m%d -s "20081128"')
-# os.system('date +%T -s "21:02:00"')
+# strTime = "2020/02/19 11:20:24"
+# # os.system('date +%Y%m%d -s "20081128"')
+# # os.system('date +%T -s "21:02:00"')
+# os.system('date +%Y/%m/%d -s ' + '"%s"'%(strTime.split(" ")[0]))
+# os.system('date +%T -s ' +'"%s"'%(strTime.split(" ")[1]))
+
+####################Tạo frame trả lời ping và cập nhật giờ######################
+
+dic = {
+
+    "code":1,
+    "data": {
+        "pong":"1",
+        "time":"2021/02/21 05:20:15"
+
+    },
+    "message":"null",
+    "checksum":"23"
+}
+jsonStr = json.dumps(dic)
+khungGui, tong = __DungKhungGiaoTiep(jsonStr, 1)
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client.settimeout(1000)
+client.connect((SERVER_IP, SERVER_PORT))
+client.send(khungGui)
+
+################################################################################

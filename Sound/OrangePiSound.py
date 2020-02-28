@@ -12,7 +12,6 @@ class Sound():
         self.waveVuiLongThuLai = sa.WaveObject.from_wave_file(fileVuiLongThuLaiPath)
 
     def __PlayXinCamOn(self):
-        self.waveXinCamOn = sa.WaveObject.from_wave_file(fileXinCamOnPath)
         playSound = self.waveXinCamOn.play()
         playSound.wait_done()
 

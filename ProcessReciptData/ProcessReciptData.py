@@ -10,11 +10,12 @@ import  numpy
 from    PIL         import Image
 from    datetime    import datetime
 import  io
+import  os
 
 CODE_GET_DATABASE = "4"
 CODE_RECIPT_DATA_FROM_SERVER = 3
 CODE_UPLOAD_DATA_TO_SERVER = "2"
-CODE_PING_PING = "1"
+CODE_PING_PING = 1
 
 MAC_ADDRESS_LENGTH                                  = 8
 LOCAL_PATH_CONTAIN_DATA_UPDATE                      = "DataUpdate/"
@@ -32,7 +33,7 @@ class ProcessReciptData(QObject):
     SignalSendMessage = pyqtSignal(str)
     SignalUpdateOrSyncStudentInfo = pyqtSignal(dict)
     SignalStopForUpdateData = pyqtSignal()
-    
+    __FlagTimeUpdated = False
 
     def __init__(self):
         super().__init__()
@@ -50,22 +51,30 @@ class ProcessReciptData(QObject):
             if(reciptObj.code == CODE_RECIPT_DATA_FROM_SERVER):
                 self.SignalStopForUpdateData.emit()
                 self.__ProcessRequestUpdateDatabase(reciptObj)
-
-
+            
             elif(reciptObj.code == CODE_UPLOAD_DATA_TO_SERVER):
                 self.ServerRequestTakePicture.emit()
                 
             elif(reciptObj.code == CODE_PING_PING):
-                self.__ServerAcceptConnect(self.__CatLayPhanDataTrongFrame(khungNhan))
-            
+                self.__ServerAcceptConnect(reciptObj)
+                
             elif(reciptObj.code == CODE_GET_DATABASE):
                 self.__ServerRequestDatabaseCheck(reciptObj)
+        
         except:
 
             pass
 
-    def __ServerAcceptConnect(self, frame):
+    def __ServerAcceptConnect(self, messageObj):
         self.ServerConfirmedConnect.emit()
+        if(not self.__FlagTimeUpdated):
+            strTime = messageObj.data.time
+            try:
+                os.system('date +%Y/%m/%d -s ' + '"%s"'%(strTime.split(" ")[0]))
+                os.system('date +%T -s ' +'"%s"'%(strTime.split(" ")[1]))
+                self.__FlagTimeUpdated = True
+            except:
+                pass
 
     def __ServerRequestUpdateDatabase(self, ftpFileDir):
 #region truong hop khong doc duoc anh tu xml
@@ -133,10 +142,10 @@ class ProcessReciptData(QObject):
             for khoaThi in lstKhoaThi:
                 listCourseID.append(khoaThi.IDKhoaThi)
             jsonSaveIntoFile = {
-                "MAC":"12345", 
+                "MAC":"12345",
                 "ListCourse":listCourseID,
             }
-            fileName  = "DSKT_" + datetime.now().strftime("%d_%m_%Y-%H_%M_%S")+".json"
+            fileName  = "DSKT_" + datetime.now().strftime("%d_%m%_Y-%H_%M_%S")+".json"
             with open(fileName, 'w') as outfile:
                 json.dump(jsonSaveIntoFile, outfile)
             messageForSendToServer = {
@@ -148,7 +157,7 @@ class ProcessReciptData(QObject):
             }
             self.SignalSendFile.emit(fileName)
             self.SignalSendMessage.emit(json.dumps(messageForSendToServer))
-
+    
         elif(target == "listStudent"):
             try:
                 course = messageObj.detail["course"]
@@ -186,6 +195,17 @@ class ProcessReciptData(QObject):
             khoKhoaThi = messageObj.detail["course"]
             khoKhoaThi.xoaBanGhi(" IDKhoaThi = %s"%( "IDKhoaThi  = %s"%(course)))
         
+        elif(target == "getHistory"):
+            courseID = messageObj.detail["course"]
+            lstStudentOfCourse = ThiSinhRepository().layDanhSach(" IDkhoaThi = courseID ")
+            historyRepo = LichSuRepository()
+
+            for student in lstStudentOfCourse:
+                lstHistoryOfStudent = historyRepo.layDanhSach(" IDThiSinh = student.IDThiSinh ")
+            
+
+        
+            
         # detailForGetListStudent = {
         #     "course":"id Khoa hoc"
         # }        
@@ -271,8 +291,6 @@ class ProcessReciptData(QObject):
         for elem in string:
             x.append(ord(elem))
         return(bytes(x).decode("utf8", "ignore"))
-
-
 
     def __AddStudent(self, lstStudentNumber, IDCourse):
         

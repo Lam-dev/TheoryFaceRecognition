@@ -15,8 +15,7 @@ from         datetime                           import datetime
 from         SocketConnect.SocketClient         import SocketClient
 import       os
 from         FingerPrintSensor.FingerPrint      import Fingerprint
-from         SocketServerForRFID.SocketServer   import SocketServerForRFID
-from         Sound.OrangePiSound                import Sound
+from         Sound.OrangePiSound                 import Sound
 
 # from   Sound.Sound              import Sound
 class MainWindow(QMainWindow):
@@ -123,14 +122,14 @@ class MainWindow(QMainWindow):
     
     def RecognizedFGP(self, studentID):
         self.__OffCameraTemporary(faceRecognized= False)
-        self.soundObj.ThreadPlayXinCamOn()
         for student in self.lstStudent:
             if(student.ID == studentID):
                 self.mainScreenObj.ShowStudentInfomation(student) 
                 self.socketObject.SendResultsFGPrecognition(studentID)
                 break
         # self.__SaveHistory("FGP", studentID)
-
+        self.soundObj.ThreadPlayXinCamOn()
+        
     def __AddFaceEncodingAndFGP(self, faceDict, FGPdict):
 
         khoThiSinh = ThiSinhRepository()

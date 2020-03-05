@@ -19,6 +19,7 @@ class SettingScreen(Ui_frame_settingScreen, QObject):
     SignalConnectNewServer = pyqtSignal(dict)
     SignalConnectNewFTPserver = pyqtSignal(dict)
     SignalOpenHideSettingScreen = pyqtSignal()
+    SignalCleanFGPsensor = pyqtSignal()
 
     def __init__(self, Frame):
         
@@ -152,7 +153,8 @@ class SettingScreen(Ui_frame_settingScreen, QObject):
             self.content.SignalModifyImageQuality.connect(self.__ChangeImageQuality)
             self.content.SignalConnectNewServer.connect(self.SignalConnectNewServer.emit)
             self.content.SignalConnectNewFTPserver.connect(self.SignalConnectNewFTPserver.emit)
-
+            self.content.SignalCleanFGPsensor.connect(self.SignalCleanFGPsensor.emit)
+            
             self.content.lineEdit_forInputIP.mousePressEvent = lambda event:self.__OpenKeyboard(self.content.lineEdit_forInputIP)
             self.content.lineEdit_forInputPort.mousePressEvent = lambda event:self.__OpenKeyboard(self.content.lineEdit_forInputPort)
             self.content.lineEdit_forInputAccount.mousePressEvent = lambda event:self.__OpenKeyboard(self.content.lineEdit_forInputAccount)

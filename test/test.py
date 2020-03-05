@@ -130,24 +130,25 @@ dic = {
 # os.system('date +%Y/%m/%d -s ' + '"%s"'%(strTime.split(" ")[0]))
 # os.system('date +%T -s ' +'"%s"'%(strTime.split(" ")[1]))
 
-####################Tạo frame trả lời ping và cập nhật giờ######################
+# ####################Tạo frame trả lời ping và cập nhật giờ######################
 
-dic = {
+# dic = {
 
-    "code":1,
-    "data": {
-        "pong":"1",
-        "time":"2021/02/21 05:20:15"
+#     "code":1,
+#     "data": {
+#         "pong":"1",
+#         "time":"2021/02/21 05:20:15"
 
-    },
-    "message":"null",
-    "checksum":"23"
-}
-jsonStr = json.dumps(dic)
-khungGui, tong = __DungKhungGiaoTiep(jsonStr, 1)
-client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client.settimeout(1000)
-client.connect((SERVER_IP, SERVER_PORT))
-client.send(khungGui)
+#     },
+#     "message":"null",
+#     "checksum":"23"
+# }
+# jsonStr = json.dumps(dic)
+# khungGui, tong = __DungKhungGiaoTiep(jsonStr, 1)
+# client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+# client.settimeout(1000)
+# client.connect((SERVER_IP, SERVER_PORT))
+# client.send(khungGui)
 
-################################################################################
+# ################################################################################
+print(getmac.get_mac_address())

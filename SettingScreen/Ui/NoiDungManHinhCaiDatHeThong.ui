@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>416</width>
-    <height>1512</height>
+    <height>1700</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -351,14 +351,27 @@ color: rgb(0, 170, 255);</string>
    <widget class="QLabel" name="label_showSocketConnectStatus">
     <property name="geometry">
      <rect>
-      <x>40</x>
+      <x>60</x>
       <y>188</y>
-      <width>195</width>
+      <width>175</width>
       <height>27</height>
      </rect>
     </property>
     <property name="text">
      <string>Đã kết nối</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_iconSocketStatus">
+    <property name="geometry">
+     <rect>
+      <x>8</x>
+      <y>186</y>
+      <width>39</width>
+      <height>37</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
     </property>
    </widget>
   </widget>
@@ -629,14 +642,27 @@ color: rgb(0, 170, 255);</string>
    <widget class="QLabel" name="label_showFTPconnectStatus">
     <property name="geometry">
      <rect>
-      <x>42</x>
+      <x>60</x>
       <y>188</y>
-      <width>195</width>
+      <width>177</width>
       <height>27</height>
      </rect>
     </property>
     <property name="text">
-     <string>Đã kết nối</string>
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_forShowIconFTPstatus">
+    <property name="geometry">
+     <rect>
+      <x>6</x>
+      <y>184</y>
+      <width>39</width>
+      <height>37</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
     </property>
    </widget>
   </widget>
@@ -644,7 +670,7 @@ color: rgb(0, 170, 255);</string>
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>1044</y>
+     <y>1206</y>
      <width>421</width>
      <height>149</height>
     </rect>
@@ -718,7 +744,7 @@ font: 25 10pt &quot;Ubuntu&quot;;</string>
    <property name="geometry">
     <rect>
      <x>2</x>
-     <y>1208</y>
+     <y>1370</y>
      <width>421</width>
      <height>211</height>
     </rect>
@@ -1255,7 +1281,102 @@ font: 25 10pt &quot;Ubuntu&quot;;</string>
    <property name="geometry">
     <rect>
      <x>22</x>
-     <y>1192</y>
+     <y>1354</y>
+     <width>371</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+  </widget>
+  <widget class="QFrame" name="frame_containMemoryInfomation_2">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>1042</y>
+     <width>421</width>
+     <height>149</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 0px</string>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::StyledPanel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Raised</enum>
+   </property>
+   <widget class="QLabel" name="label_lamSachCamBien">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>12</y>
+      <width>391</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="mouseTracking">
+     <bool>true</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 75 bold 12pt &quot;Ubuntu&quot;;</string>
+    </property>
+    <property name="text">
+     <string>Làm sạch cảm biến</string>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_xoaBoRacCamBien">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>34</y>
+      <width>391</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="mouseTracking">
+     <bool>true</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 85, 255);
+font: 25 10pt &quot;Ubuntu&quot;;</string>
+    </property>
+    <property name="text">
+     <string>(Xóa các vân tay rác trên cảm biến)</string>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_cleanFGPsensor">
+    <property name="geometry">
+     <rect>
+      <x>24</x>
+      <y>72</y>
+      <width>137</width>
+      <height>59</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);
+border-radius:3px;
+color: rgb(0, 170, 255);</string>
+    </property>
+    <property name="text">
+     <string>Làm sạch</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="Line" name="line_12">
+   <property name="geometry">
+    <rect>
+     <x>24</x>
+     <y>1190</y>
      <width>371</width>
      <height>16</height>
     </rect>

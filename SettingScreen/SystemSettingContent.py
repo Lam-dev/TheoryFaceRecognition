@@ -11,7 +11,7 @@ class SystemSettingContent(Ui_widget_containSettingContent, QObject):
     SignalModifyImageQuality = pyqtSignal(float)
     SignalConnectNewServer = pyqtSignal(dict)
     SignalConnectNewFTPserver = pyqtSignal(dict)
-
+    SignalCleanFGPsensor = pyqtSignal()
 
     def __init__(self):
         QObject.__init__(self)
@@ -44,6 +44,7 @@ class SystemSettingContent(Ui_widget_containSettingContent, QObject):
         self.lineEdit_forInputFPTpassword.textChanged.connect(lambda:self.__CheckPassword(self.lineEdit_forInputFPTpassword.text(), self.label_iconCheckFTPpassword))
         self.pushButton_connectNewServer.clicked.connect(self.__ConnectNewServer)
         self.pushButton_connectNewFTP.clicked.connect(self.__ConnectNewFTPserver)
+        self.pushButton_cleanFGPsensor.clicked.connect(self.SignalCleanFGPsensor.emit)
         self.GetAndShowSetting()
         
     def __ConnectNewServer(self):

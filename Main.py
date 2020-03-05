@@ -41,6 +41,8 @@ class MainWindow(QMainWindow):
         self.mainScreenObj.SignalAddFaceEncodeAndFGP.connect(self.__AddFaceEncodingAndFGP)
         self.mainScreenObj.SignalDeleteFaceAdded.connect(self.__DeleteFaceAdded)
         self.mainScreenObj.SignalDeleteFGPadded.connect(self.__DeleteFGPadded)
+
+
         self.khoLichSu = LichSuRepository()
         self.soundObj = Sound()
 
@@ -83,6 +85,8 @@ class MainWindow(QMainWindow):
         self.FGPobj.SignalRecognizedFGP.connect(self.RecognizedFGP)
         self.FGPobj.BatLayVanTayDangNhap()
         
+        self.mainScreenObj.SignalCleanFGPsensor.connect(self.FGPobj.LamSachCamBien)
+
         self.__FlagUpdateScreenIsShow = False
         self.__FlagNeedWaitContinue = False
         # self.socketServerForRFIDobj = SocketServerForRFID()

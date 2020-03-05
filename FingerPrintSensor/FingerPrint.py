@@ -13,7 +13,7 @@ class Fingerprint(QObject):
     SignalFGPnotFind = pyqtSignal()
     SignalHandPushed = pyqtSignal()
     
-    def __init__(self, port = '/dev/ttyACM0', baudRate = 57600, address = 0xFFFFFFFF, password = 0xFFFFFFFF):
+    def __init__(self, port = '/dev/ttyS3', baudRate = 57600, address = 0xFFFFFFFF, password = 0xFFFFFFFF):
         super().__init__()
         self.port = port
         self.baudRate = baudRate
@@ -33,7 +33,14 @@ class Fingerprint(QObject):
         self.viTriDaChonChuaLuu = []
         self.LayDanhSachIDvaVanTay()
         self.FlagFGPfree = True
-        
+    
+    def LamSachCamBien(self):
+        lstIDvaVanTay = IDvaVanTayRepository().layDanhSach(" 1 = 1 ")
+        for idVaVanTay in lstIDvaVanTay:
+            studentExist = ThiSinhRepository().layDanhSach( " ID = '%s' "%(idVaVanTay.IDThiSinh))
+            if(len(studentExist) == 0):
+                IDvaVanTayRepository().xoaBanGhi( " IDThiSinh = '%s' "%(idVaVanTay.IDThiSinh))
+                self.fingerprintObj.deleteTemplate(idVaVanTay.ViTriVanTay)
 
     def LayDanhSachIDvaVanTay(self):
         khoIDvaVanTay = IDvaVanTayRepository()

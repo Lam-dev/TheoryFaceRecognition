@@ -26,6 +26,7 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
     SignalAddFaceEncodeAndFGP  = pyqtSignal(dict, dict)
     SignalDeleteFaceAdded = pyqtSignal(int)
     SignalDeleteFGPadded = pyqtSignal(int)
+    SignalCleanFGPsensor = pyqtSignal()
 
     def __init__(self, MainWindow):
         QObject.__init__(self)
@@ -228,6 +229,7 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         self.settingScreenObj.SignalConnectNewServer.connect(self.SignalConnectNewServer.emit)
         self.settingScreenObj.RequestOpenDatabaseScreen.connect(self.OpenDatabaseManagerScreen)
         self.settingScreenObj.SignalOpenHideSettingScreen.connect(self.OpenHideSettingScreen)
+        self.settingScreenObj.SignalCleanFGPsensor.connect(self.SignalCleanFGPsensor.emit)
         self.settingScreenShadow.show()
         self.settingScreenShadow.raise_()
 

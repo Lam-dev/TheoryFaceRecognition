@@ -313,10 +313,10 @@ class ProcessReciptData(QObject):
                 fp = open(LOCAL_PATH_CONTAIN_DATA_UPDATE + image, 'rb')
                 student.ID = image.split(".")[0]
                 student.AnhDangKy = fp.read()
-                imagePil = Image.open(io.BytesIO(student.AnhDangKy))
-                imagePil = imagePil.convert("RGB")
-                npArrayImage = numpy.array(imagePil)
-                student.NhanDienKhuonMatStr = GetFaceEncodingFromImage().GetFaceEncodingStr(npArrayImage)[0]
+                #imagePil = Image.open(io.BytesIO(student.AnhDangKy))
+                #imagePil = imagePil.convert("RGB")
+                #npArrayImage = numpy.array(imagePil)
+                student.NhanDienKhuonMatStr = ""#GetFaceEncodingFromImage().GetFaceEncodingStr(npArrayImage)[0]
                 student.HoVaTen = self.__ConvertStringToUTF8String(lstStudentNumber[i].TraineeName)
                 student.IDKhoaThi = IDCourse
                 khoThiSinh.ghiDuLieu(student)

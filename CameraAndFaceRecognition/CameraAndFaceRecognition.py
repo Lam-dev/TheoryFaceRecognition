@@ -55,6 +55,7 @@ class GetImageFromCamera(QObject):
         else:
             frame = frameFullSize[self.frameCut[1][0]:self.frameCut[1][1], self.frameCut[0][0]:self.frameCut[0][1]]
             frame = cv2.resize(frame, (0, 0), fx = self.scale, fy = self.scale)
+            frame = cv2.flip(frame, 1)
             frameNoFaceMark = frame.copy()
 
             if(type(FaceLocationInImage) is not bool):

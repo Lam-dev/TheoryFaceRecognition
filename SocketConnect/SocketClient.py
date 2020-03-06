@@ -37,6 +37,7 @@ class SocketClient(QObject):
     SignalConnectNewFTP = pyqtSignal(dict)
     SignalUpdateOrSyncStudentInfo = pyqtSignal(dict)
     __SignalConnected = pyqtSignal()
+    __SignalReciptEnounghData = pyqtSignal(bytes)
     SignalStopForUpdateData = pyqtSignal()
     
 
@@ -73,7 +74,12 @@ class SocketClient(QObject):
         self.__SignalRecreateConnect.connect(self.__RecreateConnect)
         self.__FlagSendPingPong = True
         self.waitingForConnect = False
-    
+        self.__FlagBusyProcessingData = False
+        self.__DataWaitForProcess = b''
+        self.__FlagNeedProcessData = False
+        self.__DataProcessing = b'';
+
+        self.__SignalReciptEnounghData.connect(self.__ThreadTachVaPhanTichKhungNhan)
     def __ServerConnected(self):
         try:
             self.FlagServerISconnect = True
@@ -152,15 +158,35 @@ class SocketClient(QObject):
                 if(recvData == b''):
                     self.__SignalRecreateConnect.emit()
                     return
-                else: 
+                else:
                     # self.__FlagSendPingPong = False
-                    lstCacKhungNhan = self.__TachCacKhungTruyen(recvData)
-                    for khung in lstCacKhungNhan:
-                        self.__PhanTichKhungNhan(khung)
+                    self.__SignalReciptEnounghData.emit(recvData)
+
             except:
                 self.__SignalRecreateConnect.emit()
                 return
-                         
+
+
+    def __ThreadTachVaPhanTichKhungNhan(self, revData):
+        self.__DataWaitForProcess += revData
+        if(self.__FlagBusyProcessingData):
+            self.__FlagNeedProcessData = True
+            return
+        self.__FlagNeedProcessData = False
+        self.__FlagBusyProcessingData = True
+        self.__DataProcessing = self.__DataWaitForProcess
+        self.__DataWaitForProcess = b''
+        threadTachPhanTich = threading.Thread(target= self.__TachVaPhanTichKhungNhan, args=(self.__DataProcessing,), daemon= True) 
+        threadTachPhanTich.start()
+        
+
+    def __TachVaPhanTichKhungNhan(self, data):
+        lstCacKhungNhan = self.__TachCacKhungTruyen(data)
+        for khung in lstCacKhungNhan:
+            self.__PhanTichKhungNhan(khung)
+        if(self.__DataWaitForProcess != b''):
+            self.__SignalReciptEnounghData.emit(b'')
+        self.__FlagBusyProcessingData = False
     def __PhanTichKhungNhan(self, khungNhan):
         try:
             # if(not self.__CheckSumKhungTruyen(khungNhan)):

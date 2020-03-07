@@ -66,8 +66,8 @@ class Ui_Frame_MainScreen(object):
         self.frame.setLineWidth(5)
         self.frame.setObjectName("frame")
         self.label_forShowName = QtWidgets.QLabel(self.frame)
-        self.label_forShowName.setGeometry(QtCore.QRect(166, 44, 263, 103))
-        self.label_forShowName.setStyleSheet("font: 75 bold 22pt \"Ubuntu\";\n"
+        self.label_forShowName.setGeometry(QtCore.QRect(184, 44, 245, 103))
+        self.label_forShowName.setStyleSheet("font: 75 bold 20pt \"Ubuntu\";\n"
 "color: rgb(70, 70, 70);\n"
 "border-radius:3px;\n"
 "")
@@ -79,14 +79,14 @@ class Ui_Frame_MainScreen(object):
         self.label_forShowName.setWordWrap(True)
         self.label_forShowName.setObjectName("label_forShowName")
         self.frame_containLabelShowRegisImage = QtWidgets.QFrame(self.frame)
-        self.frame_containLabelShowRegisImage.setGeometry(QtCore.QRect(10, 8, 173, 185))
+        self.frame_containLabelShowRegisImage.setGeometry(QtCore.QRect(4, 8, 173, 185))
         self.frame_containLabelShowRegisImage.setStyleSheet("border-style:solid;\n"
 "border-width:0px")
         self.frame_containLabelShowRegisImage.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_containLabelShowRegisImage.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_containLabelShowRegisImage.setObjectName("frame_containLabelShowRegisImage")
         self.label_regisImage = QtWidgets.QLabel(self.frame_containLabelShowRegisImage)
-        self.label_regisImage.setGeometry(QtCore.QRect(10, 10, 153, 171))
+        self.label_regisImage.setGeometry(QtCore.QRect(6, 10, 167, 171))
         self.label_regisImage.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 "")
         self.label_regisImage.setText("")
@@ -201,7 +201,7 @@ class Ui_Frame_MainScreen(object):
         self.label_forShowIconFaceRecognized = QtWidgets.QLabel(self.frame_containLabelShowCamera)
         self.label_forShowIconFaceRecognized.setGeometry(QtCore.QRect(-4, 0, 301, 169))
         self.label_forShowIconFaceRecognized.setText("")
- 
+        self.label_forShowIconFaceRecognized.setPixmap(QtGui.QPixmap("../../../../Downloads/icons8-facial-recognition-100.png"))
         self.label_forShowIconFaceRecognized.setAlignment(QtCore.Qt.AlignCenter)
         self.label_forShowIconFaceRecognized.setObjectName("label_forShowIconFaceRecognized")
         self.label_forShowTimeRecognized = QtWidgets.QLabel(self.frame_containLabelShowCamera)
@@ -219,12 +219,12 @@ class Ui_Frame_MainScreen(object):
     def retranslateUi(self, Frame_MainScreen):
         _translate = QtCore.QCoreApplication.translate
         Frame_MainScreen.setWindowTitle(_translate("Frame_MainScreen", "Frame"))
-        self.label_cty.setText(_translate("Frame_MainScreen", "TRƯỜNG CAO ĐẲNG CÔNG NGHIỆP VÀ XÂY DỰNG"))
+        self.label_cty.setText(_translate("Frame_MainScreen", "CÔNG TY CỔ PHẦN CÔNG NGHỆ KỸ THUẬT ECOTEK"))
         self.label_trungTam.setText(_translate("Frame_MainScreen", "TRUNG TÂM ĐÀO TẠO VÀ SÁT HẠCH LÁI XE"))
         self.label_forShowName.setText(_translate("Frame_MainScreen", "CHƯA NHẬN ĐƯỢC THÍ SINH"))
         self.label.setText(_translate("Frame_MainScreen", "SỐ BÁO DANH:"))
         self.label_2.setText(_translate("Frame_MainScreen", "NGÀY SINH:"))
-        self.label_3.setText(_translate("Frame_MainScreen", "SỐ BÁO DANH:"))
+        self.label_3.setText(_translate("Frame_MainScreen", "MÃ ĐĂNG KÝ"))
         self.label_8.setText(_translate("Frame_MainScreen", "KHÓA THI:"))
         self.label_forShowTimeRecognized.setText(_translate("Frame_MainScreen", "25 / 02 / 2020 \n"
 " 11 : 34 : 15"))

@@ -56,7 +56,7 @@ border-width:0px</string>
 font: 75 bold 14pt &quot;Ubuntu&quot;;</string>
     </property>
     <property name="text">
-     <string>TRƯỜNG CAO ĐẲNG CÔNG NGHIỆP VÀ XÂY DỰNG</string>
+     <string>CÔNG TY CỔ PHẦN CÔNG NGHỆ KỸ THUẬT ECOTEK</string>
     </property>
     <property name="margin">
      <number>0</number>
@@ -165,14 +165,14 @@ border-radius:7px</string>
    <widget class="QLabel" name="label_forShowName">
     <property name="geometry">
      <rect>
-      <x>166</x>
+      <x>184</x>
       <y>44</y>
-      <width>263</width>
+      <width>245</width>
       <height>103</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">font: 75 bold 22pt &quot;Ubuntu&quot;;
+     <string notr="true">font: 75 bold 20pt &quot;Ubuntu&quot;;
 color: rgb(70, 70, 70);
 border-radius:3px;
 </string>
@@ -202,7 +202,7 @@ border-radius:3px;
    <widget class="QFrame" name="frame_containLabelShowRegisImage">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>4</x>
       <y>8</y>
       <width>173</width>
       <height>185</height>
@@ -221,9 +221,9 @@ border-width:0px</string>
     <widget class="QLabel" name="label_regisImage">
      <property name="geometry">
       <rect>
-       <x>10</x>
+       <x>6</x>
        <y>10</y>
-       <width>153</width>
+       <width>167</width>
        <height>171</height>
       </rect>
      </property>
@@ -366,7 +366,7 @@ font: 75 bold 11pt &quot;Ubuntu&quot;;</string>
 font: 57 bold 11pt &quot;Ubuntu&quot;;</string>
      </property>
      <property name="text">
-      <string>SỐ BÁO DANH:</string>
+      <string>MÃ ĐĂNG KÝ</string>
      </property>
      <property name="indent">
       <number>-1</number>

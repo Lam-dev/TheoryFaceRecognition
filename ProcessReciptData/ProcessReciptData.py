@@ -12,7 +12,7 @@ from    datetime    import datetime
 import  io
 import  os
 
-CODE_GET_DATABASE = "4"
+CODE_GET_DATABASE = 6
 CODE_RECIPT_DATA_FROM_SERVER = 3
 CODE_UPLOAD_DATA_TO_SERVER = "2"
 CODE_PING_PING = 1
@@ -184,7 +184,7 @@ class ProcessReciptData(QObject):
                 }
                 
                 self.SignalSendFile.emit(fileName)
-                self.SignalSendMessage(messageForSendToServer)
+                self.SignalSendMessage.emit(messageForSendToServer)
             except:
                 pass
 

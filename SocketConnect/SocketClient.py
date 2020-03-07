@@ -18,6 +18,7 @@ SERVER_PORT                                         = int(SETTING_DICT["serverPo
 CODE_SEND_PING_PONG                         = 1
 CODE_RESULT_RECOGNITION                     = 2
 CODE_STUDENT_FEATURE_FILE                   = 4
+CODE_SEND_RESULT_DATA_BASE_CHECK            = 6
 
 MAC_ADDRESS                                         = getmac.get_mac_address()
 IMAGE_TO_SEND_SERVER_PATH                           = "/StudentRecognize/SocketConnect/"
@@ -57,7 +58,8 @@ class SocketClient(QObject):
         self.processReciptDataObj.SignalNumberStudentParsed.connect(self.__NumberStudentParsed)
         self.processReciptDataObj.SignalUpdateOrSyncStudentInfo.connect(self.SignalUpdateOrSyncStudentInfo.emit)
         self.processReciptDataObj.SignalStopForUpdateData.connect(self.SignalStopForUpdateData.emit)
-        
+        self.processReciptDataObj.SignalSendFile.connect(self.SendFileDataBaseCheck)
+        self.processReciptDataObj.SignalSendMessage.connect(self.SendMessageDatabaseCheck)
         self.chuaXuLy = b''
 
         self.TimerWaitForServerConfirm = QTimer(self)
@@ -80,6 +82,14 @@ class SocketClient(QObject):
         self.__DataProcessing = b'';
 
         self.__SignalReciptEnounghData.connect(self.__ThreadTachVaPhanTichKhungNhan)
+
+    def SendFileDataBaseCheck(self, fileName):
+        self.ftpObj.SendImageToFTPserver(fileName, FTP_SERVER_SYNC_FILE + "/" +fileName)
+    
+    def SendMessageDatabaseCheck(self, message):
+        self.__SendDataViaSocket(self.__DungKhungGiaoTiep(message, CODE_SEND_RESULT_DATA_BASE_CHECK))
+
+
     def __ServerConnected(self):
         try:
             self.FlagServerISconnect = True
@@ -123,7 +133,7 @@ class SocketClient(QObject):
         global FTP_FILE_PATH_TO_UPLOAD
         FTP_FILE_PATH_TO_UPLOAD = remoteFilePath + "AnhNhanDien/"
         
-        self.__SendDataViaSocket(self.__DungKhungGiaoTiep(remoteFilePath + ";"+ MAC_ADDRESS, 4)[0])
+        self.__SendDataViaSocket(self.__DungKhungGiaoTiep(remoteFilePath + ";"+ MAC_ADDRESS, 4))
         self.SignalWaitForUpdateDatabase.emit(remoteFilePath)
 
     def __RecreateConnect(self):
@@ -187,6 +197,7 @@ class SocketClient(QObject):
         if(self.__DataWaitForProcess != b''):
             self.__SignalReciptEnounghData.emit(b'')
         self.__FlagBusyProcessingData = False
+        
     def __PhanTichKhungNhan(self, khungNhan):
         try:
             # if(not self.__CheckSumKhungTruyen(khungNhan)):

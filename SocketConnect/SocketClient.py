@@ -59,7 +59,7 @@ class SocketClient(QObject):
         self.processReciptDataObj.SignalUpdateOrSyncStudentInfo.connect(self.SignalUpdateOrSyncStudentInfo.emit)
         self.processReciptDataObj.SignalStopForUpdateData.connect(self.SignalStopForUpdateData.emit)
         self.processReciptDataObj.SignalSendFile.connect(self.SendFileDataBaseCheck)
-        self.processReciptDataObj.SignalSendMessage.connect(self.SendMessageDatabaseCheck)
+        self.processReciptDataObj.SignalSendResultDeleteAndCheck.connect(self.SendMessageDatabaseCheck)
         self.chuaXuLy = b''
 
         self.TimerWaitForServerConfirm = QTimer(self)
@@ -86,8 +86,8 @@ class SocketClient(QObject):
     def SendFileDataBaseCheck(self, fileName):
         self.ftpObj.SendImageToFTPserver(fileName, FTP_SERVER_SYNC_FILE + "/" +fileName)
     
-    def SendMessageDatabaseCheck(self, message):
-        self.__SendDataViaSocket(self.__DungKhungGiaoTiep(message, CODE_SEND_RESULT_DATA_BASE_CHECK))
+    def SendMessageDatabaseCheck(self, message, code):
+        self.__SendDataViaSocket(self.__DungKhungGiaoTiep(message, code))
 
 
     def __ServerConnected(self):

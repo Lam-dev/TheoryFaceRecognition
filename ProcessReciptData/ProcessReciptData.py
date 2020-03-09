@@ -11,16 +11,23 @@ from    PIL         import Image
 from    datetime    import datetime
 import  io
 import  os
+import getmac
 
-CODE_GET_DATABASE = 6
 CODE_RECIPT_DATA_FROM_SERVER = 3
 CODE_UPLOAD_DATA_TO_SERVER = "2"
 CODE_PING_PING = 1
 
-MAC_ADDRESS_LENGTH                                  = 8
+SERVER_REQUEST_GET_LIST_COURSE                      = 7
+SERVER_REQUEST_GET_LIST_STUDENT                     = 8
+SERVER_REQUEST_DELETE_A_COURSE                      = 9
+SERVER_REQUEST_DELETE_A_STUDENT                     = 10
+SERVER_REQUEST_GET_LIST_HISTORY                     = 11
+
 LOCAL_PATH_CONTAIN_DATA_UPDATE                      = "DataUpdate/"
 FTP_FILE_PATH_TO_UPLOAD                             = GetSetting.GetSetting("--ServerImageDir")
 FTP_SERVER_SYNC_DIR                                = "files/"
+
+MAC                              =  getmac.get_mac_address()
 
 class ProcessReciptData(QObject):
     ShowStudentForConfirm = pyqtSignal(str)
@@ -32,6 +39,7 @@ class ProcessReciptData(QObject):
     SignalSendFile = pyqtSignal(str)
     SignalSendMessage = pyqtSignal(str)
     SignalUpdateOrSyncStudentInfo = pyqtSignal(dict)
+    SignalSendResultDeleteAndCheck = pyqtSignal(str, int)
     SignalStopForUpdateData = pyqtSignal()
     __FlagTimeUpdated = False
 
@@ -45,25 +53,135 @@ class ProcessReciptData(QObject):
     
     def ProcessDataFrame(self, khungNhan):
         try:
-            data = self.__CatLayPhanDataTrongFrame(khungNhan)
+            data, code = self.__CatLayPhanDataTrongFrame(khungNhan)
             reciptObj = self.json2obj(data)
 
-            if(reciptObj.code == CODE_RECIPT_DATA_FROM_SERVER):
+            if(code == CODE_RECIPT_DATA_FROM_SERVER):
                 self.SignalStopForUpdateData.emit()
                 self.__ProcessRequestUpdateDatabase(reciptObj)
             
-            elif(reciptObj.code == CODE_UPLOAD_DATA_TO_SERVER):
+            elif(code == CODE_UPLOAD_DATA_TO_SERVER):
                 self.ServerRequestTakePicture.emit()
                 
-            elif(reciptObj.code == CODE_PING_PING):
+            elif(code == CODE_PING_PING):
                 self.__ServerAcceptConnect(reciptObj)
                 
-            elif(reciptObj.code == CODE_GET_DATABASE):
-                self.__ServerRequestDatabaseCheck(reciptObj)
-        
+            elif(code == SERVER_REQUEST_GET_LIST_COURSE):
+                self.SendListCourse()
+            
+            elif(code == SERVER_REQUEST_GET_LIST_STUDENT):
+                self.SendListStudent(reciptObj)
+
+            elif(code == SERVER_REQUEST_DELETE_A_COURSE):
+                self.DeleteCourse(reciptObj)
+
+            elif(code == SERVER_REQUEST_DELETE_A_STUDENT):
+                self.DeleteStudent(reciptObj)
+            
+            elif(code == SERVER_REQUEST_GET_LIST_HISTORY):
+                self.GetListHistory(reciptObj)    
         except:
 
             pass
+    
+    def SendListCourse(self):
+        courseRepo = KhoaThiRepository()
+        lstCourse = courseRepo.layDanhSach(" 1 = 1 ")
+        lstCourseInfo = []
+        for course in lstCourse:
+            courseInfor = {
+                "courseID": course.IDKhoaThi,
+                "numStudent": 0,
+            }
+            lstCourseInfo.append(courseInfor)
+        messageSendToSocket = {
+            "MAC": MAC,
+            "listCouse": lstCourseInfo
+        }
+        self.SignalSendResultDeleteAndCheck.emit(json.dumps(messageSendToSocket), SERVER_REQUEST_GET_LIST_COURSE)
+        
+    def SendListStudent(self, objectInfo):
+        studentRepo = ThiSinhRepository()
+        lstStudent = studentRepo.layDanhSach( " IDKhoaThi = %s "%(objectInfo.courseID))
+        lst10student = []
+        numFrame = int(len(lstStudent) / 10) + 1
+        frameNum = 1
+        while(True):
+            if(len(lst10student) > 10):
+                lst10student = lstStudent[0:9]
+                self.Send10Student(lst10student, objectInfo.courseID, "%s/%s"%(frameNum, numFrame))
+                lstStudent = lstStudent[10:(len(lstStudent) - 1)]
+                frameNum += 1
+            else:
+                self.Send10Student(lstStudent, objectInfo.courseID, "%s/%s"%(frameNum, numFrame))
+                return
+
+
+    def Send10Student(self,lstStudent, courseID, frameNum):
+        lstStudentID = []
+        for student in lstStudent:
+            lstStudentID.append(student.ID)
+        messageSendToSocket = {
+            "MAC":MAC,
+            "courseID":courseID,
+            "listStudent": lstStudentID,
+            "frameNum":frameNum
+        }
+        self.SignalSendResultDeleteAndCheck.emit(json.dumps(messageSendToSocket), SERVER_REQUEST_GET_LIST_STUDENT)
+
+    def DeleteCourse(self, objectInfo):
+        try:
+            studentRepo = ThiSinhRepository()
+            studentRepo.xoaBanGhi(" IDKhoaThi = %s "%(objectInfo.courseID))
+            courseRepo = KhoaThiRepository()
+            courseRepo.xoaBanGhi( " IDKhoaThi = %s "%(objectInfo.courseID))
+            messageSendToSocket = {
+                "MAC":MAC,
+                "curseID":objectInfo.courseID,
+            }
+            self.SignalSendResultDeleteAndCheck.emit(json.dumps(messageSendToSocket), SERVER_REQUEST_DELETE_A_COURSE)
+        
+        except:
+            pass
+
+    
+    def DeleteStudent(self, objectInfo):
+        try:
+            studentRepo = ThiSinhRepository()
+            studentRepo.xoaBanGhi(" ID = %s "%(objectInfo.studentID))
+            messageSendToSocket = {
+                "MAC":MAC,
+                "studentID":objectInfo.studentID,
+            }
+            self.SignalSendResultDeleteAndCheck.emit(json.dumps(messageSendToSocket), SERVER_REQUEST_DELETE_A_STUDENT)
+        except:
+            pass
+
+    def GetListHistory(self, objectInfo):
+        historyRepo = LichSuRepository()
+        lstHistory = historyRepo.layDanhSach(" 1 = 1 ")
+        lstHistoryInfo = []
+        for history in lstHistory:
+            dictInfo = {
+                "studentID":history.IDThiSinh,
+                "checkTime":history.ThoiGian
+            }
+            lstHistoryInfo.append(dictInfo)
+        jsonToFile = {
+            "MAC":MAC,
+            "courseID":objectInfo.courseID,
+            "his":lstHistoryInfo
+        }
+        fileName  = "HIS_" + datetime.now().strftime("%Y_%m_%d_%H_%M_%S")+".json"
+        with open(fileName, 'w') as outfile:
+            json.dump(jsonToFile, outfile)
+
+        messageSendToSocket = {
+            "MAC":MAC,
+            "fileName":fileName
+        }
+        self.SignalSendFile.emit(fileName)
+        self.SignalSendResultDeleteAndCheck.emit(json.dumps(messageSendToSocket), SERVER_REQUEST_GET_LIST_HISTORY)
 
     def __ServerAcceptConnect(self, messageObj):
         self.ServerConfirmedConnect.emit()
@@ -184,7 +302,7 @@ class ProcessReciptData(QObject):
                 }
                 
                 self.SignalSendFile.emit(fileName)
-                self.SignalSendMessage.emit(messageForSendToServer)
+                self.SignalSendMessage.emit(messageForSendToServer, SERVER_REQUEST_GET_LIST_HISTORY)
             except:
                 pass
 
@@ -338,6 +456,7 @@ class ProcessReciptData(QObject):
         khoThiSinh.xoaBanGhi(" 1 = 1 ")
 
     def __CatLayPhanDataTrongFrame(self, frameNhan):
+        code = frameNhan[3]
         chieuDaiDl = frameNhan[4] + frameNhan[5] * math.pow(2, 8)
         duLieu = []
         j = 0
@@ -346,4 +465,4 @@ class ProcessReciptData(QObject):
             duLieu[j] = chr(frameNhan[i])
             j += 1
             chuoiDuLieu = ''.join(duLieu)
-        return chuoiDuLieu
+        return chuoiDuLieu, code

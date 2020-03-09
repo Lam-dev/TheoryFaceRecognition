@@ -187,12 +187,7 @@ class LayDuLieuTrongDataBase:
     def xoaBanGhi(self, dieuKien):
         try:
             cursor = self.CSDL.cursor()
-            if(self.tenBang == "ThongTinThiSinh"):
-                sql = 'DELETE FROM `ThongTinThiSinh` WHERE %s'%(dieuKien)
-
-            if(self.tenBang == "AnhXaIDvaVanTay"):
-                sql = 'DELETE FROM `AnhXaIDvaVanTay` WHERE %s'%(dieuKien)
-                
+            sql = 'DELETE FROM `%s` WHERE %s'%(self.tenBang ,dieuKien)
             print(cursor.execute(sql))
             self.CSDL.commit()
             cursor.close()

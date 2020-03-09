@@ -9,7 +9,7 @@
 import socket
 from   datetime     import datetime
 import json
-SERVER_IP                                           = "192.168.1.24"
+SERVER_IP                                           = "192.168.1.16"
 SERVER_PORT                                         = 2019
 import getmac
 def __DungKhungGiaoTiep(noiDung, malenh):
@@ -70,34 +70,34 @@ def ConvertStringToByteArray(string):
 
 # print(datetime.now().strftime("%d_%m_%Y"))
 ####### create course and update listStuden##################################
-course = {
-    "IDKhoaThi": 1,
-    "TenKhoaThi":"KhoaThi 2/1/2020",
-    "NgayTao":"13:32:32 02/01/2020",
-    "DuongDanLuuAnh":""
-}
+# course = {
+#     "IDKhoaThi": 1,
+#     "TenKhoaThi":"KhoaThi 2/1/2020",
+#     "NgayTao":"13:32:32 02/01/2020",
+#     "DuongDanLuuAnh":""
+# }
 
-lstName = ["Nguyễn Hồng Lâm", "Nguyễn Xuân Lộc", "Bùi Văn Trung", "Đỗ Mạnh Cường", "Đinh Trọng Tiến"]
-lstStudent = []
-for i in range(1, 5):
-    student = {
-        "CardNumber":i,
-        "TraineeName":lstName[i]
-    }
-    lstStudent.append(student)
+# lstName = ["Nguyễn Hồng Lâm", "Nguyễn Xuân Lộc", "Bùi Văn Trung", "Đỗ Mạnh Cường", "Đinh Trọng Tiến"]
+# lstStudent = []
+# for i in range(1, 5):
+#     student = {
+#         "CardNumber":i,
+#         "TraineeName":lstName[i]
+#     }
+#     lstStudent.append(student)
 
-dic = {
-    "success":"True",
-    "code":3,
-    "data":{
-        # "CourseInfo":course,
-        # "CardNumber":lstStudent,
-        "fileName":"TTND_2020_02_19_CN.json",
-        "action":"sync",
-    },
-    "message":12,
-    "checksum":21
-}
+# dic = {
+#     "success":"True",
+#     "code":3,
+#     "data":{
+#         # "CourseInfo":course,
+#         # "CardNumber":lstStudent,
+#         "fileName":"TTND_2020_02_19_CN.json",
+#         "action":"sync",
+#     },
+#     "message":12,
+#     "checksum":21
+# }
 
 # jsonStr = json.dumps(dic)
 # khungGui, tong = __DungKhungGiaoTiep(jsonStr, 3)
@@ -132,23 +132,17 @@ dic = {
 
 # ####################Tạo frame trả lời ping và cập nhật giờ######################
 
-# dic = {
-
-#     "code":1,
-#     "data": {
-#         "pong":"1",
-#         "time":"2021/02/21 05:20:15"
-
-#     },
-#     "message":"null",
-#     "checksum":"23"
-# }
-# jsonStr = json.dumps(dic)
-# khungGui, tong = __DungKhungGiaoTiep(jsonStr, 1)
-# client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-# client.settimeout(1000)
-# client.connect((SERVER_IP, SERVER_PORT))
-# client.send(khungGui)
+dic = {
+    "courseID": "1"
+}
+jsonStr = json.dumps(dic)
+khungGui, tong = __DungKhungGiaoTiep(jsonStr, 11)
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client.settimeout(1000)
+client.connect((SERVER_IP, SERVER_PORT))
+client.send(khungGui)
 
 # ################################################################################
-print(getmac.get_mac_address())
+######################yeu cau client gui len danh sach hoc vien##################
+
+#################################################################################

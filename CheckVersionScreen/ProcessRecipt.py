@@ -10,7 +10,7 @@ CODE_SERVER_SETTING_FOR_DEVICE = 1
 class ProcessRecipt(QObject):
     SignalCloneNewApplication = pyqtSignal(object)
     SignalServerRequestCloneApp = pyqtSignal(object)
-    SignalServerSettingForDevice = pyqtSignal(str)
+    SignalServerSettingForDevice = pyqtSignal(dict)
 
     def _json_object_hook(self, d): return namedtuple('X', d.keys())(*d.values())
 
@@ -27,7 +27,7 @@ class ProcessRecipt(QObject):
             if(code == CODE_SERVER_ALLOW_CLONE_APP):
                 self.SignalServerRequestCloneApp.emit(self.json2obj(content))
             if(code == CODE_SERVER_SETTING_FOR_DEVICE):
-                self.SignalServerSettingForDevice.emit(content)
+                self.SignalServerSettingForDevice.emit(json.loads(content))
 
     
     """

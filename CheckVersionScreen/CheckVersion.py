@@ -10,7 +10,7 @@ from        CheckVersionScreen          import GetSetting
 class CheckUpdate(QObject, Ui_Frame):
     SignalRequestCloseScreen = pyqtSignal()
     SignalUpdateVersion = pyqtSignal()
-    SignalServerSettingForDevice = pyqtSignal()
+    SignalServerSettingForDevice = pyqtSignal(dict)
 
     def __init__(self, Frame):
         QObject.__init__(self)
@@ -64,7 +64,7 @@ class CheckUpdate(QObject, Ui_Frame):
         self.ShowConnectNotify()
         self.socketObj = SocketClient()
         self.socketObj.SignalServerRequestCloneApp.connect(self.ReciptVersionInfoFromServer)
-        self.socketObj.SignalServerSettingForDevice.connect(self.SignalServerSettingForDevice.emit)
+        self.socketObj.SignalServerSettingForDevice.connect(self.ChangeSettingForDevice)
         self.socketObj.SendRequestCloneData()
 
     def GetSettingVersion(self):

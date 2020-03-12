@@ -15,7 +15,7 @@ from         datetime                           import datetime
 from         SocketConnect.SocketClient         import SocketClient
 import       os
 from         FingerPrintSensor.FingerPrint      import Fingerprint
-from         Sound.OrangePiSound                 import Sound
+from         Sound.OrangePiSound                import Sound
 
 # from   Sound.Sound              import Sound
 class MainWindow(QMainWindow):

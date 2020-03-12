@@ -23,7 +23,7 @@ class SocketClient(QObject):
     SignalServerRequestCloneApp = pyqtSignal(object)
     SignalServerNotConnect = pyqtSignal()
     __SignalRecreateConnect = pyqtSignal()
-    SignalServerSettingForDevice = pyqtSignal(str)
+    SignalServerSettingForDevice = pyqtSignal(dict)
     
     def __init__(self):
         super().__init__()

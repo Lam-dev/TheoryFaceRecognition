@@ -23,6 +23,7 @@ class SocketClient(QObject):
     SignalServerRequestCloneApp = pyqtSignal(object)
     SignalServerNotConnect = pyqtSignal()
     __SignalRecreateConnect = pyqtSignal()
+    SignalServerSettingForDevice = pyqtSignal(str)
     
     def __init__(self):
         super().__init__()
@@ -33,7 +34,7 @@ class SocketClient(QObject):
         self.SignalServerConnected.connect(self.__ServerConnected)
         self.processReciptObj = ProcessRecipt()
         self.processReciptObj.SignalServerRequestCloneApp.connect(self.SignalServerRequestCloneApp.emit)
-
+        self.processReciptObj.SignalServerSettingForDevice.connect(self.SignalServerSettingForDevice.emit)
 
     def CloseSocket(self):
         try:

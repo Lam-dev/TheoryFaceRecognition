@@ -5,12 +5,13 @@ import json
 import math
 
 CODE_SERVER_ALLOW_CLONE_APP = 0
-
+CODE_SERVER_SETTING_FOR_DEVICE = 1
 
 class ProcessRecipt(QObject):
     SignalCloneNewApplication = pyqtSignal(object)
     SignalServerRequestCloneApp = pyqtSignal(object)
-    
+    SignalServerSettingForDevice = pyqtSignal(str)
+
     def _json_object_hook(self, d): return namedtuple('X', d.keys())(*d.values())
 
     def json2obj(self, data): return json.loads(data, object_hook=self._json_object_hook, encoding= "utf-8")
@@ -25,6 +26,8 @@ class ProcessRecipt(QObject):
             code, content = self.__CatLayPhanDataTrongFrame(frame)
             if(code == CODE_SERVER_ALLOW_CLONE_APP):
                 self.SignalServerRequestCloneApp.emit(self.json2obj(content))
+            if(code == CODE_SERVER_SETTING_FOR_DEVICE):
+                self.SignalServerSettingForDevice.emit(content)
 
     
     """

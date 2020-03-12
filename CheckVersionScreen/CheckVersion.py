@@ -5,10 +5,12 @@ from        PyQt5           import QtWidgets, QtGui, QtCore
 from        PIL             import Image, ImageQt
 from        CheckVersionScreen.SocketClientEcotekServer   import SocketClient
 import      json
+from        CheckVersionScreen          import GetSetting
 
 class CheckUpdate(QObject, Ui_Frame):
     SignalRequestCloseScreen = pyqtSignal()
     SignalUpdateVersion = pyqtSignal()
+    SignalServerSettingForDevice = pyqtSignal()
 
     def __init__(self, Frame):
         QObject.__init__(self)
@@ -22,6 +24,7 @@ class CheckUpdate(QObject, Ui_Frame):
         self.frameDetectNewVersion.hide()
         self.ConnectServerAndGetVersion()
         self.currentVersion = self.GetCurrentVersion()
+        self.currentSettingVersion = self.GetSettingVersion()
         self.newVersionInfo = object
 
 #region hien thi cac man hinh
@@ -43,8 +46,14 @@ class CheckUpdate(QObject, Ui_Frame):
 #endregion
     
     def UpdateNewVersion(self):
+        updateInfo = {
+            "ver":self.newVersionInfo.ver,
+            "ID":self.newVersionInfo.ID,
+            "hardReset":self.newVersionInfo.hardReset,
+            "delReclone":self.newVersionInfo.delReclone,
+        }
         with open('update.json', 'w') as json_file:
-            json.dump(self.newVersionInfo, json_file)
+            json.dump(updateInfo, json_file)
         self.SignalUpdateVersion.emit()
 
     def CloseCheckUpdateScreen(self):
@@ -55,7 +64,20 @@ class CheckUpdate(QObject, Ui_Frame):
         self.ShowConnectNotify()
         self.socketObj = SocketClient()
         self.socketObj.SignalServerRequestCloneApp.connect(self.ReciptVersionInfoFromServer)
+        self.socketObj.SignalServerSettingForDevice.connect(self.SignalServerSettingForDevice.emit)
         self.socketObj.SendRequestCloneData()
+
+    def GetSettingVersion(self):
+        try:
+            settingDict = GetSetting.GetPersonalSetting()
+            return settingDict["crVer"]
+        except:
+            return 0
+
+    def ChangeSettingForDevice(self, settingDict):
+        if(settingDict["crVer"] != self.currentSettingVersion):
+            GetSetting.SavePersonalSetting(settingDict)
+            self.SignalServerSettingForDevice.emit(settingDict)
 
     def GetCurrentVersion(self):
         try:

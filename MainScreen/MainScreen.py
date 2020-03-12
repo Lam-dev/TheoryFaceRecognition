@@ -244,10 +244,13 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         self.checkVersionScreenObj = CheckUpdate(self.frameContainCheckVersionScreen)
         self.checkVersionScreenObj.SignalUpdateVersion.connect(self.__GoToDesktop)
         self.checkVersionScreenObj.SignalRequestCloseScreen.connect(self.CloseCheckVersionScreen)
+        self.checkVersionScreenObj.SignalServerSettingForDevice.connect(self.SaveAndChangeSetting)
         self.checkVersionShadow.raise_()
         self.checkVersionShadow.show()
 
-
+    def SaveAndChangeSetting(self, settingDict):
+        self.label_cty.setText(settingDict["scName"])
+        self.label_trungTam.setText(settingDict["cenName"])
     
     def CloseCheckVersionScreen(self):
         self.checkVersionShadow.hide()

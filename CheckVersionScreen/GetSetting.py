@@ -18,6 +18,20 @@ def GetSystemSetting():
             return json.load(json_file)
     except:
         return 0
-            
+
+def GetPersonalSetting():
+    try:
+        with open('../Setting/personalSetting.json') as json_file:
+            return json.load(json_file)
+    except:
+        return 0
+
+def SavePersonalSetting(settingDict):
+    try:
+        with open('../Setting/persionalSetting.json', 'w') as json_file:
+            json.dump(settingDict, json_file)
+    except:
+        pass
+
 # UpdateServerImageDir("local/abde")
 # print(GetSetting("--ServerImageDir"))

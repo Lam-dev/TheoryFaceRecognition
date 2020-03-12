@@ -12,6 +12,7 @@ from    SettingScreen.SettingScreen             import SettingScreen
 from    SettingScreen.DatabaseManagerScreen     import DatabaseManagerScreen
 from    KeyBoard.KeyBoard                       import KeyBoard
 from    SettingScreen.HideSettingScreenAction   import HideSettingScreen
+from    CheckVersionScreen.CheckVersion         import CheckUpdate
 
 
 
@@ -230,10 +231,28 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         self.settingScreenObj.RequestOpenDatabaseScreen.connect(self.OpenDatabaseManagerScreen)
         self.settingScreenObj.SignalOpenHideSettingScreen.connect(self.OpenHideSettingScreen)
         self.settingScreenObj.SignalCleanFGPsensor.connect(self.SignalCleanFGPsensor.emit)
+        self.settingScreenObj.SignalCheckVersion.connect(self.ShowVersionCheckScreen)
         self.settingScreenShadow.show()
         self.settingScreenShadow.raise_()
+    
+    def ShowVersionCheckScreen(self):
+        
+        self.checkVersionShadow = QtWidgets.QFrame(self.centralWidget)
+        self.checkVersionShadow.setGeometry(QtCore.QRect(0, 0, 800, 480))
+        self.checkVersionShadow.setStyleSheet("background-color: rgba(0, 0, 0, 100);")
+        self.frameContainCheckVersionScreen = QtWidgets.QFrame(self.checkVersionShadow)
+        self.checkVersionScreenObj = CheckUpdate(self.frameContainCheckVersionScreen)
+        self.checkVersionScreenObj.SignalUpdateVersion.connect(self.__GoToDesktop)
+        self.checkVersionScreenObj.SignalRequestCloseScreen.connect(self.CloseCheckVersionScreen)
+        self.checkVersionShadow.raise_()
+        self.checkVersionShadow.show()
 
 
+    
+    def CloseCheckVersionScreen(self):
+        self.checkVersionShadow.hide()
+        self.checkVersionShadow.deleteLater()
+    
     def OpenHideSettingScreen(self):
 
         self.frameContainHideSettingScreen = QtWidgets.QFrame(self.centralWidget)

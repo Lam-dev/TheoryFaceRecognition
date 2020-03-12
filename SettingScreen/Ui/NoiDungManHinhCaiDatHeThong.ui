@@ -743,10 +743,10 @@ font: 25 10pt &quot;Ubuntu&quot;;</string>
   <widget class="QFrame" name="frame_containFirmwareInformation">
    <property name="geometry">
     <rect>
-     <x>2</x>
-     <y>1370</y>
+     <x>10</x>
+     <y>1374</y>
      <width>421</width>
-     <height>211</height>
+     <height>265</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -806,9 +806,9 @@ font: 25 10pt &quot;Ubuntu&quot;;</string>
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>176</y>
-      <width>141</width>
-      <height>31</height>
+      <y>178</y>
+      <width>151</width>
+      <height>59</height>
      </rect>
     </property>
     <property name="styleSheet">

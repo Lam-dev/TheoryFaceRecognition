@@ -20,6 +20,7 @@ class SettingScreen(Ui_frame_settingScreen, QObject):
     SignalConnectNewFTPserver = pyqtSignal(dict)
     SignalOpenHideSettingScreen = pyqtSignal()
     SignalCleanFGPsensor = pyqtSignal()
+    SignalCheckVersion = pyqtSignal()
 
     def __init__(self, Frame):
         
@@ -164,7 +165,7 @@ class SettingScreen(Ui_frame_settingScreen, QObject):
             self.content.lineEdit_forInputFTPaccount.mousePressEvent = lambda event:self.__OpenKeyboard(self.content.lineEdit_forInputFTPaccount)
             self.content.lineEdit_forInputFPTpassword.mousePressEvent = lambda event:self.__OpenKeyboard(self.content.lineEdit_forInputFPTpassword)
 
-            
+            self.content.pushButton_checkUpdate.clicked.connect(self.SignalCheckVersion.emit)
             
             
             # self.ScrollArea.GetTextFromKeyBoard.connect(self.__OpenKeyboard())

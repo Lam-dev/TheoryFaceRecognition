@@ -36,6 +36,14 @@ def GetSystemSetting():
             return json.load(json_file)
     except:
         return 0
+
+def GetEcotekServerSetting():
+    try:
+        with open('../Setting/setting.json') as json_file:
+            return json.load(json_file)
+    except:
+        return 0
+
             
 # UpdateServerImageDir("local/abde")
 # print(GetSetting("--ServerImageDir"))

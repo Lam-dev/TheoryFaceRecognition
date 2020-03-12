@@ -245,7 +245,7 @@ class Ui_widget_containSettingContent(object):
         self.tableView_forShowMemoryInformation.setGeometry(QtCore.QRect(10, 64, 401, 81))
         self.tableView_forShowMemoryInformation.setObjectName("tableView_forShowMemoryInformation")
         self.frame_containFirmwareInformation = QtWidgets.QFrame(widget_containSettingContent)
-        self.frame_containFirmwareInformation.setGeometry(QtCore.QRect(2, 1370, 421, 211))
+        self.frame_containFirmwareInformation.setGeometry(QtCore.QRect(10, 1374, 421, 265))
         self.frame_containFirmwareInformation.setStyleSheet("border: 0px")
         self.frame_containFirmwareInformation.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_containFirmwareInformation.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -263,7 +263,7 @@ class Ui_widget_containSettingContent(object):
         self.label_ctPHanMemTrenvv.setWordWrap(True)
         self.label_ctPHanMemTrenvv.setObjectName("label_ctPHanMemTrenvv")
         self.pushButton_checkUpdate = QtWidgets.QPushButton(self.frame_containFirmwareInformation)
-        self.pushButton_checkUpdate.setGeometry(QtCore.QRect(20, 176, 141, 31))
+        self.pushButton_checkUpdate.setGeometry(QtCore.QRect(20, 178, 151, 59))
         self.pushButton_checkUpdate.setStyleSheet("margin: 1px; padding: 7px;\n"
 "background-color: rgb(255, 255, 255);\n"
 "color: rgba(0,190,255,255);\n"

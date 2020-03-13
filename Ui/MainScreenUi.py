@@ -38,14 +38,14 @@ class Ui_Frame_MainScreen(object):
         self.label_7.setPixmap(QtGui.QPixmap("../icon/iconEcotek.png"))
         self.label_7.setObjectName("label_7")
         self.pushButton_shutdown = QtWidgets.QPushButton(self.frame_containName)
-        self.pushButton_shutdown.setGeometry(QtCore.QRect(8, 2, 59, 51))
+        self.pushButton_shutdown.setGeometry(QtCore.QRect(8, 2, 65, 51))
         self.pushButton_shutdown.setStyleSheet("background-color: rgba(255, 255, 255, 0);\n"
 "border-radius:2px;")
         self.pushButton_shutdown.setText("")
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("../icon/iconShutdown.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.pushButton_shutdown.setIcon(icon)
-        self.pushButton_shutdown.setIconSize(QtCore.QSize(25, 25))
+        self.pushButton_shutdown.setIconSize(QtCore.QSize(30, 30))
         self.pushButton_shutdown.setObjectName("pushButton_shutdown")
         self.label_cty_2 = QtWidgets.QLabel(self.frame_containName)
         self.label_cty_2.setGeometry(QtCore.QRect(112, 24, 531, 27))
@@ -131,7 +131,7 @@ class Ui_Frame_MainScreen(object):
         self.line_4.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line_4.setObjectName("line_4")
         self.label = QtWidgets.QLabel(self.frame_2)
-        self.label.setGeometry(QtCore.QRect(14, 6, 147, 35))
+        self.label.setGeometry(QtCore.QRect(14, 98, 147, 35))
         self.label.setStyleSheet("border-width:0px;\n"
 "font: 75 bold 11pt \"Ubuntu\";\n"
 "")
@@ -142,19 +142,11 @@ class Ui_Frame_MainScreen(object):
 "font: 75 bold 11pt \"Ubuntu\";")
         self.label_2.setObjectName("label_2")
         self.label_3 = QtWidgets.QLabel(self.frame_2)
-        self.label_3.setGeometry(QtCore.QRect(14, 102, 147, 29))
+        self.label_3.setGeometry(QtCore.QRect(12, 10, 147, 29))
         self.label_3.setStyleSheet("border-width:0px;\n"
 "font: 57 bold 11pt \"Ubuntu\";")
         self.label_3.setIndent(-1)
         self.label_3.setObjectName("label_3")
-        self.label_forShowNumberCard = QtWidgets.QLabel(self.frame_2)
-        self.label_forShowNumberCard.setGeometry(QtCore.QRect(152, 6, 251, 35))
-        self.label_forShowNumberCard.setStyleSheet("border-width:0px;\n"
-"font: 75 bold 11pt \"Ubuntu\";\n"
-"color: rgb(0, 0, 127);\n"
-"")
-        self.label_forShowNumberCard.setText("")
-        self.label_forShowNumberCard.setObjectName("label_forShowNumberCard")
         self.label_dateOfBird = QtWidgets.QLabel(self.frame_2)
         self.label_dateOfBird.setGeometry(QtCore.QRect(152, 54, 247, 35))
         self.label_dateOfBird.setStyleSheet("border-width:0px;\n"
@@ -164,7 +156,7 @@ class Ui_Frame_MainScreen(object):
         self.label_dateOfBird.setText("")
         self.label_dateOfBird.setObjectName("label_dateOfBird")
         self.label_forShowIdentNumber = QtWidgets.QLabel(self.frame_2)
-        self.label_forShowIdentNumber.setGeometry(QtCore.QRect(152, 98, 247, 35))
+        self.label_forShowIdentNumber.setGeometry(QtCore.QRect(156, 4, 247, 35))
         self.label_forShowIdentNumber.setStyleSheet("border-width:0px;\n"
 "font: 75 bold 11pt \"Ubuntu\";\n"
 "color: rgb(0, 0, 127);\n"
@@ -184,6 +176,14 @@ class Ui_Frame_MainScreen(object):
 "")
         self.label_forShowCourse.setText("")
         self.label_forShowCourse.setObjectName("label_forShowCourse")
+        self.label_forShowNumberCard = QtWidgets.QLabel(self.frame_2)
+        self.label_forShowNumberCard.setGeometry(QtCore.QRect(152, 100, 251, 35))
+        self.label_forShowNumberCard.setStyleSheet("border-width:0px;\n"
+"font: 75 bold 11pt \"Ubuntu\";\n"
+"color: rgb(0, 0, 127);\n"
+"")
+        self.label_forShowNumberCard.setText("")
+        self.label_forShowNumberCard.setObjectName("label_forShowNumberCard")
         self.frame_3 = QtWidgets.QFrame(Frame_MainScreen)
         self.frame_3.setGeometry(QtCore.QRect(10, 66, 329, 405))
         self.frame_3.setStyleSheet("background-color: rgb(255, 255, 255);\n"
@@ -227,12 +227,12 @@ class Ui_Frame_MainScreen(object):
         _translate = QtCore.QCoreApplication.translate
         Frame_MainScreen.setWindowTitle(_translate("Frame_MainScreen", "Frame"))
         self.label_cty.setText(_translate("Frame_MainScreen", "CÔNG TY CỔ PHẦN CÔNG NGHỆ KỸ THUẬT ECOTEK"))
-        self.label_cty_2.setText(_translate("Frame_MainScreen", "Thiết bị nhận diện khuôn mặt, vân tay"))
-        self.label_forShowName.setText(_translate("Frame_MainScreen", "CHƯA NHẬN ĐƯỢC THÍ SINH"))
-        self.label.setText(_translate("Frame_MainScreen", "SỐ BÁO DANH:"))
+        self.label_cty_2.setText(_translate("Frame_MainScreen", "Thiết bị điểm danh nhận diện khuôn mặt, vân tay"))
+        self.label_forShowName.setText(_translate("Frame_MainScreen", "CHƯA NHẬN ĐƯỢC HỌC VIÊN"))
+        self.label.setText(_translate("Frame_MainScreen", "SỐ CMTND"))
         self.label_2.setText(_translate("Frame_MainScreen", "NGÀY SINH:"))
         self.label_3.setText(_translate("Frame_MainScreen", "MÃ ĐĂNG KÝ"))
-        self.label_8.setText(_translate("Frame_MainScreen", "KHÓA THI:"))
+        self.label_8.setText(_translate("Frame_MainScreen", "KHÓA HỌC"))
         self.label_forShowTimeRecognized.setText(_translate("Frame_MainScreen", "25 / 02 / 2020 \n"
 " 11 : 34 : 15"))
 

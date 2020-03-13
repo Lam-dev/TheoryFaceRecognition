@@ -46,17 +46,17 @@ border-width:0px</string>
     <property name="geometry">
      <rect>
       <x>106</x>
-      <y>4</y>
-      <width>537</width>
-      <height>47</height>
+      <y>-2</y>
+      <width>531</width>
+      <height>27</height>
      </rect>
     </property>
     <property name="styleSheet">
      <string notr="true">color: rgb(0, 0, 255);
-font: 75 bold 18pt &quot;Ubuntu&quot;;</string>
+font: 75 bold 14pt &quot;Ubuntu&quot;;</string>
     </property>
     <property name="text">
-     <string>XE KHÁCH BẮC GIANG</string>
+     <string>CÔNG TY CỔ PHẦN CÔNG NGHỆ KỸ THUẬT ECOTEK</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -111,12 +111,43 @@ border-radius:2px;</string>
      </size>
     </property>
    </widget>
+   <widget class="QLabel" name="label_cty_2">
+    <property name="geometry">
+     <rect>
+      <x>112</x>
+      <y>24</y>
+      <width>531</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(200, 0, 0);
+font: 75 bold 12pt &quot;Ubuntu&quot;;</string>
+    </property>
+    <property name="text">
+     <string>Thiết bị nhận diện khuôn mặt, vân tay</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+    <property name="margin">
+     <number>0</number>
+    </property>
+    <property name="indent">
+     <number>-1</number>
+    </property>
+   </widget>
+   <zorder>label_cty</zorder>
+   <zorder>label_7</zorder>
+   <zorder>pushButton_shutdown</zorder>
+   <zorder>label_cty_2</zorder>
+   <zorder>line</zorder>
   </widget>
   <widget class="Line" name="line">
    <property name="geometry">
     <rect>
      <x>132</x>
-     <y>52</y>
+     <y>50</y>
      <width>487</width>
      <height>17</height>
     </rect>

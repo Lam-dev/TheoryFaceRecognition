@@ -249,9 +249,15 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         self.checkVersionShadow.show()
 
     def SaveAndChangeSetting(self, settingDict):
-        self.label_cty.setText(settingDict["scName"])
-        self.label_trungTam.setText(settingDict["cenName"])
+        self.label_cty.setText(self.__ConvertStringToUTF8String(settingDict["scName"]))
+        self.label_trungTam.setText(self.__ConvertStringToUTF8String(settingDict["cenName"]))
     
+    def __ConvertStringToUTF8String(self, string):
+        x = []
+        for elem in string:
+            x.append(ord(elem))
+        return(bytes(x).decode("utf8", "ignore"))
+
     def CloseCheckVersionScreen(self):
         self.checkVersionShadow.hide()
         self.checkVersionShadow.deleteLater()

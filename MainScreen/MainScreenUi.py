@@ -26,7 +26,7 @@ class Ui_Frame_MainScreen(object):
         self.frame_containName.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_containName.setObjectName("frame_containName")
         self.label_cty = QtWidgets.QLabel(self.frame_containName)
-        self.label_cty.setGeometry(QtCore.QRect(106, -2, 531, 27))
+        self.label_cty.setGeometry(QtCore.QRect(82, -2, 555, 27))
         self.label_cty.setStyleSheet("color: rgb(0, 0, 255);\n"
 "font: 75 bold 14pt \"Ubuntu\";")
         self.label_cty.setAlignment(QtCore.Qt.AlignCenter)
@@ -227,7 +227,7 @@ class Ui_Frame_MainScreen(object):
         _translate = QtCore.QCoreApplication.translate
         Frame_MainScreen.setWindowTitle(_translate("Frame_MainScreen", "Frame"))
         self.label_cty.setText(_translate("Frame_MainScreen", "CÔNG TY CỔ PHẦN CÔNG NGHỆ KỸ THUẬT ECOTEK"))
-        self.label_cty_2.setText(_translate("Frame_MainScreen", "Thiết bị nhận diện khuôn mặt, vân tay"))
+        self.label_cty_2.setText(_translate("Frame_MainScreen", "Thiết bị điểm danh nhận diện khuôn mặt, vân tay"))
         self.label_forShowName.setText(_translate("Frame_MainScreen", "CHƯA NHẬN ĐƯỢC HỌC VIÊN"))
         self.label.setText(_translate("Frame_MainScreen", "SỐ CMTND"))
         self.label_2.setText(_translate("Frame_MainScreen", "NGÀY SINH:"))

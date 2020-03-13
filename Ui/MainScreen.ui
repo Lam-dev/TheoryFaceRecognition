@@ -45,9 +45,9 @@ border-width:0px</string>
    <widget class="QLabel" name="label_cty">
     <property name="geometry">
      <rect>
-      <x>106</x>
+      <x>82</x>
       <y>-2</y>
-      <width>531</width>
+      <width>555</width>
       <height>27</height>
      </rect>
     </property>

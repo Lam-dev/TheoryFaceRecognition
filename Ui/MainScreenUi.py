@@ -26,7 +26,7 @@ class Ui_Frame_MainScreen(object):
         self.frame_containName.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_containName.setObjectName("frame_containName")
         self.label_cty = QtWidgets.QLabel(self.frame_containName)
-        self.label_cty.setGeometry(QtCore.QRect(106, -2, 531, 27))
+        self.label_cty.setGeometry(QtCore.QRect(82, -2, 555, 27))
         self.label_cty.setStyleSheet("color: rgb(0, 0, 255);\n"
 "font: 75 bold 14pt \"Ubuntu\";")
         self.label_cty.setAlignment(QtCore.Qt.AlignCenter)

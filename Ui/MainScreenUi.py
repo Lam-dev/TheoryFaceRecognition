@@ -26,9 +26,9 @@ class Ui_Frame_MainScreen(object):
         self.frame_containName.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_containName.setObjectName("frame_containName")
         self.label_cty = QtWidgets.QLabel(self.frame_containName)
-        self.label_cty.setGeometry(QtCore.QRect(106, 4, 537, 39))
+        self.label_cty.setGeometry(QtCore.QRect(106, 4, 537, 47))
         self.label_cty.setStyleSheet("color: rgb(0, 0, 255);\n"
-"font: 75 bold 16pt \"Ubuntu\";")
+"font: 75 bold 18pt \"Ubuntu\";")
         self.label_cty.setAlignment(QtCore.Qt.AlignCenter)
         self.label_cty.setIndent(-1)
         self.label_cty.setObjectName("label_cty")
@@ -215,7 +215,7 @@ class Ui_Frame_MainScreen(object):
     def retranslateUi(self, Frame_MainScreen):
         _translate = QtCore.QCoreApplication.translate
         Frame_MainScreen.setWindowTitle(_translate("Frame_MainScreen", "Frame"))
-        self.label_cty.setText(_translate("Frame_MainScreen", "TRƯỜNG TRUNG CẤP NGHỀ SỐ 1 BẮC GIANG"))
+        self.label_cty.setText(_translate("Frame_MainScreen", "XE KHÁCH BẮC GIANG"))
         self.label_forShowName.setText(_translate("Frame_MainScreen", "CHƯA NHẬN ĐƯỢC THÍ SINH"))
         self.label.setText(_translate("Frame_MainScreen", "SỐ BÁO DANH:"))
         self.label_2.setText(_translate("Frame_MainScreen", "NGÀY SINH:"))

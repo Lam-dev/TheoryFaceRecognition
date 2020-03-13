@@ -48,15 +48,15 @@ border-width:0px</string>
       <x>106</x>
       <y>4</y>
       <width>537</width>
-      <height>39</height>
+      <height>47</height>
      </rect>
     </property>
     <property name="styleSheet">
      <string notr="true">color: rgb(0, 0, 255);
-font: 75 bold 16pt &quot;Ubuntu&quot;;</string>
+font: 75 bold 18pt &quot;Ubuntu&quot;;</string>
     </property>
     <property name="text">
-     <string>TRƯỜNG TRUNG CẤP NGHỀ SỐ 1 BẮC GIANG</string>
+     <string>XE KHÁCH BẮC GIANG</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>

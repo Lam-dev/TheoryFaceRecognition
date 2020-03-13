@@ -95,7 +95,7 @@ class Fingerprint(QObject):
             else:
                 self.fingerprintObj = PyFingerprint(self.port, self.baudRate, self.address, self.password)
                 self.fingerprintObj.verifyPassword()
-        except NameError:
+        except:
             self.fingerprintObj = False
     
     def NapVanTayTuThietBiVaoCamBien(self, FGPencoding):
@@ -193,8 +193,7 @@ class Fingerprint(QObject):
                             self.fingerprintObj.storeTemplate(positionNumber = IDvaVTvanTay.Vi_Tri_Van_Tay)
                     except:
                         pass
-        except NameError as e:
-            print(e)
+        except:
             pass
 
 # x = Fingerprint()

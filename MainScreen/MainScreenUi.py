@@ -26,16 +26,12 @@ class Ui_Frame_MainScreen(object):
         self.frame_containName.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_containName.setObjectName("frame_containName")
         self.label_cty = QtWidgets.QLabel(self.frame_containName)
-        self.label_cty.setGeometry(QtCore.QRect(114, -6, 539, 37))
+        self.label_cty.setGeometry(QtCore.QRect(106, 4, 537, 39))
         self.label_cty.setStyleSheet("color: rgb(0, 0, 255);\n"
-"font: 75 bold 14pt \"Ubuntu\";")
+"font: 75 bold 16pt \"Ubuntu\";")
+        self.label_cty.setAlignment(QtCore.Qt.AlignCenter)
         self.label_cty.setIndent(-1)
         self.label_cty.setObjectName("label_cty")
-        self.label_trungTam = QtWidgets.QLabel(self.frame_containName)
-        self.label_trungTam.setGeometry(QtCore.QRect(182, 28, 453, 27))
-        self.label_trungTam.setStyleSheet("font: 75 bold 12pt \"Ubuntu\";\n"
-"color: rgb(255, 0, 0);")
-        self.label_trungTam.setObjectName("label_trungTam")
         self.label_7 = QtWidgets.QLabel(self.frame_containName)
         self.label_7.setGeometry(QtCore.QRect(654, 4, 155, 37))
         self.label_7.setText("")
@@ -219,8 +215,7 @@ class Ui_Frame_MainScreen(object):
     def retranslateUi(self, Frame_MainScreen):
         _translate = QtCore.QCoreApplication.translate
         Frame_MainScreen.setWindowTitle(_translate("Frame_MainScreen", "Frame"))
-        self.label_cty.setText(_translate("Frame_MainScreen", "CÔNG TY CỔ PHẦN CÔNG NGHỆ KỸ THUẬT ECOTEK"))
-        self.label_trungTam.setText(_translate("Frame_MainScreen", "TRUNG TÂM ĐÀO TẠO VÀ SÁT HẠCH LÁI XE"))
+        self.label_cty.setText(_translate("Frame_MainScreen", "TRƯỜNG TRUNG CẤP NGHỀ SỐ 1 BẮC GIANG"))
         self.label_forShowName.setText(_translate("Frame_MainScreen", "CHƯA NHẬN ĐƯỢC THÍ SINH"))
         self.label.setText(_translate("Frame_MainScreen", "SỐ BÁO DANH:"))
         self.label_2.setText(_translate("Frame_MainScreen", "NGÀY SINH:"))

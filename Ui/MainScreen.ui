@@ -45,41 +45,27 @@ border-width:0px</string>
    <widget class="QLabel" name="label_cty">
     <property name="geometry">
      <rect>
-      <x>114</x>
-      <y>-6</y>
-      <width>539</width>
-      <height>37</height>
+      <x>106</x>
+      <y>4</y>
+      <width>537</width>
+      <height>39</height>
      </rect>
     </property>
     <property name="styleSheet">
      <string notr="true">color: rgb(0, 0, 255);
-font: 75 bold 14pt &quot;Ubuntu&quot;;</string>
+font: 75 bold 16pt &quot;Ubuntu&quot;;</string>
     </property>
     <property name="text">
-     <string>CÔNG TY CỔ PHẦN CÔNG NGHỆ KỸ THUẬT ECOTEK</string>
+     <string>TRƯỜNG TRUNG CẤP NGHỀ SỐ 1 BẮC GIANG</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
     <property name="margin">
      <number>0</number>
     </property>
     <property name="indent">
      <number>-1</number>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_trungTam">
-    <property name="geometry">
-     <rect>
-      <x>182</x>
-      <y>28</y>
-      <width>453</width>
-      <height>27</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">font: 75 bold 12pt &quot;Ubuntu&quot;;
-color: rgb(255, 0, 0);</string>
-    </property>
-    <property name="text">
-     <string>TRUNG TÂM ĐÀO TẠO VÀ SÁT HẠCH LÁI XE</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_7">

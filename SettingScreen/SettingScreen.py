@@ -21,6 +21,7 @@ class SettingScreen(Ui_frame_settingScreen, QObject):
     SignalOpenHideSettingScreen = pyqtSignal()
     SignalCleanFGPsensor = pyqtSignal()
     SignalCheckVersion = pyqtSignal()
+    SignalShutdown = pyqtSignal()
 
     def __init__(self, Frame):
         
@@ -37,6 +38,8 @@ class SettingScreen(Ui_frame_settingScreen, QObject):
         self.frameContainSettingScreen  = Frame
         self.keyboardIsShow = False
         
+        self.pushButton_shutdown.clicked.connect(self.SignalShutdown.emit)
+
         self.pixmapConnected = QtGui.QPixmap("icon/iconConnected.png")
         self.pixmapWaitForConnect = QtGui.QPixmap("icon/iconWaitForConnect.png")
 

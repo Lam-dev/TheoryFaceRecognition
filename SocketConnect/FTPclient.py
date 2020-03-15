@@ -46,7 +46,7 @@ class FTPclient(QObject):
 
     def __CreateConnect(self):
         try:
-            self.ftpObj = ftplib.FTP(FTP_IP)
+            self.ftpObj = ftplib.FTP(host = FTP_IP, timeout = 1)
             self.ftpObj.login(FTP_ACCOUNT, FTP_PASSWORD)
             return True
 
@@ -74,7 +74,7 @@ class FTPclient(QObject):
                         lstImage.append(f)
                 self.GetListFileFromServer(lstImage)
                 return lstImage
-            except NameError as e:
+            except:
                 print(e)
                 self.__CreateConnect()
         
@@ -83,14 +83,17 @@ class FTPclient(QObject):
         try:
             self.__CreateConnect()
             self.ftpObj.storbinary('STOR %s' % remotefile, fp, 1024)
-        except Exception:
-            print("remotefile not exist error caught" + remotefile)
-            path,filename = os.path.split(remotefile)
-            print("creating directory: " + remotefile)
-            self.ftpObj.mkd(path)
-            self.ftpObj.storbinary('STOR %s' % remotefile, fp, 1024)
-            fp.close()
-            return
+        except:
+            try:
+                print("remotefile not exist error caught" + remotefile)
+                path,filename = os.path.split(remotefile)
+                print("creating directory: " + remotefile)
+                self.ftpObj.mkd(path)
+                self.ftpObj.storbinary('STOR %s' % remotefile, fp, 1024)
+                fp.close()
+                return
+            except:
+                pass
         fp.close()
                     
     def GetListFileFromServer(self, lstFile, ftpFilePath = FTP_SERVER_DOWLOAD_IMAGE_FILE_PATH):
@@ -111,8 +114,7 @@ class FTPclient(QObject):
                 self.ftpObj.retrbinary("RETR " + f ,open(LOCAL_PATH_CONTAIN_DATA_UPDATE + f, 'wb').write)
                 numberFileGraped += 1
                 lstImageGraped.append(f)
-            except Exception as e:
-                print(e.args)
+            except:
                 pass
         return lstImageGraped
 

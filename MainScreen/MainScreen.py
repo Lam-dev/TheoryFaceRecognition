@@ -13,8 +13,11 @@ from    SettingScreen.DatabaseManagerScreen     import DatabaseManagerScreen
 from    KeyBoard.KeyBoard                       import KeyBoard
 from    SettingScreen.HideSettingScreenAction   import HideSettingScreen
 from    CheckVersionScreen.CheckVersion         import CheckUpdate
+from    GetSettingFromJSON    import GetSetting 
 
-
+NAME_SETTING_DICT = GetSetting.GetNameSetting()
+NAME_CENTER = NAME_SETTING_DICT["centerName"]
+NAME_DEVICE = NAME_SETTING_DICT["deviceName"]
 
 class MainScreen(QObject, Ui_Frame_MainScreen):
     SignalGoToDesktop = pyqtSignal()
@@ -28,6 +31,7 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
     SignalDeleteFaceAdded = pyqtSignal(int)
     SignalDeleteFGPadded = pyqtSignal(int)
     SignalCleanFGPsensor = pyqtSignal()
+    SignalShutdown = pyqtSignal()
 
     def __init__(self, MainWindow):
         QObject.__init__(self)
@@ -54,7 +58,7 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         self.pixmapWarningIcon = QtGui.QPixmap("icon/iconWarning.png")
         self.pixmapNotRecognized = QtGui.QPixmap("icon/iconImageRepresent.png")
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("icon/iconShutdown.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("icon/settingIcon40.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.pushButton_shutdown.setIcon(icon)
         self.label_7.setPixmap(QtGui.QPixmap("icon/iconEcotek.png"))
         self.label_regisImage.setPixmap(QtGui.QPixmap("icon/iconImageRepresent.png"))
@@ -63,7 +67,8 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         self.timerFlickerWarning.timeout.connect(self.__FlickerWarning)
         self.iconFaceRecognized = QtGui.QPixmap("icon/iconFaceRecognized.png")
         self.iconFGPrecognized = QtGui.QPixmap("icon/iconFingerprintRecognitzed.png")
-    
+        self.label_cty.setText(NAME_CENTER)
+        self.label_cty_2.setText(NAME_DEVICE)
     def HideCamera(self, faceRecognized = True):
         self.label_showCamera.hide()
         if(faceRecognized):
@@ -232,6 +237,8 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         self.settingScreenObj.SignalOpenHideSettingScreen.connect(self.OpenHideSettingScreen)
         self.settingScreenObj.SignalCleanFGPsensor.connect(self.SignalCleanFGPsensor.emit)
         self.settingScreenObj.SignalCheckVersion.connect(self.ShowVersionCheckScreen)
+        self.settingScreenObj.SignalShutdown.connect(self.SignalShutdown.emit)
+
         self.settingScreenShadow.show()
         self.settingScreenShadow.raise_()
     

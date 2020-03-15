@@ -45,15 +45,15 @@ border-width:0px</string>
    <widget class="QLabel" name="label_cty">
     <property name="geometry">
      <rect>
-      <x>82</x>
-      <y>-2</y>
-      <width>555</width>
+      <x>68</x>
+      <y>2</y>
+      <width>577</width>
       <height>27</height>
      </rect>
     </property>
     <property name="styleSheet">
      <string notr="true">color: rgb(0, 0, 255);
-font: 75 bold 14pt &quot;Ubuntu&quot;;</string>
+font: 75 bold 15pt &quot;Ubuntu&quot;;</string>
     </property>
     <property name="text">
      <string>CÔNG TY CỔ PHẦN CÔNG NGHỆ KỸ THUẬT ECOTEK</string>
@@ -89,7 +89,7 @@ font: 75 bold 14pt &quot;Ubuntu&quot;;</string>
      <rect>
       <x>8</x>
       <y>2</y>
-      <width>65</width>
+      <width>61</width>
       <height>51</height>
      </rect>
     </property>
@@ -106,17 +106,17 @@ border-radius:2px;</string>
     </property>
     <property name="iconSize">
      <size>
-      <width>30</width>
-      <height>30</height>
+      <width>40</width>
+      <height>40</height>
      </size>
     </property>
    </widget>
    <widget class="QLabel" name="label_cty_2">
     <property name="geometry">
      <rect>
-      <x>112</x>
-      <y>24</y>
-      <width>531</width>
+      <x>70</x>
+      <y>30</y>
+      <width>575</width>
       <height>27</height>
      </rect>
     </property>
@@ -137,17 +137,12 @@ font: 75 bold 12pt &quot;Ubuntu&quot;;</string>
      <number>-1</number>
     </property>
    </widget>
-   <zorder>label_cty</zorder>
-   <zorder>label_7</zorder>
-   <zorder>pushButton_shutdown</zorder>
-   <zorder>label_cty_2</zorder>
-   <zorder>line</zorder>
   </widget>
   <widget class="Line" name="line">
    <property name="geometry">
     <rect>
      <x>132</x>
-     <y>50</y>
+     <y>54</y>
      <width>487</width>
      <height>17</height>
     </rect>
@@ -239,9 +234,9 @@ border-width:0px</string>
      <property name="geometry">
       <rect>
        <x>6</x>
-       <y>10</y>
+       <y>4</y>
        <width>167</width>
-       <height>171</height>
+       <height>177</height>
       </rect>
      </property>
      <property name="styleSheet">
@@ -591,6 +586,11 @@ font: 75 bold 24pt &quot;Ubuntu&quot;;</string>
     </widget>
    </widget>
   </widget>
+  <zorder>frame_containName</zorder>
+  <zorder>line</zorder>
+  <zorder>frame</zorder>
+  <zorder>frame_3</zorder>
+  <zorder>label_cty_2</zorder>
  </widget>
  <resources/>
  <connections/>

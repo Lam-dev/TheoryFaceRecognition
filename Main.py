@@ -41,7 +41,7 @@ class MainWindow(QMainWindow):
         self.mainScreenObj.SignalAddFaceEncodeAndFGP.connect(self.__AddFaceEncodingAndFGP)
         self.mainScreenObj.SignalDeleteFaceAdded.connect(self.__DeleteFaceAdded)
         self.mainScreenObj.SignalDeleteFGPadded.connect(self.__DeleteFGPadded)
-
+        self.mainScreenObj.SignalShutdown.connect(self.Shutdown)
 
         self.khoLichSu = LichSuRepository()
         self.soundObj = Sound()
@@ -84,7 +84,6 @@ class MainWindow(QMainWindow):
         self.FGPobj = Fingerprint()
         self.FGPobj.SignalRecognizedFGP.connect(self.RecognizedFGP)
         self.FGPobj.BatLayVanTayDangNhap()
-        
         self.mainScreenObj.SignalCleanFGPsensor.connect(self.FGPobj.LamSachCamBien)
 
         self.__FlagUpdateScreenIsShow = False
@@ -93,6 +92,10 @@ class MainWindow(QMainWindow):
         # self.socketServerForRFIDobj.SignalRFIDputOn.connect(self.RFIDputOn)
 
         self.mainScreenObj.ShowCamera()
+
+    def Shutdown(self):
+        os.system("shutdown now")
+    
     def ShowWaitForUpdateDataScreen(self):
         if(self.__FlagUpdateScreenIsShow):
             self.__FlagNeedWaitContinue = True
@@ -131,7 +134,7 @@ class MainWindow(QMainWindow):
                 self.mainScreenObj.ShowStudentInfomation(student) 
                 self.socketObject.SendResultsFGPrecognition(studentID)
                 break
-        # self.__SaveHistory("FGP", studentID)
+        self.__SaveHistory("FGP", studentID)
         self.soundObj.ThreadPlayXinCamOn()
         
     def __AddFaceEncodingAndFGP(self, faceDict, FGPdict):
@@ -261,7 +264,7 @@ class MainWindow(QMainWindow):
         fp = open("imageTosend.jpg", 'wb')
         fp.write(faceImageJpgData)
         self.mainScreenObj.ShowStudentInfomation(studentObj)
-        #self.__SaveHistory("Face", studentObj.ID)
+        self.__SaveHistory("Face", studentObj.ID)
         # self.mainScreenObj.ShowFaceRecognizeOK()
         self.socketObject.SendResultsFaceRecognize(studentObj.ID, "T", "imageTosend.jpg")
 

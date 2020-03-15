@@ -171,12 +171,19 @@ class FaceRecognition(QObject):
         #     self.StudentNotRecognized.emit(self.lstStudent[0], jpgData)
         faceEncodings = face_recognition.face_encodings(image, FaceLocationInImage)
         i = 0
+        match = []
         for student in self.lstStudent:
             i = i + 1
             for encoding in faceEncodings:
-                match = face_recognition.compare_faces(student.NhanDienKhuonMat, encoding, self.FRthreshold)
+                try:
+                    match = face_recognition.compare_faces(student.NhanDienKhuonMat, encoding, self.FRthreshold)
+                    
+                except:
+                    pass
+
                 try:
                     match.extend(face_recognition.compare_faces(student.NhanDienKhuonMatThem, encoding, self.FRthreshold))
+
                 except:
                     pass
                 if True in match:

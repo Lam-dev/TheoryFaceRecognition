@@ -37,6 +37,14 @@ def GetSystemSetting():
     except:
         return 0
 
+def GetNameSetting():
+    try:
+        with open('GetSettingFromJSON/nameSetting.json') as json_file:
+            return json.load(json_file)
+    except:
+        return 0
+
+
 def GetEcotekServerSetting():
     try:
         with open('../Setting/setting.json') as json_file:

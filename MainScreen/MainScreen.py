@@ -168,9 +168,9 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         self.SetGeometryForLabelShowRegisImage(resizePixmap.width(), resizePixmap.height())
         self.label_regisImage.setPixmap(resizePixmap)
         self.label_forShowName.setText(student.HoVaTen.upper())
-        self.label_forShowNumberCard.setText(student.SBD)
+        self.label_forShowNumberCard.setText(student.SoCMTND)
         self.label_dateOfBird.setText(student.NgaySinh)
-        self.label_forShowIdentNumber.setText(student.SoCMTND)
+        self.label_forShowIdentNumber.setText(student.SBD)
     
     def ClearStudentRecognizedInfomation(self):
         self.label_regisImage.setPixmap(self.pixmapNotRecognized)

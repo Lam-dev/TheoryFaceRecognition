@@ -287,7 +287,7 @@ class MainWindow(QMainWindow):
         lichSu.KhuonMatHayVanTay = FGPorFace
         lichSu.ThoiGian = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         lichSu.Anh = b''
-        #self.khoLichSu.ghiDuLieu(lichSu)
+        self.khoLichSu.ghiDuLieu(lichSu)
 
 def main():
     app = QApplication(sys.argv)

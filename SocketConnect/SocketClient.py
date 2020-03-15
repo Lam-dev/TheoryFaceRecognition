@@ -143,6 +143,7 @@ class SocketClient(QObject):
 
     def __SendDataViaSocket(self, data):
         try:
+            
             self.clientObj.send(data)
             self.__FlagSendPingPong = False
         except:
@@ -257,6 +258,7 @@ class SocketClient(QObject):
         try:
             if(not self.FlagServerISconnect):
                 self.clientObj = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                self.clientObj.setblocking(0)
                 self.clientObj.connect((SERVER_IP, SERVER_PORT))
                 self.__SendPingPong()
                 self.SignalServerConnected.emit()
@@ -356,7 +358,7 @@ class SocketClient(QObject):
         self.__SendDataViaSocket(bytes(resultFrame))
         thread = threading.Thread(target = self.ftpObj.SendImageToFTPserver, args = (nameOfPhotoTaked, imageFileName), daemon= True)
         thread.start()
-        # self.ftpObj.SendImageToFTPserver(nameOfPhotoTaked, FTP_FILE_PATH_TO_UPLOAD +"/"+ datetime.now().strftime("%Y%m%d") + '/' + str(ID)+"_"+datetime.now().strftime("%H%M%S")+ ".jpg")
+        self.ftpObj.SendImageToFTPserver(nameOfPhotoTaked, FTP_FILE_PATH_TO_UPLOAD +"/"+ datetime.now().strftime("%Y%m%d") + '/' + str(ID)+"_"+datetime.now().strftime("%H%M%S")+ ".jpg")
 
 
     def SendResultsFGPrecognition(self, ID):

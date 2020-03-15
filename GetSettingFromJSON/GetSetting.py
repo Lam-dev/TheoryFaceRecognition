@@ -39,7 +39,7 @@ def GetSystemSetting():
 
 def GetNameSetting():
     try:
-        with open('GetSettingFromJSON/nameSetting.json') as json_file:
+        with open('GetSettingFromJSON/nameSetting.json', encoding= 'utf-8') as json_file:
             return json.load(json_file)
     except:
         return 0

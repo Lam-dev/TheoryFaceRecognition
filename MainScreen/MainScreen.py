@@ -15,9 +15,13 @@ from    SettingScreen.HideSettingScreenAction   import HideSettingScreen
 from    CheckVersionScreen.CheckVersion         import CheckUpdate
 from    GetSettingFromJSON    import GetSetting 
 
-NAME_SETTING_DICT = GetSetting.GetNameSetting()
-NAME_CENTER = NAME_SETTING_DICT["centerName"]
-NAME_DEVICE = NAME_SETTING_DICT["deviceName"]
+try:
+    NAME_SETTING_DICT = GetSetting.GetPersionalSetting()
+    NAME_CENTER = NAME_SETTING_DICT["scName"]
+    NAME_DEVICE = NAME_SETTING_DICT["cenName"]
+except:
+    NAME_CENTER = ""
+    NAME_DEVICE = ""
 
 class MainScreen(QObject, Ui_Frame_MainScreen):
     SignalGoToDesktop = pyqtSignal()
@@ -257,7 +261,7 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
 
     def SaveAndChangeSetting(self, settingDict):
         self.label_cty.setText(self.__ConvertStringToUTF8String(settingDict["scName"]))
-        self.label_trungTam.setText(self.__ConvertStringToUTF8String(settingDict["cenName"]))
+        self.label_cty_2.setText(self.__ConvertStringToUTF8String(settingDict["cenName"]))
     
     def __ConvertStringToUTF8String(self, string):
         x = []

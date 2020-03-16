@@ -586,11 +586,6 @@ font: 75 bold 24pt &quot;Ubuntu&quot;;</string>
     </widget>
    </widget>
   </widget>
-  <zorder>frame_containName</zorder>
-  <zorder>line</zorder>
-  <zorder>frame</zorder>
-  <zorder>frame_3</zorder>
-  <zorder>label_cty_2</zorder>
  </widget>
  <resources/>
  <connections/>

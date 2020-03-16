@@ -271,7 +271,6 @@ class SocketClient(QObject):
             self.FlagServerISconnect = False
         self.waitingForConnect = False
 
-
     def __ServerConfirmedConnect(self):
         self.FlagServerConfirmedForConnect = True
         self.TimerWaitForServerConfirm.stop()

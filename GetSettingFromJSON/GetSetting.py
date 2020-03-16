@@ -37,9 +37,9 @@ def GetSystemSetting():
     except:
         return 0
 
-def GetNameSetting():
+def GetPersionalSetting():
     try:
-        with open('GetSettingFromJSON/nameSetting.json', encoding= 'utf-8') as json_file:
+        with open('../Setting/persionalSetting.json', encoding= 'utf-8-sig') as json_file:
             return json.load(json_file)
     except:
         return 0
@@ -51,6 +51,7 @@ def GetEcotekServerSetting():
             return json.load(json_file)
     except:
         return 0
+
 
             
 # UpdateServerImageDir("local/abde")

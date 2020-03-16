@@ -45,7 +45,7 @@ border-width:0px;</string>
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>92</y>
+      <y>48</y>
       <width>355</width>
       <height>47</height>
      </rect>
@@ -59,6 +59,22 @@ font: 75 bold 18pt &quot;Ubuntu&quot;;</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>142</y>
+      <width>129</width>
+      <height>59</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);</string>
+    </property>
+    <property name="text">
+     <string>Đóng</string>
     </property>
    </widget>
   </widget>
@@ -222,6 +238,9 @@ font: 75 bold 18pt &quot;Ubuntu&quot;;</string>
     </property>
    </widget>
   </widget>
+  <zorder>frame_containConnectingNotify</zorder>
+  <zorder>frameDetectNewVersion</zorder>
+  <zorder>frameNotNewVersion</zorder>
  </widget>
  <resources/>
  <connections/>

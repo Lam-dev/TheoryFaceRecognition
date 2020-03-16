@@ -21,6 +21,7 @@ class CheckUpdate(QObject, Ui_Frame):
         self.pushButton_cancelCheck.clicked.connect(self.CloseCheckUpdateScreen)
         self.pushButton_cancelUpdated.clicked.connect(self.CloseCheckUpdateScreen)
         self.pushButton_update.clicked.connect(self.UpdateNewVersion)
+        self.pushButton.clicked.connect(self.CloseCheckUpdateScreen)
         self.frameDetectNewVersion.hide()
         self.ConnectServerAndGetVersion()
         self.currentVersion = self.GetCurrentVersion()
@@ -90,6 +91,8 @@ class CheckUpdate(QObject, Ui_Frame):
         if(dataObj.ver != self.currentVersion):
             self.ShowNewVersion(dataObj.ver)
             self.newVersionInfo = dataObj
+        else:
+            self.ShowNotNewVersion()
 
 
     def ShowNewVersionReady(self):

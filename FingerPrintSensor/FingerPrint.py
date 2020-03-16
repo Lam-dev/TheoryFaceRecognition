@@ -99,14 +99,17 @@ class Fingerprint(QObject):
             self.fingerprintObj = False
     
     def NapVanTayTuThietBiVaoCamBien(self, FGPencoding):
-        self.fingerprintObj.uploadCharacteristics(characteristicsData= FGPencoding)
-        result = self.fingerprintObj.searchTemplate()
-        if(result[0] >= 0):
-            viTriLuu = result[0]
-        else:
-            viTriLuu = self.TimKhoangTrong()
-        self.fingerprintObj.storeTemplate(viTriLuu, 0x01)
-        return viTriLuu
+        try:
+            self.fingerprintObj.uploadCharacteristics(characteristicsData= FGPencoding)
+            result = self.fingerprintObj.searchTemplate()
+            if(result[0] >= 0):
+                viTriLuu = result[0]
+            else:
+                viTriLuu = self.TimKhoangTrong()
+            self.fingerprintObj.storeTemplate(viTriLuu, 0x01)
+            return viTriLuu
+        except:
+            pass
 
     def TimViTriLuu(self):
         for i in range(0,4):

@@ -278,9 +278,11 @@ class SocketClient(QObject):
 
 
     def __PingPong(self):
-            framePing = self.__DungKhungGiaoTiep(self.__BuildFramePingPong(), CODE_SEND_PING_PONG)
+        framePing = self.__DungKhungGiaoTiep(self.__BuildFramePingPong(), CODE_SEND_PING_PONG)
+        try:
             self.clientObj.sendall(framePing)
-
+        except:
+            pass
     def __BuildFramePingPong(self):
         dictData = {
             "ping":"1"

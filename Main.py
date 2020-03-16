@@ -120,7 +120,10 @@ class MainWindow(QMainWindow):
         self.faceRecognitionObj.SetListStudent(self.lstStudent)
         khoIDvaVanTay = IDvaVanTayRepository()
         for FGPfeature in infoDict["FGPencoding"]:
-            viTri = self.FGPobj.NapVanTayTuThietBiVaoCamBien(FGPfeature)
+            try:
+                viTri = self.FGPobj.NapVanTayTuThietBiVaoCamBien(FGPfeature)
+            except:
+                pass
             idVaVanTay = AnhXaIDvaVanTay()
             idVaVanTay.IDThiSinh = infoDict["idStudent"]
             idVaVanTay.ViTriVanTay = viTri

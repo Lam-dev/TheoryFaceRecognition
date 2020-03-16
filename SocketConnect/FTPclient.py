@@ -90,6 +90,10 @@ class FTPclient(QObject):
                 print("creating directory: " + remotefile)
                 self.ftpObj.mkd(path)
                 self.ftpObj.storbinary('STOR %s' % remotefile, fp, 1024)
+                try:
+                    os.remove(localfile)
+                except:
+                    pass
                 fp.close()
                 return
             except:

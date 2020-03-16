@@ -9,7 +9,7 @@
 import socket
 from   datetime     import datetime
 import json
-SERVER_IP                                           = "192.168.1.16"
+SERVER_IP                                           = "192.168.1.10"
 SERVER_PORT                                         = 2019
 import getmac
 def __DungKhungGiaoTiep(noiDung, malenh):
@@ -86,24 +86,24 @@ def ConvertStringToByteArray(string):
 #     }
 #     lstStudent.append(student)
 
-# dic = {
-#     "success":"True",
-#     "code":3,
-#     "data":{
-#         # "CourseInfo":course,
-#         # "CardNumber":lstStudent,
-#         "fileName":"TTND_2020_02_19_CN.json",
-#         "action":"sync",
-#     },
-#     "message":12,
-#     "checksum":21
-# }
+dic = {
+    "success":"True",
+    "code":3,
+    "data":{
+        # "CourseInfo":course,
+        # "CardNumber":lstStudent,
+        "fileName":"TTND_2020_3_15_4_44_58.json",
+        "action":"sync",
+    },
+    "message":12,
+    "checksum":21
+}
 
-# jsonStr = json.dumps(dic)
-# khungGui, tong = __DungKhungGiaoTiep(jsonStr, 3)
-# client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-# client.connect((SERVER_IP, SERVER_PORT))
-# client.send(khungGui)
+jsonStr = json.dumps(dic)
+khungGui, tong = __DungKhungGiaoTiep(jsonStr, 3)
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client.connect((SERVER_IP, SERVER_PORT))
+client.send(khungGui)
 
 # ############################################################
 # def __ConvertStringToUTF8String(string):

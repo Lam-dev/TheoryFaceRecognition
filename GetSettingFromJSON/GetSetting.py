@@ -39,7 +39,7 @@ def GetSystemSetting():
 
 def GetPersionalSetting():
     try:
-        with open('../Setting/persionalSetting.json', encoding= 'utf-8-sig') as json_file:
+        with open('../Setting/persionalSetting.json', encoding= "utf-8") as json_file:
             return json.load(json_file)
     except:
         return 0

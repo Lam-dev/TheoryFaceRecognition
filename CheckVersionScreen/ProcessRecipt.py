@@ -27,7 +27,7 @@ class ProcessRecipt(QObject):
             if(code == CODE_SERVER_ALLOW_CLONE_APP):
                 self.SignalServerRequestCloneApp.emit(self.json2obj(content))
             if(code == CODE_SERVER_SETTING_FOR_DEVICE):
-                dictJson = json.loads(content, encoding= 'utf-8')
+                dictJson = json.loads(content, encoding="unicode")
                 self.SignalServerSettingForDevice.emit(dictJson)
 
     

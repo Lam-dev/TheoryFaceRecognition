@@ -21,8 +21,8 @@ def GetSystemSetting():
 
 def SavePersonalSetting(settingDict):
     try:
-        with open('../Setting/persionalSetting.json', 'w') as json_file:
-            json.dump(settingDict, json_file, ensure_ascii= False)
+        with open('../Setting/persionalSetting.json', 'w', encoding='utf8') as json_file:
+            json.dump(settingDict, json_file)
     except:
         pass
 

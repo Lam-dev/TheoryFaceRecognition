@@ -71,8 +71,8 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         self.timerFlickerWarning.timeout.connect(self.__FlickerWarning)
         self.iconFaceRecognized = QtGui.QPixmap("icon/iconFaceRecognized.png")
         self.iconFGPrecognized = QtGui.QPixmap("icon/iconFingerprintRecognitzed.png")
-        self.label_cty.setText(NAME_CENTER)
-        self.label_cty_2.setText(NAME_DEVICE)
+        self.label_cty.setText(self.__ConvertStringToUTF8String(NAME_CENTER))
+        self.label_cty_2.setText(self.__ConvertStringToUTF8String(NAME_DEVICE))
     def HideCamera(self, faceRecognized = True):
         self.label_showCamera.hide()
         if(faceRecognized):
@@ -262,7 +262,7 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
     def SaveAndChangeSetting(self, settingDict):
         self.label_cty.setText(self.__ConvertStringToUTF8String(settingDict["scName"]))
         self.label_cty_2.setText(self.__ConvertStringToUTF8String(settingDict["cenName"]))
-    
+
     def __ConvertStringToUTF8String(self, string):
         x = []
         for elem in string:

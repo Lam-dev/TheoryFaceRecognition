@@ -36,6 +36,7 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
     SignalDeleteFGPadded = pyqtSignal(int)
     SignalCleanFGPsensor = pyqtSignal()
     SignalShutdown = pyqtSignal()
+    SignalCloseELT = pyqtSignal()
 
     def __init__(self, MainWindow):
         QObject.__init__(self)
@@ -253,7 +254,7 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         self.checkVersionShadow.setStyleSheet("background-color: rgba(0, 0, 0, 100);")
         self.frameContainCheckVersionScreen = QtWidgets.QFrame(self.checkVersionShadow)
         self.checkVersionScreenObj = CheckUpdate(self.frameContainCheckVersionScreen)
-        self.checkVersionScreenObj.SignalUpdateVersion.connect(self.__GoToDesktop)
+        self.checkVersionScreenObj.SignalUpdateVersion.connect(self.SignalCloseELT.emit)
         self.checkVersionScreenObj.SignalRequestCloseScreen.connect(self.CloseCheckVersionScreen)
         self.checkVersionScreenObj.SignalServerSettingForDevice.connect(self.SaveAndChangeSetting)
         self.checkVersionShadow.raise_()

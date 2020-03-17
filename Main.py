@@ -43,6 +43,7 @@ class MainWindow(QMainWindow):
         self.mainScreenObj.SignalDeleteFaceAdded.connect(self.__DeleteFaceAdded)
         self.mainScreenObj.SignalDeleteFGPadded.connect(self.__DeleteFGPadded)
         self.mainScreenObj.SignalShutdown.connect(self.Shutdown)
+        self.mainScreenObj.SignalCloseELT.connect(self.close)
 
         self.khoLichSu = LichSuRepository()
         self.soundObj = Sound()

@@ -98,7 +98,7 @@ class MainWindow(QMainWindow):
         desktop = {
             'destop':1,
         }
-        with open("desktop", 'w') as fp:
+        with open("desktop.json", 'w') as fp:
             json.dump(desktop,fp)
         self.close()
         

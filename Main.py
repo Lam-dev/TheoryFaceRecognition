@@ -16,6 +16,7 @@ from         SocketConnect.SocketClient         import SocketClient
 import       os
 from         FingerPrintSensor.FingerPrint      import Fingerprint
 from         Sound.OrangePiSound                import Sound
+import       json
 
 # from   Sound.Sound              import Sound
 class MainWindow(QMainWindow):
@@ -31,7 +32,7 @@ class MainWindow(QMainWindow):
         # self.mainScree-nObj.pushButton_shutdown.clicked.connect(lambda:os.system('sudo shutdown now'))\
         self.mainScreenObj.pushButton_shutdown.clicked.connect(self.__ShowSettingScreen)
         # self.mainScreenObj.ShowNotStudentInformation()
-        self.mainScreenObj.SignalGoToDesktop.connect(self.close)
+        self.mainScreenObj.SignalGoToDesktop.connect(self.GoToDesktop)
         self.mainScreenObj.SignalModifyImageQuality.connect(self.__ModifyImageQuality)
         self.mainScreenObj.SignalModifyFaceMark.connect(self.__ModifyFaceMark)
         self.mainScreenObj.SignalModifyFRthreshold.connect(self.__ModifyFRthreshold)
@@ -93,6 +94,14 @@ class MainWindow(QMainWindow):
 
         self.mainScreenObj.ShowCamera()
 
+    def GoToDesktop(self):
+        desktop = {
+            'destop':1,
+        }
+        with open("desktop", 'w') as fp:
+            json.dump(desktop,fp)
+        self.close()
+        
     def Shutdown(self):
         os.system("shutdown now")
     

@@ -1,6 +1,6 @@
 import sqlite3
 
-duongDanTepSqlite = "DatabaseAccess/Database"
+duongDanTepSqlite = "../Database/Database"
 
 class LayDuLieuTrongDataBase:
     def __init__(self, duongDanDataBase, tenBang):
@@ -195,32 +195,32 @@ class LayDuLieuTrongDataBase:
             pass
 
 class ThiSinhRepository(LayDuLieuTrongDataBase):
-    def __init__(self, duongDanTepSqlite = "DatabaseAccess/Database"): 
+    def __init__(self, duongDanTepSqlite = "../Database/Database"): 
         super().__init__(duongDanTepSqlite, "ThongTinThiSinh")
         return
 
 class LichSuRepository(LayDuLieuTrongDataBase):
-    def __init__(self, duongDanTepSqlite = "DatabaseAccess/Database"): 
+    def __init__(self, duongDanTepSqlite = "../Database/Database"): 
         super().__init__(duongDanTepSqlite, "LichSuDiemDanh")
         return
 
 class KhoaThiRepository(LayDuLieuTrongDataBase):
-    def __init__(self, duongDanTepSqlite = "DatabaseAccess/Database"):
+    def __init__(self, duongDanTepSqlite = "../Database/Database"):
         super().__init__(duongDanTepSqlite, "ThongTinKhoaThi")
         return
 
 class IDvaVanTayRepository(LayDuLieuTrongDataBase):
-    def __init__(self, duongDanTepSqlite = "DatabaseAccess/Database"):
+    def __init__(self, duongDanTepSqlite = "../Database/Database"):
         super().__init__(duongDanTepSqlite, "AnhXaIDvaVanTay")
         return
 
 class TaiKhoanQuanLyRepository(LayDuLieuTrongDataBase):
-    def __init__(self, duongDanTepSqlite = "DatabaseAccess/Database"):
+    def __init__(self, duongDanTepSqlite = "../Database/Database"):
         super().__init__(duongDanTepSqlite, "TaiKhoanQuanLy")
         return
 
 class DanhSachThiSinhTuongUngTaiKhoanRepository(LayDuLieuTrongDataBase):
-    def __init__(self, duongDanTepSqlite = "DatabaseAccess/Database"):
+    def __init__(self, duongDanTepSqlite = "../Database/Database"):
         super().__init__(duongDanTepSqlite, "HocVienTuongUngTaiKhoanQuanLy")
         return
 

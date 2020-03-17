@@ -729,16 +729,6 @@ font: 25 10pt &quot;Ubuntu&quot;;</string>
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QTableView" name="tableView_forShowMemoryInformation">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>64</y>
-      <width>401</width>
-      <height>81</height>
-     </rect>
-    </property>
-   </widget>
   </widget>
   <widget class="QFrame" name="frame_containFirmwareInformation">
    <property name="geometry">
@@ -877,21 +867,21 @@ border-color: rgba(0,140,255,255);
      <item>
       <widget class="QLabel" name="label_forShowFirmwareVersion">
        <property name="text">
-        <string>1.0.0</string>
+        <string>v0.0.0</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QLabel" name="label_forShowUpdateTime">
        <property name="text">
-        <string>30/10/2019 - 18:24:00</string>
+        <string/>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QLabel" name="label_forShowCopyright">
        <property name="text">
-        <string>Công ty cổ phần công nghệ và kỹ thuật Ecotek</string>
+        <string>Công ty cổ phần Công nghệ và Kỹ thuật Ecotek</string>
        </property>
        <property name="wordWrap">
         <bool>true</bool>
@@ -1395,7 +1385,6 @@ color: rgb(0, 170, 255);</string>
   <tabstop>lineEdit_forInputPort</tabstop>
   <tabstop>lineEdit_forInputFTPaccount</tabstop>
   <tabstop>lineEdit_forInputFPTpassword</tabstop>
-  <tabstop>tableView_forShowMemoryInformation</tabstop>
   <tabstop>comboBox_chooseTime</tabstop>
  </tabstops>
  <resources/>

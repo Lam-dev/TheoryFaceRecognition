@@ -3,6 +3,7 @@ from PyQt5.QtCore import pyqtSlot, pyqtSignal,QTimer, QDateTime, Qt, QObject, QP
 from PyQt5 import QtWidgets
 from PyQt5 import QtGui
 from GetSettingFromJSON   import GetSetting, SaveSetting
+import json
 
 class SystemSettingContent(Ui_widget_containSettingContent, QObject):
     GetTextFromKeyBoard = pyqtSignal(object)
@@ -46,6 +47,15 @@ class SystemSettingContent(Ui_widget_containSettingContent, QObject):
         self.pushButton_connectNewFTP.clicked.connect(self.__ConnectNewFTPserver)
         self.pushButton_cleanFGPsensor.clicked.connect(self.SignalCleanFGPsensor.emit)
         self.GetAndShowSetting()
+        self.__GetAndShowCurrentVersion()
+
+    def __GetAndShowCurrentVersion(self):
+        try:
+            with open("version.json", "r") as fp:
+                versionDict = json.load(fp)
+                self.label_forShowFirmwareVersion.setText(versionDict["crVer"])
+        except:
+            self.label_forShowFirmwareVersion.setText("v0.0.0")
         
     def __ConnectNewServer(self):
         

@@ -54,19 +54,21 @@ class GetImageFromCamera(QObject):
             time.sleep(1000)
         else:
             frame = frameFullSize[self.frameCut[1][0]:self.frameCut[1][1], self.frameCut[0][0]:self.frameCut[0][1]]
-            frame = cv2.resize(frame, (0, 0), fx = self.scale, fy = self.scale)
             frame = cv2.flip(frame, 1)
+            frameToShow = frame
+            frame = cv2.resize(frame, (0, 0), fx = self.scale, fy = self.scale)
+            
             frameNoFaceMark = frame.copy()
 
             if(type(FaceLocationInImage) is not bool):
                 # for (top, right, bottom, left) in FaceLocationInImage[0]:
-                top = FaceLocationInImage[0][0]
-                right = FaceLocationInImage[0][1]
-                bottom = FaceLocationInImage[0][2]
-                left = FaceLocationInImage[0][3]
-                cv2.rectangle(frame, (left, top), (right, bottom), (255, 255, 0), 1)
+                top = FaceLocationInImage[0][0]*3
+                right = FaceLocationInImage[0][1]*3
+                bottom = FaceLocationInImage[0][2]*3
+                left = FaceLocationInImage[0][3]*3
+                cv2.rectangle(frameToShow, (left, top), (right, bottom), (255, 255, 0), 1)
             
-            rgbImage = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            rgbImage = cv2.cvtColor(frameToShow, cv2.COLOR_BGR2RGB)
             convertToQtFormat = QtGui.QImage(rgbImage.data, rgbImage.shape[1], rgbImage.shape[0],
                                             QtGui.QImage.Format_RGB888)
             convertToQtFormat = QtGui.QPixmap.fromImage(convertToQtFormat)

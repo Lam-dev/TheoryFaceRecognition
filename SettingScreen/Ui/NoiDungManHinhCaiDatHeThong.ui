@@ -700,7 +700,7 @@ color: rgb(0, 170, 255);</string>
      <string notr="true">font: 75 bold 12pt &quot;Ubuntu&quot;;</string>
     </property>
     <property name="text">
-     <string>Thông tin bộ nhớ</string>
+     <string>Xóa toàn bộ dữ liệu</string>
     </property>
     <property name="wordWrap">
      <bool>true</bool>
@@ -719,14 +719,32 @@ color: rgb(0, 170, 255);</string>
      <bool>true</bool>
     </property>
     <property name="styleSheet">
-     <string notr="true">color: rgb(0, 85, 255);
+     <string notr="true">color: rgb(255, 85, 0);
 font: 25 10pt &quot;Ubuntu&quot;;</string>
     </property>
     <property name="text">
-     <string>(Bộ nhớ sử dụng trên thiết bị)</string>
+     <string>(Xóa toàn bộ dữ liệu trên cảm biến)</string>
     </property>
     <property name="wordWrap">
      <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_deleteAllData">
+    <property name="geometry">
+     <rect>
+      <x>22</x>
+      <y>66</y>
+      <width>65</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);
+border-radius:3px;
+color: rgb(0, 170, 255);</string>
+    </property>
+    <property name="text">
+     <string>Xóa</string>
     </property>
    </widget>
   </widget>

@@ -86,24 +86,24 @@ def ConvertStringToByteArray(string):
 #     }
 #     lstStudent.append(student)
 
-dic = {
-    "success":"True",
-    "code":3,
-    "data":{
-        # "CourseInfo":course,
-        # "CardNumber":lstStudent,
-        "fileName":"TTND_2020_3_15_4_44_58.json",
-        "action":"sync",
-    },
-    "message":12,
-    "checksum":21
-}
+# dic = {
+#     "success":"True",
+#     "code":3,
+#     "data":{
+#         # "CourseInfo":course,
+#         # "CardNumber":lstStudent,
+#         "fileName":"TTND_2020_3_15_4_44_58.json",
+#         "action":"sync",
+#     },
+#     "message":12,
+#     "checksum":21
+# }
 
-jsonStr = json.dumps(dic)
-khungGui, tong = __DungKhungGiaoTiep(jsonStr, 3)
-client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client.connect((SERVER_IP, SERVER_PORT))
-client.send(khungGui)
+# jsonStr = json.dumps(dic)
+# khungGui, tong = __DungKhungGiaoTiep(jsonStr, 3)
+# client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+# client.connect((SERVER_IP, SERVER_PORT))
+# client.send(khungGui)
 
 # ############################################################
 # def __ConvertStringToUTF8String(string):
@@ -132,17 +132,22 @@ client.send(khungGui)
 
 # ####################Tạo frame trả lời ping và cập nhật giờ######################
 
-dic = {
-    "courseID": "1"
-}
-jsonStr = json.dumps(dic)
-khungGui, tong = __DungKhungGiaoTiep(jsonStr, 11)
-client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client.settimeout(1000)
-client.connect((SERVER_IP, SERVER_PORT))
-client.send(khungGui)
+# dic = {
+#     "courseID": "1"
+# }
+# jsonStr = json.dumps(dic)
+# khungGui, tong = __DungKhungGiaoTiep(jsonStr, 11)
+# client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+# client.settimeout(1000)
+# client.connect((SERVER_IP, SERVER_PORT))
+# client.send(khungGui)
 
 # ################################################################################
 ######################yeu cau client gui len danh sach hoc vien##################
 
-#################################################################################
+#################################################################################import time
+import time
+named_tuple = time.localtime() # get struct_time
+time_string = time.strftime("%m/%d/%Y, %H:%M:%S", named_tuple)
+
+print(time_string)

@@ -44,6 +44,7 @@ class MainWindow(QMainWindow):
         self.mainScreenObj.SignalDeleteFGPadded.connect(self.__DeleteFGPadded)
         self.mainScreenObj.SignalShutdown.connect(self.Shutdown)
         self.mainScreenObj.SignalCloseELT.connect(self.close)
+        self.mainScreenObj.SignalDeleteAllData.connect(self.DeleteAllData)
 
         self.khoLichSu = LichSuRepository()
         self.soundObj = Sound()
@@ -95,6 +96,20 @@ class MainWindow(QMainWindow):
         # self.socketServerForRFIDobj.SignalRFIDputOn.connect(self.RFIDputOn)
 
         self.mainScreenObj.ShowCamera()
+
+    def DeleteAllData(self):
+        try:
+            KhoaThiRepository().xoaBanGhi(" 1 = 1 ")
+            ThiSinhRepository().xoaBanGhi( " 1 = 1 " )
+            LichSuRepository().xoaBanGhi(" 1 = 1 " )
+            IDvaVanTayRepository().xoaBanGhi( " 1 = 1 ")
+            self.FGPobj.XoaToanBoDatabase()
+            self.lstStudent = []
+            self.faceRecognitionObj.SetListStudent(self.lstStudent)
+            self.FGPobj.lstIDvaVanTay = []
+        except:
+            pass
+
 
     def DeleteFGPofStudentInSensor(self, ID):
         lstIDvaVanTay = IDvaVanTayRepository().layDanhSach(" IDThiSinh = %s"%(ID))

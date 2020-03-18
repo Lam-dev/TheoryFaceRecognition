@@ -79,7 +79,10 @@ class Fingerprint(QObject):
             self.TimerLayVanTayDangNhap.stop()
 
     def XoaToanBoDatabase(self):
-        self.fingerprintObj.clearDatabase()
+        try:
+            self.fingerprintObj.clearDatabase()
+        except:
+            pass
 
     def ThemVanTay(self):
         try:

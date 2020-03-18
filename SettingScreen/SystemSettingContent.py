@@ -13,6 +13,8 @@ class SystemSettingContent(Ui_widget_containSettingContent, QObject):
     SignalConnectNewServer = pyqtSignal(dict)
     SignalConnectNewFTPserver = pyqtSignal(dict)
     SignalCleanFGPsensor = pyqtSignal()
+    SignalDeleteAllData = pyqtSignal()
+    
 
     def __init__(self):
         QObject.__init__(self)
@@ -46,6 +48,7 @@ class SystemSettingContent(Ui_widget_containSettingContent, QObject):
         self.pushButton_connectNewServer.clicked.connect(self.__ConnectNewServer)
         self.pushButton_connectNewFTP.clicked.connect(self.__ConnectNewFTPserver)
         self.pushButton_cleanFGPsensor.clicked.connect(self.SignalCleanFGPsensor.emit)
+        self.pushButton_deleteAllData.clicked.connect(self.SignalDeleteAllData.emit)
         self.GetAndShowSetting()
         self.__GetAndShowCurrentVersion()
 

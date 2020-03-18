@@ -6,6 +6,7 @@ from        PyQt5           import QtWidgets, QtGui, QtCore
 from        PIL             import Image, ImageQt
 import      io
 from        datetime        import datetime
+import      time
 from    UpdateScreen.UpdateScreen               import UpdateScreen
 from    Outdoor.OutDoor                         import OutDoor
 from    SettingScreen.SettingScreen             import SettingScreen
@@ -37,6 +38,7 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
     SignalCleanFGPsensor = pyqtSignal()
     SignalShutdown = pyqtSignal()
     SignalCloseELT = pyqtSignal()
+    SignalDeleteAllData = pyqtSignal()
 
     def __init__(self, MainWindow):
         QObject.__init__(self)
@@ -74,13 +76,16 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         self.iconFGPrecognized = QtGui.QPixmap("icon/iconFingerprintRecognitzed.png")
         self.label_cty.setText(self.__ConvertStringToUTF8String(NAME_CENTER))
         self.label_cty_2.setText(self.__ConvertStringToUTF8String(NAME_DEVICE))
+
     def HideCamera(self, faceRecognized = True):
         self.label_showCamera.hide()
         if(faceRecognized):
             self.label_forShowIconFaceRecognized.setPixmap(self.iconFaceRecognized)
         else:
             self.label_forShowIconFaceRecognized.setPixmap(self.iconFGPrecognized)
-        self.label_forShowTimeRecognized.setText(datetime.now().strftime("%d/%m/%Y\n%H:%M:%S"))
+        named_tuple = time.localtime()
+        time_string = time.strftime("%m/%d/%Y \n %H:%M:%S", named_tuple)
+        self.label_forShowTimeRecognized.setText(time_string)
     
     def ShowCamera(self):
         self.label_showCamera.raise_()
@@ -243,6 +248,7 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         self.settingScreenObj.SignalCleanFGPsensor.connect(self.SignalCleanFGPsensor.emit)
         self.settingScreenObj.SignalCheckVersion.connect(self.ShowVersionCheckScreen)
         self.settingScreenObj.SignalShutdown.connect(self.SignalShutdown.emit)
+        self.settingScreenObj.SignalDeleteAllData.connect(self.SignalDeleteAllData.emit)
 
         self.settingScreenShadow.show()
         self.settingScreenShadow.raise_()

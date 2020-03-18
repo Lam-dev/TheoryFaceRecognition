@@ -112,7 +112,7 @@ class MainWindow(QMainWindow):
 
 
     def DeleteFGPofStudentInSensor(self, ID):
-        lstIDvaVanTay = IDvaVanTayRepository().layDanhSach(" IDThiSinh = %s"%(ID))
+        lstIDvaVanTay = IDvaVanTayRepository().layDanhSach(" IDThiSinh = '%s' "%(ID))
         for IDvaVanTay in lstIDvaVanTay:
             self.FGPobj.XoaVanTayTrongCamBien(IDvaVanTay.ViTriVanTay)
 
@@ -141,6 +141,9 @@ class MainWindow(QMainWindow):
             #self.timerWaitForUpdateData.start(10000)
             self.__FlagNeedWaitContinue = False
         else:
+            self.lstStudent = GetDataFromDatabase().GetListStudent()
+            self.faceRecognitionObj.SetListStudent(self.lstStudent)
+            self.FGPobj.LayDanhSachIDvaVanTay()
             self.timerWaitForUpdateData.stop()
             self.mainScreenObj.HideWaitForUpdateScreen()
             self.__FlagUpdateScreenIsShow = False

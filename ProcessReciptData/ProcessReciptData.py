@@ -394,7 +394,6 @@ class ProcessReciptData(QObject):
 
     def TimerUpdateDataTimeout(self):
         self.SignalStopForUpdateData.emit()
-        print("so con lai = %s"%(self.lstFeatureFileNameForSync.__len__()))
         if(self.lstFeatureFileNameForSync.__len__() == 0):
             self.SignalSyncComplete.emit()
         else:
@@ -458,8 +457,7 @@ class ProcessReciptData(QObject):
                 imageName = str(stNumber.CardNumber) + ".jpg"
                 lstImage.append(imageName)
 
-        except NameError as e:
-            print(e)
+        except:
             pass
         ftpObj = FTPclient()
         lstImageGrapped = ftpObj.GetListFileFromServer(lstImage)
@@ -479,8 +477,7 @@ class ProcessReciptData(QObject):
                 student.IDKhoaThi = IDCourse
                 khoThiSinh.ghiDuLieu(student)
                 del student
-            except NameError as e:
-                print(e)
+            except:
                 pass
     
     def __DeleteStudentByNumber(self, lstStudentNumber):

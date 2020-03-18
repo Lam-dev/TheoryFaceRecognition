@@ -1,4 +1,4 @@
-from    FingerPrintSensor.FingerprintLib    import PyFingerprint
+from    FingerprintLib    import PyFingerprint
 from    PyQt5.QtCore       import QRect, QPropertyAnimation, QTimer, pyqtSignal, pyqtSlot, QObject
 from    DatabaseAccess.DatabaseAccess   import *
 import  time
@@ -13,7 +13,7 @@ class Fingerprint(QObject):
     SignalFGPnotFind = pyqtSignal()
     SignalHandPushed = pyqtSignal()
     
-    def __init__(self, port = '/dev/ttyS3', baudRate = 57600, address = 0xFFFFFFFF, password = 0xFFFFFFFF):
+    def __init__(self, port = '/dev/ttyACM0', baudRate = 57600, address = 0xFFFFFFFF, password = 0xFFFFFFFF):
         super().__init__()
         self.port = port
         self.baudRate = baudRate
@@ -34,12 +34,6 @@ class Fingerprint(QObject):
         self.LayDanhSachIDvaVanTay()
         self.FlagFGPfree = True
     
-    def XoaVanTayTrongCamBien(self, viTri):
-        try:
-            self.fingerprintObj.deleteTemplate(viTri)
-        except:
-            pass
-
     def LamSachCamBien(self):
         lstIDvaVanTay = IDvaVanTayRepository().layDanhSach(" 1 = 1 ")
         for idVaVanTay in lstIDvaVanTay:

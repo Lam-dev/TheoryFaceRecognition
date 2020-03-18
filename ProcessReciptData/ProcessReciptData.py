@@ -41,10 +41,15 @@ class ProcessReciptData(QObject):
     SignalUpdateOrSyncStudentInfo = pyqtSignal(dict)
     SignalSendResultDeleteAndCheck = pyqtSignal(str, int)
     SignalStopForUpdateData = pyqtSignal()
+    SignalWaitForRecitpEnoughSyncData = pyqtSignal()
+    SignalSyncComplete = pyqtSignal()
+    SignalDeleteFGPofStudent = pyqtSignal(str)
     __FlagTimeUpdated = False
 
     def __init__(self):
         super().__init__()
+        self.lstFeatureFileNameForSync = []
+
         # self.ftpObj = FTPclient()
 
     def _json_object_hook(self, d): return namedtuple('X', d.keys())(*d.values())
@@ -73,9 +78,11 @@ class ProcessReciptData(QObject):
                 self.SendListStudent(reciptObj)
 
             elif(code == SERVER_REQUEST_DELETE_A_COURSE):
+                self.SignalStopForUpdateData.emit()
                 self.DeleteCourse(reciptObj)
 
             elif(code == SERVER_REQUEST_DELETE_A_STUDENT):
+                self.SignalStopForUpdateData.emit()
                 self.DeleteStudent(reciptObj)
             
             elif(code == SERVER_REQUEST_GET_LIST_HISTORY):
@@ -131,8 +138,13 @@ class ProcessReciptData(QObject):
 
     def DeleteCourse(self, objectInfo):
         try:
-            studentRepo = ThiSinhRepository()
-            studentRepo.xoaBanGhi(" IDKhoaThi = %s "%(objectInfo.courseID))
+            # studentRepo = ThiSinhRepository()
+            # studentRepo.xoaBanGhi(" IDKhoaThi = %s "%(objectInfo.courseID))
+            # courseRepo = KhoaThiRepository()
+            # courseRepo.xoaBanGhi( " IDKhoaThi = %s "%(objectInfo.courseID))
+            lstStudentOfCourse = ThiSinhRepository().layDanhSach(" IDKhoaThi = %s"%(objectInfo.courseID))
+            for student in lstStudentOfCourse:
+                self.DeleteStudentByID(student.IDThiSinh)
             courseRepo = KhoaThiRepository()
             courseRepo.xoaBanGhi( " IDKhoaThi = %s "%(objectInfo.courseID))
             messageSendToSocket = {
@@ -146,13 +158,21 @@ class ProcessReciptData(QObject):
 
     
     def DeleteStudent(self, objectInfo):
+
+        self.DeleteStudentByID(objectInfo.studentID)
+
+    def DeleteStudentByID(self, ID):
+
         try:
             studentRepo = ThiSinhRepository()
-            studentRepo.xoaBanGhi(" ID = %s "%(objectInfo.studentID))
+            studentRepo.xoaBanGhi(" ID = %s "%(ID))
             messageSendToSocket = {
                 "MAC":MAC,
-                "studentID":objectInfo.studentID,
+                "studentID":ID,
             }
+            idAndFGPrepo = IDvaVanTayRepository()
+            idAndFGPrepo.xoaBanGhi(" ID = %s "%(ID))
+            self.SignalDeleteFGPofStudent.emit(ID)
             self.SignalSendResultDeleteAndCheck.emit(json.dumps(messageSendToSocket), SERVER_REQUEST_DELETE_A_STUDENT)
         except:
             pass
@@ -349,7 +369,9 @@ class ProcessReciptData(QObject):
             self.__AddStudent(lstStudent, idCourse)
         
         elif(reciptObj.data.action == "sync"):
-            self.__UpdateSyncData(reciptObj.data.fileName)
+            self.SignalWaitForRecitpEnoughSyncData.emit()
+            self.lstFeatureFileNameForSync.insert(0, reciptObj.data.fileName)
+            #self.__UpdateSyncData(reciptObj.data.fileName)
 
         elif(reciptObj.data.action == "newCourse"):
             self.__CreateAndAddNewCourse(reciptObj)
@@ -365,34 +387,52 @@ class ProcessReciptData(QObject):
         elif(reciptObj.data.action == "deleteAll"):
             self.__DeleteAllStudent()
 
+    # def QueueUpdateData(self, fileName):
+    #     if(not self.timerUpdateSyncData.isActive):
+    #         self.timerUpdateSyncData.start(1500)
+    #     self.lstFeatureFileNameForSync.
+
+    def TimerUpdateDataTimeout(self):
+        self.SignalStopForUpdateData.emit()
+        print("so con lai = %s"%(self.lstFeatureFileNameForSync.__len__()))
+        if(self.lstFeatureFileNameForSync.__len__() == 0):
+            self.SignalSyncComplete.emit()
+        else:
+            featureFileName = self.lstFeatureFileNameForSync.pop()
+            self.__UpdateSyncData(featureFileName)
+
     def __UpdateSyncData(self, fileName):
-        lstFileName = []
-        lstFileName.append(fileName)
-        ftpObj = FTPclient()
-        ftpObj.GetListFileFromServer(lstFile = lstFileName, ftpFilePath = FTP_SERVER_SYNC_DIR)
-        updateFilePath = LOCAL_PATH_CONTAIN_DATA_UPDATE + fileName
-        with open(updateFilePath, encoding='utf-8-sig') as json_file:
-            jsonDict = json.load(json_file)
+        try:
+            lstFileName = []
+            lstFileName.append(fileName)
+            ftpObj = FTPclient()
+            ftpObj.GetListFileFromServer(lstFile = lstFileName, ftpFilePath = FTP_SERVER_SYNC_DIR)
+            updateFilePath = LOCAL_PATH_CONTAIN_DATA_UPDATE + fileName
+            with open(updateFilePath, encoding='utf-8-sig') as json_file:
+                jsonDict = json.load(json_file)
 
-        khoThiSinh = ThiSinhRepository()
-        khoThiSinh.capNhatTruong(("NhanDienKhuonMatThem", "NhanDienVanTay"),(jsonDict["FaceEncoding"], jsonDict["FGPEncoding"]), " ID = '%s' "%(jsonDict["ID"]))
-        faceEncodingStringArr = jsonDict["FaceEncoding"].split(",")
-        faceEncodingArr = [float(elem) for elem in faceEncodingStringArr]
-        lstMultiFGPfeatureStr = jsonDict["FGPEncoding"].split(";")
-        lstFGP = []
-        for FGPfeatureStr in lstMultiFGPfeatureStr:
-            FGPfeatureStrArr = FGPfeatureStr.split(",")
-            FGPfeatureArr = [int(elem) for elem in FGPfeatureStrArr]
-            lstFGP.append(FGPfeatureArr)
-        # FGPencodingStringArr = jsonDict["FGPEncoding"].split(",")
-        # FGPencodingArr = [int(elem) for elem in FGPencodingStringArr]
+            khoThiSinh = ThiSinhRepository()
+            print("Them cho = %s"%(jsonDict["ID"]))
+            khoThiSinh.capNhatTruong(("NhanDienKhuonMatThem", "NhanDienVanTay"),(jsonDict["FaceEncoding"], jsonDict["FGPEncoding"]), " ID = '%s' "%(jsonDict["ID"]))
+            faceEncodingStringArr = jsonDict["FaceEncoding"].split(",")
+            faceEncodingArr = [float(elem) for elem in faceEncodingStringArr]
+            lstMultiFGPfeatureStr = jsonDict["FGPEncoding"].split(";")
+            lstFGP = []
+            for FGPfeatureStr in lstMultiFGPfeatureStr:
+                FGPfeatureStrArr = FGPfeatureStr.split(",")
+                FGPfeatureArr = [int(elem) for elem in FGPfeatureStrArr]
+                lstFGP.append(FGPfeatureArr)
+            # FGPencodingStringArr = jsonDict["FGPEncoding"].split(",")
+            # FGPencodingArr = [int(elem) for elem in FGPencodingStringArr]
 
-        faceInfoDict = {
-            "faceEncodingArr": faceEncodingArr,
-            "FGPencoding":lstFGP,
-            "idStudent" : jsonDict["ID"],
-        }
-        self.SignalUpdateOrSyncStudentInfo.emit(faceInfoDict)
+            faceInfoDict = {
+                "faceEncodingArr": faceEncodingArr,
+                "FGPencoding":lstFGP,
+                "idStudent" : jsonDict["ID"],
+            }
+            self.SignalUpdateOrSyncStudentInfo.emit(faceInfoDict)
+        except:
+            pass
 
     def __CreateAndAddNewCourse(self, dataObj):
         khoaThi = ThongTinKhoaThi()

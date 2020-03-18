@@ -12,8 +12,12 @@ import  os
 import getmac
 
 SETTING_DICT                                        = GetSetting.LoadSettingFromFile()
-SERVER_IP                                           = SETTING_DICT["serverIP"]
-SERVER_PORT                                         = int(SETTING_DICT["serverPort"])
+try:
+    SERVER_IP                                           = SETTING_DICT["serverIP"]
+    SERVER_PORT                                         = int(SETTING_DICT["serverPort"])
+except:
+    SERVER_IP = "0.0.0.0"
+    SERVER_PORT = 0
 
 CODE_SEND_PING_PONG                         = 1
 CODE_RESULT_RECOGNITION                     = 2
@@ -40,6 +44,7 @@ class SocketClient(QObject):
     __SignalConnected = pyqtSignal()
     __SignalReciptEnounghData = pyqtSignal(bytes)
     SignalStopForUpdateData = pyqtSignal()
+    SignalDeleteFGPofStudent = pyqtSignal(str)
     
 
     def __init__(self):
@@ -47,6 +52,11 @@ class SocketClient(QObject):
         self.ftpObj = FTPclient()
         self.timerPingPong = QTimer(self)
         self.timerPingPong.timeout.connect(self.__PingPong)
+
+        self.timerWaitForReciptEnoughSyncData = QTimer(self)# cho nhan du du lieu dac trung,\
+        self.timerSyncData = QTimer(self)
+        self.timerWaitForReciptEnoughSyncData.timeout.connect(self.ReciptEnoughData)
+
 
         self.__SignalConnected.connect(self.__ServerConnected)
 
@@ -58,9 +68,14 @@ class SocketClient(QObject):
         self.processReciptDataObj.SignalNumberStudentParsed.connect(self.__NumberStudentParsed)
         self.processReciptDataObj.SignalUpdateOrSyncStudentInfo.connect(self.SignalUpdateOrSyncStudentInfo.emit)
         self.processReciptDataObj.SignalStopForUpdateData.connect(self.SignalStopForUpdateData.emit)
+        self.processReciptDataObj.SignalWaitForRecitpEnoughSyncData.connect(self.WaitForReciptEnoughSyncData)
         self.processReciptDataObj.SignalSendFile.connect(self.SendFileDataBaseCheck)
         self.processReciptDataObj.SignalSendResultDeleteAndCheck.connect(self.SendMessageDatabaseCheck)
+        self.processReciptDataObj.SignalSyncComplete.connect(self.StopSyncData)
+        self.processReciptDataObj.SignalDeleteFGPofStudent.connect(self.SignalDeleteFGPofStudent.emit)
         self.chuaXuLy = b''
+
+        self.timerSyncData.timeout.connect(self.processReciptDataObj.TimerUpdateDataTimeout)
 
         self.TimerWaitForServerConfirm = QTimer(self)
         self.TimerWaitForServerConfirm.timeout.connect(self.__ThreadCreateConnect)
@@ -82,6 +97,17 @@ class SocketClient(QObject):
         self.__DataProcessing = b'';
 
         self.__SignalReciptEnounghData.connect(self.__ThreadTachVaPhanTichKhungNhan)
+
+    def ReciptEnoughData(self):
+        self.timerWaitForReciptEnoughSyncData.stop()
+        self.timerSyncData.start(1100)
+
+    def StopSyncData(self):
+        self.timerSyncData.stop()
+
+    def WaitForReciptEnoughSyncData(self):
+        self.timerWaitForReciptEnoughSyncData.stop()
+        self.timerWaitForReciptEnoughSyncData.start(5000)
 
     def SendFileDataBaseCheck(self, fileName):
         self.ftpObj.SendImageToFTPserver(fileName, FTP_SERVER_SYNC_FILE + "/" +fileName)

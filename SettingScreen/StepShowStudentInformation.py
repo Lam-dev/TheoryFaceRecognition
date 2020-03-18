@@ -50,7 +50,7 @@ class StepShowStudentInformation(QObject, Ui_Frame):
             self.label_forShowNumberFaceAdded.setStyleSheet("color:rgb(30, 30, 30)")
             self.label_forShowNumberFaceAdded.setText("Đã thêm")
         khoIDvaVanTay = IDvaVanTayRepository()
-        lstIDvaVanTay = khoIDvaVanTay.layDanhSach(" IDThiSinh = %s "%(student.ID))
+        lstIDvaVanTay = khoIDvaVanTay.layDanhSach(" IDThiSinh = '%s' "%(student.ID))
         if(len(lstIDvaVanTay) == 0):
             self.label_forShowNumberFGPadded.setStyleSheet("color:rgb(200, 0, 0)")
             self.label_forShowNumberFGPadded.setText("Chưa thêm")

@@ -27,10 +27,16 @@ from   GetSettingFromJSON       import GetSetting
 #     print(f)
 
 SETTING_DICT = GetSetting.LoadSettingFromFile()
-FTP_IP       =  SETTING_DICT["ftpIP"]
-FTP_PORT     =  SETTING_DICT["ftpPort"]
-FTP_ACCOUNT  =  SETTING_DICT["ftpAccount"]
-FTP_PASSWORD =  SETTING_DICT["ftpPassword"]
+try:
+    FTP_IP       =  SETTING_DICT["ftpIP"]
+    FTP_PORT     =  SETTING_DICT["ftpPort"]
+    FTP_ACCOUNT  =  SETTING_DICT["ftpAccount"]
+    FTP_PASSWORD =  SETTING_DICT["ftpPassword"]
+except:
+    FTP_IP = "192.168.0.0"
+    FTP_PORT = 0
+    FTP_ACCOUNT = ""
+    FTP_PASSWORD = ""
 
 LOCAL_PATH_CONTAIN_DATA_UPDATE = "DataUpdate/"
 FTP_SERVER_DOWLOAD_IMAGE_FILE_PATH = "syncimage/"
@@ -110,17 +116,20 @@ class FTPclient(QObject):
         except:
             pass
         os.mkdir("DataUpdate")
-        self.ftpObj.cwd(ftpFilePath)
-        for f in lstFile:
-            if((not f.__contains__(".jpg")) & (not f.__contains__(".json"))):
-                continue
-            try:
-                self.ftpObj.retrbinary("RETR " + f ,open(LOCAL_PATH_CONTAIN_DATA_UPDATE + f, 'wb').write)
-                numberFileGraped += 1
-                lstImageGraped.append(f)
-            except:
-                pass
-        return lstImageGraped
+        try:
+            self.ftpObj.cwd(ftpFilePath)
+            for f in lstFile:
+                if((not f.__contains__(".jpg")) & (not f.__contains__(".json"))):
+                    continue
+                try:
+                    self.ftpObj.retrbinary("RETR " + f ,open(LOCAL_PATH_CONTAIN_DATA_UPDATE + f, 'wb').write)
+                    numberFileGraped += 1
+                    lstImageGraped.append(f)
+                except:
+                    pass
+            return lstImageGraped
+        except:
+            return
 
 
 # x = FTPclient()

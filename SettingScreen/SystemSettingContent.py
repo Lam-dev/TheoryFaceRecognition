@@ -78,6 +78,7 @@ class SystemSettingContent(Ui_widget_containSettingContent, QObject):
         self.SignalConnectNewFTPserver.emit(FTPserverDict)
 
     def GetAndShowSetting(self):
+        
         settingDict = GetSetting.GetSystemSetting()
         if(type(settingDict) is  bool):
             return

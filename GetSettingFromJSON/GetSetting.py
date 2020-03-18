@@ -19,9 +19,12 @@ def GetSetting(arg):
         return setting["SocketServerPort"]
 
 def LoadSettingFromFile():
-    with open('GetSettingFromJSON/systemSetting.json') as json_file:
-        setting = json.load(json_file)
-    return setting
+    try:
+        with open('../Setting/systemSetting.json') as json_file:
+            setting = json.load(json_file)
+        return setting
+    except:
+        return 0
 
 def UpdateServerImageDir(dir):
     with open('GetSettingFromJSON/setting.json') as json_file:
@@ -32,7 +35,7 @@ def UpdateServerImageDir(dir):
 
 def GetSystemSetting():
     try:
-        with open('GetSettingFromJSON/systemSetting.json') as json_file:
+        with open('../Setting/systemSetting.json') as json_file:
             return json.load(json_file)
     except:
         return 0

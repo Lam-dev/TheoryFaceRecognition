@@ -23,7 +23,7 @@ class LayDuLieuTrongDataBase:
                 else:
                     sql += '`%s` = "%s" ' % (truongTuple[i].__str__(), giaTriTuple[i].__str__())
             sql += 'where %s' % (oDau)
-            print("sql = ", sql)
+            #print("sql = ", sql)
             cursor.execute(sql)
             self.CSDL.commit()
         except:

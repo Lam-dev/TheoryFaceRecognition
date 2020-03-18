@@ -75,6 +75,7 @@ class MainWindow(QMainWindow):
         self.socketObject.SignalNumberStudentParsed.connect(self.NumberStudentParsed)
         self.socketObject.SignalUpdateOrSyncStudentInfo.connect(self.AddStudentInfomation)
         self.socketObject.SignalStopForUpdateData.connect(self.ShowWaitForUpdateDataScreen)
+        self.socketObject.SignalDeleteFGPofStudent.connect(self.DeleteFGPofStudentInSensor)
 
 #endregion
         self.timerReopenReadCam = QTimer(self)
@@ -95,6 +96,11 @@ class MainWindow(QMainWindow):
 
         self.mainScreenObj.ShowCamera()
 
+    def DeleteFGPofStudentInSensor(self, ID):
+        lstIDvaVanTay = IDvaVanTayRepository().layDanhSach(" IDThiSinh = %s"%(ID))
+        for IDvaVanTay in lstIDvaVanTay:
+            self.FGPobj.XoaVanTayTrongCamBien(IDvaVanTay.ViTriVanTay)
+
     def GoToDesktop(self):
         desktop = {
             'destop':1,
@@ -112,7 +118,7 @@ class MainWindow(QMainWindow):
             return
         self.__FlagUpdateScreenIsShow = True    
         self.__OffCameraTemporary(autoReopen= False)
-        self.timerWaitForUpdateData.start(10000)
+        self.timerWaitForUpdateData.start(6000)
         self.mainScreenObj.ShowWaitForUpdateScreen()
 
     def HideWaitForUpdateDataScreen(self):

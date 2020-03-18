@@ -6,7 +6,7 @@ from        PyQt5           import QtWidgets, QtGui, QtCore
 from        PIL             import Image, ImageQt
 import      io
 from        datetime        import datetime
-import      time
+import      pytz
 from    UpdateScreen.UpdateScreen               import UpdateScreen
 from    Outdoor.OutDoor                         import OutDoor
 from    SettingScreen.SettingScreen             import SettingScreen
@@ -83,8 +83,11 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
             self.label_forShowIconFaceRecognized.setPixmap(self.iconFaceRecognized)
         else:
             self.label_forShowIconFaceRecognized.setPixmap(self.iconFGPrecognized)
-        named_tuple = time.localtime()
-        time_string = time.strftime("%m/%d/%Y \n %H:%M:%S", named_tuple)
+        # named_tuple = time.localtime()
+        # time_string = time.strftime("%m/%d/%Y \n %H:%M:%S", named_tuple)
+        tz_HCM = pytz.timezone('Asia/Ho_Chi_Minh') 
+        datetime_HCM = datetime.now(tz_HCM)
+        time_string = datetime_HCM.strftime("%m/%d/%Y \n %H:%M:%S")
         self.label_forShowTimeRecognized.setText(time_string)
     
     def ShowCamera(self):

@@ -146,8 +146,11 @@ def ConvertStringToByteArray(string):
 ######################yeu cau client gui len danh sach hoc vien##################
 
 #################################################################################import time
-import time
-named_tuple = time.localtime() # get struct_time
-time_string = time.strftime("%m/%d/%Y, %H:%M:%S", named_tuple)
+import pytz
+# named_tuple = time.localtime() # get struct_time
+# time_string = time.strftime("%m/%d/%Y, %H:%M:%S", named_tuple)
 
-print(time_string)
+# print(time_string)
+tz_HCM = pytz.timezone('Asia/Ho_Chi_Minh') 
+datetime_HCM = datetime.now(tz_HCM)
+print(datetime_HCM.strftime("%m/%d/%Y \n %H:%M:%S"))

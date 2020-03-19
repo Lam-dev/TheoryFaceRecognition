@@ -48,8 +48,9 @@ class FTPclient(QObject):
     def __init__(self):
         super().__init__()
         self.__CreateConnect()
-
-
+        self.localImageFile = ""
+        self.timerDeleteLocalFile = QTimer(self)
+        self.timerDeleteLocalFile.timeout.connect(self.__DeleteLocalImageFile)
     def __CreateConnect(self):
         try:
             self.ftpObj = ftplib.FTP(host = FTP_IP, timeout = 3)
@@ -58,6 +59,13 @@ class FTPclient(QObject):
 
         except:
             return False
+
+    def __DeleteLocalImageFile(self):
+        self.timerDeleteLocalFile.stop()
+        try:
+            os.remove(self.localImageFile)
+        except:
+            pass
 
     def ConnectNewFTPserver(self, inforDict):
         global FTP_IP, FTP_PORT, FTP_ACCOUNT, FTP_PASSWORD
@@ -82,8 +90,11 @@ class FTPclient(QObject):
                 return lstImage
             except:
                 self.__CreateConnect()
-        
+    
+
+    
     def SendImageToFTPserver(self, localfile, remotefile):
+        self.localImageFile = localfile
         fp = open(localfile, 'rb')
         try:
             self.__CreateConnect()
@@ -95,10 +106,8 @@ class FTPclient(QObject):
                 print("creating directory: " + remotefile)
                 self.ftpObj.mkd(path)
                 self.ftpObj.storbinary('STOR %s' % remotefile, fp, 1024)
-                try:
-                    os.remove(localfile)
-                except:
-                    pass
+                self.timerDeleteLocalFile.start(2000)
+
                 fp.close()
                 return
             except:

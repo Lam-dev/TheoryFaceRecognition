@@ -52,7 +52,7 @@
     </property>
     <property name="styleSheet">
      <string notr="true">margin: 1px; padding: 7px;
-background-color: rgb(255, 255, 255);
+background-color: rgba(0,0,0,0);
 color: rgba(0,190,255,255);
 border-style: solid;
 border-radius: 3px;
@@ -61,6 +61,16 @@ border-color: rgba(0,140,255,255);</string>
     </property>
     <property name="text">
      <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>../../icon/closeIcon37.png</normaloff>../../icon/closeIcon37.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>39</width>
+      <height>39</height>
+     </size>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_reloadDatabase">
@@ -83,6 +93,16 @@ border-color: rgba(0,140,255,255);</string>
     </property>
     <property name="text">
      <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>../../icon/reloadIcon37.png</normaloff>../../icon/reloadIcon37.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>32</width>
+      <height>32</height>
+     </size>
     </property>
    </widget>
   </widget>
@@ -243,9 +263,9 @@ border-radius:3px;</string>
    <widget class="QWidget" name="horizontalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>208</x>
+      <x>210</x>
       <y>392</y>
-      <width>91</width>
+      <width>89</width>
       <height>19</height>
      </rect>
     </property>

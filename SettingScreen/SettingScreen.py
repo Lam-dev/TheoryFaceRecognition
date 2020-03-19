@@ -9,6 +9,8 @@ from SettingScreen.SoundSettingContent    import SoundSettingContent
 from SettingScreen.DatabaseManagerScreen  import DatabaseManagerScreen
 from SettingScreen.HideSettingScreenAction import HideSettingScreen
 from KeyBoard               import KeyBoard
+from        datetime        import datetime
+import      pytz
 
 class SettingScreen(Ui_frame_settingScreen, QObject):
     RequestOpenDatabaseScreen = pyqtSignal()
@@ -40,6 +42,10 @@ class SettingScreen(Ui_frame_settingScreen, QObject):
         self.keyboardIsShow = False
         
         self.pushButton_shutdown.clicked.connect(self.SignalShutdown.emit)
+        
+        self.timerGetAndShowTime = QTimer(self)
+        self.timerGetAndShowTime.timeout.connect(self.__GetAndShowTime)
+        self.timerGetAndShowTime.start(1000)
 
         self.pixmapConnected = QtGui.QPixmap("icon/iconConnected.png")
         self.pixmapWaitForConnect = QtGui.QPixmap("icon/iconWaitForConnect.png")
@@ -82,7 +88,7 @@ class SettingScreen(Ui_frame_settingScreen, QObject):
         self.lb_iconSoundSetting.setPixmap(QtGui.QPixmap("icon/iconSound.png"))
         self.lb_iconSystemSetting.setPixmap(QtGui.QPixmap("icon/iconSystem.png"))
 
-        self.pushButton_goToHideSetting.clicked.connect(self.SignalOpenHideSettingScreen)
+        #self.pushButton_goToHideSetting.clicked.connect(self.SignalOpenHideSettingScreen)
         
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("icon/iconShutdown.png"), QtGui.QIcon.Disabled, QtGui.QIcon.On)
@@ -91,7 +97,12 @@ class SettingScreen(Ui_frame_settingScreen, QObject):
         self.ChooseScreenSetting(1)
         self.settingNumber = 1
 
-        
+    def __GetAndShowTime(self):
+        tz_HCM = pytz.timezone('Asia/Ho_Chi_Minh') 
+        datetime_HCM = datetime.now(tz_HCM)
+        time_string = datetime_HCM.strftime("%d/%m/%Y \n %H:%M:%S")
+        self.label_forShowDateTime.setText(time_string)
+
     def ShowConnectFTPserverStatusToSettingScreen(self, statusStr, connectAvailalbe):
         if(self.settingNumber == 3):
             self.content.label_showFTPconnectStatus.setText(statusStr)

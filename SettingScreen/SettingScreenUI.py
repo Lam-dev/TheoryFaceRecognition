@@ -13,7 +13,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_frame_settingScreen(object):
     def setupUi(self, frame_settingScreen):
         frame_settingScreen.setObjectName("frame_settingScreen")
-        frame_settingScreen.resize(659, 429)
+        frame_settingScreen.resize(659, 425)
         frame_settingScreen.setStyleSheet("border-radius: 10px;\n"
 "background-color: rgb(255, 255, 235);")
         frame_settingScreen.setFrameShape(QtWidgets.QFrame.StyledPanel)
@@ -24,7 +24,7 @@ class Ui_frame_settingScreen(object):
         self.frame_settingMenu.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_settingMenu.setObjectName("frame_settingMenu")
         self.formLayoutWidget = QtWidgets.QWidget(self.frame_settingMenu)
-        self.formLayoutWidget.setGeometry(QtCore.QRect(12, 22, 181, 209))
+        self.formLayoutWidget.setGeometry(QtCore.QRect(10, 98, 181, 209))
         self.formLayoutWidget.setObjectName("formLayoutWidget")
         self.formLayout = QtWidgets.QFormLayout(self.formLayoutWidget)
         self.formLayout.setSizeConstraint(QtWidgets.QLayout.SetDefaultConstraint)
@@ -65,17 +65,23 @@ class Ui_frame_settingScreen(object):
         self.lb_textDatabaseSetting.setObjectName("lb_textDatabaseSetting")
         self.formLayout.setWidget(3, QtWidgets.QFormLayout.FieldRole, self.lb_textDatabaseSetting)
         self.pushButton_shutdown = QtWidgets.QPushButton(self.frame_settingMenu)
-        self.pushButton_shutdown.setGeometry(QtCore.QRect(12, 388, 37, 31))
+        self.pushButton_shutdown.setGeometry(QtCore.QRect(12, 368, 63, 51))
         self.pushButton_shutdown.setText("")
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("../../icon/iconShutdown.png"), QtGui.QIcon.Disabled, QtGui.QIcon.On)
         self.pushButton_shutdown.setIcon(icon)
-        self.pushButton_shutdown.setIconSize(QtCore.QSize(30, 30))
+        self.pushButton_shutdown.setIconSize(QtCore.QSize(50, 50))
         self.pushButton_shutdown.setObjectName("pushButton_shutdown")
-        self.pushButton_goToHideSetting = QtWidgets.QPushButton(self.frame_settingMenu)
-        self.pushButton_goToHideSetting.setGeometry(QtCore.QRect(34, 266, 127, 89))
-        self.pushButton_goToHideSetting.setText("")
-        self.pushButton_goToHideSetting.setObjectName("pushButton_goToHideSetting")
+        self.label_forShowDateTime = QtWidgets.QLabel(self.frame_settingMenu)
+        self.label_forShowDateTime.setGeometry(QtCore.QRect(10, 8, 175, 71))
+        self.label_forShowDateTime.setStyleSheet("color: rgb(0, 120, 0);\n"
+"font: 57 bold 18pt \"Ubuntu\";\n"
+"background-color: rgba(0, 170, 255, 80);\n"
+"border-width:1px;\n"
+"")
+        self.label_forShowDateTime.setText("")
+        self.label_forShowDateTime.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_forShowDateTime.setObjectName("label_forShowDateTime")
         self.frame_containSettingContent = QtWidgets.QFrame(frame_settingScreen)
         self.frame_containSettingContent.setGeometry(QtCore.QRect(210, 0, 447, 425))
         self.frame_containSettingContent.setFrameShape(QtWidgets.QFrame.StyledPanel)

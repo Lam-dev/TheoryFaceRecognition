@@ -13,8 +13,8 @@ from SettingScreen.AddDataResult              import AddDataResults
 class DatabaseManagerScreen(Ui_Frame_containDatabaseScreen, QObject):
     SignalCloseDatabaseScreen = pyqtSignal()
     SignalAddFaceEncodeAndFGP = pyqtSignal(dict, dict)
-    SignalDeleteFaceAdded = pyqtSignal(int)
-    SignalDeleteFGPadded = pyqtSignal(int)
+    SignalDeleteFaceAdded = pyqtSignal(str)
+    SignalDeleteFGPadded = pyqtSignal(str)
 
     def __init__(self, frameContain):
         Ui_Frame_containDatabaseScreen.__init__(self)
@@ -30,6 +30,16 @@ class DatabaseManagerScreen(Ui_Frame_containDatabaseScreen, QObject):
         #self.pushButton_preStep.hide()
 
         self.pushButton_reloadDatabase.clicked.connect(self.__ReloadScreen)
+
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap("icon/closeIcon37.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pushButton_closeDatabaseScreen.setIcon(icon)
+        self.pushButton_closeDatabaseScreen.setIconSize(QtCore.QSize(39, 39))
+
+        icon1 = QtGui.QIcon()
+        icon1.addPixmap(QtGui.QPixmap("icon/reloadIcon37.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pushButton_reloadDatabase.setIcon(icon1)
+        self.pushButton_reloadDatabase.setIconSize(QtCore.QSize(32, 32))
 
         self.comboBox_showListCourser.currentIndexChanged.connect(self.ChooserCourse)
         self.lstStudent = []

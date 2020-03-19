@@ -88,6 +88,9 @@ class MainWindow(QMainWindow):
         self.FGPobj = Fingerprint()
         self.FGPobj.SignalRecognizedFGP.connect(self.RecognizedFGP)
         self.FGPobj.BatLayVanTayDangNhap()
+
+        self.FGPobj.SignalFGPnotFind.connect(self.NotRecogniedFGP)
+
         self.mainScreenObj.SignalCleanFGPsensor.connect(self.FGPobj.LamSachCamBien)
 
         self.__FlagUpdateScreenIsShow = False
@@ -96,6 +99,9 @@ class MainWindow(QMainWindow):
         # self.socketServerForRFIDobj.SignalRFIDputOn.connect(self.RFIDputOn)
 
         self.mainScreenObj.ShowCamera()
+
+    def NotRecogniedFGP(self):
+        self.soundObj.ThreadPlayVuiLongThuLai()
 
     def DeleteAllData(self):
         try:

@@ -27,7 +27,7 @@ class Ui_Frame_containDatabaseScreen(object):
         self.pushButton_closeDatabaseScreen = QtWidgets.QPushButton(self.frame_tabarScreen)
         self.pushButton_closeDatabaseScreen.setGeometry(QtCore.QRect(754, 2, 43, 39))
         self.pushButton_closeDatabaseScreen.setStyleSheet("margin: 1px; padding: 7px;\n"
-"background-color: rgb(255, 255, 255);\n"
+"background-color: rgba(0,0,0,0);\n"
 "color: rgba(0,190,255,255);\n"
 "border-style: solid;\n"
 "border-radius: 3px;\n"
@@ -45,6 +45,7 @@ class Ui_Frame_containDatabaseScreen(object):
 "border-width: 1px;\n"
 "border-color: rgba(0,140,255,255);")
         self.pushButton_reloadDatabase.setText("")
+
         self.pushButton_reloadDatabase.setObjectName("pushButton_reloadDatabase")
         self.frame_2 = QtWidgets.QFrame(Frame_containDatabaseScreen)
         self.frame_2.setGeometry(QtCore.QRect(6, 50, 287, 63))
@@ -98,7 +99,7 @@ class Ui_Frame_containDatabaseScreen(object):
         self.frame_containAddInformationStep.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_containAddInformationStep.setObjectName("frame_containAddInformationStep")
         self.horizontalLayoutWidget = QtWidgets.QWidget(self.frame_containAddInformationStep)
-        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(208, 392, 91, 19))
+        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(208, 392, 91, 23))
         self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)

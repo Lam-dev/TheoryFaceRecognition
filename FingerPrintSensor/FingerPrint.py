@@ -13,6 +13,7 @@ class Fingerprint(QObject):
     SignalFGPnotFind = pyqtSignal()
     SignalHandPushed = pyqtSignal()
     
+
     def __init__(self, port = '/dev/ttyS3', baudRate = 57600, address = 0xFFFFFFFF, password = 0xFFFFFFFF):
         super().__init__()
         self.port = port
@@ -173,6 +174,7 @@ class Fingerprint(QObject):
         try:
             if(self.fingerprintObj.readImage()):
                 self.fingerprintObj.convertImage(0x01)
+                
                 ketqua = self.fingerprintObj.searchTemplate()
                 print("ket qua = %s"%(ketqua[0]))
                 if(len(ketqua) == 2):

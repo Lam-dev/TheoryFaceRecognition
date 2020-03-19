@@ -29,6 +29,9 @@ class StepShowStudentInformation(QObject, Ui_Frame):
         self.pushButton_deleteFGPadded.setIcon(icon)
         self.pushButton_deleteFGPadded.setIconSize(QtCore.QSize(38, 38))
 
+        self.pushButton_deleteFaceAdded.hide()
+        self.pushButton_deleteFGPadded.hide()
+
         self.pushButton_deleteFaceAdded.clicked.connect(self.SignalRequestDeleteFaceAdded.emit)
         self.pushButton_deleteFGPadded.clicked.connect(self.SignalRequestDeleteFGPadded.emit)
         

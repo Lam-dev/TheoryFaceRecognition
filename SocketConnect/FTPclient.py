@@ -45,12 +45,13 @@ FTP_FILE_PATH_TO_UPLOAD            = GetSetting.GetSetting("--ServerImageDir")
 class FTPclient(QObject):
     SignalFTPnotConnect = pyqtSignal()
     SignalFolderNotExist = pyqtSignal()
+    SignalWaitForDeleteFile = pyqtSignal()
     def __init__(self):
         super().__init__()
         self.__CreateConnect()
         self.localImageFile = ""
-        self.timerDeleteLocalFile = QTimer(self)
-        self.timerDeleteLocalFile.timeout.connect(self.__DeleteLocalImageFile)
+        # self.timerDeleteLocalFile = QTimer(self)
+        # self.timerDeleteLocalFile.timeout.connect(self.__DeleteLocalImageFile)
     def __CreateConnect(self):
         try:
             self.ftpObj = ftplib.FTP(host = FTP_IP, timeout = 3)
@@ -60,9 +61,9 @@ class FTPclient(QObject):
         except:
             return False
 
-    def __DeleteLocalImageFile(self):
-        self.timerDeleteLocalFile.stop()
+    def DeleteLocalImageFile(self):
         try:
+            print("da xoa = %s"%(self.localImageFile))
             os.remove(self.localImageFile)
         except:
             pass
@@ -99,6 +100,7 @@ class FTPclient(QObject):
         try:
             self.__CreateConnect()
             self.ftpObj.storbinary('STOR %s' % remotefile, fp, 1024)
+            self.SignalWaitForDeleteFile.emit()
         except:
             try:
                 print("remotefile not exist error caught" + remotefile)
@@ -106,12 +108,13 @@ class FTPclient(QObject):
                 print("creating directory: " + remotefile)
                 self.ftpObj.mkd(path)
                 self.ftpObj.storbinary('STOR %s' % remotefile, fp, 1024)
-                self.timerDeleteLocalFile.start(2000)
-
+                self.SignalWaitForDeleteFile.emit()
                 fp.close()
                 return
             except:
                 pass
+
+        self.SignalWaitForDeleteFile.emit()
         fp.close()
                     
     def GetListFileFromServer(self, lstFile, ftpFilePath = FTP_SERVER_DOWLOAD_IMAGE_FILE_PATH):

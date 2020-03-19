@@ -53,6 +53,11 @@ class SocketClient(QObject):
         self.timerPingPong = QTimer(self)
         self.timerPingPong.timeout.connect(self.__PingPong)
 
+        self.timerDeleteFTPsendedFile = QTimer(self)
+        self.timerDeleteFTPsendedFile.timeout.connect(self.DeleteFTPsendedFile)
+
+        self.ftpObj.SignalWaitForDeleteFile.connect(lambda:self.timerDeleteFTPsendedFile.start(2100))
+
         self.timerWaitForReciptEnoughSyncData = QTimer(self)# cho nhan du du lieu dac trung,\
         self.timerSyncData = QTimer(self)
         self.timerWaitForReciptEnoughSyncData.timeout.connect(self.ReciptEnoughData)
@@ -97,6 +102,10 @@ class SocketClient(QObject):
         self.__DataProcessing = b'';
 
         self.__SignalReciptEnounghData.connect(self.__ThreadTachVaPhanTichKhungNhan)
+    
+    def DeleteFTPsendedFile(self):
+        self.timerDeleteFTPsendedFile.stop()
+        self.ftpObj.DeleteLocalImageFile()
 
     def ReciptEnoughData(self):
         self.timerWaitForReciptEnoughSyncData.stop()
@@ -165,7 +174,7 @@ class SocketClient(QObject):
     def __RecreateConnect(self):
         self.FlagServerISconnect = False
         if(not self.TimerWaitForServerConfirm.isActive()):
-            self.TimerWaitForServerConfirm.start(2000)
+            self.TimerWaitForServerConfirm.start(5000)
 
     def __SendDataViaSocket(self, data):
         try:

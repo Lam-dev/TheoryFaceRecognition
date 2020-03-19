@@ -52,7 +52,7 @@ class FTPclient(QObject):
 
     def __CreateConnect(self):
         try:
-            self.ftpObj = ftplib.FTP(host = FTP_IP, timeout = 1)
+            self.ftpObj = ftplib.FTP(host = FTP_IP, timeout = 3)
             self.ftpObj.login(FTP_ACCOUNT, FTP_PASSWORD)
             return True
 
@@ -81,7 +81,6 @@ class FTPclient(QObject):
                 self.GetListFileFromServer(lstImage)
                 return lstImage
             except:
-                print(e)
                 self.__CreateConnect()
         
     def SendImageToFTPserver(self, localfile, remotefile):

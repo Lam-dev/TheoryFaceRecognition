@@ -10,6 +10,7 @@ from    GetSettingFromJSON    import GetSetting
 import json
 import  os
 import getmac
+import      pytz
 
 SETTING_DICT                                        = GetSetting.LoadSettingFromFile()
 try:
@@ -332,10 +333,12 @@ class SocketClient(QObject):
         return json.dumps(dictToSend)
         
     def __BuildResultToSend(self, studentNumberCard, imageFileName, RecBy):
-
+        tz_HCM = pytz.timezone('Asia/Ho_Chi_Minh') 
+        datetime_HCM = datetime.now(tz_HCM)
+        time_string = datetime_HCM.strftime("%d/%m/%Y %H:%M:%S")
         dictData = {
             "cardNumber":studentNumberCard,
-            "time":datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
+            "time":time_string,
             "imageLength":0,
             "imageDir": imageFileName,
             "recBy": RecBy

@@ -144,7 +144,7 @@ class ProcessReciptData(QObject):
             # courseRepo.xoaBanGhi( " IDKhoaThi = %s "%(objectInfo.courseID))
             lstStudentOfCourse = ThiSinhRepository().layDanhSach(" IDKhoaThi = %s"%(objectInfo.courseID))
             for student in lstStudentOfCourse:
-                self.DeleteStudentByID(student.IDThiSinh)
+                self.DeleteStudentByID(student.ID)
             courseRepo = KhoaThiRepository()
             courseRepo.xoaBanGhi( " IDKhoaThi = %s "%(objectInfo.courseID))
             messageSendToSocket = {
@@ -165,13 +165,13 @@ class ProcessReciptData(QObject):
 
         try:
             studentRepo = ThiSinhRepository()
-            studentRepo.xoaBanGhi(" ID = %s "%(ID))
+            studentRepo.xoaBanGhi(" ID = '%s' "%(ID))
             messageSendToSocket = {
                 "MAC":MAC,
                 "studentID":ID,
             }
             idAndFGPrepo = IDvaVanTayRepository()
-            idAndFGPrepo.xoaBanGhi(" ID = %s "%(ID))
+            idAndFGPrepo.xoaBanGhi(" ID = '%s' "%(ID))
             self.SignalDeleteFGPofStudent.emit(ID)
             self.SignalSendResultDeleteAndCheck.emit(json.dumps(messageSendToSocket), SERVER_REQUEST_DELETE_A_STUDENT)
         except:
@@ -474,6 +474,7 @@ class ProcessReciptData(QObject):
                 #npArrayImage = numpy.array(imagePil)
                 student.NhanDienKhuonMatStr = ""#GetFaceEncodingFromImage().GetFaceEncodingStr(npArrayImage)[0]
                 student.HoVaTen = self.__ConvertStringToUTF8String(lstStudentNumber[i].TraineeName)
+                student.SoCMTND = lstStudentNumber[i].SoCMT
                 student.IDKhoaThi = IDCourse
                 khoThiSinh.ghiDuLieu(student)
                 del student

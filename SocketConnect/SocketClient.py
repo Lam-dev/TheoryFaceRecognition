@@ -405,6 +405,10 @@ class SocketClient(QObject):
         resultFrame = self.__DungKhungGiaoTiep(self.__BuildResultToSend(ID, "", "FGP"), CODE_RESULT_RECOGNITION)
         self.__SendDataViaSocket(bytes(resultFrame))
 
+    def SendResultsCardrecognition(self, ID):
+        resultFrame = self.__DungKhungGiaoTiep(self.__BuildResultToSend(ID, "", "card"), CODE_RESULT_RECOGNITION)
+        self.__SendDataViaSocket(bytes(resultFrame))
+
 #endregion
     
     def SendAddFaceAndFGP(self, info):

@@ -16,6 +16,7 @@ from         SocketConnect.SocketClient         import SocketClient
 import       os
 from         FingerPrintSensor.FingerPrint      import Fingerprint
 from         Sound.OrangePiSound                import Sound
+from         WriteRFcard.ControlRFIDmodule   import ControlRFIDmudule
 import       json
 
 # from   Sound.Sound              import Sound
@@ -88,10 +89,14 @@ class MainWindow(QMainWindow):
         self.FGPobj = Fingerprint()
         self.FGPobj.SignalRecognizedFGP.connect(self.RecognizedFGP)
         self.FGPobj.BatLayVanTayDangNhap()
-
-        self.FGPobj.SignalFGPnotFind.connect(self.NotRecogniedFGP)
-
+        self.FGPobj.SignalFGPnotFind.connect(self.PlayNotRecognized)
         self.mainScreenObj.SignalCleanFGPsensor.connect(self.FGPobj.LamSachCamBien)
+
+        self.rfModuleObj = ControlRFIDmudule()
+        self.rfModuleObj.SignalRecognizedStudent.connect(self.RecognizedCard)
+        self.rfModuleObj.SignalNotReconizedStudent.connect(self.PlayNotRecognized)
+        self.rfModuleObj.lstStudent = self.lstStudent
+        
 
         self.__FlagUpdateScreenIsShow = False
         self.__FlagNeedWaitContinue = False
@@ -100,7 +105,7 @@ class MainWindow(QMainWindow):
 
         self.mainScreenObj.ShowCamera()
 
-    def NotRecogniedFGP(self):
+    def PlayNotRecognized(self):
         self.soundObj.ThreadPlayVuiLongThuLai()
 
     def DeleteAllData(self):
@@ -170,8 +175,15 @@ class MainWindow(QMainWindow):
             khoIDvaVanTay.ghiDuLieu(idVaVanTay)
             self.FGPobj.ThemIDvaVanTayVaoDanhSachDaLay(infoDict["idStudent"], viTri)
     
+    def RecognizedCard(self, student):
+        self.__OffCameraTemporary(recBy= "card")
+        self.mainScreenObj.ShowStudentInfomation(student)
+        self.socketObject.SendResultsCardrecognition(student.ID)
+        self.__SaveHistory("card", student.ID)
+        self.soundObj.ThreadPlayXinCamOn()
+
     def RecognizedFGP(self, studentID):
-        self.__OffCameraTemporary(faceRecognized= False)
+        self.__OffCameraTemporary(recBy= "fgp")
         for student in self.lstStudent:
             if(student.ID == studentID):
                 self.mainScreenObj.ShowStudentInfomation(student) 
@@ -302,7 +314,7 @@ class MainWindow(QMainWindow):
                 return
                 
     def __RecognizedStudent(self, studentObj, faceImageJpgData):
-        self.__OffCameraTemporary(faceRecognized= True)
+        self.__OffCameraTemporary(recBy= "face")
         self.soundObj.ThreadPlayXinCamOn()
         fp = open("imageTosend.jpg", 'wb')
         fp.write(faceImageJpgData)
@@ -311,12 +323,12 @@ class MainWindow(QMainWindow):
         # self.mainScreenObj.ShowFaceRecognizeOK()
         self.socketObject.SendResultsFaceRecognize(studentObj.ID, "T", "imageTosend.jpg")
 
-    def __OffCameraTemporary(self, faceRecognized = True, autoReopen = True):
+    def __OffCameraTemporary(self, recBy = "face", autoReopen = True):
         self.FGPobj.TatLayVanTayDangNhap()
         self.cameraObj.StopReadImage()
         # self.faceRecognitionObj.StopFaceTracking()
         self.faceRecognitionObj.StopFaceRecognize()
-        self.mainScreenObj.HideCamera(faceRecognized)
+        self.mainScreenObj.HideCamera(recBy)
         if(autoReopen):
             self.timerReopenReadCam.start(3000)
         

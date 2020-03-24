@@ -9,7 +9,7 @@
 import socket
 from   datetime     import datetime
 import json
-SERVER_IP                                           = "192.168.1.10"
+SERVER_IP                                           = "192.168.1.14"
 SERVER_PORT                                         = 2019
 import getmac
 def __DungKhungGiaoTiep(noiDung, malenh):
@@ -132,25 +132,26 @@ def ConvertStringToByteArray(string):
 
 # ####################Tạo frame trả lời ping và cập nhật giờ######################
 
-# dic = {
-#     "courseID": "1"
-# }
-# jsonStr = json.dumps(dic)
-# khungGui, tong = __DungKhungGiaoTiep(jsonStr, 11)
-# client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-# client.settimeout(1000)
-# client.connect((SERVER_IP, SERVER_PORT))
-# client.send(khungGui)
+dic = {
+    "courseID": 2226
+}
+jsonStr = json.dumps(dic)
+khungGui, tong = __DungKhungGiaoTiep(jsonStr, 9)
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client.settimeout(1000)
+client.connect((SERVER_IP, SERVER_PORT))
+client.send(khungGui)
 
 # ################################################################################
 ######################yeu cau client gui len danh sach hoc vien##################
 
 #################################################################################import time
-import pytz
-# named_tuple = time.localtime() # get struct_time
-# time_string = time.strftime("%m/%d/%Y, %H:%M:%S", named_tuple)
+# import pytz
+# # named_tuple = time.localtime() # get struct_time
+# # time_string = time.strftime("%m/%d/%Y, %H:%M:%S", named_tuple)
 
-# print(time_string)
-tz_HCM = pytz.timezone('Asia/Ho_Chi_Minh') 
-datetime_HCM = datetime.now(tz_HCM)
-print(datetime_HCM.strftime("%m/%d/%Y \n %H:%M:%S"))
+# # print(time_string)
+# tz_HCM = pytz.timezone('Asia/Ho_Chi_Minh') 
+# datetime_HCM = datetime.now(tz_HCM)
+# print(datetime_HCM.strftime("%m/%d/%Y \n %H:%M:%S"))
+

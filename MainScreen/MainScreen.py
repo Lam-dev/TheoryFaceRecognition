@@ -74,15 +74,18 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         self.timerFlickerWarning.timeout.connect(self.__FlickerWarning)
         self.iconFaceRecognized = QtGui.QPixmap("icon/iconFaceRecognized.png")
         self.iconFGPrecognized = QtGui.QPixmap("icon/iconFingerprintRecognitzed.png")
+        self.iconCardRecognized = QtGui.QPixmap("icon/cardIcon100.png")
         self.label_cty.setText(self.__ConvertStringToUTF8String(NAME_CENTER))
         self.label_cty_2.setText(self.__ConvertStringToUTF8String(NAME_DEVICE))
 
-    def HideCamera(self, faceRecognized = True):
+    def HideCamera(self, faceRecognized = "face"):
         self.label_showCamera.hide()
-        if(faceRecognized):
+        if(faceRecognized == "face"):
             self.label_forShowIconFaceRecognized.setPixmap(self.iconFaceRecognized)
-        else:
+        elif(faceRecognized == "fgp"):
             self.label_forShowIconFaceRecognized.setPixmap(self.iconFGPrecognized)
+        else:
+            self.label_forShowIconFaceRecognized.setPixmap(self.iconCardRecognized)
         # named_tuple = time.localtime()
         # time_string = time.strftime("%m/%d/%Y \n %H:%M:%S", named_tuple)
         tz_HCM = pytz.timezone('Asia/Ho_Chi_Minh') 

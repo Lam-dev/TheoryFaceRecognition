@@ -55,7 +55,12 @@ def GetEcotekServerSetting():
     except:
         return 0
 
-
+def GetUARTsetting():
+    try:
+        with open('../Setting/uartSetting.json') as json_file:
+            return json.load(json_file)
+    except:
+        return 0
             
 # UpdateServerImageDir("local/abde")
 # print(GetSetting("--ServerImageDir"))

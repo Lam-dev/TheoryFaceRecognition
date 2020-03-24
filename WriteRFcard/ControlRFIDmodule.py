@@ -16,14 +16,14 @@ class ControlRFIDmudule(QObject):
     def __init__(self):
         QObject.__init__(self)
         self.uartObject = UART()
-        self.uartObject.ThreadListenUART()
+        self.uartObject.StartTimerReadUARTdata()
         self.uartObject.SignalReciptedData.connect(self.ProcessReciptData)
         self.chuaXuLy = b''
         self.lstStudent = []
         
         ## Test""""""
-        self.timerSendWriteToCard = QTimer(self)
-        self.timerSendWriteToCard.timeout.connect(lambda:self.WriteIDcardNumberToRFcard("21212121"))
+        #self.timerSendWriteToCard = QTimer(self)
+        #self.timerSendWriteToCard.timeout.connect(lambda:self.WriteIDcardNumberToRFcard("21212121"))
         #self.timerSendWriteToCard.start(2000)
         
     def WriteIDcardNumberToRFcard(self, strNumber):

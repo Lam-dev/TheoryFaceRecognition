@@ -29,7 +29,7 @@ class UART(QObject):
             stopbits=serial.STOPBITS_ONE,
             bytesize=serial.EIGHTBITS,
             timeout= 0.8)
-        except NameError:
+        except:
             return False
 
     def ThreadListenUART(self):
@@ -49,7 +49,7 @@ class UART(QObject):
                             print("Khung Nhan = ", data)
                             self.SignalReciptedData.emit(data)
                             pass
-                    except NameError as e:
+                    except:
                         print(e)
 
     

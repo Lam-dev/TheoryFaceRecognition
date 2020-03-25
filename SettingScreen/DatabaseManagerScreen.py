@@ -191,7 +191,7 @@ class DatabaseManagerScreen(Ui_Frame_containDatabaseScreen, QObject):
 
         row = self.listWidget_showListStudent.currentRow()
         self.studentInfoObj.ShowStudentInformation(self.lstStudent[row])
-        #self.pushButton_nextStep.show()
+        self.pushButton_nextStep.show()
         self.addFaceObj.addForStudent = self.lstStudent[row]
         self.addFGPobj.studentForAdd = self.lstStudent[row]
         self.choseStudent = self.lstStudent[row]

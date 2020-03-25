@@ -27,7 +27,7 @@ class GetImageFromCamera(QObject):
         self.time = time
         self.toBeReadImage = False
         self.timerReadImage = QTimer(self)
-        self.timerReadImage.timeout.connect(self.__GetImageFromCamera)
+        self.timerReadImage.timeout.connect(self.__GetImageFromCamera) 
         self.labelObject = labelObject
         # self.StartReadImage()
 

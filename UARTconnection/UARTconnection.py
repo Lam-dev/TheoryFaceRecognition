@@ -9,7 +9,9 @@ uartSettingDict = GetSetting.GetUARTsetting()
 try:    
     UART_PORT = uartSettingDict["UARTport"]
     UART_SPEED = uartSettingDict["baudrate"]
+    print(UART_PORT)
 except:
+    print("doc loi")
     pass
 
 class UART(QObject):
@@ -70,6 +72,7 @@ class UART(QObject):
             print("Khung Nhan = ", data)
             self.SignalReciptedData.emit(data)
         except:
+            print("khong duoc")
             self.serObj = self.__UARTinit()
 
 

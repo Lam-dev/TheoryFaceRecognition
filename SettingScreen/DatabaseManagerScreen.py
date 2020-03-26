@@ -8,6 +8,7 @@ from SettingScreen.StepShowStudentInformation import StepShowStudentInformation
 from SettingScreen.AddFace                    import AddFaceScreen
 from SettingScreen.AddFGP                     import AddFGP
 from SettingScreen.AddDataResult              import AddDataResults
+from SettingScreen.WriteCard                  import WriteCard
 
 
 class DatabaseManagerScreen(Ui_Frame_containDatabaseScreen, QObject):
@@ -15,6 +16,7 @@ class DatabaseManagerScreen(Ui_Frame_containDatabaseScreen, QObject):
     SignalAddFaceEncodeAndFGP = pyqtSignal(dict, dict)
     SignalDeleteFaceAdded = pyqtSignal(str)
     SignalDeleteFGPadded = pyqtSignal(str)
+    SignalWriteToCard = pyqtSignal(str, object)
 
     def __init__(self, frameContain):
         Ui_Frame_containDatabaseScreen.__init__(self)
@@ -60,6 +62,11 @@ class DatabaseManagerScreen(Ui_Frame_containDatabaseScreen, QObject):
         self.addFaceObj = AddFaceScreen(self.frameContainAddFace)
         self.addFaceObj.SignalGrappedImage.connect(self.GrappedFaceImage)
         self.choseStudent = object
+
+        self.frameContainWriteCardScreen = QtWidgets.QFrame(self.frame_containAddInformationStep)
+        self.frameContainWriteCardScreen.setGeometry(QtCore.QRect(self.frame_containAddInformationStep.width(), 0, 0, 0))
+        self.writeCardObj = WriteCard(self.frameContainWriteCardScreen)
+        self.writeCardObj.SignalWriteToCard.connect(self.SignalWriteToCard)
 
         self.faceAdded = object
         self.FGPadded = object
@@ -149,8 +156,12 @@ class DatabaseManagerScreen(Ui_Frame_containDatabaseScreen, QObject):
             self.currentStep = 3
             self.Step3HightLight()
             self.addFGPobj.StopReciptFGP()
-            self.pushButton_nextStep.setText("Hoàn tất")
-            
+            self.pushButton_nextStep.setText("Ghi thẻ")
+
+        elif(self.currentStep == 3):
+            self.writeCardObj.ShowStepStudentInformationAnim(self.frameContainAddFace)
+            self.currentStep = 4
+
         else:
             self.currentStep == 1
             faceEncodeDict = self.addFaceObj.GetFaceEncodingImageGrapped()
@@ -166,16 +177,26 @@ class DatabaseManagerScreen(Ui_Frame_containDatabaseScreen, QObject):
         self.label_step1HighLight.setStyleSheet("background-color: rgb(0, 170, 127);border-radius:7px")
         self.label_step2HighLight.setStyleSheet("border-radius:7px;border-color:rgb(0, 170, 255);border-width:2px")
         self.label_step3HighLight.setStyleSheet("border-radius:7px;border-color:rgb(0, 170, 255);border-width:2px")
+        self.label_step4HighLight.setStyleSheet("border-radius:7px;border-color:rgb(0, 170, 255);border-width:2px")
 
     def Step2HightLight(self):
         self.label_step2HighLight.setStyleSheet("background-color: rgb(0, 170, 127);border-radius:7px")
         self.label_step1HighLight.setStyleSheet("border-radius:7px;border-color:rgb(0, 170, 255);border-width:2px")
         self.label_step3HighLight.setStyleSheet("border-radius:7px;border-color:rgb(0, 170, 255);border-width:2px")
+        self.label_step4HighLight.setStyleSheet("border-radius:7px;border-color:rgb(0, 170, 255);border-width:2px")
 
     def Step3HightLight(self):
         self.label_step3HighLight.setStyleSheet("background-color: rgb(0, 170, 127);border-radius:7px")
         self.label_step1HighLight.setStyleSheet("border-radius:7px;border-color:rgb(0, 170, 255);border-width:2px")
         self.label_step2HighLight.setStyleSheet("border-radius:7px;border-color:rgb(0, 170, 255);border-width:2px")
+        self.label_step4HighLight.setStyleSheet("border-radius:7px;border-color:rgb(0, 170, 255);border-width:2px")
+
+    def Step4HidghtLight(self):
+        self.label_step3HighLight.setStyleSheet("border-radius:7px;border-color:rgb(0, 170, 255);border-width:2px")
+        self.label_step1HighLight.setStyleSheet("border-radius:7px;border-color:rgb(0, 170, 255);border-width:2px")
+        self.label_step2HighLight.setStyleSheet("border-radius:7px;border-color:rgb(0, 170, 255);border-width:2px")
+        self.label_step4HighLight.setStyleSheet("background-color: rgb(0, 170, 127);border-radius:7px")
+
 
     def ChooseStudent(self):
         if(self.currentStep != 1):
@@ -195,6 +216,7 @@ class DatabaseManagerScreen(Ui_Frame_containDatabaseScreen, QObject):
         self.addFaceObj.addForStudent = self.lstStudent[row]
         self.addFGPobj.studentForAdd = self.lstStudent[row]
         self.choseStudent = self.lstStudent[row]
+        self.writeCardObj.SetNumberToWriteCard(self.choseStudent.SoCMTND)
 
     def __ReturnStep1(self):
         if(self.currentStep != 1):

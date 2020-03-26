@@ -86,10 +86,10 @@ class Ui_Frame_containDatabaseScreen(object):
         self.label_3.setGeometry(QtCore.QRect(46, 6, 207, 17))
         self.label_3.setObjectName("label_3")
         self.lineEdit_forInputTextToSearch = QtWidgets.QLineEdit(self.frame_3)
-        self.lineEdit_forInputTextToSearch.setGeometry(QtCore.QRect(56, 310, 219, 27))
+        self.lineEdit_forInputTextToSearch.setGeometry(QtCore.QRect(56, 310, 221, 35))
         self.lineEdit_forInputTextToSearch.setObjectName("lineEdit_forInputTextToSearch")
         self.label_forShowIconSearch = QtWidgets.QLabel(self.frame_3)
-        self.label_forShowIconSearch.setGeometry(QtCore.QRect(14, 308, 31, 29))
+        self.label_forShowIconSearch.setGeometry(QtCore.QRect(12, 312, 31, 29))
         self.label_forShowIconSearch.setObjectName("label_forShowIconSearch")
         self.listWidget_showListStudent = QtWidgets.QListWidget(self.frame_3)
         self.listWidget_showListStudent.setGeometry(QtCore.QRect(14, 42, 261, 261))
@@ -106,7 +106,7 @@ class Ui_Frame_containDatabaseScreen(object):
         self.frame_containAddInformationStep.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_containAddInformationStep.setObjectName("frame_containAddInformationStep")
         self.horizontalLayoutWidget = QtWidgets.QWidget(self.frame_containAddInformationStep)
-        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(208, 392, 91, 23))
+        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(196, 388, 129, 19))
         self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
@@ -132,15 +132,37 @@ class Ui_Frame_containDatabaseScreen(object):
         self.label_step3HighLight.setText("")
         self.label_step3HighLight.setObjectName("label_step3HighLight")
         self.horizontalLayout.addWidget(self.label_step3HighLight)
+        self.label_step4HighLight = QtWidgets.QLabel(self.horizontalLayoutWidget)
+        self.label_step4HighLight.setStyleSheet("border-radius:7px;\n"
+"border-color:rgb(0, 170, 255);\n"
+"border-width:2px")
+        self.label_step4HighLight.setText("")
+        self.label_step4HighLight.setObjectName("label_step4HighLight")
+        self.horizontalLayout.addWidget(self.label_step4HighLight)
         self.frame = QtWidgets.QFrame(self.frame_containAddInformationStep)
         self.frame.setGeometry(QtCore.QRect(-2, 0, 493, 373))
         self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame.setObjectName("frame")
         self.pushButton_nextStep = QtWidgets.QPushButton(self.frame_containAddInformationStep)
-        self.pushButton_nextStep.setGeometry(QtCore.QRect(360, 374, 123, 45))
-        self.pushButton_nextStep.setStyleSheet("background-color: rgb(0, 135, 202);")
+        self.pushButton_nextStep.setGeometry(QtCore.QRect(360, 372, 123, 47))
+        self.pushButton_nextStep.setStyleSheet("background-color: rgba(85, 255, 255, 70);\n"
+"font: 75 bold 12pt \"Ubuntu\";\n"
+"border-radius:5px;\n"
+"border-color:rgb(33, 148, 255);\n"
+"border-width:1px;\n"
+"border-style:solid;")
         self.pushButton_nextStep.setObjectName("pushButton_nextStep")
+        self.pushButton_preStep = QtWidgets.QPushButton(self.frame_containAddInformationStep)
+        self.pushButton_preStep.setGeometry(QtCore.QRect(36, 372, 123, 47))
+        self.pushButton_preStep.setStyleSheet("background-color: rgba(85, 255, 255, 70);\n"
+"font: 75 20pt \"Ubuntu\";\n"
+"border-radius:5px;\n"
+"border-color:rgb(33, 148, 255);\n"
+"border-width:1px;\n"
+"border-style:solid;")
+        self.pushButton_preStep.setText("")
+        self.pushButton_preStep.setObjectName("pushButton_preStep")
 
         self.retranslateUi(Frame_containDatabaseScreen)
         QtCore.QMetaObject.connectSlotsByName(Frame_containDatabaseScreen)

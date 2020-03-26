@@ -39,6 +39,7 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
     SignalShutdown = pyqtSignal()
     SignalCloseELT = pyqtSignal()
     SignalDeleteAllData = pyqtSignal()
+    SignalWriteToCard = pyqtSignal(str, object)
 
     def __init__(self, MainWindow):
         QObject.__init__(self)
@@ -302,7 +303,7 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         self.databaseScreenObj.SignalCloseDatabaseScreen.connect(self.CloseDatabaseScreen)
         self.databaseScreenObj.SignalDeleteFaceAdded.connect(self.SignalDeleteFaceAdded.emit)
         self.databaseScreenObj.SignalDeleteFGPadded.connect(self.SignalDeleteFGPadded.emit)
-
+        self.databaseScreenObj.SignalWriteToCard.connect(self.SignalWriteToCard.emit)
 
         self.frameContainDatabaseScreen.show()
         self.frameContainDatabaseScreen.raise_()

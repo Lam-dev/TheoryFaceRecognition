@@ -196,16 +196,16 @@ border-radius:3px;</string>
      <rect>
       <x>56</x>
       <y>310</y>
-      <width>219</width>
-      <height>27</height>
+      <width>221</width>
+      <height>35</height>
      </rect>
     </property>
    </widget>
    <widget class="QLabel" name="label_forShowIconSearch">
     <property name="geometry">
      <rect>
-      <x>14</x>
-      <y>308</y>
+      <x>12</x>
+      <y>312</y>
       <width>31</width>
       <height>29</height>
      </rect>
@@ -233,7 +233,7 @@ border-radius:3px;</string>
      </size>
     </property>
     <property name="spacing">
-     <number>5</number>
+     <number>15</number>
     </property>
     <property name="batchSize">
      <number>100</number>
@@ -263,13 +263,13 @@ border-radius:3px;</string>
    <widget class="QWidget" name="horizontalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>210</x>
-      <y>392</y>
-      <width>89</width>
+      <x>196</x>
+      <y>388</y>
+      <width>129</width>
       <height>19</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0">
+    <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0,0">
      <property name="spacing">
       <number>20</number>
      </property>
@@ -308,6 +308,18 @@ border-width:2px</string>
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QLabel" name="label_step4HighLight">
+       <property name="styleSheet">
+        <string notr="true">border-radius:7px;
+border-color:rgb(0, 170, 255);
+border-width:2px</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
     </layout>
    </widget>
    <widget class="QFrame" name="frame">
@@ -330,16 +342,42 @@ border-width:2px</string>
     <property name="geometry">
      <rect>
       <x>360</x>
-      <y>374</y>
+      <y>372</y>
       <width>123</width>
-      <height>45</height>
+      <height>47</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(0, 135, 202);</string>
+     <string notr="true">background-color: rgba(85, 255, 255, 70);
+font: 75 bold 12pt &quot;Ubuntu&quot;;
+border-radius:5px;
+border-color:rgb(33, 148, 255);
+border-width:1px;
+border-style:solid;</string>
     </property>
     <property name="text">
      <string>Thêm vân tay</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_preStep">
+    <property name="geometry">
+     <rect>
+      <x>36</x>
+      <y>372</y>
+      <width>123</width>
+      <height>47</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgba(85, 255, 255, 70);
+font: 75 20pt &quot;Ubuntu&quot;;
+border-radius:5px;
+border-color:rgb(33, 148, 255);
+border-width:1px;
+border-style:solid;</string>
+    </property>
+    <property name="text">
+     <string/>
     </property>
    </widget>
   </widget>

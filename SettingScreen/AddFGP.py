@@ -11,7 +11,7 @@ class AddFGP(Ui_Frame_AddFGP, QObject):
         Ui_Frame_AddFGP.__init__(self)
         QObject.__init__(self)
         self.setupUi(frameContain)
-        self.label_forShowIconAddFingerPrint.setPixmap(QtGui.QPixmap("icon/iconFGPtouch.png"))
+        # self.label_forShowIconAddFingerPrint.setPixmap(QtGui.QPixmap("icon/iconFGPtouch.png"))
         self.frameContainCurrentStep = frameContain
         self.frameContainCurrentStep.show()
         
@@ -23,23 +23,30 @@ class AddFGP(Ui_Frame_AddFGP, QObject):
         self.timerHoldHandAnounment = QTimer(self)
         self.timerHoldHandAnounment.timeout.connect(self.HoldHandAnounment)
 
-        self.feature = False
-        self.pos = False
+        self.pushButton_addFGP.clicked.connect(self.StartReciptFGP)
+
+        self.lstFeature = []
+        self.lstPos = []
+
+        self.numberFGPadded = 0
 
     def ClearAddAdded(self):
-        self.feature = False
-        self.pos = False
-     
+        self.lstFeature.clear()
+        self.lstPos.clear()
+        self.numberFGPadded = 0
+
     def FGPsavedInSensor(self, pos, feature):
         
-        self.pos = pos
-        self.feature = feature
+        self.lstFeature.append(feature)
+        self.lstPos.append(pos)
+
         self.SignalAddedFGP.emit()
         self.timerHoldHandAnounment.stop()
         self.FGPsensorObj.TatThemVanTay()
+        self.numberFGPadded += 1
+        self.label_numberFGPadded.setText(str(self.numberFGPadded))
         self.label_forShowAnoument.setStyleSheet('color: rgb(0, 170, 0);\nfont: 75 bold 14pt "Ubuntu";')
         self.label_forShowAnoument.setText("ĐÃ NHẬN ĐƯỢC VÂN TAY")
-
 
     def GetFGPsavePosAndFeature(self):
         infoDict = {

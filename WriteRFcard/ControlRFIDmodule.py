@@ -20,20 +20,36 @@ class ControlRFIDmudule(QObject):
         self.uartObject.SignalReciptedData.connect(self.ProcessReciptData)
         self.chuaXuLy = b''
         self.lstStudent = []
-        
+
+        self.timerWriteToCard = QTimer(self)
+        self.timerWriteToCard.timeout.connect(lambda: self.SendRequestWriteToRFcard(self.lstByteWriteToCard))
         ## Test""""""
         #self.timerSendWriteToCard = QTimer(self)
         #self.timerSendWriteToCard.timeout.connect(lambda:self.WriteIDcardNumberToRFcard("21212121"))
         #self.timerSendWriteToCard.start(2000)
-        
-    def WriteIDcardNumberToRFcard(self, strNumber):
+        self.lstByteWriteToCard = []
+        self.callbackWriteNotify = object
+        self.numberStrToSend = ""
+
+    def WriteIDcardNumberToRFcard(self, strNumber, callback):
         self.timerSendWriteToCard.stop()
         lstByte = []
         for charNumber in strNumber:
             lstByte.append(ord(charNumber))
                  
-        self.SendRequestWriteToRFcard(lstByte)
+        #self.SendRequestWriteToRFcard(lstByte)
 
+    def SetIDcarNumberToWriteToRFcard(self, strNumber, callback):
+        self.lstByteWriteToCard.clear()
+        for charNumber in strNumber:
+            self.lstByteWriteToCard.append(ord(charNumber))
+        self.callbackWriteNotify = callback
+
+    def StartWriteIDcardNumberToRFcard(self):
+        self.timerWriteToCard.start(1000)
+
+    def StopWriteIDcardNumberToRFcard(self):
+        self.timerWriteToCard.stop()
 
     """
     Tach xu ly du lieu nhan
@@ -55,7 +71,10 @@ class ControlRFIDmudule(QObject):
             elif(code == CODE_RESQUEST_WRITE_DATA_TO_CARD):
                 pass
             elif(code == CODE_WRITE_SUCCESSFUL):
-                pass
+                try:
+                    pass
+                except:
+                    pass
             elif(code == CODE_WRITE_FAIL):
                 pass
         except NameError as e:

@@ -24,11 +24,18 @@ class AddFGP(Ui_Frame_AddFGP, QObject):
         self.timerHoldHandAnounment.timeout.connect(self.HoldHandAnounment)
 
         self.pushButton_addFGP.clicked.connect(self.StartReciptFGP)
+        self.pushButton_deleteAllFeature.clicked.connect(self.DeleteAllFeature)
 
         self.lstFeature = []
         self.lstPos = []
 
         self.numberFGPadded = 0
+
+    def DeleteAllFeature(self):
+        self.numberFGPadded = 0
+        self.label_numberFGPadded.setText(str(self.numberFGPadded))
+        self.lstFeature.clear()
+        self.lstPos.clear()
 
     def ClearAddAdded(self):
         self.lstFeature.clear()
@@ -42,18 +49,41 @@ class AddFGP(Ui_Frame_AddFGP, QObject):
 
         self.SignalAddedFGP.emit()
         self.timerHoldHandAnounment.stop()
-        self.FGPsensorObj.TatThemVanTay()
+        self.StopReciptFGP()
         self.numberFGPadded += 1
         self.label_numberFGPadded.setText(str(self.numberFGPadded))
         self.label_forShowAnoument.setStyleSheet('color: rgb(0, 170, 0);\nfont: 75 bold 14pt "Ubuntu";')
         self.label_forShowAnoument.setText("ĐÃ NHẬN ĐƯỢC VÂN TAY")
 
     def GetFGPsavePosAndFeature(self):
-        infoDict = {
-            "FGPsavePos":self.pos,
-            "FGPfeature":self.feature
-        }
-        return infoDict
+        try:
+            if(self.lstPos.__len__() == 0):
+                return None
+            allFeatureStr = ""
+            for feature in self.lstFeature:
+                allFeatureStr += ";"
+                allFeatureStr += self.__ConvertIntList2Str(feature)
+
+            
+            infoDict = {
+                "ListPos":self.lstPos,
+                "AllFeatureStr": allFeatureStr
+            }
+            return infoDict
+
+        except:
+            infoDict = {
+                "ListPos":"",
+                "AllFeatureStr":""
+            }
+            return infoDict
+    """
+    noi mot mang int thanh mot chuoi str cac phan tu ngan cach bang dau ,
+    """
+    def __ConvertIntList2Str(self, intList):
+        strLst = [str(elem) for elem in intList]
+        return ",".join(strLst)
+
 
     def HandPushed(self):
         self.label_forShowAnoument.setText("GIỮ TAY TRÊN CẢM BIẾN")
@@ -81,6 +111,8 @@ class AddFGP(Ui_Frame_AddFGP, QObject):
         self.currentStepToLeftAnim.start()
 
     def StartReciptFGP(self):
+        self.label_forShowAnoument.setStyleSheet('color: rgb(170, 0, 0);\nfont: 75 bold 14pt "Ubuntu";')
+        self.label_forShowAnoument.setText("ĐẶT TAY LÊN CẢM BIẾN")
         self.FGPsensorObj.BatThemVanTay()
 
     def StopReciptFGP(self):

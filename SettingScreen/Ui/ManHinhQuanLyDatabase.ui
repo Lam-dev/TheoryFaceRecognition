@@ -265,8 +265,8 @@ border-radius:3px;</string>
      <rect>
       <x>196</x>
       <y>388</y>
-      <width>129</width>
-      <height>19</height>
+      <width>125</width>
+      <height>17</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0,0">
@@ -325,8 +325,8 @@ border-width:2px</string>
    <widget class="QFrame" name="frame">
     <property name="geometry">
      <rect>
-      <x>-2</x>
-      <y>0</y>
+      <x>0</x>
+      <y>2</y>
       <width>493</width>
       <height>373</height>
      </rect>
@@ -377,7 +377,11 @@ border-width:1px;
 border-style:solid;</string>
     </property>
     <property name="text">
-     <string/>
+     <string>aaaaa</string>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>../../icon/iconFail.png</normaloff>../../icon/iconFail.png</iconset>
     </property>
    </widget>
   </widget>

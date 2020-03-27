@@ -30,14 +30,23 @@ class AddFaceScreen(Ui_Frame_AddFace, QObject):
         self.countdownTime = 3
 
     def GetFaceEncodingImageGrapped(self):
-        faceEcodingStr, faceEncodingArr = GetFaceEncodingFromImage().GetFaceEncodingStr(self.imageGrapped)
-        faceInfoDict = {
-            "image":self.imageGrapped,
-            "faceEncodingStr":faceEcodingStr,
-            "faceEncodingArr": faceEncodingArr,
-            "student":self.addForStudent
-        }
-        return faceInfoDict
+        try:
+            faceEcodingStr, faceEncodingArr = GetFaceEncodingFromImage().GetFaceEncodingStr(self.imageGrapped)
+            faceInfoDict = {
+                "image":self.imageGrapped,
+                "faceEncodingStr":faceEcodingStr,
+                "faceEncodingArr": faceEncodingArr,
+                "student":self.addForStudent
+            }
+            return faceInfoDict
+        except:
+            faceInfoDict = {
+                "image":"",
+                "faceEncodingStr":"",
+                "faceEncodingArr":"",
+                "student":self.addForStudent
+            }
+            return faceInfoDict
 
     def CountDown(self):
         if(self.countdownTime == 0):

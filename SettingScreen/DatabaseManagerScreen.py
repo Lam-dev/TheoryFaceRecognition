@@ -2,6 +2,7 @@ from PyQt5                  import QtCore, QtGui, QtWidgets
 from PyQt5                  import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui            import QIcon, QPixmap
 from PyQt5.QtCore           import pyqtSlot, pyqtSignal,QTimer, QDateTime, Qt, QObject, QPointF, QPropertyAnimation, pyqtProperty
+import threading
 from SettingScreen.DatabaseManagerScreenUI    import Ui_Frame_containDatabaseScreen
 from DatabaseAccess.DatabaseAccess            import *  
 from SettingScreen.StepShowStudentInformation import StepShowStudentInformation
@@ -9,7 +10,7 @@ from SettingScreen.AddFace                    import AddFaceScreen
 from SettingScreen.AddFGP                     import AddFGP
 from SettingScreen.AddDataResult              import AddDataResults
 from SettingScreen.WriteCard                  import WriteCard
-
+from DialogScreen.WaitToSaveDialog            import WaitToSaveDialog
 
 class DatabaseManagerScreen(Ui_Frame_containDatabaseScreen, QObject):
     SignalCloseDatabaseScreen = pyqtSignal()
@@ -17,6 +18,8 @@ class DatabaseManagerScreen(Ui_Frame_containDatabaseScreen, QObject):
     SignalDeleteFaceAdded = pyqtSignal(str)
     SignalDeleteFGPadded = pyqtSignal(str)
     SignalWriteToCard = pyqtSignal(str, object)
+    __SignalShowDialogWaitToSave = pyqtSignal()
+    __SignalCloseDialog = pyqtSignal()
 
     def __init__(self, frameContain):
         Ui_Frame_containDatabaseScreen.__init__(self)
@@ -28,6 +31,7 @@ class DatabaseManagerScreen(Ui_Frame_containDatabaseScreen, QObject):
         self.pushButton_nextStep.clicked.connect(self.NextStep)
         self.pushButton_nextStep.hide()
 
+        self.__SignalCloseDialog.connect(self.__CloseWaitToSaveDialog)
         # self.pushButton_preStep.clicked.connect(self.PreStep)
         #self.pushButton_preStep.hide()
 
@@ -72,6 +76,10 @@ class DatabaseManagerScreen(Ui_Frame_containDatabaseScreen, QObject):
         self.FGPadded = object
 
         self.currentStep = 1
+
+    def __CloseWaitToSaveDialog(self):
+        self.dialogWaitToSave.CloseDialog()
+        self.dialogWaitToSave.deleteLater()
 
     def __DeleteFaceAdded(self):
         try:
@@ -161,17 +169,30 @@ class DatabaseManagerScreen(Ui_Frame_containDatabaseScreen, QObject):
         elif(self.currentStep == 3):
             self.writeCardObj.ShowStepStudentInformationAnim(self.frameContainAddFace)
             self.currentStep = 4
+            self.pushButton_nextStep.setText("Lưu")
 
         else:
-            self.currentStep == 1
-            faceEncodeDict = self.addFaceObj.GetFaceEncodingImageGrapped()
-            FGPdict = self.addFGPobj.GetFGPsavePosAndFeature()
-            self.SignalAddFaceEncodeAndFGP.emit(faceEncodeDict, FGPdict)
-            return
+            thread = threading.Thread(target=self.ProcessAndSaveData, args=(), daemon= True)
+            thread.start()
+            self.dialogWaitToSave = WaitToSaveDialog()
+            self.dialogWaitToSave.ShowDialog()
+            self.studentInfoObj.ShowStepStudentInformationAnim(self.frameContainWriteCardScreen)
+            
+            # self.currentStep == 1
+            # faceEncodeDict = self.addFaceObj.GetFaceEncodingImageGrapped()
+            # FGPdict = self.addFGPobj.GetFGPsavePosAndFeature()
+            # self.SignalAddFaceEncodeAndFGP.emit(faceEncodeDict, FGPdict)
+            # return
             # self.addFaceObj.StopCamera()
-            # self.studentInfoObj.ShowStepStudentInformationAnim(self.frameContainAddFace)
+            
             # self.currentStep = 1
             # self.Step1HightLight()
+
+    def ProcessAndSaveData(self):
+        faceEncodeDict = self.addFaceObj.GetFaceEncodingImageGrapped()
+        FGPdict = self.addFGPobj.GetFGPsavePosAndFeature()
+        self.SignalAddFaceEncodeAndFGP.emit(faceEncodeDict, FGPdict)
+        self.__SignalCloseDialog.emit()
 
     def Step1HightLight(self):
         self.label_step1HighLight.setStyleSheet("background-color: rgb(0, 170, 127);border-radius:7px")

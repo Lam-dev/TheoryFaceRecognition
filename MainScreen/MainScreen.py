@@ -256,7 +256,7 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         self.settingScreenObj.SignalCheckVersion.connect(self.ShowVersionCheckScreen)
         self.settingScreenObj.SignalShutdown.connect(self.SignalShutdown.emit)
         self.settingScreenObj.SignalDeleteAllData.connect(self.SignalDeleteAllData.emit)
-
+        
         self.settingScreenShadow.show()
         self.settingScreenShadow.raise_()
     

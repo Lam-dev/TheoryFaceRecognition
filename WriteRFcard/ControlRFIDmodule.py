@@ -30,6 +30,7 @@ class ControlRFIDmudule(QObject):
         self.lstByteWriteToCard = []
         self.callbackWriteNotify = object
         self.numberStrToSend = ""
+        self.flagStopReadDataInCard = False
 
     def WriteIDcardNumberToRFcard(self, strNumber, callback):
         self.timerSendWriteToCard.stop()
@@ -59,28 +60,37 @@ class ControlRFIDmudule(QObject):
         for frame in lstFrame:
             self.SwitchRequest(frame)
 
+    def StopReadDataInCard(self):
+        self.flagStopReadDataInCard = True
+
+    def StartReadDataInCard(self):
+        self.flagStopReadDataInCard = False
+    
     def SwitchRequest(self, frame):
         try:
             data, code = self.__CatLayPhanDataTrongFrame(frame)
             #reciptObj = self.json2obj(data)
 
             if(code == CODE_DATA_IN_CARD):
-                self.SearchStudent(data)
+                if(not self.flagStopReadDataInCard):
+                    self.SearchStudent(data)
             elif(code == CODE_NOT_CARD):
                 pass
             elif(code == CODE_RESQUEST_WRITE_DATA_TO_CARD):
                 pass
             elif(code == CODE_WRITE_SUCCESSFUL):
-                try:
-                    pass
-                except:
-                    pass
+                self.RFmoduleWriteCardSuccess()
+
             elif(code == CODE_WRITE_FAIL):
                 pass
         except NameError as e:
             print(e)
             pass
     
+    def RFmoduleWriteCardSuccess(self):
+        self.StopWriteIDcardNumberToRFcard()
+        self.callbackWriteNotify()
+
     def SearchStudent(self, data):
         IDcardNumber = self.ConvertListByteToString(data)
         if(type(IDcardNumber) is bool):

@@ -22,6 +22,7 @@ class WriteCard(Ui_Frame, QObject):
         self.strNumber = strNumber
 
     def WriteToCard(self):
+        self.PutCardToDeviceNotify()
         self.SignalWriteToCard.emit(self.strNumber, self.WritedNotify)
 
     def PutCardToDeviceNotify(self):

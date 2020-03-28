@@ -160,6 +160,7 @@ class MainWindow(QMainWindow):
             self.lstStudent = GetDataFromDatabase().GetListStudent()
             self.faceRecognitionObj.SetListStudent(self.lstStudent)
             self.FGPobj.LayDanhSachIDvaVanTay()
+            
             self.timerWaitForUpdateData.stop()
             self.mainScreenObj.HideWaitForUpdateScreen()
             self.__FlagUpdateScreenIsShow = False

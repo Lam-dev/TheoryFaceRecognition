@@ -83,7 +83,7 @@ class ControlRFIDmudule(QObject):
 
             elif(code == CODE_WRITE_FAIL):
                 pass
-        except NameError as e:
+        except:
             print(e)
             pass
     

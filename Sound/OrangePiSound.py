@@ -6,6 +6,7 @@ from    PyQt5.QtCore   import QTimer, QObject
 fileXinCamOnPath = 'Sound/AudioFile/xinCamOn.wav'
 fileVuiLongThuLaiPath = 'Sound/AudioFile/vuiLongThuLai.wav'
 fileTemp = 'Sound/AudioFile/temp.wav'
+fileBip = 'Sound/AudioFile/bip.wav'
 
 class Sound(QObject):
 
@@ -14,11 +15,19 @@ class Sound(QObject):
         self.waveXinCamOn = sa.WaveObject.from_wave_file(fileXinCamOnPath)
         self.waveVuiLongThuLai = sa.WaveObject.from_wave_file(fileVuiLongThuLaiPath)
         self.waveTemp = sa.WaveObject.from_wave_file(fileTemp)
+        self.waveBip = sa.WaveObject.from_wave_file(fileBip)
         self.ThreadPlayTemp()
         self.timerPlayTemp = QTimer(self)
         self.timerPlayTemp.start(240000)
         self.timerPlayTemp.timeout.connect(self.ThreadPlayTemp)
 
+    def __PlayBip(self):
+        playSound = self.waveBip.play()
+        playSound.wait_done()
+
+    def ThreadPlayBip(self):
+        thread = threading.Thread(target=self.__PlayBip, args=(), daemon=True)
+        thread.start()
 
     def __PlayTemp(self):
         playSound = self.waveTemp.play()

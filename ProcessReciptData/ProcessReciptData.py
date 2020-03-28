@@ -255,7 +255,7 @@ class ProcessReciptData(QObject):
             self.SignalUpdateDataBaseSuccess.emit(listHocVien)
 
         except:
-            print(e)
+
             pass
 # #endregion 
         # try:

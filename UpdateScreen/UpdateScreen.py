@@ -114,7 +114,7 @@ class UpdateScreen(QObject, Ui_FrameContainUpdateScreen):
                     hocVien.MaDK = imageName
                     listHocVien.append(hocVien)
 
-                except NameError as e:
+                except:
                     print(imageName)
                     self.__CountUpNumberStudentError()
             khoThiSinh = ThiSinhRepository()
@@ -137,8 +137,7 @@ class UpdateScreen(QObject, Ui_FrameContainUpdateScreen):
             # GetSetting.UpdateServerImageDir(FTP_FILE_PATH_TO_UPLOAD)
             # self.SignalUpdateDataBaseSuccess.emit(listHocVien)
 
-        except NameError as e:
-            print(e)
+        except:
             pass
     
     

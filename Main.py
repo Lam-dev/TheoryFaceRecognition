@@ -91,6 +91,7 @@ class MainWindow(QMainWindow):
         self.FGPobj.SignalRecognizedFGP.connect(self.RecognizedFGP)
         self.FGPobj.BatLayVanTayDangNhap()
         self.FGPobj.SignalFGPnotFind.connect(self.PlayNotRecognized)
+        self.FGPobj.SignalHandPushed.connect(self.PlayBip)
         self.mainScreenObj.SignalCleanFGPsensor.connect(self.FGPobj.LamSachCamBien)
 
         self.rfModuleObj = ControlRFIDmudule()
@@ -106,9 +107,13 @@ class MainWindow(QMainWindow):
 
         self.mainScreenObj.ShowCamera()
 
+
     def WriteNumberToCard(self, strNumber, callback):
         self.rfModuleObj.SetIDcarNumberToWriteToRFcard(strNumber, callback)
         self.rfModuleObj.StartWriteIDcardNumberToRFcard()
+
+    def PlayBip(self):
+        self.soundObj.ThreadPlayBip()
 
     def PlayNotRecognized(self):
         self.soundObj.ThreadPlayVuiLongThuLai()
@@ -159,6 +164,7 @@ class MainWindow(QMainWindow):
         else:
             self.lstStudent = GetDataFromDatabase().GetListStudent()
             self.faceRecognitionObj.SetListStudent(self.lstStudent)
+            self.rfModuleObj.lstStudent = self.lstStudent
             self.FGPobj.LayDanhSachIDvaVanTay()
             self.rfModuleObj.lstStudent = self.lstStudent
             self.timerWaitForUpdateData.stop()

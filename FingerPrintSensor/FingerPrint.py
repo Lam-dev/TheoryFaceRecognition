@@ -173,6 +173,7 @@ class Fingerprint(QObject):
         
         try:
             if(self.fingerprintObj.readImage()):
+                self.SignalHandPushed.emit()
                 self.fingerprintObj.convertImage(0x01)
                 
                 ketqua = self.fingerprintObj.searchTemplate()
@@ -186,6 +187,7 @@ class Fingerprint(QObject):
                 self.SignalFGPnotFind.emit()
 
         except:
+            self.fingerprintObj = PyFingerprint(self.port, self.baudRate, self.address, self.password)
             pass
         self.FlagFGPfree = True
 

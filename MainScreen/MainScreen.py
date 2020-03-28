@@ -91,7 +91,7 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         # time_string = time.strftime("%m/%d/%Y \n %H:%M:%S", named_tuple)
         tz_HCM = pytz.timezone('Asia/Ho_Chi_Minh') 
         datetime_HCM = datetime.now(tz_HCM)
-        time_string = datetime_HCM.strftime("%m/%d/%Y \n %H:%M:%S")
+        time_string = datetime_HCM.strftime("%d/%m/%Y \n %H:%M:%S")
         self.label_forShowTimeRecognized.setText(time_string)
     
     def ShowCamera(self):
@@ -172,18 +172,22 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
             self.label_textWarning.hide()
 
     def ShowStudentInfomation(self, student):
-        image = Image.open(io.BytesIO(student.AnhDangKy))
-        # im_data = ImageQt._toqclass_helper(image)
-        # pixmap = QPixmap(im_data['im'].size[0], im_data['im'].size[1])
-        # resizeImage = pixmap.scaled(150, 250, QtCore.Qt.KeepAspectRatio)
-        # self.label_regisImage.setPixmap(resizeImage)
-        # self.label_forShowName.setText(student.HoVaTen)
-        #self.label_forShowNumberCard.setText(student.SBD)
-        qim = ImageQt.ImageQt(image)
-        pix = QtGui.QPixmap.fromImage(qim)
-        resizePixmap = pix.scaled(150, 200, QtCore.Qt.KeepAspectRatio)
-        self.SetGeometryForLabelShowRegisImage(resizePixmap.width(), resizePixmap.height())
-        self.label_regisImage.setPixmap(resizePixmap)
+        try:
+            image = Image.open(io.BytesIO(student.AnhDangKy))
+            # im_data = ImageQt._toqclass_helper(image)
+            # pixmap = QPixmap(im_data['im'].size[0], im_data['im'].size[1])
+            # resizeImage = pixmap.scaled(150, 250, QtCore.Qt.KeepAspectRatio)
+            # self.label_regisImage.setPixmap(resizeImage)
+            # self.label_forShowName.setText(student.HoVaTen)
+            #self.label_forShowNumberCard.setText(student.SBD)
+            qim = ImageQt.ImageQt(image)
+            pix = QtGui.QPixmap.fromImage(qim)
+            resizePixmap = pix.scaled(150, 200, QtCore.Qt.KeepAspectRatio)
+            self.SetGeometryForLabelShowRegisImage(resizePixmap.width(), resizePixmap.height())
+            self.label_regisImage.setPixmap(resizePixmap)
+        except:
+            pass
+
         self.label_forShowName.setText(student.HoVaTen.upper())
         self.label_forShowNumberCard.setText(student.SoCMTND)
         self.label_dateOfBird.setText(student.NgaySinh)

@@ -70,9 +70,8 @@ class ProcessRecipt(QObject):
                     else:
                         self.chuaXuLy = self.chuaXuLy[i: len(self.chuaXuLy)]
                         break
-                except NameError as e:
+                except:
                     self.chuaXuLy = self.chuaXuLy[i: len(self.chuaXuLy)]
-                    print(e)
                     break
             i = i + 1
         return lstKhungDL

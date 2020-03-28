@@ -58,8 +58,7 @@ class ControlRFIDmudule(QObject):
                 pass
             elif(code == CODE_WRITE_FAIL):
                 pass
-        except NameError as e:
-            print(e)
+        except:
             pass
     
     def SearchStudent(self, data):
@@ -146,7 +145,7 @@ class ControlRFIDmudule(QObject):
                     else:
                         self.chuaXuLy = self.chuaXuLy[i: len(self.chuaXuLy)]
                         break
-                except NameError as e:
+                except:
                     self.chuaXuLy = self.chuaXuLy[i: len(self.chuaXuLy)]
                     print(e)
                     break

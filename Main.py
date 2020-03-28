@@ -301,6 +301,7 @@ class MainWindow(QMainWindow):
                 self.faceRecognitionObj.StartFaceRecognize()
                 return
                 
+                
     def __RecognizedStudent(self, studentObj, faceImageJpgData):
         self.__OffCameraTemporary(faceRecognized= True)
         self.soundObj.ThreadPlayXinCamOn()

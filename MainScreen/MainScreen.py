@@ -168,18 +168,22 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
             self.label_textWarning.hide()
 
     def ShowStudentInfomation(self, student):
-        image = Image.open(io.BytesIO(student.AnhDangKy))
-        # im_data = ImageQt._toqclass_helper(image)
-        # pixmap = QPixmap(im_data['im'].size[0], im_data['im'].size[1])
-        # resizeImage = pixmap.scaled(150, 250, QtCore.Qt.KeepAspectRatio)
-        # self.label_regisImage.setPixmap(resizeImage)
-        # self.label_forShowName.setText(student.HoVaTen)
-        #self.label_forShowNumberCard.setText(student.SBD)
-        qim = ImageQt.ImageQt(image)
-        pix = QtGui.QPixmap.fromImage(qim)
-        resizePixmap = pix.scaled(150, 200, QtCore.Qt.KeepAspectRatio)
-        self.SetGeometryForLabelShowRegisImage(resizePixmap.width(), resizePixmap.height())
-        self.label_regisImage.setPixmap(resizePixmap)
+        try:
+            if(not (student.AnhDangKy == None)):
+                image = Image.open(io.BytesIO(student.AnhDangKy))
+            # im_data = ImageQt._toqclass_helper(image)
+            # pixmap = QPixmap(im_data['im'].size[0], im_data['im'].size[1])
+            # resizeImage = pixmap.scaled(150, 250, QtCore.Qt.KeepAspectRatio)
+            # self.label_regisImage.setPixmap(resizeImage)
+            # self.label_forShowName.setText(student.HoVaTen)
+            #self.label_forShowNumberCard.setText(student.SBD)
+                qim = ImageQt.ImageQt(image)
+                pix = QtGui.QPixmap.fromImage(qim)
+                resizePixmap = pix.scaled(150, 200, QtCore.Qt.KeepAspectRatio)
+                self.SetGeometryForLabelShowRegisImage(resizePixmap.width(), resizePixmap.height())
+                self.label_regisImage.setPixmap(resizePixmap)
+        except:
+            pass
         self.label_forShowName.setText(student.HoVaTen.upper())
         self.label_forShowNumberCard.setText(student.SoCMTND)
         self.label_dateOfBird.setText(student.NgaySinh)

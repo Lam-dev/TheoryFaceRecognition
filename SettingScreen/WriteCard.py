@@ -29,7 +29,7 @@ class WriteCard(Ui_Frame, QObject):
         self.label_showNotify.setStyleSheet('color: rgb(200, 0, 0);font: 75 bold 16pt "Ubuntu";')
         self.label_showNotify.setText("Đặt thẻ lên thiết bị")
 
-    def WritedNotify(self):
+    def WritedNotify(self, ):
         self.label_showNotify.setStyleSheet('color: rgb(0, 200, 0);font: 75 bold 16pt "Ubuntu";')
         self.label_showNotify.setText("Ghi thẻ thành công")
 

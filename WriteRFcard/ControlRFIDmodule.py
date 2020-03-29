@@ -84,7 +84,6 @@ class ControlRFIDmudule(QObject):
             elif(code == CODE_WRITE_FAIL):
                 pass
         except:
-            print(e)
             pass
     
     def RFmoduleWriteCardSuccess(self):

@@ -173,10 +173,10 @@ class DatabaseManagerScreen(Ui_Frame_containDatabaseScreen, QObject):
             self.pushButton_nextStep.setText("Lưu")
 
         else:
-            self.dialogWaitToSave = WaitToSaveDialog()
-            self.dialogWaitToSave.ShowDialog()
             thread = threading.Thread(target=self.ProcessAndSaveData, args=(), daemon= True)
             thread.start()
+            self.dialogWaitToSave = WaitToSaveDialog()
+            self.dialogWaitToSave.ShowDialog()
             self.currentStep = 1
             self.pushButton_nextStep.setText("Thêm vân tay")
             self.studentInfoObj.ShowStepStudentInformationAnim(self.frameContainWriteCardScreen)

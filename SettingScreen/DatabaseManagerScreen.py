@@ -169,13 +169,16 @@ class DatabaseManagerScreen(Ui_Frame_containDatabaseScreen, QObject):
         elif(self.currentStep == 3):
             self.writeCardObj.ShowStepStudentInformationAnim(self.frameContainAddFace)
             self.currentStep = 4
+            self.Step4HightLight()
             self.pushButton_nextStep.setText("Lưu")
 
         else:
-            thread = threading.Thread(target=self.ProcessAndSaveData, args=(), daemon= True)
-            thread.start()
             self.dialogWaitToSave = WaitToSaveDialog()
             self.dialogWaitToSave.ShowDialog()
+            thread = threading.Thread(target=self.ProcessAndSaveData, args=(), daemon= True)
+            thread.start()
+            self.currentStep = 1
+            self.pushButton_nextStep.setText("Thêm vân tay")
             self.studentInfoObj.ShowStepStudentInformationAnim(self.frameContainWriteCardScreen)
             
             # self.currentStep == 1
@@ -191,8 +194,9 @@ class DatabaseManagerScreen(Ui_Frame_containDatabaseScreen, QObject):
     def ProcessAndSaveData(self):
         faceEncodeDict = self.addFaceObj.GetFaceEncodingImageGrapped()
         FGPdict = self.addFGPobj.GetFGPsavePosAndFeature()
-        self.SignalAddFaceEncodeAndFGP.emit(faceEncodeDict, FGPdict)
         self.__SignalCloseDialog.emit()
+        self.SignalAddFaceEncodeAndFGP.emit(faceEncodeDict, FGPdict)
+        
 
     def Step1HightLight(self):
         self.label_step1HighLight.setStyleSheet("background-color: rgb(0, 170, 127);border-radius:7px")
@@ -212,7 +216,7 @@ class DatabaseManagerScreen(Ui_Frame_containDatabaseScreen, QObject):
         self.label_step2HighLight.setStyleSheet("border-radius:7px;border-color:rgb(0, 170, 255);border-width:2px")
         self.label_step4HighLight.setStyleSheet("border-radius:7px;border-color:rgb(0, 170, 255);border-width:2px")
 
-    def Step4HidghtLight(self):
+    def Step4HightLight(self):
         self.label_step3HighLight.setStyleSheet("border-radius:7px;border-color:rgb(0, 170, 255);border-width:2px")
         self.label_step1HighLight.setStyleSheet("border-radius:7px;border-color:rgb(0, 170, 255);border-width:2px")
         self.label_step2HighLight.setStyleSheet("border-radius:7px;border-color:rgb(0, 170, 255);border-width:2px")

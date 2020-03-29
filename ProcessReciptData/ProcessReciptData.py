@@ -254,7 +254,7 @@ class ProcessReciptData(QObject):
             GetSetting.UpdateServerImageDir(FTP_FILE_PATH_TO_UPLOAD)
             self.SignalUpdateDataBaseSuccess.emit(listHocVien)
 
-        except NameError as e:
+        except:
             print(e)
             pass
 # #endregion 

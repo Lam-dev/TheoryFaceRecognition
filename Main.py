@@ -207,7 +207,7 @@ class MainWindow(QMainWindow):
             #self.ThemKhuonMatVaoDanhSachDaLay(faceDict["student"].ID, faceDict["faceEncodingArr"])
             faceEncodeSendToServer = faceDict["faceEncodingStr"]
             self.lstStudent = GetDataFromDatabase().GetListStudent()
-            self.faceRecognitionObj = FaceRecognition(self.lstStudent)
+            self.faceRecognitionObj.SetListStudent(self.lstStudent)
         if(not len(FGPdict["AllFeatureStr"])==0):
             khoThiSinh.capNhatTruong(("NhanDienVanTay", ), (FGPdict["AllFeatureStr"], ), 'ID = "%s"'%(str(faceDict["student"].ID)))
             khoIDvaVanTay = IDvaVanTayRepository()

@@ -58,7 +58,11 @@ class AddFGP(Ui_Frame_AddFGP, QObject):
     def GetFGPsavePosAndFeature(self):
         try:
             if(self.lstPos.__len__() == 0):
-                return None
+                infoDict = {
+                    "ListPos":"",
+                    "AllFeatureStr":""
+                }
+                return infoDict
             allFeatureStr = ""
             for feature in self.lstFeature:
                 allFeatureStr += ";"

@@ -3,7 +3,7 @@ from PyQt5                      import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui                import QIcon, QPixmap
 from PyQt5.QtCore               import pyqtSlot, pyqtSignal,QTimer, QDateTime, Qt, QObject, QPointF, QPropertyAnimation, pyqtProperty
 from SettingScreen.WriteCardUi  import Ui_Frame
-
+from GlobalClass.GlobalClass    import DefineWriteCardNotify
 
 class WriteCard(Ui_Frame, QObject):
     
@@ -29,9 +29,13 @@ class WriteCard(Ui_Frame, QObject):
         self.label_showNotify.setStyleSheet('color: rgb(200, 0, 0);font: 75 bold 16pt "Ubuntu";')
         self.label_showNotify.setText("Đặt thẻ lên thiết bị")
 
-    def WritedNotify(self, ):
-        self.label_showNotify.setStyleSheet('color: rgb(0, 200, 0);font: 75 bold 16pt "Ubuntu";')
-        self.label_showNotify.setText("Ghi thẻ thành công")
+    def WritedNotify(self, flag):
+        if(flag == DefineWriteCardNotify().waitCard):
+            self.label_showNotify.setStyleSheet('color: rgb(200, 0, 0);font: 75 bold 16pt "Ubuntu";')
+            self.label_showNotify.setText("ĐẶT THẺ LÊN THIẾT BỊ")
+        if(flag == DefineWriteCardNotify().written):
+            self.label_showNotify.setStyleSheet('color: rgb(0, 200, 0);font: 75 bold 16pt "Ubuntu";')
+            self.label_showNotify.setText("GHI THẺ THÀNH CÔNG")
 
     def ShowStepStudentInformationAnim(self, frameOfPreStep):
 

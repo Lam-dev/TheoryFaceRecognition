@@ -2,6 +2,7 @@ from        UARTconnection.UARTconnection   import UART
 from        PyQt5.QtCore                    import pyqtSlot, pyqtSignal,QTimer, QDateTime,Qt, QObject
 from        DatabaseAccess.DatabaseAccess   import ThongTinThiSinh
 import      math
+from       GlobalClass.GlobalClass         import DefineWriteCardNotify
 
 CODE_DATA_IN_CARD = 0
 CODE_NOT_CARD = 1
@@ -88,7 +89,7 @@ class ControlRFIDmudule(QObject):
     
     def RFmoduleWriteCardSuccess(self):
         self.StopWriteIDcardNumberToRFcard()
-        self.callbackWriteNotify()
+        self.callbackWriteNotify(DefineWriteCardNotify().written)
 
     def SearchStudent(self, data):
         IDcardNumber = self.ConvertListByteToString(data)
@@ -119,6 +120,7 @@ class ControlRFIDmudule(QObject):
             return False
 
     def SendRequestWriteToRFcard(self, data):
+        self.callbackWriteNotify(DefineWriteCardNotify().waitCard)
         self.uartObject.SendDataToUART(self.__BuildFrameToSend(data, CODE_RESQUEST_WRITE_DATA_TO_CARD)[0])
 
 

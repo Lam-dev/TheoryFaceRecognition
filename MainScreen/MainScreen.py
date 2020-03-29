@@ -14,7 +14,7 @@ from    SettingScreen.DatabaseManagerScreen     import DatabaseManagerScreen
 from    KeyBoard.KeyBoard                       import KeyBoard
 from    SettingScreen.HideSettingScreenAction   import HideSettingScreen
 from    CheckVersionScreen.CheckVersion         import CheckUpdate
-from    GetSettingFromJSON    import GetSetting 
+from    GetSettingFromJSON    import GetSetting
 
 try:
     NAME_SETTING_DICT = GetSetting.GetPersionalSetting()
@@ -89,7 +89,7 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
             self.label_forShowIconFaceRecognized.setPixmap(self.iconCardRecognized)
         # named_tuple = time.localtime()
         # time_string = time.strftime("%m/%d/%Y \n %H:%M:%S", named_tuple)
-        tz_HCM = pytz.timezone('Asia/Ho_Chi_Minh') 
+        tz_HCM = pytz.timezone('Asia/Ho_Chi_Minh')
         datetime_HCM = datetime.now(tz_HCM)
         time_string = datetime_HCM.strftime("%d/%m/%Y \n %H:%M:%S")
         self.label_forShowTimeRecognized.setText(time_string)
@@ -187,11 +187,12 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
             self.label_regisImage.setPixmap(resizePixmap)
         except:
             pass
-
+        
         self.label_forShowName.setText(student.HoVaTen.upper())
         self.label_forShowNumberCard.setText(student.SoCMTND)
         self.label_dateOfBird.setText(student.NgaySinh)
-        self.label_forShowIdentNumber.setText(student.SBD)
+        self.label_forShowIdentNumber.setText(student.ID)
+        self.label_forShowCourse.setText(student.TenKhoaHoc)
     
     def ClearStudentRecognizedInfomation(self):
         self.label_regisImage.setPixmap(self.pixmapNotRecognized)
@@ -199,6 +200,7 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         self.label_forShowNumberCard.setText("")
         self.label_forShowIdentNumber.setText("")
         self.label_dateOfBird.setText("")
+        self.label_forShowCourse.setText("")
 
     def SetGeometryForLabelShowCamera(self, cameraWidth, cameraHeight):
         x = (self.frame_containLabelShowCamera.width() - cameraWidth)/2

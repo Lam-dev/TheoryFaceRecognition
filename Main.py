@@ -343,11 +343,12 @@ class MainWindow(QMainWindow):
                 return
                 
     def __RecognizedStudent(self, studentObj, faceImageJpgData):
+        self.soundObj.ThreadPlayBip()
         self.__OffCameraTemporary(recBy= "face")
-        self.soundObj.ThreadPlayXinCamOn()
         fp = open("imageTosend.jpg", 'wb')
         fp.write(faceImageJpgData)
         self.mainScreenObj.ShowStudentInfomation(studentObj)
+        self.soundObj.ThreadPlayXinCamOn()
         self.__SaveHistory("Face", studentObj.ID)
         # self.mainScreenObj.ShowFaceRecognizeOK()
         self.socketObject.SendResultsFaceRecognize(studentObj.ID, "T", "imageTosend.jpg")

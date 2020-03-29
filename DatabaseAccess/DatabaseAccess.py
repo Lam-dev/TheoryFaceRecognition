@@ -52,6 +52,12 @@ class LayDuLieuTrongDataBase:
         cursor.execute(sql)
         results = cursor.fetchall()
         if(self.tenBang == "ThongTinThiSinh"):
+            # try:
+            #     IDkhoaHoc  = where.split("=")[1]
+            #     khoaHoc = KhoaThiRepository().layDanhSach( " IDKhoaThi = %s "%(str(IDkhoaHoc)))
+            #     tenKhoaHoc = khoaHoc[0].TenKhoaHoc
+            # except:
+            #     tenKhoaHoc = ""
             listThiSinh = [];
             for i in range(0, len(results)):
                 thiSinh = ThongTinThiSinh()
@@ -63,6 +69,12 @@ class LayDuLieuTrongDataBase:
                 thiSinh.SoCMTND = results[i][5]
                 thiSinh.NgayDangKy = results[i][6]
                 thiSinh.AnhDangKy = results[i][7]
+                try:
+                    tenKhoaHoc = KhoaThiRepository().layDanhSach( " IDKhoaThi = %s "%(str(thiSinh.IDKhoaHoc)))[0].TenKhoaThi
+                    thiSinh.TenKhoaHoc = tenKhoaHoc
+                except NameError as e:
+                    print(e)
+                    pass
                 if((results[i][8] != None) & (results[i][11] != "")):
                     lstDSdacTrung = results[i][8].split(';')
                     for k in range (0, len(lstDSdacTrung)):
@@ -263,6 +275,7 @@ class ThongTinThiSinh:
         self.ID = ""
         self.MaDK = ""
         self.IDKhoaThi = ""
+        self.TenKhoaHoc = ""
         self.NgayDangKy = ""
         self.AnhDangKy = ""
         self.NhanDienKhuonMatThem = []

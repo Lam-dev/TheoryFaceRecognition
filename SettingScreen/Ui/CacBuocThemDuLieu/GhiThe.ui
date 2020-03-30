@@ -23,21 +23,21 @@
   <property name="frameShadow">
    <enum>QFrame::Raised</enum>
   </property>
-  <widget class="QLabel" name="label_themKhuonMatThiSinh">
+  <widget class="QLabel" name="label_forShowNameStudent">
    <property name="geometry">
     <rect>
-     <x>84</x>
-     <y>4</y>
-     <width>323</width>
-     <height>33</height>
+     <x>60</x>
+     <y>0</y>
+     <width>401</width>
+     <height>41</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">color: rgb(35, 35, 35);
+    <string notr="true">color: rgb(0, 85, 127);
 font: 75 bold 16pt &quot;Ubuntu&quot;;</string>
    </property>
    <property name="text">
-    <string>Ghi thẻ cho học viên</string>
+    <string/>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>

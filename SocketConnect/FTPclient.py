@@ -3,6 +3,7 @@ from    PyQt5.QtCore            import pyqtSlot, pyqtSignal,QTimer, QDateTime,Qt
 import  os
 import shutil
 from   GetSettingFromJSON       import GetSetting
+import threading
 # ftp = ftplib.FTP("192.168.1.46")
 # ftp.login("etm", "1")
 # file = []
@@ -92,9 +93,11 @@ class FTPclient(QObject):
             except:
                 self.__CreateConnect()
     
-
-    
     def SendImageToFTPserver(self, localfile, remotefile):
+        thread = threading.Thread(target=self.ActionSendImageToFTPserver, args=(localfile, localfile), daemon= True)
+        thread.start()
+
+    def ActionSendImageToFTPserver(self, localfile, remotefile):
         self.localImageFile = localfile
         fp = open(localfile, 'rb')
         try:
@@ -103,15 +106,17 @@ class FTPclient(QObject):
             self.SignalWaitForDeleteFile.emit()
         except:
             try:
-                print("remotefile not exist error caught" + remotefile)
+                #print("remotefile not exist error caught" + remotefile)
                 path,filename = os.path.split(remotefile)
-                print("creating directory: " + remotefile)
+                #print("creating directory: " + remotefile)
                 self.ftpObj.mkd(path)
                 self.ftpObj.storbinary('STOR %s' % remotefile, fp, 1024)
                 self.SignalWaitForDeleteFile.emit()
                 fp.close()
+                print("tao muc moi")
                 return
             except:
+                print("Khong gui duoc")
                 pass
 
         self.SignalWaitForDeleteFile.emit()

@@ -29,8 +29,8 @@ class StepShowStudentInformation(QObject, Ui_Frame):
         self.pushButton_deleteFGPadded.setIcon(icon)
         self.pushButton_deleteFGPadded.setIconSize(QtCore.QSize(38, 38))
 
-        self.pushButton_deleteFaceAdded.hide()
-        self.pushButton_deleteFGPadded.hide()
+        # self.pushButton_deleteFaceAdded.hide()
+        # self.pushButton_deleteFGPadded.hide()
 
         self.pushButton_deleteFaceAdded.clicked.connect(self.SignalRequestDeleteFaceAdded.emit)
         self.pushButton_deleteFGPadded.clicked.connect(self.SignalRequestDeleteFGPadded.emit)
@@ -46,12 +46,17 @@ class StepShowStudentInformation(QObject, Ui_Frame):
         self.label_nameOfStudent.setText(student.HoVaTen.upper())
         self.label_forShowIDnumber.setText(student.SoCMTND)
         # self.label_forShowDateOfBird.setText(student.SoCMTND)
-        if(len(student.NhanDienKhuonMatThem) == 0):
+        try:
+            if(len(student.NhanDienKhuonMatThem) == 0):
+                self.label_forShowNumberFaceAdded.setStyleSheet("color:rgb(200, 0, 0)")
+                self.label_forShowNumberFaceAdded.setText("Chưa thêm")
+            else:
+                self.label_forShowNumberFaceAdded.setStyleSheet("color:rgb(30, 30, 30)")
+                self.label_forShowNumberFaceAdded.setText("Đã thêm")
+        except:
             self.label_forShowNumberFaceAdded.setStyleSheet("color:rgb(200, 0, 0)")
             self.label_forShowNumberFaceAdded.setText("Chưa thêm")
-        else:
-            self.label_forShowNumberFaceAdded.setStyleSheet("color:rgb(30, 30, 30)")
-            self.label_forShowNumberFaceAdded.setText("Đã thêm")
+            
         khoIDvaVanTay = IDvaVanTayRepository()
         lstIDvaVanTay = khoIDvaVanTay.layDanhSach(" IDThiSinh = '%s' "%(student.ID))
         if(len(lstIDvaVanTay) == 0):

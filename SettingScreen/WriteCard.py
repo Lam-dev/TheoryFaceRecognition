@@ -8,7 +8,8 @@ from GlobalClass.GlobalClass    import DefineWriteCardNotify
 class WriteCard(Ui_Frame, QObject):
     
     SignalWriteToCard = pyqtSignal(str, object)
-
+    SignalStopWriteCard = pyqtSignal()
+    
     def __init__(self, frameContain):
         Ui_Frame.__init__(self)
         QObject.__init__(self)
@@ -17,9 +18,26 @@ class WriteCard(Ui_Frame, QObject):
         self.label.setPixmap(QtGui.QPixmap("icon/putRFcardIcon.png"))
         self.strNumber = ""
         self.pushButton.clicked.connect(self.WriteToCard)
+        self.studentForAdd = object
+        self.numberCardWritten = 0
+
+    def StudentChose(self, student):
+        self.label_forShowNameStudent.setText(student.HoVaTen)
+        self.studentForAdd = student
+        self.strNumber = student.SoCMTND
 
     def SetNumberToWriteCard(self, strNumber):
         self.strNumber = strNumber
+
+
+    def GetNamberCardWriten(self):
+        return self.numberCardWritten
+
+    def StopWriteCard(self):
+        self.SignalStopWriteCard.emit()
+
+    def ClearTempData(self):
+        self.numberCardWritten = 0
 
     def WriteToCard(self):
         self.PutCardToDeviceNotify()
@@ -27,7 +45,7 @@ class WriteCard(Ui_Frame, QObject):
 
     def PutCardToDeviceNotify(self):
         self.label_showNotify.setStyleSheet('color: rgb(200, 0, 0);font: 75 bold 16pt "Ubuntu";')
-        self.label_showNotify.setText("Đặt thẻ lên thiết bị")
+        self.label_showNotify.setText("ĐẶT THẺ LÊN THIẾT BỊ")
 
     def WritedNotify(self, flag):
         if(flag == DefineWriteCardNotify().waitCard):
@@ -36,6 +54,7 @@ class WriteCard(Ui_Frame, QObject):
         if(flag == DefineWriteCardNotify().written):
             self.label_showNotify.setStyleSheet('color: rgb(0, 200, 0);font: 75 bold 16pt "Ubuntu";')
             self.label_showNotify.setText("GHI THẺ THÀNH CÔNG")
+            self.numberCardWritten += 1
 
     def ShowStepStudentInformationAnim(self, frameOfPreStep):
 

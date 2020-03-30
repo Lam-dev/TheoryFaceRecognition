@@ -47,6 +47,7 @@ class MainWindow(QMainWindow):
         self.mainScreenObj.SignalCloseELT.connect(self.close)
         self.mainScreenObj.SignalDeleteAllData.connect(self.DeleteAllData)
         self.mainScreenObj.SignalWriteToCard.connect(self.WriteNumberToCard)
+        self.mainScreenObj.SignalStopWriteCard.connect(self.StopWriteCard)
 
         self.khoLichSu = LichSuRepository()
         self.soundObj = Sound()
@@ -106,7 +107,9 @@ class MainWindow(QMainWindow):
         # self.socketServerForRFIDobj.SignalRFIDputOn.connect(self.RFIDputOn)
 
         self.mainScreenObj.ShowCamera()
-
+    
+    def StopWriteCard(self):
+        self.rfModuleObj.StopWriteIDcardNumberToRFcard()
 
     def WriteNumberToCard(self, strNumber, callback):
         self.rfModuleObj.SetIDcarNumberToWriteToRFcard(strNumber, callback)
@@ -254,7 +257,7 @@ class MainWindow(QMainWindow):
         for student in self.lstStudent:
             if(student.ID == idStudent):
                 student.NhanDienKhuonMatThem = ""
-                return
+                self.faceRecognitionObj.SetListStudent(self.lstStudent)
 
     def __DeleteFGPadded(self):
         self.FGPobj.LayDanhSachIDvaVanTay()
@@ -343,7 +346,7 @@ class MainWindow(QMainWindow):
                 return
                 
     def __RecognizedStudent(self, studentObj, faceImageJpgData):
-        self.soundObj.ThreadPlayBip()
+        #self.soundObj.ThreadPlayBip()
         self.__OffCameraTemporary(recBy= "face")
         fp = open("imageTosend.jpg", 'wb')
         fp.write(faceImageJpgData)

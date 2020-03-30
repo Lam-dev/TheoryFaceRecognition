@@ -22,17 +22,18 @@
   <property name="frameShadow">
    <enum>QFrame::Raised</enum>
   </property>
-  <widget class="QLabel" name="label_themKhuonMatThiSinh">
+  <widget class="QLabel" name="label_forShowNameStudent">
    <property name="geometry">
     <rect>
      <x>82</x>
-     <y>12</y>
+     <y>0</y>
      <width>323</width>
-     <height>17</height>
+     <height>41</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true">color: rgb(35, 35, 35);
+color: rgb(0, 85, 127);
 font: 75 bold 16pt &quot;Ubuntu&quot;;</string>
    </property>
    <property name="text">
@@ -45,8 +46,8 @@ font: 75 bold 16pt &quot;Ubuntu&quot;;</string>
   <widget class="QLabel" name="label_forShowCamera">
    <property name="geometry">
     <rect>
-     <x>36</x>
-     <y>62</y>
+     <x>30</x>
+     <y>50</y>
      <width>425</width>
      <height>267</height>
     </rect>

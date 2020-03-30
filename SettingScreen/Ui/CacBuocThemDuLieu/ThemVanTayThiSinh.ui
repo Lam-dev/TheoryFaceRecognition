@@ -23,21 +23,24 @@
   <property name="frameShadow">
    <enum>QFrame::Raised</enum>
   </property>
-  <widget class="QLabel" name="label_ThemVanTayThiSinh">
+  <widget class="QLabel" name="label_forShowNameStudent">
    <property name="geometry">
     <rect>
      <x>72</x>
      <y>6</y>
      <width>335</width>
-     <height>33</height>
+     <height>41</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">color: rgb(29, 29, 29);
+    <string notr="true">color: rgb(0, 85, 127);
 font: 57 bold 16pt &quot;Ubuntu&quot;;</string>
    </property>
    <property name="text">
     <string>THÊM VÂN TAY CHO THÍ SINH</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
    </property>
   </widget>
   <widget class="QLabel" name="label_forShowAnoument">
@@ -97,55 +100,23 @@ font: 75 bold 70pt &quot;Ubuntu&quot;;</string>
   <widget class="QPushButton" name="pushButton_addFGP">
    <property name="geometry">
     <rect>
-     <x>310</x>
-     <y>194</y>
-     <width>81</width>
+     <x>170</x>
+     <y>190</y>
+     <width>151</width>
      <height>73</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: rgba(85, 255, 255, 70);
-font: 75 20pt &quot;Ubuntu&quot;;
+    <string notr="true">color: rgb(0, 170, 255);
+background-color: rgba(85, 255, 255, 70);
+font: 75 bold 20pt &quot;Ubuntu&quot;;
 border-radius:5px;
 border-color:rgb(33, 148, 255);
 border-width:1px;
 border-style:solid;</string>
    </property>
    <property name="text">
-    <string>+</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="pushButton_deleteAllFeature">
-   <property name="geometry">
-    <rect>
-     <x>70</x>
-     <y>192</y>
-     <width>81</width>
-     <height>73</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Ubuntu</family>
-     <pointsize>20</pointsize>
-     <weight>9</weight>
-     <italic>false</italic>
-     <bold>false</bold>
-    </font>
-   </property>
-   <property name="mouseTracking">
-    <bool>false</bool>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background-color: rgba(255, 0, 0, 70);
-font: 75 20pt &quot;Ubuntu&quot;;
-border-radius:5px;
-border-color:rgb(33, 148, 255);
-border-width:1px;
-border-style:solid;</string>
-   </property>
-   <property name="text">
-    <string>-</string>
+    <string>THÊM</string>
    </property>
   </widget>
  </widget>

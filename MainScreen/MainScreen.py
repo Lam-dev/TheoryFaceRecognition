@@ -33,13 +33,14 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
     SignalConnectNewFTPserver = pyqtSignal(dict)
     SignalSettingScreenHiden = pyqtSignal()
     SignalAddFaceEncodeAndFGP  = pyqtSignal(dict, dict)
-    SignalDeleteFaceAdded = pyqtSignal(int)
+    SignalDeleteFaceAdded = pyqtSignal(str)
     SignalDeleteFGPadded = pyqtSignal(int)
     SignalCleanFGPsensor = pyqtSignal()
     SignalShutdown = pyqtSignal()
     SignalCloseELT = pyqtSignal()
     SignalDeleteAllData = pyqtSignal()
     SignalWriteToCard = pyqtSignal(str, object)
+    SignalStopWriteCard = pyqtSignal()
 
     def __init__(self, MainWindow):
         QObject.__init__(self)
@@ -310,7 +311,7 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         self.databaseScreenObj.SignalDeleteFaceAdded.connect(self.SignalDeleteFaceAdded.emit)
         self.databaseScreenObj.SignalDeleteFGPadded.connect(self.SignalDeleteFGPadded.emit)
         self.databaseScreenObj.SignalWriteToCard.connect(self.SignalWriteToCard.emit)
-
+        self.databaseScreenObj.SignalStopWriteCard.connect(self.SignalStopWriteCard)
         self.frameContainDatabaseScreen.show()
         self.frameContainDatabaseScreen.raise_()
         

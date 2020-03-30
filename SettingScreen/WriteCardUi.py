@@ -2,13 +2,11 @@
 
 # Form implementation generated from reading ui file 'GhiThe.ui'
 #
-# Created by: PyQt5 UI code generator 5.13.0
+# Created by: PyQt5 UI code generator 5.5.1
 #
 # WARNING! All changes made in this file will be lost!
 
-
 from PyQt5 import QtCore, QtGui, QtWidgets
-
 
 class Ui_Frame(object):
     def setupUi(self, Frame):
@@ -18,12 +16,13 @@ class Ui_Frame(object):
 "")
         Frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         Frame.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.label_themKhuonMatThiSinh = QtWidgets.QLabel(Frame)
-        self.label_themKhuonMatThiSinh.setGeometry(QtCore.QRect(84, 4, 323, 33))
-        self.label_themKhuonMatThiSinh.setStyleSheet("color: rgb(35, 35, 35);\n"
+        self.label_forShowNameStudent = QtWidgets.QLabel(Frame)
+        self.label_forShowNameStudent.setGeometry(QtCore.QRect(60, 0, 401, 41))
+        self.label_forShowNameStudent.setStyleSheet("color: rgb(0, 85, 127);\n"
 "font: 75 bold 16pt \"Ubuntu\";")
-        self.label_themKhuonMatThiSinh.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_themKhuonMatThiSinh.setObjectName("label_themKhuonMatThiSinh")
+        self.label_forShowNameStudent.setText("")
+        self.label_forShowNameStudent.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_forShowNameStudent.setObjectName("label_forShowNameStudent")
         self.label = QtWidgets.QLabel(Frame)
         self.label.setGeometry(QtCore.QRect(68, 50, 359, 199))
         self.label.setText("")
@@ -52,7 +51,6 @@ class Ui_Frame(object):
     def retranslateUi(self, Frame):
         _translate = QtCore.QCoreApplication.translate
         Frame.setWindowTitle(_translate("Frame", "Frame"))
-        self.label_themKhuonMatThiSinh.setText(_translate("Frame", "Ghi thẻ cho học viên"))
         self.pushButton.setText(_translate("Frame", "Ghi thẻ"))
         self.label_showNotify.setText(_translate("Frame", "ĐẶT THẺ LÊN THIẾT BỊ"))
 
@@ -65,3 +63,4 @@ if __name__ == "__main__":
     ui.setupUi(Frame)
     Frame.show()
     sys.exit(app.exec_())
+

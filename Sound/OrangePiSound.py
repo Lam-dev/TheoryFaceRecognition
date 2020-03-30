@@ -23,7 +23,7 @@ class Sound(QObject):
 
     def __PlayBip(self):
         playSound = self.waveBip.play()
-        playSound.wait_done()
+        #playSound.wait_done()
 
     def ThreadPlayBip(self):
         thread = threading.Thread(target=self.__PlayBip, args=(), daemon=True)
@@ -31,7 +31,7 @@ class Sound(QObject):
 
     def __PlayTemp(self):
         playSound = self.waveTemp.play()
-        playSound.wait_done()
+        #playSound.wait_done()
 
     def ThreadPlayTemp(self):
         thread = threading.Thread(target=self.__PlayTemp, args=(), daemon=True)
@@ -39,12 +39,12 @@ class Sound(QObject):
 
     def __PlayXinCamOn(self):
         playSound = self.waveXinCamOn.play()
-        playSound.wait_done()
+        #playSound.wait_done()
 
     def __PlayVuiLongThuLai(self):
         
         playSound = self.waveVuiLongThuLai.play()
-        playSound.wait_done()
+        #playSound.wait_done()
 
     def ThreadPlayXinCamOn(self):
         self.timerPlayTemp.stop()

@@ -24,12 +24,16 @@ class AddFGP(Ui_Frame_AddFGP, QObject):
         self.timerHoldHandAnounment.timeout.connect(self.HoldHandAnounment)
 
         self.pushButton_addFGP.clicked.connect(self.StartReciptFGP)
-        self.pushButton_deleteAllFeature.clicked.connect(self.DeleteAllFeature)
+
 
         self.lstFeature = []
         self.lstPos = []
 
         self.numberFGPadded = 0
+
+    def StudentChose(self, student):
+        self.label_forShowNameStudent.setText(student.HoVaTen)
+        self.studentForAdd = student
 
     def DeleteAllFeature(self):
         self.numberFGPadded = 0
@@ -41,6 +45,7 @@ class AddFGP(Ui_Frame_AddFGP, QObject):
         self.lstFeature.clear()
         self.lstPos.clear()
         self.numberFGPadded = 0
+        self.label_numberFGPadded.setText("0")
 
     def FGPsavedInSensor(self, pos, feature):
         

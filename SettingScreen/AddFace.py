@@ -21,9 +21,13 @@ class AddFaceScreen(Ui_Frame_AddFace, QObject):
         self.faceRecognitionObj = FaceRecognition()
         # self.pushButton_changeImage.clicked.connect(self.ChangeImage)
         self.imageGrapped = False
-        self.addForStudent = False
+        self.studentForAdd = False
         self.reloadPixmap = QtGui.QPixmap("icon/iconReadFace.png")
         self.label_countdownTime.mouseReleaseEvent = lambda event : self.ChangeImage()
+    
+    def StudentChose(self, student):
+        self.label_forShowNameStudent.setText(student.HoVaTen)
+        self.studentForAdd = student
 
     def ClearAddAdded(self):
         self.imageGrapped = False
@@ -36,7 +40,7 @@ class AddFaceScreen(Ui_Frame_AddFace, QObject):
                 "image":self.imageGrapped,
                 "faceEncodingStr":faceEcodingStr,
                 "faceEncodingArr": faceEncodingArr,
-                "student":self.addForStudent
+                "student":self.studentForAdd
             }
             return faceInfoDict
         except:
@@ -44,7 +48,7 @@ class AddFaceScreen(Ui_Frame_AddFace, QObject):
                 "image":"",
                 "faceEncodingStr":"",
                 "faceEncodingArr":"",
-                "student":self.addForStudent
+                "student":self.studentForAdd
             }
             return faceInfoDict
 

@@ -72,8 +72,7 @@ class LayDuLieuTrongDataBase:
                 try:
                     tenKhoaHoc = KhoaThiRepository().layDanhSach( " IDKhoaThi = %s "%(str(thiSinh.IDKhoaHoc)))[0].TenKhoaThi
                     thiSinh.TenKhoaHoc = tenKhoaHoc
-                except NameError as e:
-                    print(e)
+                except:
                     pass
                 if((results[i][8] != None) & (results[i][11] != "")):
                     lstDSdacTrung = results[i][8].split(';')

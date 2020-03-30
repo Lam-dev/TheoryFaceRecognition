@@ -11,6 +11,7 @@ from SettingScreen.AddFGP                     import AddFGP
 from SettingScreen.AddDataResult              import AddDataResults
 from SettingScreen.WriteCard                  import WriteCard
 from DialogScreen.WaitToSaveDialog            import WaitToSaveDialog
+from GlobalClass.GlobalClass                  import AddDataResult
 
 class DatabaseManagerScreen(Ui_Frame_containDatabaseScreen, QObject):
     SignalCloseDatabaseScreen = pyqtSignal()
@@ -18,8 +19,11 @@ class DatabaseManagerScreen(Ui_Frame_containDatabaseScreen, QObject):
     SignalDeleteFaceAdded = pyqtSignal(str)
     SignalDeleteFGPadded = pyqtSignal(str)
     SignalWriteToCard = pyqtSignal(str, object)
+    SignalStopWriteCard = pyqtSignal()
+
     __SignalShowDialogWaitToSave = pyqtSignal()
     __SignalCloseDialog = pyqtSignal()
+    __SignalShowResultAddDataToDialog = pyqtSignal(AddDataResult)
 
     def __init__(self, frameContain):
         Ui_Frame_containDatabaseScreen.__init__(self)
@@ -32,8 +36,9 @@ class DatabaseManagerScreen(Ui_Frame_containDatabaseScreen, QObject):
         self.pushButton_nextStep.hide()
 
         self.__SignalCloseDialog.connect(self.__CloseWaitToSaveDialog)
+        self.__SignalShowResultAddDataToDialog.connect(self.__ShowResultAddDataToDialog)
         # self.pushButton_preStep.clicked.connect(self.PreStep)
-        #self.pushButton_preStep.hide()
+        self.pushButton_preStep.hide()
 
         self.pushButton_reloadDatabase.clicked.connect(self.__ReloadScreen)
 
@@ -71,11 +76,15 @@ class DatabaseManagerScreen(Ui_Frame_containDatabaseScreen, QObject):
         self.frameContainWriteCardScreen.setGeometry(QtCore.QRect(self.frame_containAddInformationStep.width(), 0, 0, 0))
         self.writeCardObj = WriteCard(self.frameContainWriteCardScreen)
         self.writeCardObj.SignalWriteToCard.connect(self.SignalWriteToCard)
+        self.writeCardObj.SignalStopWriteCard.connect(self.SignalStopWriteCard)
 
         self.faceAdded = object
         self.FGPadded = object
 
         self.currentStep = 1
+
+    def __ShowResultAddDataToDialog(self, resultObj):
+        self.dialogWaitToSave.ShowResult(resultObj)
 
     def __CloseWaitToSaveDialog(self):
         self.dialogWaitToSave.CloseDialog()
@@ -84,7 +93,7 @@ class DatabaseManagerScreen(Ui_Frame_containDatabaseScreen, QObject):
     def __DeleteFaceAdded(self):
         try:
             khoThiSinh = ThiSinhRepository()
-            khoThiSinh.capNhatTruong(("NhanDienKhuonMatThem",),("", ), " ID = %s "%(self.choseStudent.ID))
+            khoThiSinh.capNhatTruong(("NhanDienKhuonMatThem",),("", ), " ID = '%s' "%(self.choseStudent.ID))
             self.choseStudent.NhanDienKhuonMatThem = None
             self.studentInfoObj.ShowStudentInformation(self.choseStudent)
             self.SignalDeleteFaceAdded.emit(self.choseStudent.ID)
@@ -94,7 +103,9 @@ class DatabaseManagerScreen(Ui_Frame_containDatabaseScreen, QObject):
     def __DeleteFGPadded(self):
         try:
             khoTSvaVanTay = IDvaVanTayRepository()
-            khoTSvaVanTay.xoaBanGhi(" IDThiSinh = %s "%(self.choseStudent.ID))
+            khoTSvaVanTay.xoaBanGhi(" IDThiSinh = '%s' "%(self.choseStudent.ID))
+            khoThiSinh = ThiSinhRepository()
+            khoThiSinh.capNhatTruong(("NhanDienVanTay",),("", ), " ID = '%s' "%(self.choseStudent.ID))
             self.studentInfoObj.ShowStudentInformation(self.choseStudent)
             self.SignalDeleteFGPadded.emit(self.choseStudent.ID)
         except:
@@ -157,28 +168,31 @@ class DatabaseManagerScreen(Ui_Frame_containDatabaseScreen, QObject):
             self.currentStep = 2
             self.Step2HightLight()
             self.addFGPobj.StartReciptFGP()
-            self.pushButton_nextStep.setText("Thêm khuôn mặt")
+            self.pushButton_nextStep.setText("KHUÔN MẶT")
 
         elif(self.currentStep == 2):
             self.addFaceObj.ShowStepStudentInformationAnim(self.frameContainAddFGP)
             self.currentStep = 3
             self.Step3HightLight()
             self.addFGPobj.StopReciptFGP()
-            self.pushButton_nextStep.setText("Ghi thẻ")
+            self.pushButton_nextStep.setText("GHI THẺ")
 
         elif(self.currentStep == 3):
             self.writeCardObj.ShowStepStudentInformationAnim(self.frameContainAddFace)
+            self.writeCardObj.WriteToCard()
             self.currentStep = 4
             self.Step4HightLight()
-            self.pushButton_nextStep.setText("Lưu")
+            self.pushButton_nextStep.setText("LƯU")
 
         else:
+            self.SignalStopWriteCard.emit()
             thread = threading.Thread(target=self.ProcessAndSaveData, args=(), daemon= True)
             thread.start()
             self.dialogWaitToSave = WaitToSaveDialog()
             self.dialogWaitToSave.ShowDialog()
             self.currentStep = 1
-            self.pushButton_nextStep.setText("Thêm vân tay")
+            self.pushButton_nextStep.setText("VÂN TAY")
+            self.Step1HightLight()
             self.studentInfoObj.ShowStepStudentInformationAnim(self.frameContainWriteCardScreen)
             
             # self.currentStep == 1
@@ -191,12 +205,34 @@ class DatabaseManagerScreen(Ui_Frame_containDatabaseScreen, QObject):
             # self.currentStep = 1
             # self.Step1HightLight()
 
+    def ShowResultToDialog(self, resultObj):
+        pass
+
+
     def ProcessAndSaveData(self):
-        faceEncodeDict = self.addFaceObj.GetFaceEncodingImageGrapped()
-        FGPdict = self.addFGPobj.GetFGPsavePosAndFeature()
-        self.__SignalCloseDialog.emit()
-        self.SignalAddFaceEncodeAndFGP.emit(faceEncodeDict, FGPdict)
-        
+        try:
+            faceEncodeDict = self.addFaceObj.GetFaceEncodingImageGrapped()
+            FGPdict = self.addFGPobj.GetFGPsavePosAndFeature()
+            self.SignalAddFaceEncodeAndFGP.emit(faceEncodeDict, FGPdict)
+            addDataResultObj = AddDataResult()
+            self.cardWritten = self.writeCardObj.GetNamberCardWriten()
+            if(faceEncodeDict["faceEncodingStr"].__len__() == 0):
+                addDataResultObj.faceAdded = False
+            else:
+                addDataResultObj.faceAdded = True
+
+            if(FGPdict["AllFeatureStr"].__len__() == 0):
+                addDataResultObj.FGPadded = False
+            else:
+                addDataResultObj.FGPadded = True
+            if(self.cardWritten == 0):
+                addDataResultObj.cardWritten = False
+            else:
+                addDataResultObj.cardWritten = True
+            self.__SignalShowResultAddDataToDialog.emit(addDataResultObj)
+        except:
+            pass
+
 
     def Step1HightLight(self):
         self.label_step1HighLight.setStyleSheet("background-color: rgb(0, 170, 127);border-radius:7px")
@@ -224,25 +260,33 @@ class DatabaseManagerScreen(Ui_Frame_containDatabaseScreen, QObject):
 
 
     def ChooseStudent(self):
-        if(self.currentStep != 1):
-            self.addFGPobj.StopReciptFGP()
-            self.addFaceObj.StopCamera()
-            if(self.currentStep == 2):
-                self.studentInfoObj.ShowStepStudentInformationAnim(self.frameContainAddFGP)
-            else:
-                self.studentInfoObj.ShowStepStudentInformationAnim(self.frameContainAddFace)
-        self.currentStep = 1
-        self.addFaceObj.ClearAddAdded()
-        self.addFGPobj.ClearAddAdded()
-
-        row = self.listWidget_showListStudent.currentRow()
-        self.studentInfoObj.ShowStudentInformation(self.lstStudent[row])
-        self.pushButton_nextStep.show()
-        self.addFaceObj.addForStudent = self.lstStudent[row]
-        self.addFGPobj.studentForAdd = self.lstStudent[row]
-        self.choseStudent = self.lstStudent[row]
-        self.writeCardObj.SetNumberToWriteCard(self.choseStudent.SoCMTND)
-
+        try:
+            if(self.currentStep != 1):
+                self.addFGPobj.StopReciptFGP()
+                self.addFaceObj.StopCamera()
+                self.writeCardObj.StopWriteCard()
+                if(self.currentStep == 2):
+                    self.studentInfoObj.ShowStepStudentInformationAnim(self.frameContainAddFGP)
+                elif(self.currentStep == 3):
+                    self.studentInfoObj.ShowStepStudentInformationAnim(self.frameContainAddFace)
+                else:
+                    self.studentInfoObj.ShowStepStudentInformationAnim(self.frameContainWriteCardScreen)
+            self.currentStep = 1
+            self.Step1HightLight()
+            self.addFaceObj.ClearAddAdded()
+            self.addFGPobj.ClearAddAdded()
+            self.writeCardObj.ClearTempData()
+            row = self.listWidget_showListStudent.currentRow()
+            self.choseStudent = self.lstStudent[row]
+            self.studentInfoObj.ShowStudentInformation(self.choseStudent)
+            self.pushButton_nextStep.show()
+            self.addFaceObj.StudentChose(self.choseStudent)
+            self.addFGPobj.StudentChose(self.choseStudent)
+            self.writeCardObj.StudentChose(self.choseStudent)
+        except NameError as e:
+            print(e)
+            pass
+        
     def __ReturnStep1(self):
         if(self.currentStep != 1):
             self.addFGPobj.StopReciptFGP()

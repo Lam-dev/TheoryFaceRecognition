@@ -295,6 +295,7 @@ class SocketClient(QObject):
             if(not self.FlagServerISconnect):
                 self.clientObj = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 self.clientObj.setblocking(0)
+                self.clientObj.settimeout(2)
                 self.clientObj.connect((SERVER_IP, SERVER_PORT))
                 self.__SendPingPong()
                 self.SignalServerConnected.emit()

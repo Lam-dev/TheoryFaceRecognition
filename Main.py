@@ -346,7 +346,7 @@ class MainWindow(QMainWindow):
                 return
                 
     def __RecognizedStudent(self, studentObj, faceImageJpgData):
-        #self.soundObj.ThreadPlayBip()
+        self.soundObj.ThreadPlayBip()
         self.__OffCameraTemporary(recBy= "face")
         fp = open("imageTosend.jpg", 'wb')
         fp.write(faceImageJpgData)

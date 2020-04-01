@@ -132,15 +132,15 @@ def ConvertStringToByteArray(string):
 
 # ####################Tạo frame trả lời ping và cập nhật giờ######################
 
-dic = {
-    "courseID": 2226
-}
-jsonStr = json.dumps(dic)
-khungGui, tong = __DungKhungGiaoTiep(jsonStr, 9)
-client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client.settimeout(1000)
-client.connect((SERVER_IP, SERVER_PORT))
-client.send(khungGui)
+# dic = {
+#     "courseID": 2226
+# }
+# jsonStr = json.dumps(dic)
+# khungGui, tong = __DungKhungGiaoTiep(jsonStr, 9)
+# client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+# client.settimeout(1000)
+# client.connect((SERVER_IP, SERVER_PORT))
+# client.send(khungGui)
 
 # ################################################################################
 ######################yeu cau client gui len danh sach hoc vien##################
@@ -155,3 +155,14 @@ client.send(khungGui)
 # datetime_HCM = datetime.now(tz_HCM)
 # print(datetime_HCM.strftime("%m/%d/%Y \n %H:%M:%S"))
 
+#######################get ip#########################
+# import socket    
+# hostname = socket.gethostname()    
+# IPAddr = socket.gethostbyname(hostname)    
+# print("Your Computer Name is:" + hostname)    
+# print("Your Computer IP Address is:" + IPAddr)    
+
+hname = socket.gethostname()
+hip = socket.gethostbyname(hname)
+print("Hostname:  ",hname)
+print("IP Address: ",hip)

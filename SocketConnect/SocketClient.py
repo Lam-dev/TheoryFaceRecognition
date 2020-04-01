@@ -104,6 +104,16 @@ class SocketClient(QObject):
 
         self.__SignalReciptEnounghData.connect(self.__ThreadTachVaPhanTichKhungNhan)
     
+    def GetCurrentIP(self):
+        gw = os.popen("ip -4 route show default").read().split()
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.setblocking(1)
+        s.settimeout(1)
+        s.connect((gw[2], 0))
+        ipaddr = s.getsockname()[0]
+        gateway = gw[2]
+        host = socket.gethostname()
+
     def DeleteFTPsendedFile(self):
         self.timerDeleteFTPsendedFile.stop()
         self.ftpObj.DeleteLocalImageFile()

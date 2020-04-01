@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'HienThiThongTinThiSinh.ui'
 #
-# Created by: PyQt5 UI code generator 5.13.0
+# Created by: PyQt5 UI code generator 5.14.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -19,8 +19,10 @@ class Ui_Frame(object):
         Frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.label_forShowStudentImage = QtWidgets.QLabel(Frame)
         self.label_forShowStudentImage.setGeometry(QtCore.QRect(16, 58, 151, 179))
-        self.label_forShowStudentImage.setStyleSheet("background-color: rgb(170, 170, 255);")
+        self.label_forShowStudentImage.setStyleSheet("background-color: rgb(170, 170, 255);\n"
+"color: rgb(197, 0, 0);")
         self.label_forShowStudentImage.setText("")
+        self.label_forShowStudentImage.setAlignment(QtCore.Qt.AlignCenter)
         self.label_forShowStudentImage.setObjectName("label_forShowStudentImage")
         self.label_thongTinHocVien = QtWidgets.QLabel(Frame)
         self.label_thongTinHocVien.setGeometry(QtCore.QRect(100, 10, 323, 31))
@@ -65,7 +67,7 @@ class Ui_Frame(object):
         self.label_forShowNumberFaceAdded.setText("")
         self.label_forShowNumberFaceAdded.setObjectName("label_forShowNumberFaceAdded")
         self.label_forShowNumberFGPadded = QtWidgets.QLabel(Frame)
-        self.label_forShowNumberFGPadded.setGeometry(QtCore.QRect(270, 300, 149, 29))
+        self.label_forShowNumberFGPadded.setGeometry(QtCore.QRect(250, 280, 149, 29))
         self.label_forShowNumberFGPadded.setText("")
         self.label_forShowNumberFGPadded.setObjectName("label_forShowNumberFGPadded")
         self.pushButton_deleteFaceAdded = QtWidgets.QPushButton(Frame)

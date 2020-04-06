@@ -158,7 +158,7 @@ class LayDuLieuTrongDataBase:
                 del lstHocVienTuongUngTaiKhoan
             return lstHocVienTuongUngTaiKhoan
         elif(self.tenBang == ""):
-
+            pass
 
     def ghiDuLieu(self, thongTin):
         try:

@@ -42,7 +42,7 @@ class MainWindow(QMainWindow):
         self.mainScreenObj.SignalSettingScreenHiden.connect(self.__SettingScreenHiden)
         self.mainScreenObj.SignalAddFaceEncodeAndFGP.connect(self.__AddFaceEncodingAndFGP)
         self.mainScreenObj.SignalDeleteFaceAdded.connect(self.__DeleteFaceAdded)
-        self.mainScreenObj.SignalDeleteFGPadded.connect(self.__DeleteFGPaddcleared)
+        self.mainScreenObj.SignalDeleteFGPadded.connect(self.__DeleteFGPadded)
         self.mainScreenObj.SignalShutdown.connect(self.Shutdown)
         self.mainScreenObj.SignalCloseELT.connect(self.close)
         self.mainScreenObj.SignalDeleteAllData.connect(self.DeleteAllData)
@@ -352,7 +352,7 @@ class MainWindow(QMainWindow):
         self.khoLichSu.ghiDuLieu(lichSu)
 
     def SearchStudentAndCheck(self, teacher):
-        
+        pass
 
 def main():
     app = QApplication(sys.argv)

@@ -1,9 +1,10 @@
-from SettingScreen.SystemSettingContentUI import Ui_widget_containSettingContent
-from PyQt5.QtCore import pyqtSlot, pyqtSignal,QTimer, QDateTime, Qt, QObject, QPointF, QPropertyAnimation, pyqtProperty
-from PyQt5 import QtWidgets
-from PyQt5 import QtGui
-from GetSettingFromJSON   import GetSetting, SaveSetting
-import json
+from    SettingScreen.SystemSettingContentUI import Ui_widget_containSettingContent
+from    PyQt5.QtCore                        import pyqtSlot, pyqtSignal,QTimer, QDateTime, Qt, QObject, QPointF, QPropertyAnimation, pyqtProperty
+from    PyQt5                               import QtWidgets
+from    PyQt5                               import QtGui
+from    GetSettingFromJSON                  import GetSetting, SaveSetting
+from    GetCurrentIP.GetCurrentIP           import GetCurrentIp
+import  json
 
 class SystemSettingContent(Ui_widget_containSettingContent, QObject):
     GetTextFromKeyBoard = pyqtSignal(object)
@@ -51,6 +52,25 @@ class SystemSettingContent(Ui_widget_containSettingContent, QObject):
         self.pushButton_deleteAllData.clicked.connect(self.SignalDeleteAllData.emit)
         self.GetAndShowSetting()
         self.__GetAndShowCurrentVersion()
+    
+    def ShowCurrentIP(self):
+        getCrIpObj = GetCurrentIp()
+        crIP = getCrIpObj.GetIP()
+        if(crIP["privateIP"] != False):
+            self.label_currentIP.setText(crIP["privateIP"])
+        else:
+            self.label_currentIP.setText("CHƯA NHẬN ĐƯỢC IP")
+        
+        if(crIP["subnetMask"] != False):
+            self.label_currentIP.setText(crIP["subnetMask"])
+        else:
+            self.label_currentIP.setText("CHƯA NHẬN ĐƯỢC IP")
+
+        if(crIP["gateway"] != False):
+            self.label_currentIP.setText(crIP["privateIP"])
+        else:
+            self.label_currentIP.setText("CHƯA NHẬN ĐƯỢC IP")
+
 
     def __GetAndShowCurrentVersion(self):
         try:

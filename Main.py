@@ -42,12 +42,10 @@ class MainWindow(QMainWindow):
         self.mainScreenObj.SignalSettingScreenHiden.connect(self.__SettingScreenHiden)
         self.mainScreenObj.SignalAddFaceEncodeAndFGP.connect(self.__AddFaceEncodingAndFGP)
         self.mainScreenObj.SignalDeleteFaceAdded.connect(self.__DeleteFaceAdded)
-        self.mainScreenObj.SignalDeleteFGPadded.connect(self.__DeleteFGPadded)
+        self.mainScreenObj.SignalDeleteFGPadded.connect(self.__DeleteFGPaddcleared)
         self.mainScreenObj.SignalShutdown.connect(self.Shutdown)
         self.mainScreenObj.SignalCloseELT.connect(self.close)
         self.mainScreenObj.SignalDeleteAllData.connect(self.DeleteAllData)
-        self.mainScreenObj.SignalWriteToCard.connect(self.WriteNumberToCard)
-        self.mainScreenObj.SignalStopWriteCard.connect(self.StopWriteCard)
 
         self.khoLichSu = LichSuRepository()
         self.soundObj = Sound()
@@ -107,13 +105,6 @@ class MainWindow(QMainWindow):
         # self.socketServerForRFIDobj.SignalRFIDputOn.connect(self.RFIDputOn)
 
         self.mainScreenObj.ShowCamera()
-    
-    def StopWriteCard(self):
-        self.rfModuleObj.StopWriteIDcardNumberToRFcard()
-
-    def WriteNumberToCard(self, strNumber, callback):
-        self.rfModuleObj.SetIDcarNumberToWriteToRFcard(strNumber, callback)
-        self.rfModuleObj.StartWriteIDcardNumberToRFcard()
 
     def PlayBip(self):
         self.soundObj.ThreadPlayBip()
@@ -169,7 +160,6 @@ class MainWindow(QMainWindow):
             self.faceRecognitionObj.SetListStudent(self.lstStudent)
             self.rfModuleObj.lstStudent = self.lstStudent
             self.FGPobj.LayDanhSachIDvaVanTay()
-            self.rfModuleObj.lstStudent = self.lstStudent
             self.timerWaitForUpdateData.stop()
             self.mainScreenObj.HideWaitForUpdateScreen()
             self.__FlagUpdateScreenIsShow = False
@@ -208,42 +198,27 @@ class MainWindow(QMainWindow):
         self.soundObj.ThreadPlayXinCamOn()
         
     def __AddFaceEncodingAndFGP(self, faceDict, FGPdict):
-        khoThiSinh = ThiSinhRepository()
-        faceEncodeSendToServer = ""
-        FGPencodeSendToServer = ""
-        if(not len(faceDict["faceEncodingStr"]) == 0):
-            khoThiSinh.capNhatTruong(("NhanDienKhuonMatThem", ), (faceDict["faceEncodingStr"], ), 'ID = "%s"'%(str(faceDict["student"].ID)))
-            #self.ThemKhuonMatVaoDanhSachDaLay(faceDict["student"].ID, faceDict["faceEncodingArr"])
-            faceEncodeSendToServer = faceDict["faceEncodingStr"]
-            self.lstStudent = GetDataFromDatabase().GetListStudent()
-            self.faceRecognitionObj.SetListStudent(self.lstStudent)
-        if(not len(FGPdict["AllFeatureStr"])==0):
-            khoThiSinh.capNhatTruong(("NhanDienVanTay", ), (FGPdict["AllFeatureStr"], ), 'ID = "%s"'%(str(faceDict["student"].ID)))
-            khoIDvaVanTay = IDvaVanTayRepository()
-            FGPencodeSendToServer = FGPdict["AllFeatureStr"]
-            khoIDvaVanTay.xoaBanGhi( " IDThiSinh = '%s' "%(str(faceDict["student"].ID) ))
-            for pos in FGPdict["ListPos"]:
-                idVaVanTay = AnhXaIDvaVanTay()
-                idVaVanTay.IDThiSinh = faceDict["student"].ID
-                idVaVanTay.ViTriVanTay = pos
-                khoIDvaVanTay.ghiDuLieu(idVaVanTay)
-                #self.FGPobj.ThemIDvaVanTayVaoDanhSachDaLay(faceDict["student"].ID, pos)
-            self.FGPobj.LayDanhSachIDvaVanTay()
 
-        # featureStrArr = [str(elem) for elem in FGPdict["FGPfeature"]]
-        # featureStr = ",".join(featureStrArr)
-        # idVaVanTay.DacTrungVanTay = featureStr
+        khoThiSinh = ThiSinhRepository()
+        khoThiSinh.capNhatTruong(("NhanDienKhuonMatThem", ), (faceDict["faceEncodingStr"], ), 'ID = "%s"'%(str(faceDict["student"].ID)))
         
-        
-        
-        # self.faceRecognitionObj.SetListStudent(self.lstStudent)
-        # self.mainScreenObj.databaseScreenObj.ShowAddDataDialog()
-        if((faceEncodeSendToServer.__len__() == 0) & (FGPencodeSendToServer.__len__()==0)):
-            return
+        idVaVanTay = AnhXaIDvaVanTay()
+        idVaVanTay.IDThiSinh = faceDict["student"].ID
+        idVaVanTay.ViTriVanTay = FGPdict["FGPsavePos"]
+        featureStrArr = [str(elem) for elem in FGPdict["FGPfeature"]]
+        featureStr = ",".join(featureStrArr)
+        idVaVanTay.DacTrungVanTay = featureStr
+        khoIDvaVanTay = IDvaVanTayRepository()
+        khoIDvaVanTay.ghiDuLieu(idVaVanTay)
+        self.FGPobj.ThemIDvaVanTayVaoDanhSachDaLay(faceDict["student"].ID, FGPdict["FGPsavePos"])
+        self.ThemKhuonMatVaoDanhSachDaLay(faceDict["student"].ID, faceDict["faceEncodingArr"])
+        self.faceRecognitionObj.SetListStudent(self.lstStudent)
+        self.mainScreenObj.databaseScreenObj.ShowAddDataDialog()
+
         sendDict = {
             "ID":faceDict["student"].ID,
-            "FaceEncoding":faceEncodeSendToServer,
-            "FGPEncoding":FGPencodeSendToServer
+            "FaceEncoding":faceDict["faceEncodingStr"],
+            "FGPEncoding":featureStr
         }
         self.socketObject.SendAddFaceAndFGP(sendDict)
     
@@ -257,7 +232,7 @@ class MainWindow(QMainWindow):
         for student in self.lstStudent:
             if(student.ID == idStudent):
                 student.NhanDienKhuonMatThem = ""
-                self.faceRecognitionObj.SetListStudent(self.lstStudent)
+                return
 
     def __DeleteFGPadded(self):
         self.FGPobj.LayDanhSachIDvaVanTay()
@@ -267,7 +242,6 @@ class MainWindow(QMainWindow):
         # self.faceRecognitionObj.StartFaceTracking()
         self.faceRecognitionObj.StartFaceRecognize()
         self.FGPobj.BatLayVanTayDangNhap()
-        self.rfModuleObj.StartReadDataInCard()
 
     def __ReopenReadCamera(self):
         if(self.__FlagUpdateScreenIsShow):
@@ -313,7 +287,6 @@ class MainWindow(QMainWindow):
 
     def __ShowSettingScreen(self):
         self.faceRecognitionObj.StopFaceRecognize()
-        self.rfModuleObj.StopReadDataInCard()
         # self.faceRecognitionObj.StopFaceTracking()
         self.FGPobj.TatLayVanTayDangNhap()
         self.cameraObj.StopReadImage()
@@ -346,12 +319,13 @@ class MainWindow(QMainWindow):
                 return
                 
     def __RecognizedStudent(self, studentObj, faceImageJpgData):
-        self.soundObj.ThreadPlayBip()
+        if(studentObj.ID.__contains__("EC_9999")):
+            self.SearchStudentAndCheck(studentObj)
         self.__OffCameraTemporary(recBy= "face")
+        self.soundObj.ThreadPlayXinCamOn()
         fp = open("imageTosend.jpg", 'wb')
         fp.write(faceImageJpgData)
         self.mainScreenObj.ShowStudentInfomation(studentObj)
-        self.soundObj.ThreadPlayXinCamOn()
         self.__SaveHistory("Face", studentObj.ID)
         # self.mainScreenObj.ShowFaceRecognizeOK()
         self.socketObject.SendResultsFaceRecognize(studentObj.ID, "T", "imageTosend.jpg")
@@ -376,6 +350,9 @@ class MainWindow(QMainWindow):
         lichSu.ThoiGian = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         lichSu.Anh = b''
         self.khoLichSu.ghiDuLieu(lichSu)
+
+    def SearchStudentAndCheck(self, teacher):
+        
 
 def main():
     app = QApplication(sys.argv)

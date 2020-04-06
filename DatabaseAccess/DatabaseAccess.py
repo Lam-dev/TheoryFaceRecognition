@@ -157,6 +157,8 @@ class LayDuLieuTrongDataBase:
                 lstHocVienTuongUngTaiKhoan.append(hocVienVaTaiKhoanQuanLy)
                 del lstHocVienTuongUngTaiKhoan
             return lstHocVienTuongUngTaiKhoan
+        elif(self.tenBang == ""):
+
 
     def ghiDuLieu(self, thongTin):
         try:
@@ -254,6 +256,7 @@ class ThongTinTaiKhoanQuanLy:
         self.IDtaiKhoan = ""
         self.TaiKhoan = ""
         self.MatKhau = ""
+        self.IDtrongBangThiSinh = ""
 
 class AnhXaIDvaVanTay:
     def __init__(self):

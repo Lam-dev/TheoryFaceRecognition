@@ -161,8 +161,11 @@ def ConvertStringToByteArray(string):
 # IPAddr = socket.gethostbyname(hostname)    
 # print("Your Computer Name is:" + hostname)    
 # print("Your Computer IP Address is:" + IPAddr)    
-
-hname = socket.gethostname()
-hip = socket.gethostbyname(hname)
-print("Hostname:  ",hname)
-print("IP Address: ",hip)
+import netifaces
+interface = netifaces.interfaces()
+for inter in interface:
+    try:
+        print(netifaces.ifaddresses(inter)[2][0])
+    except:
+        pass
+print(netifaces.gateways())

@@ -22,6 +22,7 @@ SERVER_REQUEST_GET_LIST_STUDENT                     = 8
 SERVER_REQUEST_DELETE_A_COURSE                      = 9
 SERVER_REQUEST_DELETE_A_STUDENT                     = 10
 SERVER_REQUEST_GET_LIST_HISTORY                     = 11
+SERVER_REQUEST_UPDATE_LIST_TEACHER_ACCOUNT          = 12
 
 LOCAL_PATH_CONTAIN_DATA_UPDATE                      = "DataUpdate/"
 FTP_FILE_PATH_TO_UPLOAD                             = GetSetting.GetSetting("--ServerImageDir")
@@ -86,11 +87,15 @@ class ProcessReciptData(QObject):
                 self.DeleteStudent(reciptObj)
             
             elif(code == SERVER_REQUEST_GET_LIST_HISTORY):
-                self.GetListHistory(reciptObj)    
+                self.GetListHistory(reciptObj)
+            elif(code == SERVER_REQUEST_UPDATE_LIST_TEACHER_ACCOUNT):
+                pass
         except:
 
             pass
     
+    
+
     def SendListCourse(self):
         courseRepo = KhoaThiRepository()
         lstCourse = courseRepo.layDanhSach(" 1 = 1 ")

@@ -293,7 +293,6 @@ class SocketClient(QObject):
                         break
                 except:
                     self.chuaXuLy = self.chuaXuLy[i: len(self.chuaXuLy)]
-                    print(e)
                     break
             i = i + 1
         return lstKhungDL

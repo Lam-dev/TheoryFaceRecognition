@@ -88,7 +88,7 @@ class MainWindow(QMainWindow):
 
         self.FGPobj = Fingerprint()
         self.FGPobj.SignalRecognizedFGP.connect(self.RecognizedFGP)
-        self.FGPobj.BatLayVanTayDangNhap()
+        #self.FGPobj.BatLayVanTayDangNhap()
         self.FGPobj.SignalFGPnotFind.connect(self.PlayNotRecognized)
         self.FGPobj.SignalHandPushed.connect(self.PlayBip)
         self.mainScreenObj.SignalCleanFGPsensor.connect(self.FGPobj.LamSachCamBien)
@@ -241,7 +241,7 @@ class MainWindow(QMainWindow):
         self.cameraObj.StartReadImage()
         # self.faceRecognitionObj.StartFaceTracking()
         self.faceRecognitionObj.StartFaceRecognize()
-        self.FGPobj.BatLayVanTayDangNhap()
+        #self.FGPobj.BatLayVanTayDangNhap()
 
     def __ReopenReadCamera(self):
         if(self.__FlagUpdateScreenIsShow):
@@ -251,7 +251,7 @@ class MainWindow(QMainWindow):
         self.cameraObj.StartReadImage()
         self.faceRecognitionObj.StartFaceRecognize()
         # self.faceRecognitionObj.StartFaceTracking()
-        self.FGPobj.BatLayVanTayDangNhap()
+        #self.FGPobj.BatLayVanTayDangNhap()
         self.timerReopenReadCam.stop()
     
     def __ConnectNewFTPserver(self, ftpServerDict):

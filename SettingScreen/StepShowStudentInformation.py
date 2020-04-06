@@ -31,9 +31,14 @@ class StepShowStudentInformation(QObject, Ui_Frame):
 
         self.pushButton_deleteFaceAdded.hide()
         self.pushButton_deleteFGPadded.hide()
+        self.pushButton_deleteFGPadded.hide()
+        self.label_nhanDienVanTay.hide()
+        self.label_FGPicon.hide()
 
         self.pushButton_deleteFaceAdded.clicked.connect(self.SignalRequestDeleteFaceAdded.emit)
         self.pushButton_deleteFGPadded.clicked.connect(self.SignalRequestDeleteFGPadded.emit)
+
+        self.label_forShowNumberFGPadded.hide()
         
     def ShowStudentInformation(self, student):
         try:

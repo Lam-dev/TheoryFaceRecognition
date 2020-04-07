@@ -110,6 +110,7 @@ class Fingerprint(QObject):
                     self.fingerprintObj.convertImage(0x02)
                     if(self.fingerprintObj.compareCharacteristics() > 0):
                         result = self.fingerprintObj.searchTemplate()
+                        
                         dacTrungVanTay = self.fingerprintObj.downloadCharacteristics(0x01)
                         if(result[0] > 0):
                             viTriLuu = result[0]
@@ -194,6 +195,7 @@ class Fingerprint(QObject):
                 self.fingerprintObj.convertImage(0x01)
                 
                 ketqua = self.fingerprintObj.searchTemplate()
+                print(ketqua)
                 print("ket qua = %s"%(ketqua[0]))
                 if(len(ketqua) == 2):
                     for idVaVanTay in self.lstIDvaVanTay:

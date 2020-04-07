@@ -34,6 +34,7 @@ class SystemSettingContent(Ui_widget_containSettingContent, QObject):
         # self.GetTextFromKeyBoard.emit(self.lineEdit_forInputAccount)
         self.comboBox_forChooseFaceMark.currentIndexChanged.connect(self.ChangeFaceYesOrNoFaceMark)
         self.comboBox_forChooseFRPoint.currentIndexChanged.connect(self.ChangeFRpoint)
+        self.comboBox_forChoseFGPscuLevel.currentIndexChanged.connect(self.ChangeSecurityLevel)
         self.comboBox_forChooserImageQuality.currentIndexChanged.connect(self.ChangedImageQuality)
         self.checkFailPixmap = QtGui.QPixmap("icon/iconCheckFail.png")
         self.checkOKpixmap = QtGui.QPixmap("icon/iconCheckOk.png")
@@ -211,7 +212,7 @@ class SystemSettingContent(Ui_widget_containSettingContent, QObject):
             self.SignalModifyFRpoint.emit(0.4)
     
     def ChangeSecurityLevel(self):
-        text = self.comboBox_forChooseFRPoint.currentText()
+        text = self.comboBox_forChoseFGPscuLevel.currentText()
         if(text == "1"):
             self.SignalModifyFGPsecurityLevel.emit(1)
         elif(text == "2"):

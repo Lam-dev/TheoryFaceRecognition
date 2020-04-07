@@ -32,11 +32,12 @@ class MainWindow(QMainWindow):
         self.mainScreenObj.SetGeometryForLabelShowCamera(273,381)
         # self.mainScree-nObj.pushButton_shutdown.clicked.connect(lambda:os.system('sudo shutdown now'))\
         self.mainScreenObj.pushButton_shutdown.clicked.connect(self.__ShowSettingScreen)
-        # self.mainScreenObj.ShowNotStudentInformation()
+        # self.mainScreenObj.ShowNotStudentInformation()Setting
         self.mainScreenObj.SignalGoToDesktop.connect(self.GoToDesktop)
         self.mainScreenObj.SignalModifyImageQuality.connect(self.__ModifyImageQuality)
         self.mainScreenObj.SignalModifyFaceMark.connect(self.__ModifyFaceMark)
         self.mainScreenObj.SignalModifyFRthreshold.connect(self.__ModifyFRthreshold)
+        self.mainScreenObj.SignalModifyFGPsecurityLevel.connect(self.__ModifyFGPsecurityLevel)
         self.mainScreenObj.SignalConnectNewServer.connect(self.socketObject.ConnectNewServer)
         self.mainScreenObj.SignalConnectNewFTPserver.connect(self.__ConnectNewFTPserver)
         self.mainScreenObj.SignalSettingScreenHiden.connect(self.__SettingScreenHiden)
@@ -166,19 +167,23 @@ class MainWindow(QMainWindow):
             self.__ReopenReadCamera()
 
     def AddStudentInfomation(self, infoDict):
-        self.ThemKhuonMatVaoDanhSachDaLay(infoDict["idStudent"], infoDict["faceEncodingArr"])
-        self.faceRecognitionObj.SetListStudent(self.lstStudent)
-        khoIDvaVanTay = IDvaVanTayRepository()
-        for FGPfeature in infoDict["FGPencoding"]:
-            try:
-                viTri = self.FGPobj.NapVanTayTuThietBiVaoCamBien(FGPfeature)
-            except:
-                pass
-            idVaVanTay = AnhXaIDvaVanTay()
-            idVaVanTay.IDThiSinh = infoDict["idStudent"]
-            idVaVanTay.ViTriVanTay = viTri
-            khoIDvaVanTay.ghiDuLieu(idVaVanTay)
-            self.FGPobj.ThemIDvaVanTayVaoDanhSachDaLay(infoDict["idStudent"], viTri)
+        try:
+            if(infoDict["faceEncodingArr"].__len__() != 0):
+                self.ThemKhuonMatVaoDanhSachDaLay(infoDict["idStudent"], infoDict["faceEncodingArr"])
+                self.faceRecognitionObj.SetListStudent(self.lstStudent)
+            khoIDvaVanTay = IDvaVanTayRepository()
+            if(infoDict["FGPencoding"].__len__() != 0):
+                for FGPfeature in infoDict["FGPencoding"]:
+                    viTri = self.FGPobj.NapVanTayTuThietBiVaoCamBien(FGPfeature)
+                    if(viTri == -1):
+                        continue
+                    idVaVanTay = AnhXaIDvaVanTay()
+                    idVaVanTay.IDThiSinh = infoDict["idStudent"]
+                    idVaVanTay.ViTriVanTay = viTri
+                    khoIDvaVanTay.ghiDuLieu(idVaVanTay)
+                    self.FGPobj.ThemIDvaVanTayVaoDanhSachDaLay(infoDict["idStudent"], viTri)
+        except:
+            pass
     
     def RecognizedCard(self, student):
         self.__OffCameraTemporary(recBy= "card")
@@ -266,6 +271,10 @@ class MainWindow(QMainWindow):
 
     def __ModifyFaceMark(self, mark):
         print(mark)
+
+    def __ModifyFGPsecurityLevel(self, level):
+        self.FGPobj.setSecurityLevel(level)
+
 
     def __ModifyFRthreshold(self, threshold):
         self.faceRecognitionObj.FRthreshold = threshold

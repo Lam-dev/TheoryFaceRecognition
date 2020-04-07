@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>416</width>
-    <height>1900</height>
+    <height>2150</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -594,7 +594,7 @@ color: rgb(0, 170, 255);</string>
    <widget class="QLabel" name="label_showFTPconnectStatus">
     <property name="geometry">
      <rect>
-      <x>70</x>
+      <x>60</x>
       <y>210</y>
       <width>221</width>
       <height>45</height>
@@ -625,7 +625,7 @@ color: rgb(0, 170, 255);</string>
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>1320</y>
+     <y>1550</y>
      <width>421</width>
      <height>149</height>
     </rect>
@@ -708,7 +708,7 @@ color: rgb(0, 170, 255);</string>
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>1490</y>
+     <y>1720</y>
      <width>421</width>
      <height>265</height>
     </rect>
@@ -885,7 +885,7 @@ border-color: rgba(0,140,255,255);
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>60</y>
+     <y>50</y>
      <width>371</width>
      <height>1</height>
     </rect>
@@ -935,8 +935,8 @@ border-color: rgba(0,140,255,255);
   <widget class="Line" name="line_7">
    <property name="geometry">
     <rect>
-     <x>22</x>
-     <y>830</y>
+     <x>20</x>
+     <y>860</y>
      <width>371</width>
      <height>1</height>
     </rect>
@@ -972,7 +972,7 @@ color: rgb(85, 85, 0);</string>
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>830</y>
+     <y>1020</y>
      <width>421</width>
      <height>131</height>
     </rect>
@@ -1003,7 +1003,7 @@ color: rgb(85, 85, 0);</string>
 color: rgb(0, 0, 0);</string>
     </property>
     <property name="text">
-     <string>Độ chính xác nhận diện khuôn mặt</string>
+     <string>Độ khó nhận diện khuôn mặt</string>
     </property>
     <property name="wordWrap">
      <bool>true</bool>
@@ -1086,7 +1086,7 @@ border-color: rgba(0,140,255,255);</string>
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>960</y>
+     <y>1170</y>
      <width>421</width>
      <height>195</height>
     </rect>
@@ -1252,7 +1252,7 @@ font: 25 10pt &quot;Ubuntu&quot;;</string>
    <property name="geometry">
     <rect>
      <x>22</x>
-     <y>960</y>
+     <y>1160</y>
      <width>371</width>
      <height>1</height>
     </rect>
@@ -1268,7 +1268,7 @@ font: 25 10pt &quot;Ubuntu&quot;;</string>
    <property name="geometry">
     <rect>
      <x>24</x>
-     <y>1160</y>
+     <y>1370</y>
      <width>371</width>
      <height>1</height>
     </rect>
@@ -1284,7 +1284,7 @@ font: 25 10pt &quot;Ubuntu&quot;;</string>
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>1470</y>
+     <y>1710</y>
      <width>371</width>
      <height>1</height>
     </rect>
@@ -1300,7 +1300,7 @@ font: 25 10pt &quot;Ubuntu&quot;;</string>
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>1170</y>
+     <y>1380</y>
      <width>421</width>
      <height>149</height>
     </rect>
@@ -1383,7 +1383,7 @@ color: rgb(0, 170, 255);</string>
    <property name="geometry">
     <rect>
      <x>24</x>
-     <y>1320</y>
+     <y>1540</y>
      <width>371</width>
      <height>1</height>
     </rect>
@@ -1399,7 +1399,7 @@ color: rgb(0, 170, 255);</string>
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>1770</y>
+     <y>2000</y>
      <width>421</width>
      <height>123</height>
     </rect>
@@ -1483,7 +1483,7 @@ border-color: rgba(0,140,255,255);</string>
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>1760</y>
+     <y>1990</y>
      <width>371</width>
      <height>1</height>
     </rect>
@@ -1512,7 +1512,7 @@ border-color: rgba(0,140,255,255);</string>
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>70</y>
+     <y>60</y>
      <width>421</width>
      <height>231</height>
     </rect>
@@ -1722,6 +1722,159 @@ color: rgb(0, 170, 255);</string>
     </property>
    </widget>
   </widget>
+  <widget class="QFrame" name="frame_containFaceRecognitionPoint_2">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>870</y>
+     <width>421</width>
+     <height>131</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 0px</string>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::StyledPanel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Raised</enum>
+   </property>
+   <widget class="QLabel" name="label_doChinhXacNhanDienVaTay">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>8</y>
+      <width>393</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="mouseTracking">
+     <bool>true</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 75 bold 12pt &quot;Ubuntu&quot;;
+color: rgb(0, 0, 0);</string>
+    </property>
+    <property name="text">
+     <string>Độ khó nhận diện vân tay</string>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_ctCaoHonLaChinhXacHon">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>40</y>
+      <width>391</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="mouseTracking">
+     <bool>true</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 85, 255);
+font: 25 10pt &quot;Ubuntu&quot;;</string>
+    </property>
+    <property name="text">
+     <string>Cao hơn là chính xác hơn</string>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="comboBox_forChoseFGPscuLevel">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>80</y>
+      <width>161</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">margin: 1px; padding: 7px;
+background-color: rgb(255, 255, 255);
+color: rgba(0,190,255,255);
+border-style: solid;
+border-radius: 3px;
+border-width: 1px;
+border-color: rgba(0,140,255,255);</string>
+    </property>
+    <item>
+     <property name="text">
+      <string>1</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>2</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>3</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>4</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>5</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>6</string>
+     </property>
+    </item>
+   </widget>
+  </widget>
+  <widget class="Line" name="line_8">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>1010</y>
+     <width>371</width>
+     <height>1</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(0, 0, 0);</string>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+  </widget>
+  <zorder>frame_serverInfomation</zorder>
+  <zorder>frame_containFTPserverInfomation</zorder>
+  <zorder>frame_containMemoryInfomation</zorder>
+  <zorder>frame_containFirmwareInformation</zorder>
+  <zorder>line_3</zorder>
+  <zorder>line_4</zorder>
+  <zorder>line_5</zorder>
+  <zorder>line_7</zorder>
+  <zorder>label</zorder>
+  <zorder>frame_containFaceRecognitionPoint</zorder>
+  <zorder>frame_imageQuality</zorder>
+  <zorder>line_9</zorder>
+  <zorder>line_10</zorder>
+  <zorder>line_11</zorder>
+  <zorder>frame_containMemoryInfomation_2</zorder>
+  <zorder>line_12</zorder>
+  <zorder>frame_autoShutdown</zorder>
+  <zorder>line_6</zorder>
+  <zorder>label_diaChi_4</zorder>
+  <zorder>frame_autoShutdown_2</zorder>
+  <zorder>frame_containFaceRecognitionPoint_2</zorder>
+  <zorder>label_thongTinMayChuDuLieu</zorder>
+  <zorder>line_8</zorder>
  </widget>
  <tabstops>
   <tabstop>lineEdit_forInputPassword</tabstop>

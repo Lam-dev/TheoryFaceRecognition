@@ -39,6 +39,7 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
     SignalShutdown = pyqtSignal()
     SignalCloseELT = pyqtSignal()
     SignalDeleteAllData = pyqtSignal()
+    SignalModifyFGPsecurityLevel = pyqtSignal(int)
 
     def __init__(self, MainWindow):
         QObject.__init__(self)
@@ -249,6 +250,7 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         self.settingScreenObj = SettingScreen(self.frameContainUpdateScreen)
         self.settingScreenObj.SignalModifyFaceMark.connect(self.__ModifyFaceMark)
         self.settingScreenObj.SignalModifyFRthreshold.connect(self.__ModifyFRthreadhold)
+        self.settingScreenObj.SignalModifyFGPsecurityLevel.connect(self.SignalModifyFGPsecurityLevel.emit)
         self.settingScreenObj.SignalModifyImageQuality.connect(self.__SignalModifyImageQuality)
         self.settingScreenObj.RequestOpenKeyBoard.connect(self.__ShowKeyBoard)
         self.settingScreenObj.SignalConnectNewFTPserver.connect(self.SignalConnectNewFTPserver.emit)
@@ -259,6 +261,7 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         self.settingScreenObj.SignalCheckVersion.connect(self.ShowVersionCheckScreen)
         self.settingScreenObj.SignalShutdown.connect(self.SignalShutdown.emit)
         self.settingScreenObj.SignalDeleteAllData.connect(self.SignalDeleteAllData.emit)
+        
 
         self.settingScreenShadow.show()
         self.settingScreenShadow.raise_()

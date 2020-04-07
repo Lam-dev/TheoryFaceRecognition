@@ -25,6 +25,7 @@ class SettingScreen(Ui_frame_settingScreen, QObject):
     SignalCheckVersion = pyqtSignal()
     SignalShutdown = pyqtSignal()
     SignalDeleteAllData = pyqtSignal()
+    SignalModifyFGPsecurityLevel = pyqtSignal(int)
     
     def __init__(self, Frame):
         
@@ -171,6 +172,7 @@ class SettingScreen(Ui_frame_settingScreen, QObject):
             self.content.SignalConnectNewFTPserver.connect(self.SignalConnectNewFTPserver.emit)
             self.content.SignalCleanFGPsensor.connect(self.SignalCleanFGPsensor.emit)
             self.content.SignalDeleteAllData.connect(self.SignalDeleteAllData.emit)
+            self.content.SignalModifyFGPsecurityLevel.connect(self.SignalModifyFGPsecurityLevel.emit)
             
             self.content.lineEdit_forInputIP.mousePressEvent = lambda event:self.__OpenKeyboard(self.content.lineEdit_forInputIP)
             self.content.lineEdit_forInputPort.mousePressEvent = lambda event:self.__OpenKeyboard(self.content.lineEdit_forInputPort)

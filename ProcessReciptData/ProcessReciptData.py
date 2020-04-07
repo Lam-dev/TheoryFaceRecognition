@@ -408,21 +408,26 @@ class ProcessReciptData(QObject):
             updateFilePath = LOCAL_PATH_CONTAIN_DATA_UPDATE + fileName
             with open(updateFilePath, encoding='utf-8-sig') as json_file:
                 jsonDict = json.load(json_file)
-
+        
             khoThiSinh = ThiSinhRepository()
             print("Them cho = %s"%(jsonDict["ID"]))
             khoThiSinh.capNhatTruong(("NhanDienKhuonMatThem", "NhanDienVanTay"),(jsonDict["FaceEncoding"], jsonDict["FGPEncoding"]), " ID = '%s' "%(jsonDict["ID"]))
-            faceEncodingStringArr = jsonDict["FaceEncoding"].split(",")
-            faceEncodingArr = [float(elem) for elem in faceEncodingStringArr]
-            lstMultiFGPfeatureStr = jsonDict["FGPEncoding"].split(";")
-            lstFGP = []
-            for FGPfeatureStr in lstMultiFGPfeatureStr:
-                FGPfeatureStrArr = FGPfeatureStr.split(",")
-                FGPfeatureArr = [int(elem) for elem in FGPfeatureStrArr]
-                lstFGP.append(FGPfeatureArr)
+            try:
+                faceEncodingStringArr = jsonDict["FaceEncoding"].split(",")
+                faceEncodingArr = [float(elem) for elem in faceEncodingStringArr]
+            except:
+                faceEncodingArr = []
+            try:
+                lstMultiFGPfeatureStr = jsonDict["FGPEncoding"].split(";")
+                lstFGP = []
+                for FGPfeatureStr in lstMultiFGPfeatureStr:
+                    FGPfeatureStrArr = FGPfeatureStr.split(",")
+                    FGPfeatureArr = [int(elem) for elem in FGPfeatureStrArr]
+                    lstFGP.append(FGPfeatureArr)
             # FGPencodingStringArr = jsonDict["FGPEncoding"].split(",")
             # FGPencodingArr = [int(elem) for elem in FGPencodingStringArr]
-
+            except:
+                lstFGP = []
             faceInfoDict = {
                 "faceEncodingArr": faceEncodingArr,
                 "FGPencoding":lstFGP,

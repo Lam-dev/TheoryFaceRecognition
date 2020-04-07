@@ -6,6 +6,13 @@ from    PIL import Image
 import  _thread
 from    DatabaseAccess.DatabaseAccess     import *
 import  threading
+from    GetSettingFromJSON    import GetSetting
+
+SETTING_DICT  = GetSetting.LoadSettingFromFile()
+try:
+    SCURITY_LEVEL = SETTING_DICT["FGPscuLevel"]
+except:
+    SCURITY_LEVEL = 3
 
 class Fingerprint(QObject):
     SignalNewFGPadded = pyqtSignal(int, list)
@@ -21,7 +28,9 @@ class Fingerprint(QObject):
         self.address = address
         self.password = password
         try:
+            global SCURITY_LEVEL
             self.fingerprintObj = PyFingerprint(port, baudRate, address, password)
+            self.fingerprintObj.setSecurityLevel(SCURITY_LEVEL)
             # self.fingerprintObj.verifyPassword()
         except:
             self.fingerprintObj = False
@@ -35,6 +44,11 @@ class Fingerprint(QObject):
         self.LayDanhSachIDvaVanTay()
         self.FlagFGPfree = True
     
+    def setSecurityLevel(self, level):
+        global SCURITY_LEVEL
+        SCURITY_LEVEL = level
+        self.fingerprintObj.setSecurityLevel(SCURITY_LEVEL)
+
     def XoaVanTayTrongCamBien(self, viTri):
         try:
             self.fingerprintObj.deleteTemplate(viTri)
@@ -86,6 +100,7 @@ class Fingerprint(QObject):
             pass
 
     def ThemVanTay(self):
+        
         try:
             if(type(self.fingerprintObj) is not bool):
                 if(self.fingerprintObj.readImage()):
@@ -103,7 +118,9 @@ class Fingerprint(QObject):
                         self.fingerprintObj.storeTemplate(viTriLuu, 0x01)
                         self.SignalNewFGPadded.emit(viTriLuu, dacTrungVanTay)
             else:
+                global SCURITY_LEVEL
                 self.fingerprintObj = PyFingerprint(self.port, self.baudRate, self.address, self.password)
+                self.fingerprintObj.setSecurityLevel(SCURITY_LEVEL)
                 self.fingerprintObj.verifyPassword()
         except:
             self.fingerprintObj = False
@@ -119,7 +136,7 @@ class Fingerprint(QObject):
             self.fingerprintObj.storeTemplate(viTriLuu, 0x01)
             return viTriLuu
         except:
-            pass
+            return -1
 
     def TimViTriLuu(self):
         for i in range(0,4):

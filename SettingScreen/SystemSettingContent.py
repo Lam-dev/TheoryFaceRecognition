@@ -14,6 +14,7 @@ class SystemSettingContent(Ui_widget_containSettingContent, QObject):
     SignalConnectNewFTPserver = pyqtSignal(dict)
     SignalCleanFGPsensor = pyqtSignal()
     SignalDeleteAllData = pyqtSignal()
+    SignalModifyFGPsecurityLevel = pyqtSignal(int)
     
 
     def __init__(self):
@@ -100,6 +101,8 @@ class SystemSettingContent(Ui_widget_containSettingContent, QObject):
             self.comboBox_forChooseFRPoint.setCurrentIndex(settingDict["FRthreshold"])
             self.comboBox_forChooserImageQuality.setCurrentIndex(settingDict["imageQuality"])
             self.comboBox_forChooseFaceMark.setCurrentIndex(settingDict["faceMark"])
+
+            self.comboBox_forChoseFGPscuLevel.setCurrentIndex(settingDict["FGPscuLevel"])
         except:
             pass
         
@@ -116,7 +119,8 @@ class SystemSettingContent(Ui_widget_containSettingContent, QObject):
             "ftpPassword" : self.lineEdit_forInputFPTpassword.text(),
             "FRthreshold" : self.comboBox_forChooseFRPoint.currentIndex(),
             "imageQuality" : self.comboBox_forChooserImageQuality.currentIndex(),
-            "faceMark":self.comboBox_forChooseFaceMark.currentIndex()
+            "faceMark":self.comboBox_forChooseFaceMark.currentIndex(),
+            "FGPscuLevel":self.comboBox_forChoseFGPscuLevel.currentIndex()
         }
         SaveSetting.SaveSystemSetting(settingDict)
 
@@ -206,5 +210,20 @@ class SystemSettingContent(Ui_widget_containSettingContent, QObject):
         elif(text == "6"):
             self.SignalModifyFRpoint.emit(0.4)
     
+    def ChangeSecurityLevel(self):
+        text = self.comboBox_forChooseFRPoint.currentText()
+        if(text == "1"):
+            self.SignalModifyFGPsecurityLevel.emit(1)
+        elif(text == "2"):
+            self.SignalModifyFGPsecurityLevel.emit(2)
+        elif(text == "3"):
+            self.SignalModifyFGPsecurityLevel.emit(3)
+        elif(text == "4"):
+            self.SignalModifyFGPsecurityLevel.emit(4)
+        elif(text == "5"):
+            self.SignalModifyFGPsecurityLevel.emit(5)
+        elif(text == "6"):
+            self.SignalModifyFGPsecurityLevel.emit(5)
+
     def GetWidgetContent(self):
         return self.scrollAreaContent

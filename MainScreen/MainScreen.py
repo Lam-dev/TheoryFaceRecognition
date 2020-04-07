@@ -155,10 +155,10 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
 
     def ShowFTPserverConnectAvailabel(self, connectAvailable):
         try:
-            if(connectAvailable):
+            if(type(connectAvailable) is bool):
                 self.settingScreenObj.ShowConnectFTPserverStatusToSettingScreen("Máy chủ đang hoạt động", True)
             else:
-                self.settingScreenObj.ShowConnectFTPserverStatusToSettingScreen("Máy chủ không hoạt động", False)
+                self.settingScreenObj.ShowConnectFTPserverStatusToSettingScreen("Lỗi " + connectAvailable , False)
         except:
             pass
 

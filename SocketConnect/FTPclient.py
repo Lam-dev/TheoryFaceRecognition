@@ -58,8 +58,8 @@ class FTPclient(QObject):
             self.ftpObj.login(FTP_ACCOUNT, FTP_PASSWORD)
             return True
 
-        except:
-            return False
+        except Exception as ex:
+            return str(ex.args)
 
     def DeleteLocalImageFile(self):
         try:

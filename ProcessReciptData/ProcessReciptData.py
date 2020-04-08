@@ -23,6 +23,7 @@ SERVER_REQUEST_DELETE_A_COURSE                      = 9
 SERVER_REQUEST_DELETE_A_STUDENT                     = 10
 SERVER_REQUEST_GET_LIST_HISTORY                     = 11
 SERVER_REQUEST_UPDATE_LIST_TEACHER_ACCOUNT          = 12
+SERVER_REQUEST_UPDATE_LIST_STUDENT_OF_TEACHER       = 13
 
 LOCAL_PATH_CONTAIN_DATA_UPDATE                      = "DataUpdate/"
 FTP_FILE_PATH_TO_UPLOAD                             = GetSetting.GetSetting("--ServerImageDir")
@@ -89,11 +90,16 @@ class ProcessReciptData(QObject):
             elif(code == SERVER_REQUEST_GET_LIST_HISTORY):
                 self.GetListHistory(reciptObj)
             elif(code == SERVER_REQUEST_UPDATE_LIST_TEACHER_ACCOUNT):
+                self.UpdateListTeacher(reciptObj)
+            elif(code == SERVER_REQUEST_UPDATE_LIST_STUDENT_OF_TEACHER):
                 pass
         except:
 
             pass
     
+    def __UpdateListTeacher(self, reciptObj):
+        pass
+        
     
 
     def SendListCourse(self):

@@ -144,16 +144,19 @@ class LayDuLieuTrongDataBase:
                 taiKhoanVaMatKhau.IDtaiKhoan = results[i][0]
                 taiKhoanVaMatKhau.TaiKhoan = results[i][1]
                 taiKhoanVaMatKhau.MatKhau = results[i][2]
+                taiKhoanVaMatKhau.NhanDienKhuonMat = results[i][3]
+                taiKhoanVaMatKhau.NhanDienVanTay = results[i][4]
                 lstTaiKhoanQuanLy.append(taiKhoanVaMatKhau)
                 del taiKhoanVaMatKhau
             return lstTaiKhoanQuanLy
-
+ 
         elif(self.tenBang == "HocVienTuongUngTaiKhoanQuanLy"):
             lstHocVienTuongUngTaiKhoan = []
             for i in range(0, len(results)):
                 hocVienVaTaiKhoanQuanLy = HocVienTuongUngTaiKhoanQuanLy()
-                hocVienVaTaiKhoanQuanLy.IDthiSinh = results[i][0]
-                hocVienVaTaiKhoanQuanLy.IDtaiKhoan = results[i][1]
+                hocVienVaTaiKhoanQuanLy.ID = results[i][0]
+                hocVienVaTaiKhoanQuanLy.IDThiSinh = results[i][1]
+                hocVienVaTaiKhoanQuanLy.IDtaiKhoanQuanLy = results[i][2]
                 lstHocVienTuongUngTaiKhoan.append(hocVienVaTaiKhoanQuanLy)
                 del lstHocVienTuongUngTaiKhoan
             return lstHocVienTuongUngTaiKhoan
@@ -253,9 +256,11 @@ class ThongTinKhoaThi:
 
 class ThongTinTaiKhoanQuanLy:
     def __init__(self):
-        self.IDtaiKhoan = ""
+        self.ID = ""
         self.TaiKhoan = ""
         self.MatKhau = ""
+        self.NhanDienVanTay = ""
+        self.NhanDienKhuonMat = ""
         self.IDtrongBangThiSinh = ""
 
 class AnhXaIDvaVanTay:
@@ -284,8 +289,9 @@ class ThongTinThiSinh:
 
 class HocVienTuongUngTaiKhoanQuanLy:
     def __init__(self):
-        self.IDthiSinh = ""
-        self.IDtaiKhoan = ""
+        self.ID = ""
+        self.IDThiSinh = ""
+        self.IDtaiKhoanQuanLy = ""
 
 class GetDataFromDatabase():
     def __init__(self):

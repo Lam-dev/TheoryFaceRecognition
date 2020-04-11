@@ -171,7 +171,7 @@ class MainWindow(QMainWindow):
                 khoIDvaVanTay.ghiDuLieu(idVaVanTay)
                 self.FGPobj.ThemIDvaVanTayVaoDanhSachDaLay(infoDict["idStudent"], viTri)
             except Exception as ex:
-                self.__AddSuccessOrError("er >>fgpAdder>>+"+ex.args+ "ID = " + infoDict["idStudent"])
+                self.__AddSuccessOrError("er >>fgpAdder>>+"+str(ex.args)+ "ID = " + infoDict["idStudent"])
 
     
     def RecognizedFGP(self, studentID):
@@ -215,11 +215,11 @@ class MainWindow(QMainWindow):
             if(student.ID == idStudent):
                 student.NhanDienKhuonMatThem.append(faceEncoding)
                 if(len(faceEncoding) == 0):
-                    self.__AddSuccessOrError("suc >> addFace >> ID = "+ student.HoVaTen)
+                    self.__AddSuccessOrError("suc >> addFace >> ID = "+ student.ID)
                 else:
-                    self.__AddSuccessOrError("er >> notFace >> ID = "+ student.HoVaTen)
+                    self.__AddSuccessOrError("er >> notFace >> ID = "+ student.ID)
                 return
-        
+        self.__AddSuccessOrError("er >> stNotMatch >> ID = "+ student.ID)
 
     def __DeleteFaceAdded(self, idStudent):
         for student in self.lstStudent:

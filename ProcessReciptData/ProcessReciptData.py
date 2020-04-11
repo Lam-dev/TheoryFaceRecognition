@@ -450,7 +450,7 @@ class ProcessReciptData(QObject):
             khoKhoaThi.ghiDuLieu(khoaThi)
             self.SignalErrorOrSuccess.emit("suc >> addedCourse >> "+"ID = "+str(khoaThi.IDKhoaThi)+"T"+str(khoaThi.TenKhoaThi))
         except Exception as ex:
-            self.SignalErrorOrSuccess.emit("er >> errAddCourse >> "+ex.args)
+            self.SignalErrorOrSuccess.emit("er >> errAddCourse >> "+str(ex.args))
         self.__AddStudent(dataObj.data.CardNumber, khoaThi.IDKhoaThi)
             
     def __ConvertStringToUTF8String(self, string):
@@ -490,9 +490,9 @@ class ProcessReciptData(QObject):
                 student.IDKhoaThi = IDCourse
                 khoThiSinh.ghiDuLieu(student)
                 del student
-                self.SignalErrorOrSuccess.emit("suc > stAdded>> "+ student.HoVaTen)
+                self.SignalErrorOrSuccess.emit("suc > stAdded>> "+ lstStudentNumber[i].TraineeName)
             except:
-                self.SignalErrorOrSuccess.emit("er > stAddEr>> "+ student.HoVaTen)
+                self.SignalErrorOrSuccess.emit("er > stAddEr>> "+ lstStudentNumber[i].TraineeName)
     
     def __DeleteStudentByNumber(self, lstStudentNumber):
         khoThiSinh = ThiSinhRepository()

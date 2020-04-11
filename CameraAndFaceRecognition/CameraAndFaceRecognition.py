@@ -104,7 +104,7 @@ class FaceRecognition(QObject):
         self.timerForFaceRecognition = QTimer(self)
         self.timerForFaceRecognition.timeout.connect(self.__StartThreadFaceRecognize)
         self.imageDetectFace = ""
-        self.FRthreshold = 0.5
+        self.FRthreshold = 0.44
         self.timerFaceTracking = QTimer(self)
         self.timerFaceTracking.timeout.connect(self.__StartThreadFaceTracking)
         self.numberFaceRecognize = 0

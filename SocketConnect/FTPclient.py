@@ -47,7 +47,7 @@ class FTPclient(QObject):
     SignalFTPnotConnect = pyqtSignal()
     SignalFolderNotExist = pyqtSignal()
     SignalWaitForDeleteFile = pyqtSignal()
-    SignalError = pyqtSignal()
+    SignalError = pyqtSignal(str)
     def __init__(self):
         super().__init__()
         self.__CreateConnect()

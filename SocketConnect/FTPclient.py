@@ -1,3 +1,4 @@
+
 import ftplib
 from    PyQt5.QtCore            import pyqtSlot, pyqtSignal,QTimer, QDateTime,Qt, QObject
 import  os
@@ -46,6 +47,7 @@ class FTPclient(QObject):
     SignalFTPnotConnect = pyqtSignal()
     SignalFolderNotExist = pyqtSignal()
     SignalWaitForDeleteFile = pyqtSignal()
+    SignalError = pyqtSignal()
     def __init__(self):
         super().__init__()
         self.__CreateConnect()
@@ -58,8 +60,8 @@ class FTPclient(QObject):
             self.ftpObj.login(FTP_ACCOUNT, FTP_PASSWORD)
             return True
 
-        except:
-            return False
+        except Exception as ex:
+            return str(ex.args)
 
     def DeleteLocalImageFile(self):
         try:
@@ -89,7 +91,8 @@ class FTPclient(QObject):
                         lstImage.append(f)
                 self.GetListFileFromServer(lstImage)
                 return lstImage
-            except:
+            except Exception as ex:
+                self.SignalError.emit("er >>getIm>> "+ str(ex.args))
                 self.__CreateConnect()
     
 
@@ -101,7 +104,8 @@ class FTPclient(QObject):
             self.__CreateConnect()
             self.ftpObj.storbinary('STOR %s' % remotefile, fp, 1024)
             self.SignalWaitForDeleteFile.emit()
-        except:
+        except Exception as ex:
+            self.SignalError.emit("er >>sendIm_ftp> "+ str(ex.args))
             try:
                 print("remotefile not exist error caught" + remotefile)
                 path,filename = os.path.split(remotefile)
@@ -136,11 +140,12 @@ class FTPclient(QObject):
                     self.ftpObj.retrbinary("RETR " + f ,open(LOCAL_PATH_CONTAIN_DATA_UPDATE + f, 'wb').write)
                     numberFileGraped += 1
                     lstImageGraped.append(f)
-                except:
-                    pass
+                except Exception as ex:
+                    self.SignalError.emit("er >>ftp_getf> "+ str(ex.args))
             return lstImageGraped
-        except:
-            return
+        except Exception as ex:
+            self.SignalError.emit("er >>ftp_getf> "+ str(ex.args))
+            return False
 
 
 # x = FTPclient()

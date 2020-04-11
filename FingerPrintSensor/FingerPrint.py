@@ -6,7 +6,7 @@ from    PIL import Image
 import  _thread
 from    DatabaseAccess.DatabaseAccess     import *
 import  threading
-
+    
 class Fingerprint(QObject):
     SignalNewFGPadded = pyqtSignal(int, list)
     SignalRecognizedFGP = pyqtSignal(str)
@@ -22,6 +22,7 @@ class Fingerprint(QObject):
         self.password = password
         try:
             self.fingerprintObj = PyFingerprint(port, baudRate, address, password)
+            self.fingerprintObj.setSecurityLevel(3)
             # self.fingerprintObj.verifyPassword()
         except:
             self.fingerprintObj = False
@@ -35,6 +36,12 @@ class Fingerprint(QObject):
         self.LayDanhSachIDvaVanTay()
         self.FlagFGPfree = True
     
+    def setSecurityLevel(self, level):
+        global SCURITY_LEVEL
+        SCURITY_LEVEL = level
+        self.fingerprintObj.setSecurityLevel(SCURITY_LEVEL)
+
+
     def XoaVanTayTrongCamBien(self, viTri):
         try:
             self.fingerprintObj.deleteTemplate(viTri)
@@ -109,17 +116,16 @@ class Fingerprint(QObject):
             self.fingerprintObj = False
     
     def NapVanTayTuThietBiVaoCamBien(self, FGPencoding):
-        try:
-            self.fingerprintObj.uploadCharacteristics(characteristicsData= FGPencoding)
-            result = self.fingerprintObj.searchTemplate()
-            if(result[0] >= 0):
-                viTriLuu = result[0]
-            else:
-                viTriLuu = self.TimKhoangTrong()
-            self.fingerprintObj.storeTemplate(viTriLuu, 0x01)
-            return viTriLuu
-        except:
-            pass
+
+        self.fingerprintObj.uploadCharacteristics(characteristicsData= FGPencoding)
+        result = self.fingerprintObj.searchTemplate()
+        if(result[0] >= 0):
+            viTriLuu = result[0]
+        else:
+            viTriLuu = self.TimKhoangTrong()
+        self.fingerprintObj.storeTemplate(viTriLuu, 0x01)
+        return viTriLuu
+
 
     def TimViTriLuu(self):
         for i in range(0,4):

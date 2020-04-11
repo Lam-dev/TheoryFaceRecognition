@@ -45,6 +45,7 @@ class ProcessReciptData(QObject):
     SignalSyncComplete = pyqtSignal()
     SignalDeleteFGPofStudent = pyqtSignal(str)
     __FlagTimeUpdated = False
+    SignalErrorOrSuccess = pyqtSignal(str)
 
     def __init__(self):
         super().__init__()
@@ -152,9 +153,9 @@ class ProcessReciptData(QObject):
                 "curseID":objectInfo.courseID,
             }
             self.SignalSendResultDeleteAndCheck.emit(json.dumps(messageSendToSocket), SERVER_REQUEST_DELETE_A_COURSE)
-        
-        except:
-            pass
+            
+        except Exception as ex:
+            self.SignalErrorOrSuccess.emit("er >>delCourseER >>"+ str(ex.args))
 
     
     def DeleteStudent(self, objectInfo):
@@ -405,25 +406,30 @@ class ProcessReciptData(QObject):
             lstFileName = []
             lstFileName.append(fileName)
             ftpObj = FTPclient()
-            ftpObj.GetListFileFromServer(lstFile = lstFileName, ftpFilePath = FTP_SERVER_SYNC_DIR)
+            result = ftpObj.GetListFileFromServer(lstFile = lstFileName, ftpFilePath = FTP_SERVER_SYNC_DIR)
+            if(type(resutl) is bool):
+                raise Exception("")
             updateFilePath = LOCAL_PATH_CONTAIN_DATA_UPDATE + fileName
             with open(updateFilePath, encoding='utf-8-sig') as json_file:
                 jsonDict = json.load(json_file)
-
             khoThiSinh = ThiSinhRepository()
-            print("Them cho = %s"%(jsonDict["ID"]))
             khoThiSinh.capNhatTruong(("NhanDienKhuonMatThem", "NhanDienVanTay"),(jsonDict["FaceEncoding"], jsonDict["FGPEncoding"]), " ID = '%s' "%(jsonDict["ID"]))
-            faceEncodingStringArr = jsonDict["FaceEncoding"].split(",")
-            faceEncodingArr = [float(elem) for elem in faceEncodingStringArr]
-            lstMultiFGPfeatureStr = jsonDict["FGPEncoding"].split(";")
-            lstFGP = []
-            for FGPfeatureStr in lstMultiFGPfeatureStr:
-                FGPfeatureStrArr = FGPfeatureStr.split(",")
-                FGPfeatureArr = [int(elem) for elem in FGPfeatureStrArr]
-                lstFGP.append(FGPfeatureArr)
+            try:
+                faceEncodingStringArr = jsonDict["FaceEncoding"].split(",")
+                faceEncodingArr = [float(elem) for elem in faceEncodingStringArr]
+            except:
+                faceEncodingArr = []
+            try:
+                lstMultiFGPfeatureStr = jsonDict["FGPEncoding"].split(";")
+                lstFGP = []
+                for FGPfeatureStr in lstMultiFGPfeatureStr:
+                    FGPfeatureStrArr = FGPfeatureStr.split(",")
+                    FGPfeatureArr = [int(elem) for elem in FGPfeatureStrArr]
+                    lstFGP.append(FGPfeatureArr)
             # FGPencodingStringArr = jsonDict["FGPEncoding"].split(",")
             # FGPencodingArr = [int(elem) for elem in FGPencodingStringArr]
-
+            except:
+                lstFGP = []
             faceInfoDict = {
                 "faceEncodingArr": faceEncodingArr,
                 "FGPencoding":lstFGP,
@@ -431,18 +437,22 @@ class ProcessReciptData(QObject):
             }
             self.SignalUpdateOrSyncStudentInfo.emit(faceInfoDict)
         except:
-            pass
+            self.SignalSendMessage.emit("er >> addRecEr>> IDst = ")
 
     def __CreateAndAddNewCourse(self, dataObj):
-        khoaThi = ThongTinKhoaThi()
-        khoaThi.IDKhoaThi = dataObj.data.CourseInfo.IDKhoaThi
-        khoaThi.TenKhoaThi = dataObj.data.CourseInfo.TenKhoaThi
-        khoaThi.DuongDanLuuAnh = ""
-        khoaThi.NgayTao = dataObj.data.CourseInfo.NgayTao
-        khoKhoaThi = KhoaThiRepository()
-        khoKhoaThi.ghiDuLieu(khoaThi)
+        try:
+            khoaThi = ThongTinKhoaThi()
+            khoaThi.IDKhoaThi = dataObj.data.CourseInfo.IDKhoaThi
+            khoaThi.TenKhoaThi = dataObj.data.CourseInfo.TenKhoaThi
+            khoaThi.DuongDanLuuAnh = ""
+            khoaThi.NgayTao = dataObj.data.CourseInfo.NgayTao
+            khoKhoaThi = KhoaThiRepository()
+            khoKhoaThi.ghiDuLieu(khoaThi)
+            self.SignalErrorOrSuccess.emit("suc >> addedCourse >> "+"ID = "+str(khoaThi.IDKhoaThi)+"T"+str(khoaThi.TenKhoaThi))
+        except Exception as ex:
+            self.SignalErrorOrSuccess.emit("er >> errAddCourse >> "+ex)
         self.__AddStudent(dataObj.data.CardNumber, khoaThi.IDKhoaThi)
-
+            
     def __ConvertStringToUTF8String(self, string):
         x = []
         for elem in string:
@@ -466,9 +476,12 @@ class ProcessReciptData(QObject):
         for image in lstImage:
             try:
                 student = ThongTinThiSinh()
-                fp = open(LOCAL_PATH_CONTAIN_DATA_UPDATE + image, 'rb')
-                student.ID = image.split(".")[0]
-                student.AnhDangKy = fp.read()
+                try:
+                    fp = open(LOCAL_PATH_CONTAIN_DATA_UPDATE + image, 'rb')
+                    student.ID = image.split(".")[0]
+                    student.AnhDangKy = fp.read()
+                except:
+                    self.SignalErrorOrSuccess.emit("er > stAddEr>> not image")
                 #imagePil = Image.open(io.BytesIO(student.AnhDangKy))
                 #imagePil = imagePil.convert("RGB")
                 #npArrayImage = numpy.array(imagePil)
@@ -477,16 +490,18 @@ class ProcessReciptData(QObject):
                 student.IDKhoaThi = IDCourse
                 khoThiSinh.ghiDuLieu(student)
                 del student
+                self.SignalErrorOrSuccess.emit("suc > stAdded>> "+ student.HoVaTen)
             except:
-                pass
+                self.SignalErrorOrSuccess.emit("er > stAddEr>> "+ student.HoVaTen)
     
     def __DeleteStudentByNumber(self, lstStudentNumber):
         khoThiSinh = ThiSinhRepository()
         for stNumber in lstStudentNumber:
             try:
                 khoThiSinh.xoaBanGhi(" ID = %s "%(stNumber))
+                self.SignalErrorOrSuccess.emit("suc > deleted>> "+ stNumber)
             except:
-                pass
+                self.SignalErrorOrSuccess.emit("err > deleteEr>> "+ stNumber)
     
     def __DeleteAllStudent(self):
         khoThiSinh = ThiSinhRepository()

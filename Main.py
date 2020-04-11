@@ -84,13 +84,14 @@ class MainWindow(QMainWindow):
         self.timerReopenReadCam.timeout.connect(self.__ReopenReadCamera)
 
         self.timerWaitForUpdateData = QTimer(self)
-        self.timerWaitForUpdateData.timeout.connect(self.HideWaitForUpdateDataScreen)
+        self.timerWaitForUpdateData.timeout.connect(self.HideWaitForUpdateDataScreen)   
 
         self.FGPobj = Fingerprint()
         self.FGPobj.SignalRecognizedFGP.connect(self.RecognizedFGP)
         self.FGPobj.BatLayVanTayDangNhap()
 
         self.FGPobj.SignalFGPnotFind.connect(self.NotRecogniedFGP)
+
 
         self.mainScreenObj.SignalCleanFGPsensor.connect(self.FGPobj.LamSachCamBien)
 
@@ -160,7 +161,8 @@ class MainWindow(QMainWindow):
         self.ThemKhuonMatVaoDanhSachDaLay(infoDict["idStudent"], infoDict["faceEncodingArr"])
         self.faceRecognitionObj.SetListStudent(self.lstStudent)
         khoIDvaVanTay = IDvaVanTayRepository()
-        if(len(infoDict["FGPencoding"] == 0)):
+        if(len(infoDict["FGPencoding"]) == 0):
+
             self.__AddSuccessOrError("er >>noFGP>> ID = " + infoDict["idStudent"])
         for FGPfeature in infoDict["FGPencoding"]:
             try:
@@ -215,9 +217,10 @@ class MainWindow(QMainWindow):
             if(student.ID == idStudent):
                 student.NhanDienKhuonMatThem.append(faceEncoding)
                 if(len(faceEncoding) == 0):
-                    self.__AddSuccessOrError("suc >> addFace >> ID = "+ student.ID)
-                else:
                     self.__AddSuccessOrError("er >> notFace >> ID = "+ student.ID)
+                    
+                else:
+                    self.__AddSuccessOrError("suc >> addFace >> ID = "+ student.ID)
                 return
         self.__AddSuccessOrError("er >> stNotMatch >> ID = "+ student.ID)
 
@@ -228,7 +231,7 @@ class MainWindow(QMainWindow):
                 return
 
     def __AddSuccessOrError(self, errStr):
-        self.socketObject.SendErrError(errStr)
+        self.socketObject.SendLogError(errStr)
 
     def __DeleteFGPadded(self):
         self.FGPobj.LayDanhSachIDvaVanTay()

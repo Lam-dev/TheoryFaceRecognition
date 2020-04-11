@@ -11,6 +11,7 @@ import json
 import  os
 import getmac
 import      pytz
+from   Logging.Logging         import Logging
 
 SETTING_DICT                                        = GetSetting.LoadSettingFromFile()
 try:
@@ -59,18 +60,19 @@ class SocketClient(QObject):
         self.timerDeleteFTPsendedFile.timeout.connect(self.DeleteFTPsendedFile)
 
         self.ftpObj.SignalWaitForDeleteFile.connect(lambda:self.timerDeleteFTPsendedFile.start(2100))
-        self.ftpObj.SignalError.connect(self.SendErrError)
+        self.ftpObj.SignalError.connect(self.SendLogError)
 
         self.timerWaitForReciptEnoughSyncData = QTimer(self)# cho nhan du du lieu dac trung,\
         self.timerSyncData = QTimer(self)
         self.timerWaitForReciptEnoughSyncData.timeout.connect(self.ReciptEnoughData)
 
+        self.log = Logging()
 
         self.__SignalConnected.connect(self.__ServerConnected)
 
 
         self.processReciptDataObj = ProcessReciptData()
-        self.processReciptDataObj.SignalErrorOrSuccess.connect(self.SendErrError)
+        self.processReciptDataObj.SignalErrorOrSuccess.connect(self.SendLogError)
         self.processReciptDataObj.ShowStudentForConfirm.connect(self.__ShowStudentForConfirmSlot)
         self.processReciptDataObj.ServerConfirmedConnect.connect(self.__ServerConfirmedConnect)
         self.processReciptDataObj.ResponseRequestUpdataFromServer.connect(self.__ResponseResquestUpdateDatabaseFromServer)
@@ -108,9 +110,16 @@ class SocketClient(QObject):
 
         self.__SignalReciptEnounghData.connect(self.__ThreadTachVaPhanTichKhungNhan)
     
-    def SendErrError(self, strErr):
-        self.__SendDataViaSocket(self.__DungKhungGiaoTiep(strErr, CODE_SEND_ERROR))
+    def WriteLog(self, strErr):
+        self.log.WriteLogToFile(strErr)
+        # self.__SendDataViaSocket(self.__DungKhungGiaoTiep(strErr, CODE_SEND_ERROR))
 
+    def SendLogError(self, strErr):
+        # for logLine in self.log.ReadLog():
+        self.__SendDataViaSocket(self.__DungKhungGiaoTiep(strErr, CODE_SEND_ERROR))
+        #pass
+
+        pass    
     def DeleteFTPsendedFile(self):
         self.timerDeleteFTPsendedFile.stop()
         self.ftpObj.DeleteLocalImageFile()
@@ -288,9 +297,8 @@ class SocketClient(QObject):
                     else:
                         self.chuaXuLy = self.chuaXuLy[i: len(self.chuaXuLy)]
                         break
-                except NameError as e:
+                except:
                     self.chuaXuLy = self.chuaXuLy[i: len(self.chuaXuLy)]
-                    print(e)
                     break
             i = i + 1
         return lstKhungDL

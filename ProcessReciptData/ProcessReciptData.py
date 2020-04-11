@@ -255,8 +255,7 @@ class ProcessReciptData(QObject):
             GetSetting.UpdateServerImageDir(FTP_FILE_PATH_TO_UPLOAD)
             self.SignalUpdateDataBaseSuccess.emit(listHocVien)
 
-        except NameError as e:
-            print(e)
+        except:
             pass
 # #endregion 
         # try:
@@ -407,7 +406,7 @@ class ProcessReciptData(QObject):
             lstFileName.append(fileName)
             ftpObj = FTPclient()
             result = ftpObj.GetListFileFromServer(lstFile = lstFileName, ftpFilePath = FTP_SERVER_SYNC_DIR)
-            if(type(resutl) is bool):
+            if(type(result) is bool):
                 raise Exception("")
             updateFilePath = LOCAL_PATH_CONTAIN_DATA_UPDATE + fileName
             with open(updateFilePath, encoding='utf-8-sig') as json_file:
@@ -436,7 +435,7 @@ class ProcessReciptData(QObject):
                 "idStudent" : jsonDict["ID"],
             }
             self.SignalUpdateOrSyncStudentInfo.emit(faceInfoDict)
-        except:
+        except Exception as e:
             self.SignalSendMessage.emit("er >> addRecEr>> IDst = ")
 
     def __CreateAndAddNewCourse(self, dataObj):

@@ -172,8 +172,9 @@ class MainWindow(QMainWindow):
                 idVaVanTay.ViTriVanTay = viTri
                 khoIDvaVanTay.ghiDuLieu(idVaVanTay)
                 self.FGPobj.ThemIDvaVanTayVaoDanhSachDaLay(infoDict["idStudent"], viTri)
+                self.__AddSuccessOrError("er >>fgpAdded>>" + "ID = " + infoDict["idStudent"])
             except Exception as ex:
-                self.__AddSuccessOrError("er >>fgpAdder>>+"+str(ex.args)+ "ID = " + infoDict["idStudent"])
+                self.__AddSuccessOrError("er >>fgpAddEr>>+"+str(ex.args)+ "ID = " + infoDict["idStudent"])
 
     
     def RecognizedFGP(self, studentID):

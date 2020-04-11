@@ -450,7 +450,7 @@ class ProcessReciptData(QObject):
             khoKhoaThi.ghiDuLieu(khoaThi)
             self.SignalErrorOrSuccess.emit("suc >> addedCourse >> "+"ID = "+str(khoaThi.IDKhoaThi)+"T"+str(khoaThi.TenKhoaThi))
         except Exception as ex:
-            self.SignalErrorOrSuccess.emit("er >> errAddCourse >> "+ex)
+            self.SignalErrorOrSuccess.emit("er >> errAddCourse >> "+ex.args)
         self.__AddStudent(dataObj.data.CardNumber, khoaThi.IDKhoaThi)
             
     def __ConvertStringToUTF8String(self, string):

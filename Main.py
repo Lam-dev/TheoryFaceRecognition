@@ -53,7 +53,7 @@ class MainWindow(QMainWindow):
 #region   dieu khien signal tu camera
 
         self.cameraObj.PixmapFromCamera.connect(self.__ShowImageFromCamera)
-        self.cameraObj.CanNotConnectCamera.connect(self.mainScreenObj.ShowCanNotConnectCamera)
+        self.cameraObj.CanNotConnectCamera.connect(self.__NoCameraMode)
         self.cameraObj.StartReadImage()
         self.cameraObj.SignalHideCamera.connect(self.__HideCamera)
 
@@ -101,10 +101,17 @@ class MainWindow(QMainWindow):
 
         self.__FlagUpdateScreenIsShow = False
         self.__FlagNeedWaitContinue = False
+        self.__FlagNoCameraMode = False
         # self.socketServerForRFIDobj = SocketServerForRFID()
         # self.socketServerForRFIDobj.SignalRFIDputOn.connect(self.RFIDputOn)
 
         self.mainScreenObj.ShowCamera()
+
+    def __NoCameraMode(self):
+        self.__FlagNoCameraMode = True
+        self.mainScreenObj.ShowCanNotConnectCamera()
+        self.faceRecognitionObj.StopFaceRecognize()
+        self.cameraObj.StopReadImage()
 
     def PlayBip(self):
         self.soundObj.ThreadPlayBip()
@@ -238,18 +245,20 @@ class MainWindow(QMainWindow):
         self.FGPobj.LayDanhSachIDvaVanTay()
    
     def __SettingScreenHiden(self):
-        self.cameraObj.StartReadImage()
-        # self.faceRecognitionObj.StartFaceTracking()
-        self.faceRecognitionObj.StartFaceRecognize()
+        if(not self.__FlagNoCameraMode):
+            self.cameraObj.StartReadImage()
+            # self.faceRecognitionObj.StartFaceTracking()
+            self.faceRecognitionObj.StartFaceRecognize()
         self.FGPobj.BatLayVanTayDangNhap()
 
     def __ReopenReadCamera(self):
         if(self.__FlagUpdateScreenIsShow):
             return
-        self.mainScreenObj.ShowCamera()
+        if(not self.__FlagNoCameraMode):
+            self.cameraObj.StartReadImage()
+            self.mainScreenObj.ShowCamera()
+            self.faceRecognitionObj.StartFaceRecognize()
         self.mainScreenObj.ClearStudentRecognizedInfomation()
-        self.cameraObj.StartReadImage()
-        self.faceRecognitionObj.StartFaceRecognize()
         # self.faceRecognitionObj.StartFaceTracking()
         self.FGPobj.BatLayVanTayDangNhap()
         self.timerReopenReadCam.stop()
@@ -276,9 +285,11 @@ class MainWindow(QMainWindow):
     def UpdateDatabaseSuccess(self, listStudents):
         self.lstStudent.clear()
         self.lstStudent.extend(listStudents)
-        self.faceRecognitionObj.StartFaceRecognize()
-        self.cameraObj.StartReadImage()
-        self.mainScreenObj.fateScreen()
+        if(not self.__FlagNoCameraMode):
+            self.cameraObj.StartReadImage()
+            self.faceRecognitionObj.StartFaceRecognize()
+            
+        # self.mainScreenObj.fateScreen()
 
     def WaitForUpdateDatabase(self, filePath):
         self.faceRecognitionObj.StopFaceRecognize()

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>416</width>
-    <height>2150</height>
+    <height>1832</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -631,7 +631,7 @@ color: rgb(0, 170, 255);</string>
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>1550</y>
+     <y>1250</y>
      <width>421</width>
      <height>149</height>
     </rect>
@@ -714,7 +714,7 @@ color: rgb(0, 170, 255);</string>
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>1720</y>
+     <y>1420</y>
      <width>421</width>
      <height>265</height>
     </rect>
@@ -974,125 +974,11 @@ color: rgb(85, 85, 0);</string>
     <string>HỆ THỐNG</string>
    </property>
   </widget>
-  <widget class="QFrame" name="frame_containFaceRecognitionPoint">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>1020</y>
-     <width>421</width>
-     <height>131</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">border: 0px</string>
-   </property>
-   <property name="frameShape">
-    <enum>QFrame::StyledPanel</enum>
-   </property>
-   <property name="frameShadow">
-    <enum>QFrame::Raised</enum>
-   </property>
-   <widget class="QLabel" name="label_doChinhXacNhanDienvv">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>8</y>
-      <width>393</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <property name="mouseTracking">
-     <bool>true</bool>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">font: 75 bold 12pt &quot;Ubuntu&quot;;
-color: rgb(0, 0, 0);</string>
-    </property>
-    <property name="text">
-     <string>Độ khó nhận diện khuôn mặt</string>
-    </property>
-    <property name="wordWrap">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_ctTangDoChinhXacvv">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>38</y>
-      <width>391</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="mouseTracking">
-     <bool>true</bool>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">color: rgb(0, 85, 255);
-font: 25 10pt &quot;Ubuntu&quot;;</string>
-    </property>
-    <property name="text">
-     <string>(Tăng độ chính xác khi nhận diện khuôn mặt nhưng làm giảm tốc độ nhận diện)</string>
-    </property>
-    <property name="wordWrap">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QComboBox" name="comboBox_forChooseFRPoint">
-    <property name="geometry">
-     <rect>
-      <x>14</x>
-      <y>90</y>
-      <width>161</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">margin: 1px; padding: 7px;
-background-color: rgb(255, 255, 255);
-color: rgba(0,190,255,255);
-border-style: solid;
-border-radius: 3px;
-border-width: 1px;
-border-color: rgba(0,140,255,255);</string>
-    </property>
-    <item>
-     <property name="text">
-      <string>1</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>2</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>3</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>4</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>5</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>6</string>
-     </property>
-    </item>
-   </widget>
-  </widget>
   <widget class="QFrame" name="frame_imageQuality">
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>1170</y>
+     <y>870</y>
      <width>421</width>
      <height>195</height>
     </rect>
@@ -1258,7 +1144,7 @@ font: 25 10pt &quot;Ubuntu&quot;;</string>
    <property name="geometry">
     <rect>
      <x>22</x>
-     <y>1160</y>
+     <y>860</y>
      <width>371</width>
      <height>1</height>
     </rect>
@@ -1274,7 +1160,7 @@ font: 25 10pt &quot;Ubuntu&quot;;</string>
    <property name="geometry">
     <rect>
      <x>24</x>
-     <y>1370</y>
+     <y>1070</y>
      <width>371</width>
      <height>1</height>
     </rect>
@@ -1290,7 +1176,7 @@ font: 25 10pt &quot;Ubuntu&quot;;</string>
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>1710</y>
+     <y>1410</y>
      <width>371</width>
      <height>1</height>
     </rect>
@@ -1306,7 +1192,7 @@ font: 25 10pt &quot;Ubuntu&quot;;</string>
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>1380</y>
+     <y>1080</y>
      <width>421</width>
      <height>149</height>
     </rect>
@@ -1389,7 +1275,7 @@ color: rgb(0, 170, 255);</string>
    <property name="geometry">
     <rect>
      <x>24</x>
-     <y>1540</y>
+     <y>1240</y>
      <width>371</width>
      <height>1</height>
     </rect>
@@ -1405,7 +1291,7 @@ color: rgb(0, 170, 255);</string>
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>2000</y>
+     <y>1700</y>
      <width>421</width>
      <height>123</height>
     </rect>
@@ -1489,7 +1375,7 @@ border-color: rgba(0,140,255,255);</string>
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>1990</y>
+     <y>1690</y>
      <width>371</width>
      <height>1</height>
     </rect>
@@ -1727,136 +1613,6 @@ color: rgb(0, 170, 255);</string>
      <string>Lấy IP</string>
     </property>
    </widget>
-  </widget>
-  <widget class="QFrame" name="frame_containFaceRecognitionPoint_2">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>870</y>
-     <width>421</width>
-     <height>131</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">border: 0px</string>
-   </property>
-   <property name="frameShape">
-    <enum>QFrame::StyledPanel</enum>
-   </property>
-   <property name="frameShadow">
-    <enum>QFrame::Raised</enum>
-   </property>
-   <widget class="QLabel" name="label_doChinhXacNhanDienVaTay">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>8</y>
-      <width>393</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <property name="mouseTracking">
-     <bool>true</bool>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">font: 75 bold 12pt &quot;Ubuntu&quot;;
-color: rgb(0, 0, 0);</string>
-    </property>
-    <property name="text">
-     <string>Độ khó nhận diện vân tay</string>
-    </property>
-    <property name="wordWrap">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_ctCaoHonLaChinhXacHon">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>40</y>
-      <width>391</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="mouseTracking">
-     <bool>true</bool>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">color: rgb(0, 85, 255);
-font: 25 10pt &quot;Ubuntu&quot;;</string>
-    </property>
-    <property name="text">
-     <string>Cao hơn là chính xác hơn</string>
-    </property>
-    <property name="wordWrap">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QComboBox" name="comboBox_forChoseFGPscuLevel">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>80</y>
-      <width>161</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">margin: 1px; padding: 7px;
-background-color: rgb(255, 255, 255);
-color: rgba(0,190,255,255);
-border-style: solid;
-border-radius: 3px;
-border-width: 1px;
-border-color: rgba(0,140,255,255);</string>
-    </property>
-    <item>
-     <property name="text">
-      <string>1</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>2</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>3</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>4</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>5</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>6</string>
-     </property>
-    </item>
-   </widget>
-  </widget>
-  <widget class="Line" name="line_8">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>1010</y>
-     <width>371</width>
-     <height>1</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background-color: rgb(0, 0, 0);</string>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Horizontal</enum>
-   </property>
   </widget>
  </widget>
  <tabstops>

@@ -7,18 +7,18 @@ from   PyQt5            import QtCore, QtGui
 import time
 from   GetSettingFromJSON    import GetSetting
 
-Camera_Number = 0
+Camera_Number = 1
 Camera_Object = cv2.VideoCapture(Camera_Number)
 frame = False
 frameNoFaceMark = False
 FaceLocationInImage = False
 NumberFrameNotFace = 0
 
-SETTING_DICT  = GetSetting.LoadSettingFromFile()
-try:
-    FR_THRESHOLD = SETTING_DICT["FRthreshold"]
-except:
-    FR_THRESHOLD = 4
+# SETTING_DICT  = GetSetting.LoadSettingFromFile()
+# try:
+#     FR_THRESHOLD = SETTING_DICT["FRthreshold"]
+# except:
+FR_THRESHOLD = 4.5
 
 class GetImageFromCamera(QObject):
     CanNotConnectCamera = pyqtSignal()
@@ -58,7 +58,7 @@ class GetImageFromCamera(QObject):
         #     return
         if(not ret):
             self.CanNotConnectCamera.emit()
-            time.sleep(1000)
+            time.sleep(1)
         else:
             frame = frameFullSize[self.frameCut[1][0]:self.frameCut[1][1], self.frameCut[0][0]:self.frameCut[0][1]]
             frame = cv2.flip(frame, 1)

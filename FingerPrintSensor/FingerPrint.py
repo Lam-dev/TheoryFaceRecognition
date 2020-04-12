@@ -8,11 +8,11 @@ from    DatabaseAccess.DatabaseAccess     import *
 import  threading
 from    GetSettingFromJSON    import GetSetting
 
-SETTING_DICT  = GetSetting.LoadSettingFromFile()
-try:
-    SCURITY_LEVEL = SETTING_DICT["FGPscuLevel"]
-except:
-    SCURITY_LEVEL = 3
+# SETTING_DICT  = GetSetting.LoadSettingFromFile()
+# try:
+#     SCURITY_LEVEL = SETTING_DICT["FGPscuLevel"]
+# except:
+SCURITY_LEVEL = 3
 
 class Fingerprint(QObject):
     SignalNewFGPadded = pyqtSignal(int, list)
@@ -206,8 +206,10 @@ class Fingerprint(QObject):
                 self.SignalFGPnotFind.emit()
 
         except:
-            self.fingerprintObj = PyFingerprint(self.port, self.baudRate, self.address, self.password)
-            pass
+            try:
+                self.fingerprintObj = PyFingerprint(self.port, self.baudRate, self.address, self.password)
+            except:
+                pass
         self.FlagFGPfree = True
 
     def NapLaiDuLieuChoCamBienVanTay(self):

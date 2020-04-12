@@ -33,8 +33,8 @@ class SystemSettingContent(Ui_widget_containSettingContent, QObject):
         self.lineEdit_forInputPort.mouseReleaseEvent = lambda event: self.GetTextFromKeyBoard.emit(self.lineEdit_forInputPort)
         # self.GetTextFromKeyBoard.emit(self.lineEdit_forInputAccount)
         self.comboBox_forChooseFaceMark.currentIndexChanged.connect(self.ChangeFaceYesOrNoFaceMark)
-        self.comboBox_forChooseFRPoint.currentIndexChanged.connect(self.ChangeFRpoint)
-        self.comboBox_forChoseFGPscuLevel.currentIndexChanged.connect(self.ChangeSecurityLevel)
+        # self.comboBox_forChooseFRPoint.currentIndexChanged.connect(self.ChangeFRpoint)
+        # self.comboBox_forChoseFGPscuLevel.currentIndexChanged.connect(self.ChangeSecurityLevel)
         self.comboBox_forChooserImageQuality.currentIndexChanged.connect(self.ChangedImageQuality)
         self.checkFailPixmap = QtGui.QPixmap("icon/iconCheckFail.png")
         self.checkOKpixmap = QtGui.QPixmap("icon/iconCheckOk.png")
@@ -118,10 +118,10 @@ class SystemSettingContent(Ui_widget_containSettingContent, QObject):
             "ftpPort" : self.lineEdit_forInputFTPport.text(),
             "ftpAccount" : self.lineEdit_forInputFTPaccount.text(),
             "ftpPassword" : self.lineEdit_forInputFPTpassword.text(),
-            "FRthreshold" : self.comboBox_forChooseFRPoint.currentIndex(),
+            # "FRthreshold" : self.comboBox_forChooseFRPoint.currentIndex(),
             "imageQuality" : self.comboBox_forChooserImageQuality.currentIndex(),
             "faceMark":self.comboBox_forChooseFaceMark.currentIndex(),
-            "FGPscuLevel":self.comboBox_forChoseFGPscuLevel.currentIndex()
+            # "FGPscuLevel":self.comboBox_forChoseFGPscuLevel.currentIndex()
         }
         SaveSetting.SaveSystemSetting(settingDict)
 

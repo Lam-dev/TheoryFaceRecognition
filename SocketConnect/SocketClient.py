@@ -11,7 +11,6 @@ import json
 import  os
 import getmac
 import      pytz
-from   Logging.Logging         import Logging
 
 SETTING_DICT                                        = GetSetting.LoadSettingFromFile()
 try:
@@ -66,7 +65,6 @@ class SocketClient(QObject):
         self.timerSyncData = QTimer(self)
         self.timerWaitForReciptEnoughSyncData.timeout.connect(self.ReciptEnoughData)
 
-        self.log = Logging()
 
         self.__SignalConnected.connect(self.__ServerConnected)
 
@@ -110,9 +108,6 @@ class SocketClient(QObject):
 
         self.__SignalReciptEnounghData.connect(self.__ThreadTachVaPhanTichKhungNhan)
     
-    def WriteLog(self, strErr):
-        self.log.WriteLogToFile(strErr)
-        # self.__SendDataViaSocket(self.__DungKhungGiaoTiep(strErr, CODE_SEND_ERROR))
 
     def SendLogError(self, strErr):
         # for logLine in self.log.ReadLog():

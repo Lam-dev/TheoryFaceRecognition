@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ManHinhSetting.ui'
 #
-# Created by: PyQt5 UI code generator 5.13.0
+# Created by: PyQt5 UI code generator 5.14.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -64,6 +64,14 @@ class Ui_frame_settingScreen(object):
         self.lb_textDatabaseSetting = QtWidgets.QLabel(self.formLayoutWidget)
         self.lb_textDatabaseSetting.setObjectName("lb_textDatabaseSetting")
         self.formLayout.setWidget(3, QtWidgets.QFormLayout.FieldRole, self.lb_textDatabaseSetting)
+        self.lb_textGoToTakeSampleScreen = QtWidgets.QLabel(self.formLayoutWidget)
+        self.lb_textGoToTakeSampleScreen.setObjectName("lb_textGoToTakeSampleScreen")
+        self.formLayout.setWidget(4, QtWidgets.QFormLayout.FieldRole, self.lb_textGoToTakeSampleScreen)
+        self.lb_iconGoToTakeSampleScreen = QtWidgets.QLabel(self.formLayoutWidget)
+        self.lb_iconGoToTakeSampleScreen.setText("")
+        self.lb_iconGoToTakeSampleScreen.setPixmap(QtGui.QPixmap("iconDatabase.png"))
+        self.lb_iconGoToTakeSampleScreen.setObjectName("lb_iconGoToTakeSampleScreen")
+        self.formLayout.setWidget(4, QtWidgets.QFormLayout.LabelRole, self.lb_iconGoToTakeSampleScreen)
         self.pushButton_shutdown = QtWidgets.QPushButton(self.frame_settingMenu)
         self.pushButton_shutdown.setGeometry(QtCore.QRect(12, 368, 63, 51))
         self.pushButton_shutdown.setText("")
@@ -103,6 +111,7 @@ class Ui_frame_settingScreen(object):
         self.lb_textSoundSetting.setText(_translate("frame_settingScreen", "<html><head/><body><p><span style=\" font-size:12pt;\">Âm thanh</span></p></body></html>"))
         self.lb_textSystemSetting.setText(_translate("frame_settingScreen", "<html><head/><body><p><span style=\" font-size:12pt;\">Hệ thống</span></p></body></html>"))
         self.lb_textDatabaseSetting.setText(_translate("frame_settingScreen", "<html><head/><body><p>Cơ sở dữ liệu</p></body></html>"))
+        self.lb_textGoToTakeSampleScreen.setText(_translate("frame_settingScreen", "<html><head/><body><p>Lấy mẫu</p></body></html>"))
 
 
 if __name__ == "__main__":

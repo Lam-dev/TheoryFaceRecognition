@@ -46,6 +46,7 @@ class MainWindow(QMainWindow):
         self.mainScreenObj.SignalShutdown.connect(self.Shutdown)
         self.mainScreenObj.SignalCloseELT.connect(self.close)
         self.mainScreenObj.SignalDeleteAllData.connect(self.DeleteAllData)
+        self.mainScreenObj.SignalRequestGoToTakeSampleScreen.connect(self.GoToTakeSampleScreen)
 
         self.khoLichSu = LichSuRepository()
         self.soundObj = Sound()
@@ -105,6 +106,9 @@ class MainWindow(QMainWindow):
         # self.socketServerForRFIDobj.SignalRFIDputOn.connect(self.RFIDputOn)
 
         self.mainScreenObj.ShowCamera()
+
+    def GoToTakeSampleScreen(self):
+        pass
 
     def PlayBip(self):
         self.soundObj.ThreadPlayBip()

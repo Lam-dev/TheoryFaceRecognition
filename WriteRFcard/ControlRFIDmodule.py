@@ -14,6 +14,7 @@ CODE_WRITE_FAIL = 4
 class ControlRFIDmudule(QObject):
     SignalRecognizedStudent = pyqtSignal(ThongTinThiSinh)
     SignalNotReconizedStudent = pyqtSignal()
+    SignalWriteToCardSuccessfully = pyqtSignal()
     def __init__(self):
         QObject.__init__(self)
         self.uartObject = UART()
@@ -81,7 +82,7 @@ class ControlRFIDmudule(QObject):
                 pass
             elif(code == CODE_WRITE_SUCCESSFUL):
                 self.RFmoduleWriteCardSuccess()
-
+                self.SignalWriteToCardSuccessfully.emit()
             elif(code == CODE_WRITE_FAIL):
                 pass
         except:

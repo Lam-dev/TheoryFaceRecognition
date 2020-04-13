@@ -25,6 +25,7 @@ class SettingScreen(Ui_frame_settingScreen, QObject):
     SignalCheckVersion = pyqtSignal()
     SignalShutdown = pyqtSignal()
     SignalDeleteAllData = pyqtSignal()
+    SignalRequestGoToTakeSampleScreen = pyqtSignal()
     
     def __init__(self, Frame):
         
@@ -60,18 +61,22 @@ class SettingScreen(Ui_frame_settingScreen, QObject):
         # self.lb_iconSecuritySetting.enterEvent = lambda event: self.MouseEnterItems(self.lb_textSecuritySetting)
         self.lb_iconDatabaseSetting.enterEvent = lambda event: self.MouseEnterItems(self.lb_textDatabaseSetting)
         self.lb_textDatabaseSetting.enterEvent = lambda event: self.MouseEnterItems(self.lb_textDatabaseSetting)
-        
+        self.lb_textGoToTakeSampleScreen.enterEvent = lambda event: self.MouseEnterItems(self.lb_iconGoToTakeSampleScreen)
+
         self.lb_textScreenSetting.leaveEvent = lambda event: self.MouseLeaveItems(self.lb_textScreenSetting)
         self.lb_iconScreenSetting.leaveEvent = lambda event: self.MouseLeaveItems(self.lb_textScreenSetting)
         self.lb_textSoundSetting.leaveEvent = lambda event: self.MouseLeaveItems(self.lb_textSoundSetting)
         self.lb_iconSoundSetting.leaveEvent = lambda event: self.MouseLeaveItems(self.lb_textSoundSetting)
         self.lb_textSystemSetting.leaveEvent = lambda event: self.MouseLeaveItems(self.lb_textSystemSetting)
         self.lb_iconSystemSetting.leaveEvent = lambda event: self.MouseLeaveItems(self.lb_textSystemSetting)
+        
+
         # self.lb_textSecuritySetting.leaveEvent = lambda event: self.MouseLeaveItems(self.lb_textSecuritySetting)
         # self.lb_iconSecuritySetting.leaveEvent = lambda event: self.MouseLeaveItems(self.lb_textSecuritySetting)
         self.lb_iconDatabaseSetting.leaveEvent = lambda event: self.MouseLeaveItems(self.lb_textDatabaseSetting)
         self.lb_textDatabaseSetting.leaveEvent = lambda event: self.MouseLeaveItems(self.lb_textDatabaseSetting)
-        
+        self.lb_textGoToTakeSampleScreen.leaveEvent = lambda event: self.MouseLeaveItems(self.lb_iconGoToTakeSampleScreen)
+
         self.lb_textScreenSetting.mousePressEvent = lambda event: self.ChooseScreenSetting(1)
         self.lb_iconScreenSetting.mousePressEvent = lambda event: self.ChooseScreenSetting(1)
         self.lb_textSoundSetting.mousePressEvent = lambda event: self.ChooseScreenSetting(2)
@@ -82,11 +87,15 @@ class SettingScreen(Ui_frame_settingScreen, QObject):
         # self.lb_iconSecuritySetting.mousePressEvent = lambda event: self.ChooseScreenSetting(4)
         self.lb_iconDatabaseSetting.mousePressEvent = lambda event: self.ChooseScreenSetting(5)
         self.lb_textDatabaseSetting.mousePressEvent = lambda event: self.ChooseScreenSetting(5)
+        self.lb_iconGoToTakeSampleScreen.mousePressEvent = lambda event: self.ChooseScreenSetting(6)
+        self.lb_textGoToTakeSampleScreen.mousePressEvent = lambda event: self.ChooseScreenSetting(6)
+        
         self.lb_iconDatabaseSetting.setPixmap(QtGui.QPixmap("icon/iconDatabase.png"))
         self.lb_iconScreenSetting.setPixmap(QtGui.QPixmap("icon/iconPicture.png"))
         # self.lb_iconSecuritySetting.setPixmap(QtGui.QPixmap("icon/iconSecurity.png"))
         self.lb_iconSoundSetting.setPixmap(QtGui.QPixmap("icon/iconSound.png"))
         self.lb_iconSystemSetting.setPixmap(QtGui.QPixmap("icon/iconSystem.png"))
+        self.lb_iconGoToTakeSampleScreen.setPixmap(QtGui.QPixmap("icon/FGPicon44.png"))
 
         #self.pushButton_goToHideSetting.clicked.connect(self.SignalOpenHideSettingScreen)
         
@@ -192,9 +201,11 @@ class SettingScreen(Ui_frame_settingScreen, QObject):
             # widgetContent = content.GetWidgetContent()
             # self.ScrollArea.SetContent(widgetContent)
             pass
-        else: 
+        elif(settingNumber == 5): 
             self.lb_textDatabaseSetting.setFont(self.boldFont)
             self.RequestOpenDatabaseScreen.emit()
+        else:
+            self.SignalRequestGoToTakeSampleScreen.emit() 
     
     def SaveSetting(self):
         self.content.SaveSetting()

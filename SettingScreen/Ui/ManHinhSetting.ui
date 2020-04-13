@@ -44,7 +44,7 @@ background-color: rgb(255, 255, 235);</string>
       <x>10</x>
       <y>98</y>
       <width>181</width>
-      <height>209</height>
+      <height>221</height>
      </rect>
     </property>
     <layout class="QFormLayout" name="formLayout">
@@ -122,6 +122,23 @@ background-color: rgb(255, 255, 235);</string>
       <widget class="QLabel" name="lb_textDatabaseSetting">
        <property name="text">
         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Cơ sở dữ liệu&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QLabel" name="lb_textGoToTakeSampleScreen">
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Lấy mẫu&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="lb_iconGoToTakeSampleScreen">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="pixmap">
+        <pixmap>iconDatabase.png</pixmap>
        </property>
       </widget>
      </item>

@@ -15,6 +15,7 @@ from    KeyBoard.KeyBoard                       import KeyBoard
 from    SettingScreen.HideSettingScreenAction   import HideSettingScreen
 from    CheckVersionScreen.CheckVersion         import CheckUpdate
 from    GetSettingFromJSON    import GetSetting
+from    TakeSampleScreen.TakeSampleScreen       import TakeSampleScreen
 
 try:
     NAME_SETTING_DICT = GetSetting.GetPersionalSetting()
@@ -41,6 +42,7 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
     SignalDeleteAllData = pyqtSignal()
     SignalWriteToCard = pyqtSignal(str, object)
     SignalStopWriteCard = pyqtSignal()
+    SignalRequestGoToTakeSampleScreen = pyqtSignal()
 
     def __init__(self, MainWindow):
         QObject.__init__(self)
@@ -263,7 +265,8 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         self.settingScreenObj.SignalCheckVersion.connect(self.ShowVersionCheckScreen)
         self.settingScreenObj.SignalShutdown.connect(self.SignalShutdown.emit)
         self.settingScreenObj.SignalDeleteAllData.connect(self.SignalDeleteAllData.emit)
-        
+        self.settingScreenObj.SignalRequestGoToTakeSampleScreen.connect(self.__GoToTakeSampleScreen)
+
         self.settingScreenShadow.show()
         self.settingScreenShadow.raise_()
     
@@ -302,6 +305,13 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         self.frameContainHideSettingScreen.raise_()
         self.frameContainHideSettingScreen.show()
 
+    def __GoToTakeSampleScreen(self):
+        self.SignalRequestGoToTakeSampleScreen.emit()
+        self.frameContainDatabaseScreen = QtWidgets.QFrame(self.centralWidget)
+        self.frameContainDatabaseScreen.setGeometry(QtCore.QRect(0, 50, 800, 429))
+        self.takeSampleScreen = TakeSampleScreen(self.frameContainDatabaseScreen)
+        self.frameContainDatabaseScreen.raise_()
+        self.frameContainDatabaseScreen.show()
 
     def OpenDatabaseManagerScreen(self):
         self.frameContainDatabaseScreen = QtWidgets.QFrame(self.centralWidget)

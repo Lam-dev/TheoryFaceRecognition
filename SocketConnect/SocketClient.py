@@ -24,6 +24,7 @@ CODE_SEND_PING_PONG                         = 1
 CODE_RESULT_RECOGNITION                     = 2
 CODE_STUDENT_FEATURE_FILE                   = 4
 CODE_SEND_RESULT_DATA_BASE_CHECK            = 6
+CODE_SEND_ERROR                             = 20
 
 MAC_ADDRESS                                         = getmac.get_mac_address()
 IMAGE_TO_SEND_SERVER_PATH                           = "/StudentRecognize/SocketConnect/"
@@ -58,6 +59,7 @@ class SocketClient(QObject):
         self.timerDeleteFTPsendedFile.timeout.connect(self.DeleteFTPsendedFile)
 
         self.ftpObj.SignalWaitForDeleteFile.connect(lambda:self.timerDeleteFTPsendedFile.start(2100))
+        self.ftpObj.SignalError.connect(self.SendLogError)
 
         self.timerWaitForReciptEnoughSyncData = QTimer(self)# cho nhan du du lieu dac trung,\
         self.timerSyncData = QTimer(self)
@@ -66,7 +68,9 @@ class SocketClient(QObject):
 
         self.__SignalConnected.connect(self.__ServerConnected)
 
+
         self.processReciptDataObj = ProcessReciptData()
+        self.processReciptDataObj.SignalErrorOrSuccess.connect(self.SendLogError)
         self.processReciptDataObj.ShowStudentForConfirm.connect(self.__ShowStudentForConfirmSlot)
         self.processReciptDataObj.ServerConfirmedConnect.connect(self.__ServerConfirmedConnect)
         self.processReciptDataObj.ResponseRequestUpdataFromServer.connect(self.__ResponseResquestUpdateDatabaseFromServer)
@@ -103,6 +107,13 @@ class SocketClient(QObject):
         self.__DataProcessing = b'';
         self.__SignalReciptEnounghData.connect(self.__ThreadTachVaPhanTichKhungNhan)
     
+
+    def SendLogError(self, strErr):
+        # for logLine in self.log.ReadLog():
+        self.__SendDataViaSocket(self.__DungKhungGiaoTiep(strErr, CODE_SEND_ERROR))
+        #pass
+
+        pass    
     def DeleteFTPsendedFile(self):
         self.timerDeleteFTPsendedFile.stop()
         self.ftpObj.DeleteLocalImageFile()

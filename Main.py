@@ -20,6 +20,7 @@ from         WriteRFcard.ControlRFIDmodule   import ControlRFIDmudule
 import       json
 
 # from   Sound.Sound              import Sound
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -84,7 +85,7 @@ class MainWindow(QMainWindow):
         self.timerReopenReadCam.timeout.connect(self.__ReopenReadCamera)
 
         self.timerWaitForUpdateData = QTimer(self)
-        self.timerWaitForUpdateData.timeout.connect(self.HideWaitForUpdateDataScreen)
+        self.timerWaitForUpdateData.timeout.connect(self.HideWaitForUpdateDataScreen)   
 
         self.FGPobj = Fingerprint()
         self.FGPobj.SignalRecognizedFGP.connect(self.RecognizedFGP)
@@ -176,16 +177,21 @@ class MainWindow(QMainWindow):
         self.ThemKhuonMatVaoDanhSachDaLay(infoDict["idStudent"], infoDict["faceEncodingArr"])
         self.faceRecognitionObj.SetListStudent(self.lstStudent)
         khoIDvaVanTay = IDvaVanTayRepository()
+        if(len(infoDict["FGPencoding"]) == 0):
+
+            self.__AddSuccessOrError("er >>noFGP>> ID = " + infoDict["idStudent"])
         for FGPfeature in infoDict["FGPencoding"]:
             try:
                 viTri = self.FGPobj.NapVanTayTuThietBiVaoCamBien(FGPfeature)
-            except:
-                pass
-            idVaVanTay = AnhXaIDvaVanTay()
-            idVaVanTay.IDThiSinh = infoDict["idStudent"]
-            idVaVanTay.ViTriVanTay = viTri
-            khoIDvaVanTay.ghiDuLieu(idVaVanTay)
-            self.FGPobj.ThemIDvaVanTayVaoDanhSachDaLay(infoDict["idStudent"], viTri)
+                idVaVanTay = AnhXaIDvaVanTay()
+                idVaVanTay.IDThiSinh = infoDict["idStudent"]
+                idVaVanTay.ViTriVanTay = viTri
+                khoIDvaVanTay.ghiDuLieu(idVaVanTay)
+                self.FGPobj.ThemIDvaVanTayVaoDanhSachDaLay(infoDict["idStudent"], viTri)
+                self.__AddSuccessOrError("er >>fgpAdded>>" + "ID = " + infoDict["idStudent"])
+            except Exception as ex:
+                self.__AddSuccessOrError("er >>fgpAddEr>>+"+str(ex.args)+ "ID = " + infoDict["idStudent"])
+
     
     def RecognizedCard(self, student):
         self.__OffCameraTemporary(recBy= "card")
@@ -230,16 +236,26 @@ class MainWindow(QMainWindow):
         self.socketObject.SendAddFaceAndFGP(sendDict)
     
     def ThemKhuonMatVaoDanhSachDaLay(self, idStudent, faceEncoding):
+        
         for student in self.lstStudent:
             if(student.ID == idStudent):
                 student.NhanDienKhuonMatThem.append(faceEncoding)
+                if(len(faceEncoding) == 0):
+                    self.__AddSuccessOrError("er >> notFace >> ID = "+ student.ID)
+                    
+                else:
+                    self.__AddSuccessOrError("suc >> addFace >> ID = "+ student.ID)
                 return
+        self.__AddSuccessOrError("er >> stNotMatch >> ID = "+ student.ID)
 
     def __DeleteFaceAdded(self, idStudent):
         for student in self.lstStudent:
             if(student.ID == idStudent):
                 student.NhanDienKhuonMatThem = ""
                 return
+
+    def __AddSuccessOrError(self, errStr):
+        self.socketObject.SendLogError(errStr)
 
     def __DeleteFGPadded(self):
         self.FGPobj.LayDanhSachIDvaVanTay()
@@ -329,6 +345,7 @@ class MainWindow(QMainWindow):
                 self.faceRecognitionObj.StartFaceRecognize()
                 return
                 
+
     def __RecognizedStudent(self, studentObj, faceImageJpgData):
         if(studentObj.ID.__contains__("EC_9999")):
             self.SearchStudentAndCheck(studentObj)

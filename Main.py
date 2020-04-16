@@ -178,19 +178,21 @@ class MainWindow(QMainWindow):
         self.faceRecognitionObj.SetListStudent(self.lstStudent)
         khoIDvaVanTay = IDvaVanTayRepository()
         if(len(infoDict["FGPencoding"]) == 0):
-
             self.__AddSuccessOrError("er >>noFGP>> ID = " + infoDict["idStudent"])
-        for FGPfeature in infoDict["FGPencoding"]:
-            try:
-                viTri = self.FGPobj.NapVanTayTuThietBiVaoCamBien(FGPfeature)
-                idVaVanTay = AnhXaIDvaVanTay()
-                idVaVanTay.IDThiSinh = infoDict["idStudent"]
-                idVaVanTay.ViTriVanTay = viTri
-                khoIDvaVanTay.ghiDuLieu(idVaVanTay)
-                self.FGPobj.ThemIDvaVanTayVaoDanhSachDaLay(infoDict["idStudent"], viTri)
-                self.__AddSuccessOrError("er >>fgpAdded>>" + "ID = " + infoDict["idStudent"])
-            except Exception as ex:
-                self.__AddSuccessOrError("er >>fgpAddEr>>+"+str(ex.args)+ "ID = " + infoDict["idStudent"])
+        else:
+            khoIDvaVanTay.xoaBanGhi(" IDThiSinh = %s "%(infoDict["idStudent"]))
+            for FGPfeature in infoDict["FGPencoding"]:
+                try:
+                    viTri = self.FGPobj.NapVanTayTuThietBiVaoCamBien(FGPfeature)
+                    idVaVanTay = AnhXaIDvaVanTay()
+                    idVaVanTay.IDThiSinh = infoDict["idStudent"]
+                    idVaVanTay.ViTriVanTay = viTri
+                    
+                    khoIDvaVanTay.ghiDuLieu(idVaVanTay)
+                    self.FGPobj.ThemIDvaVanTayVaoDanhSachDaLay(infoDict["idStudent"], viTri)
+                    self.__AddSuccessOrError("er >>fgpAdded>>" + "ID = " + infoDict["idStudent"])
+                except Exception as ex:
+                    self.__AddSuccessOrError("er >>fgpAddEr>>+"+str(ex.args)+ "ID = " + infoDict["idStudent"])
 
     
     def RecognizedCard(self, student):

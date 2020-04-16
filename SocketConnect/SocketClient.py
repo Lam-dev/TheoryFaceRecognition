@@ -157,11 +157,14 @@ class SocketClient(QObject):
             self.TimerWaitForServerConfirm.start(2000)
 
     def ConnectNewServer(self, serverInfoDict):
-        global SERVER_IP, SERVER_PORT
-        SERVER_IP = serverInfoDict["serverIP"]
-        SERVER_PORT = int(serverInfoDict["serverPort"])
-        self.FlagServerISconnect = False
-        self.CreateConnect()
+        try:
+            global SERVER_IP, SERVER_PORT
+            SERVER_IP = serverInfoDict["serverIP"]
+            SERVER_PORT = int(serverInfoDict["serverPort"])
+            self.FlagServerISconnect = False
+            self.CreateConnect()
+        except:
+            pass
 
     def __SendPingPong(self):
         if(self.__FlagSendPingPong):
@@ -303,6 +306,8 @@ class SocketClient(QObject):
         try:
             if(not self.FlagServerISconnect):
                 self.clientObj = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                self.clientObj.setblocking(1)
+                self.clientObj.settimeout(1000)
                 self.clientObj.connect((SERVER_IP, SERVER_PORT))
                 self.__SendPingPong()
                 self.SignalServerConnected.emit()

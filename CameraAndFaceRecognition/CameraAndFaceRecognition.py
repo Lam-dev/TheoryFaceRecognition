@@ -7,7 +7,7 @@ from   PyQt5            import QtCore, QtGui
 import time
 from   GetSettingFromJSON    import GetSetting
 
-Camera_Number = 1
+Camera_Number = 0
 Camera_Object = cv2.VideoCapture(Camera_Number)
 frame = False
 frameNoFaceMark = False
@@ -18,7 +18,7 @@ NumberFrameNotFace = 0
 # try:
 #     FR_THRESHOLD = SETTING_DICT["FRthreshold"]
 # except:
-FR_THRESHOLD = 4.5
+FR_THRESHOLD = 0.48
 
 class GetImageFromCamera(QObject):
     CanNotConnectCamera = pyqtSignal()

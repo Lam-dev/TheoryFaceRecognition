@@ -103,7 +103,7 @@ font: 75 bold 16pt &quot;Ubuntu&quot;;</string>
     </rect>
    </property>
    <property name="text">
-    <string>TextLabel</string>
+    <string/>
    </property>
   </widget>
   <widget class="QLabel" name="label_soCMTND">
@@ -129,7 +129,7 @@ font: 75 bold 16pt &quot;Ubuntu&quot;;</string>
     </rect>
    </property>
    <property name="text">
-    <string>cmtnd</string>
+    <string/>
    </property>
   </widget>
   <widget class="QLabel" name="label_faceIcon">

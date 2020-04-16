@@ -22,34 +22,21 @@ class SystemSettingContent(Ui_widget_containSettingContent, QObject):
         Ui_widget_containSettingContent.__init__(self)
         self.scrollAreaContent = QtWidgets.QWidget()
         self.setupUi(self.scrollAreaContent)
-        self.comboBox_chooseTime.addItems(("15 phút", "30 Phút", "1 Giờ"))
-        self.lineEdit_forInputAccount.mouseReleaseEvent = lambda event: self.GetTextFromKeyBoard.emit(self.lineEdit_forInputAccount)
-        self.lineEdit_forInputFPTpassword.mouseReleaseEvent = lambda event: self.GetTextFromKeyBoard.emit(self.lineEdit_forInputFPTpassword)
-        self.lineEdit_forInputFTPaccount.mouseReleaseEvent = lambda event: self.GetTextFromKeyBoard.emit(self.lineEdit_forInputFTPaccount)
-        self.lineEdit_forInputFTPIP.mouseReleaseEvent = lambda event: self.GetTextFromKeyBoard.emit(self.lineEdit_forInputFTPIP)
-        self.lineEdit_forInputFTPport.mouseReleaseEvent = lambda event: self.GetTextFromKeyBoard.emit(self.lineEdit_forInputFTPport)
+
         self.lineEdit_forInputIP.mouseReleaseEvent = lambda event: self.GetTextFromKeyBoard.emit(self.lineEdit_forInputIP)
-        self.lineEdit_forInputPassword.mouseReleaseEvent = lambda event: self.GetTextFromKeyBoard.emit(self.lineEdit_forInputPassword)
         self.lineEdit_forInputPort.mouseReleaseEvent = lambda event: self.GetTextFromKeyBoard.emit(self.lineEdit_forInputPort)
-        # self.GetTextFromKeyBoard.emit(self.lineEdit_forInputAccount)
-        self.comboBox_forChooseFaceMark.currentIndexChanged.connect(self.ChangeFaceYesOrNoFaceMark)
+
         # self.comboBox_forChooseFRPoint.currentIndexChanged.connect(self.ChangeFRpoint)
         # self.comboBox_forChoseFGPscuLevel.currentIndexChanged.connect(self.ChangeSecurityLevel)
-        self.comboBox_forChooserImageQuality.currentIndexChanged.connect(self.ChangedImageQuality)
         self.checkFailPixmap = QtGui.QPixmap("icon/iconCheckFail.png")
         self.checkOKpixmap = QtGui.QPixmap("icon/iconCheckOk.png")
         self.label_iconSocketStatus.setPixmap(QtGui.QPixmap("icon/iconConnected.png"))
         self.lineEdit_forInputIP.textChanged.connect(lambda:self.__CheckIPrule(self.lineEdit_forInputIP.text(), self.label_iconCheckServerIP))
         self.lineEdit_forInputPort.textChanged.connect(lambda:self.__CheckPortRule(self.lineEdit_forInputPort.text(), self.label_iconCheckServerPort))
-        self.lineEdit_forInputAccount.textChanged.connect(lambda:self.__CheckAccount(self.lineEdit_forInputAccount.text(), self.label_iconCheckServerAccount))
-        self.lineEdit_forInputPassword.textChanged.connect(lambda:self.__CheckPassword(self.lineEdit_forInputPassword.text(), self.label_iconCheckServerPassword))
-        self.lineEdit_forInputFTPIP.textChanged.connect(lambda:self.__CheckIPrule(self.lineEdit_forInputFTPIP.text(), self.label_iconCheckFTPip))
-        self.lineEdit_forInputFTPport.textChanged.connect(lambda:self.__CheckPortRule(self.lineEdit_forInputFTPport.text(), self.label_iconCheckFTPport))
-        self.lineEdit_forInputFTPaccount.textChanged.connect(lambda:self.__CheckAccount(self.lineEdit_forInputFTPaccount.text(), self.label_iconCheckFTPaccount))
-        self.lineEdit_forInputFPTpassword.textChanged.connect(lambda:self.__CheckPassword(self.lineEdit_forInputFPTpassword.text(), self.label_iconCheckFTPpassword))
+
         self.pushButton_connectNewServer.clicked.connect(self.__ConnectNewServer)
-        self.pushButton_connectNewFTP.clicked.connect(self.__ConnectNewFTPserver)
-        self.pushButton_cleanFGPsensor.clicked.connect(self.SignalCleanFGPsensor.emit)
+
+
         self.pushButton_deleteAllData.clicked.connect(self.SignalDeleteAllData.emit)
         self.GetAndShowSetting()
         self.__GetAndShowCurrentVersion()
@@ -67,18 +54,18 @@ class SystemSettingContent(Ui_widget_containSettingContent, QObject):
         serverInfoDict  ={
             "serverIP"     : self.lineEdit_forInputIP.text(),
             "serverPort"   : self.lineEdit_forInputPort.text(),
-            "serverAccount" : self.lineEdit_forInputAccount.text(),
-            "serverPassword" : self.lineEdit_forInputPassword.text()
         }
         self.SignalConnectNewServer.emit(serverInfoDict)
+
+        self.__ConnectNewFTPserver()
 
     def __ConnectNewFTPserver(self):
         
         FTPserverDict = {
-            "ftpIP" : self.lineEdit_forInputFTPIP.text(),
-            "ftpPort" : self.lineEdit_forInputFTPport.text(),
-            "ftpAccount" : self.lineEdit_forInputFTPaccount.text(),
-            "ftpPassword" : self.lineEdit_forInputFPTpassword.text()
+            "ftpIP" : self.lineEdit_forInputIP.text(),
+            "ftpPort" : 21,
+            "ftpAccount" : "ecotek",
+            "ftpPassword" : "Ecotek@123"
         }
         self.SignalConnectNewFTPserver.emit(FTPserverDict)
 
@@ -88,39 +75,39 @@ class SystemSettingContent(Ui_widget_containSettingContent, QObject):
         if(type(settingDict) is  bool):
             return
         try:
-            self.comboBox_chooseTime.setCurrentIndex(int(settingDict["autoShutdown"]))
+            # self.comboBox_chooseTime.setCurrentIndex(int(settingDict["autoShutdown"]))
             self.lineEdit_forInputIP.setText(settingDict["serverIP"])
             self.lineEdit_forInputPort.setText(settingDict["serverPort"])
-            self.lineEdit_forInputAccount.setText(settingDict["serverAccount"])
-            self.lineEdit_forInputPassword.setText(settingDict["serverPassword"])
+            # self.lineEdit_forInputAccount.setText(settingDict["serverAccount"])
+            # self.lineEdit_forInputPassword.setText(settingDict["serverPassword"])
 
-            self.lineEdit_forInputFTPIP.setText(settingDict["ftpIP"])
-            self.lineEdit_forInputFTPport.setText(settingDict["ftpPort"])
-            self.lineEdit_forInputFTPaccount.setText(settingDict["ftpAccount"])
-            self.lineEdit_forInputFPTpassword.setText(settingDict["ftpPassword"])
+            # self.lineEdit_forInputFTPIP.setText(settingDict["ftpIP"])
+            # self.lineEdit_forInputFTPport.setText(settingDict["ftpPort"])
+            # self.lineEdit_forInputFTPaccount.setText(settingDict["ftpAccount"])
+            # self.lineEdit_forInputFPTpassword.setText(settingDict["ftpPassword"])
 
-            self.comboBox_forChooseFRPoint.setCurrentIndex(settingDict["FRthreshold"])
-            self.comboBox_forChooserImageQuality.setCurrentIndex(settingDict["imageQuality"])
-            self.comboBox_forChooseFaceMark.setCurrentIndex(settingDict["faceMark"])
+            # self.comboBox_forChooseFRPoint.setCurrentIndex(settingDict["FRthreshold"])
+            # self.comboBox_forChooserImageQuality.setCurrentIndex(settingDict["imageQuality"])
+            # self.comboBox_forChooseFaceMark.setCurrentIndex(settingDict["faceMark"])
 
-            self.comboBox_forChoseFGPscuLevel.setCurrentIndex(settingDict["FGPscuLevel"])
+            # self.comboBox_forChoseFGPscuLevel.setCurrentIndex(settingDict["FGPscuLevel"])
         except:
             pass
         
     def SaveSetting(self):
         settingDict = {
-            "autoShutdown" : self.comboBox_chooseTime.currentIndex(),
+            # "autoShutdown" : self.comboBox_chooseTime.currentIndex(),
             "serverIP"     : self.lineEdit_forInputIP.text(),
             "serverPort"   : self.lineEdit_forInputPort.text(),
-            "serverAccount" : self.lineEdit_forInputAccount.text(),
-            "serverPassword" : self.lineEdit_forInputPassword.text(),
-            "ftpIP" : self.lineEdit_forInputFTPIP.text(),
-            "ftpPort" : self.lineEdit_forInputFTPport.text(),
-            "ftpAccount" : self.lineEdit_forInputFTPaccount.text(),
-            "ftpPassword" : self.lineEdit_forInputFPTpassword.text(),
+            # "serverAccount" : self.lineEdit_forInputAccount.text(),
+            # "serverPassword" : self.lineEdit_forInputPassword.text(),
+            "ftpIP" : self.lineEdit_forInputIP.text(),
+            "ftpPort" : 21,
+            "ftpAccount" : "ecotek",
+            "ftpPassword" : "Ecotek@123",
             # "FRthreshold" : self.comboBox_forChooseFRPoint.currentIndex(),
-            "imageQuality" : self.comboBox_forChooserImageQuality.currentIndex(),
-            "faceMark":self.comboBox_forChooseFaceMark.currentIndex(),
+            # "imageQuality" : self.comboBox_forChooserImageQuality.currentIndex(),
+            # "faceMark":self.comboBox_forChooseFaceMark.currentIndex(),
             # "FGPscuLevel":self.comboBox_forChoseFGPscuLevel.currentIndex()
         }
         SaveSetting.SaveSystemSetting(settingDict)

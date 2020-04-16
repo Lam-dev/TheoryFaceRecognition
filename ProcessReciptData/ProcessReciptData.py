@@ -369,9 +369,9 @@ class ProcessReciptData(QObject):
             self.__AddStudent(lstStudent, idCourse)
         
         elif(reciptObj.data.action == "sync"):
-            self.SignalWaitForRecitpEnoughSyncData.emit()
-            self.lstFeatureFileNameForSync.insert(0, reciptObj.data.fileName)
-            #self.__UpdateSyncData(reciptObj.data.fileName)
+            # self.SignalWaitForRecitpEnoughSyncData.emit()
+            # self.lstFeatureFileNameForSync.insert(0, reciptObj.data.fileName)
+            self.__UpdateSyncData(reciptObj.data.fileName)
 
         elif(reciptObj.data.action == "newCourse"):
             self.__CreateAndAddNewCourse(reciptObj)

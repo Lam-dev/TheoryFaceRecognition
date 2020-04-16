@@ -21,7 +21,7 @@ class Fingerprint(QObject):
     SignalHandPushed = pyqtSignal()
     
 
-    def __init__(self, port = '/dev/ttyACM0', baudRate = 57600, address = 0xFFFFFFFF, password = 0xFFFFFFFF):
+    def __init__(self, port = '/dev/ttyS3', baudRate = 57600, address = 0xFFFFFFFF, password = 0xFFFFFFFF):
         super().__init__()
         self.port = port
         self.baudRate = baudRate
@@ -136,8 +136,8 @@ class Fingerprint(QObject):
                 viTriLuu = self.TimKhoangTrong()
             self.fingerprintObj.storeTemplate(viTriLuu, 0x01)
             return viTriLuu
-        except:
-            return -1
+        except Exception as ex:
+            raise Exception(ex.args)
 
     def TimViTriLuu(self):
         for i in range(0,4):

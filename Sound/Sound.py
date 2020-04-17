@@ -2,6 +2,7 @@ import pyaudio
 import wave
 
 
+
 filename = 'Sound/AudioFile/xinCamOn.wav'
 fileVLC = 'Sound/AudioFile/vuiLongThuLai.wav'
 data = b''

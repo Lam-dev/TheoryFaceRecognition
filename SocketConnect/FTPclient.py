@@ -130,8 +130,8 @@ class FTPclient(QObject):
         # os.makedirs(LOCAL_PATH_CONTAIN_DATA_UPDATE)
         try:
             shutil.rmtree(LOCAL_PATH_CONTAIN_DATA_UPDATE)
-        except:
-            pass
+        except Exception as ex:
+            raise("er >> canot deleteupdatefile")
         os.mkdir("DataUpdate")
         try:
             self.ftpObj.cwd(ftpFilePath)
@@ -143,9 +143,10 @@ class FTPclient(QObject):
                     self.ftpObj.retrbinary("RETR " + f ,open(LOCAL_PATH_CONTAIN_DATA_UPDATE + f, 'wb').write)
                     numberFileGraped += 1
                     lstImageGraped.append(f)
+                    self.SignalError.emit(">>> da lay anh >> " + f)
                 except Exception as ex:
                     raise ("er >>ftp_getf> "+ str(ex.args))
-                    return
+
             return lstImageGraped
         except Exception as ex:
             raise("er >>ftp_getf> "+ str(ex.args))

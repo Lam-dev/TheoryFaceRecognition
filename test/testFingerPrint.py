@@ -1,6 +1,6 @@
 from    FingerprintLib  import PyFingerprint
 import time           
-fingerprintObj = PyFingerprint(port = '/dev/ttyS3', baudRate = 57600, address = 0xFFFFFFFF, password = 0xFFFFFFFF)
+fingerprintObj = PyFingerprint(port = '/dev/ttyACM0', baudRate = 57600, address = 0xFFFFFFFF, password = 0xFFFFFFFF)
 # print(fingerprintObj.getTemplateCount())
 while True:
     try:
@@ -11,6 +11,7 @@ while True:
                 # fingerprintObj.convertImage(0x02)
                 # if(fingerprintObj.compareCharacteristics() > 0):
                 feature = fingerprintObj.downloadCharacteristics(0x01)
+                fingerprintObj.downloadImage("/home/lam/Desktop/EcotekProject/Database")
                 tong = 0
                 for f in feature:
                     tong += f

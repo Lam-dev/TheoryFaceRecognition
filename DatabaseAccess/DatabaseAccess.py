@@ -181,7 +181,7 @@ class LayDuLieuTrongDataBase:
                 cursor.execute(sql)
                 self.CSDL.commit()
             
-        except sqlite3.Error as e:
+        except sqlite3.Error as ex:
             raise Exception(ex.args)
 
     

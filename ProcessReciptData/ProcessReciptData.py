@@ -465,7 +465,7 @@ class ProcessReciptData(QObject):
             for stNumber in lstStudentNumber:
                 imageName = str(stNumber.CardNumber) + ".jpg"
                 lstImage.append(imageName)
-
+                self.SignalErrorOrSuccess.emit("nhan dc danh sach anh >> "+imageName)
         except:
             pass
         ftpObj = FTPclient()
@@ -491,8 +491,8 @@ class ProcessReciptData(QObject):
                 khoThiSinh.ghiDuLieu(student)
                 del student
                 self.SignalErrorOrSuccess.emit("suc > stAdded>> "+ lstStudentNumber[i].TraineeName)
-            except:
-                self.SignalErrorOrSuccess.emit("er > stAddEr>> "+ lstStudentNumber[i].TraineeName)
+            except Exception as ex:
+                self.SignalErrorOrSuccess.emit("er > stAddEr>> "+ lstStudentNumber[i].TraineeName + ">>" + str(ex.args))
     
     def __DeleteStudentByNumber(self, lstStudentNumber):
         khoThiSinh = ThiSinhRepository()

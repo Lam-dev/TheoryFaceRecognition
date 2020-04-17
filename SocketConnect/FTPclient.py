@@ -144,11 +144,12 @@ class FTPclient(QObject):
                     numberFileGraped += 1
                     lstImageGraped.append(f)
                 except Exception as ex:
-                    self.SignalError.emit("er >>ftp_getf> "+ str(ex.args))
+                    raise ("er >>ftp_getf> "+ str(ex.args))
+                    return
             return lstImageGraped
         except Exception as ex:
-            self.SignalError.emit("er >>ftp_getf> "+ str(ex.args))
-            return False
+            raise("er >>ftp_getf> "+ str(ex.args))
+            return
 
 
 # x = FTPclient()

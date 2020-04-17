@@ -459,7 +459,7 @@ class ProcessReciptData(QObject):
         return(bytes(x).decode("utf8", "ignore"))
 
     def __AddStudent(self, lstStudentNumber, IDCourse):
-        
+
         lstImage = []
         try:
             for stNumber in lstStudentNumber:
@@ -469,7 +469,10 @@ class ProcessReciptData(QObject):
         except:
             pass
         ftpObj = FTPclient()
-        lstImageGrapped = ftpObj.GetListFileFromServer(lstImage)
+        try:
+            lstImageGrapped = ftpObj.GetListFileFromServer(lstImage)
+        except Exception as ex:
+            self.SignalErrorOrSuccess.emit("er > ftpErr>> "+ str(ex.args))
         khoThiSinh = ThiSinhRepository()
         i = 0
         for image in lstImage:

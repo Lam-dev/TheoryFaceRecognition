@@ -92,6 +92,7 @@ class MainWindow(QMainWindow):
         self.FGPobj.BatLayVanTayDangNhap()
         self.FGPobj.SignalFGPnotFind.connect(self.PlayNotRecognized)
         self.FGPobj.SignalHandPushed.connect(self.PlayBip)
+        self.FGPobj.LayDanhSachIDvaVanTay()
         self.mainScreenObj.SignalCleanFGPsensor.connect(self.FGPobj.LamSachCamBien)
 
         self.rfModuleObj = ControlRFIDmudule()

@@ -21,6 +21,7 @@ class Fingerprint(QObject):
         self.password = password
         try:
             self.fingerprintObj = PyFingerprint(port, baudRate, address, password)
+            self.fingerprintObj.setSecurityLevel(3)
             # self.fingerprintObj.verifyPassword()
         except:
             self.fingerprintObj = False
@@ -94,6 +95,7 @@ class Fingerprint(QObject):
                         self.SignalNewFGPadded.emit(viTriLuu, dacTrungVanTay)
             else:
                 self.fingerprintObj = PyFingerprint(self.port, self.baudRate, self.address, self.password)
+                self.fingerprintObj.setSecurityLevel(1)
                 self.fingerprintObj.verifyPassword()
         except:
             self.fingerprintObj = False

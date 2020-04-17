@@ -28,6 +28,7 @@ class Fingerprint(QObject):
         try:
             self.fingerprintObj = PyFingerprint(port, baudRate, address, password)
             # self.fingerprintObj.verifyPassword()
+            self.fingerprintObj.setSecurityLevel(1)
         except:
             self.fingerprintObj = False
         
@@ -42,8 +43,6 @@ class Fingerprint(QObject):
 
         self.timerGetFGPfeature = QTimer()
         self.timerGetFGPfeature.timeout.connect(self.ThreadGetFGPfeature)
-
-        self.lstIDvaVanTay = []
         self.viTriDaChonChuaLuu = []
         self.__FlagLockFGPsensor = False
 
@@ -117,6 +116,7 @@ class Fingerprint(QObject):
                         self.SignalNewFGPadded.emit(viTriLuu, dacTrungVanTay)
             else:
                 self.fingerprintObj = PyFingerprint(self.port, self.baudRate, self.address, self.password)
+                self.fingerprintObj.setSecurityLevel(1)
                 self.fingerprintObj.verifyPassword()
         except:
             self.fingerprintObj = False

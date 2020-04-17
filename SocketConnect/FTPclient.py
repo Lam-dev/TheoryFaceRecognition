@@ -80,6 +80,7 @@ class FTPclient(QObject):
 
 
     def GetListStudentImage(self, fileDir):
+        self.SignalError.emit("war >>  " + fileDir)
         for i in range(0, 3):
             try:
                 self.ftpObj.cwd(fileDir)
@@ -122,6 +123,7 @@ class FTPclient(QObject):
         fp.close()
                     
     def GetListFileFromServer(self, lstFile, ftpFilePath = FTP_SERVER_DOWLOAD_IMAGE_FILE_PATH):
+        
         numberFileGraped = 0
         lstImageGraped = []
         # os.removedirs(LOCAL_PATH_CONTAIN_DATA_UPDATE)
@@ -134,6 +136,7 @@ class FTPclient(QObject):
         try:
             self.ftpObj.cwd(ftpFilePath)
             for f in lstFile:
+                self.SignalError.emit("war >> ftp" + f)
                 if((not f.__contains__(".jpg")) & (not f.__contains__(".json"))):
                     continue
                 try:

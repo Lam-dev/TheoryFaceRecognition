@@ -46,12 +46,13 @@ class ProcessReciptData(QObject):
     SignalDeleteFGPofStudent = pyqtSignal(str)
     __FlagTimeUpdated = False
     SignalErrorOrSuccess = pyqtSignal(str)
+   
 
     def __init__(self):
         super().__init__()
         self.lstFeatureFileNameForSync = []
 
-        # self.ftpObj = FTPclient()
+        self.ftpObj = FTPclient()
 
     def _json_object_hook(self, d): return namedtuple('X', d.keys())(*d.values())
 
@@ -215,62 +216,6 @@ class ProcessReciptData(QObject):
             except:
                 pass
 
-    def __ServerRequestUpdateDatabase(self, ftpFileDir):
-#region truong hop khong doc duoc anh tu xml
-        # readFaceEncodingObj = GetFaceEncodingFromImage()
-
-        # lstImageDir = self.ftpObj.GetListStudentImage()
-        # lstStudent = []
-        # for imageDir in lstImageDir:
-        #     if(imageDir.__contains__("/")):
-        #         parts = imageDir.split("/")
-        #         maDK = (parts[len(parts) - 1].split("."))[0]
-        #     else:
-        #         maDK = imageDir.split(".")[0]
-        #     studentObj = ThongTinThiSinh()
-            
-        #     encoding, encodingStr = readFaceEncodingObj.GetFaceEncodingFromImageFile(image)
-
-        #     if(type(encoding) is not bool):
-        #         lstStudent.append(studentObj)
-#endregion
-#region Truong hop lay thong tin thi sinh tu xml
-        try:
-            ftpObj = FTPclient()
-            lstImageAndXMLfile = ftpObj.GetListStudentImage(ftpFileDir)
-            listHocVien = []
-            for imageAndXml in lstImageAndXMLfile:
-                if(imageAndXml.__contains__(".xml") | imageAndXml.__contains__(".XML")):
-                    self.parseXMLobj = ParseXML()
-                    self.parseXMLobj.SignalNumberParsed.connect(self.__NumberStudentParsed)
-                    lstHocVienCongThem = self.parseXMLobj.ReadListStudentFromXML(imageAndXml)
-                    for hocVien in lstHocVienCongThem:
-                        listHocVien.append(hocVien)
-            khoThiSinh = ThiSinhRepository()
-            khoThiSinh.xoaBanGhi( " 1 = 1 ")
-            for hocVien in listHocVien:
-                khoThiSinh.ghiDuLieu(hocVien)
-            global FTP_FILE_PATH_TO_UPLOAD
-            FTP_FILE_PATH_TO_UPLOAD = remoteUpdateDir + "AnhNhanDien/"
-            GetSetting.UpdateServerImageDir(FTP_FILE_PATH_TO_UPLOAD)
-            self.SignalUpdateDataBaseSuccess.emit(listHocVien)
-
-        except:
-            pass
-# #endregion 
-        # try:
-        #     ftpObj = FTPclient()
-        #     lstImage = ftpObj.GetListStudentImage(ftpFileDir)
-        #     lstStudent = []
-        #     for image in lstImage:
-        #         student = ThongTinThiSinh()
-        #         fp = open(LOCAL_PATH_CONTAIN_DATA_UPDATE + image + '.jpg', 'rb')
-        #         hocVien.AnhDangKy = fp.read()
-        #         image = Image.open(io.BytesIO(hocVien.AnhDangKy))
-        #         image = image.convert("RGB")
-        #         npArrayImage = numpy.array(image)
-        #         hocVien.NhanDienKhuonMatStr = GetFaceEncodingFromImage().GetFaceEncodingStr(npArrayImage)
-
     def __ServerRequestDatabaseCheck(self, messageObj):
         target = messageObj.target
         if(target == "listCourse"):
@@ -404,13 +349,15 @@ class ProcessReciptData(QObject):
         try:
             lstFileName = []
             lstFileName.append(fileName)
-            ftpObj = FTPclient()
-            result = ftpObj.GetListFileFromServer(lstFile = lstFileName, ftpFilePath = FTP_SERVER_SYNC_DIR)
+            
+            result = self.ftpObj.GetListFileFromServer(lstFile = lstFileName, ftpFilePath = FTP_SERVER_SYNC_DIR)
             if(type(result) is bool):
                 raise Exception("")
             updateFilePath = LOCAL_PATH_CONTAIN_DATA_UPDATE + fileName
             with open(updateFilePath, encoding='utf-8-sig') as json_file:
                 jsonDict = json.load(json_file)
+                self.SignalErrorOrSuccess.emit("war >> read "+fileName)
+
             khoThiSinh = ThiSinhRepository()
             khoThiSinh.capNhatTruong(("NhanDienKhuonMatThem", "NhanDienVanTay"),(jsonDict["FaceEncoding"], jsonDict["FGPEncoding"]), " ID = '%s' "%(jsonDict["ID"]))
             try:
@@ -468,9 +415,9 @@ class ProcessReciptData(QObject):
                 self.SignalErrorOrSuccess.emit("nhan dc danh sach anh >> "+imageName)
         except:
             pass
-        ftpObj = FTPclient()
+        # ftpObj = FTPclient()
         try:
-            lstImageGrapped = ftpObj.GetListFileFromServer(lstImage)
+            lstImageGrapped = self.ftpObj.GetListFileFromServer(lstImage)
         except Exception as ex:
             self.SignalErrorOrSuccess.emit("er > ftpErr>> "+ str(ex.args))
         khoThiSinh = ThiSinhRepository()

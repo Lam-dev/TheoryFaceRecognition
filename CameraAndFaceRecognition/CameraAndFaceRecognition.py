@@ -18,7 +18,7 @@ NumberFrameNotFace = 0
 # try:
 #     FR_THRESHOLD = SETTING_DICT["FRthreshold"]
 # except:
-FR_THRESHOLD = 0.47
+FR_THRESHOLD = 0.48
 
 class GetImageFromCamera(QObject):
     CanNotConnectCamera = pyqtSignal()

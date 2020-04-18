@@ -135,6 +135,14 @@ class FTPclient(QObject):
         os.mkdir("DataUpdate")
         try:
             self.ftpObj.cwd(ftpFilePath)
+        except:
+            try:
+                self.__CreateConnect()
+                self.ftpObj.cwd(ftpFilePath)
+            except Exception as ex:
+                raise ConnectionError("er>>>ftpNotConnect>>  "+str(ex.args))
+        try:
+            
             for f in lstFile:
                 self.SignalError.emit("war >> ftp" + f)
                 if((not f.__contains__(".jpg")) & (not f.__contains__(".json"))):
@@ -150,7 +158,7 @@ class FTPclient(QObject):
             return lstImageGraped
         except Exception as ex:
             raise("er >>ftp_getf> "+ str(ex.args))
-            return
+
 
 
 # x = FTPclient()

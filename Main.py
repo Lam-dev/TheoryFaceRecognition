@@ -94,6 +94,7 @@ class MainWindow(QMainWindow):
         self.FGPobj.SignalHandPushed.connect(self.PlayBip)
         self.FGPobj.LayDanhSachIDvaVanTay()
         self.mainScreenObj.SignalCleanFGPsensor.connect(self.FGPobj.LamSachCamBien)
+        self.mainScreenObj.SignalRequestGetFGP.connect(self.FGPobj.GetFGPforDT)
 
         self.rfModuleObj = ControlRFIDmudule()
         self.rfModuleObj.SignalRecognizedStudent.connect(self.RecognizedCard)
@@ -107,7 +108,7 @@ class MainWindow(QMainWindow):
         # self.socketServerForRFIDobj.SignalRFIDputOn.connect(self.RFIDputOn)
 
         self.mainScreenObj.ShowCamera()
-
+    
     def GoToTakeSampleScreen(self):
         pass
 

@@ -16,7 +16,7 @@ class Fingerprint(QObject):
     SignalDowloadedImage = pyqtSignal(str)
     SignalFGPget = pyqtSignal(str)
     SignalFGPputOnIsTheSame = pyqtSignal()
-
+    
     
 
     def __init__(self, port = '/dev/ttyACM0', baudRate = 57600, address = 0xFFFFFFFF, password = 0xFFFFFFFF):
@@ -46,6 +46,7 @@ class Fingerprint(QObject):
         self.viTriDaChonChuaLuu = []
         self.__FlagLockFGPsensor = False
 
+        self.FGPgetCallback = object
     
     def XoaVanTayTrongCamBien(self, viTri):
         try:
@@ -226,11 +227,11 @@ class Fingerprint(QObject):
             pass
     
     def ThreadGetFGPfeature(self):
-        thread = threading.Thread(target = self.GetFGPfeature)
+        thread = threading.Thread(target = self.GetFGPfeature_DT)
         thread.start()
     
     def StartGetFGP(self):
-        self.timerGetFGPfeature.start(1000)
+        self.timerGetFGPfeature.start(700)
     
     def StopGetFGP(self):
         self.timerGetFGPfeature.stop()
@@ -268,27 +269,62 @@ class Fingerprint(QObject):
         except:
             pass
 
-    def GetFGPfeature(self):
+    # def GetFGPfeature(self):
+    #     if(self.__FlagLockFGPsensor):
+    #         return
+    #     self.__FlagLockFGPsensor = True
+    #     try:
+    #         if(type(self.fingerprintObj) is not bool):
+    #             if(self.fingerprintObj.readImage()):
+    #                 self.SignalHandPushed.emit()
+    #                 self.fingerprintObj.convertImage(0x01)
+    #                 theSame = self.fingerprintObj.searchTemplate()
+    #                 if(theSame[0] == -1):
+    #                     lstFGPfeature = self.fingerprintObj.downloadCharacteristics(0x01)
+    #                     self.fingerprintObj.storeTemplate()
+    #                     lstFGPfeatureStrElem = [str(elem) for elem in lstFGPfeature]
+    #                     FGPfeatureString = ",".join(lstFGPfeatureStrElem)
+    #                     self.SignalFGPget.emit(FGPfeatureString)
+                        
+    #                 else:
+    #                     self.SignalFGPputOnIsTheSame.emit()
+                            
+
+    #         else:
+    #             self.fingerprintObj = PyFingerprint(self.port, self.baudRate, self.address, self.password)
+    #             self.fingerprintObj.verifyPassword()
+
+    #     except:
+    #         self.__FlagLockFGPsensor = False
+    #         self.fingerprintObj = False
+    #     self.__FlagLockFGPsensor = False
+
+    def GetFGPforDT(self, callback):
+        self.FGPgetCallback = callback
+        self.StartGetFGP()
+
+    def GetFGPfeature_DT(self):
         if(self.__FlagLockFGPsensor):
             return
         self.__FlagLockFGPsensor = True
         try:
-            if(type(self.fingerprintObj) is not bool):
-                if(self.fingerprintObj.readImage()):
-                    self.SignalHandPushed.emit()
-                    self.fingerprintObj.convertImage(0x01)
-                    theSame = self.fingerprintObj.searchTemplate()
-                    if(theSame[0] == -1):
-                        lstFGPfeature = self.fingerprintObj.downloadCharacteristics(0x01)
-                        self.fingerprintObj.storeTemplate()
-                        lstFGPfeatureStrElem = [str(elem) for elem in lstFGPfeature]
-                        FGPfeatureString = ",".join(lstFGPfeatureStrElem)
-                        self.SignalFGPget.emit(FGPfeatureString)
-                        
-                    else:
-                        self.SignalFGPputOnIsTheSame.emit()
-                            
-
+            if(self.fingerprintObj.readImage()):
+                self.SignalHandPushed.emit()
+                self.fingerprintObj.convertImage(0x01)
+                self.fingerprintObj.readImage()
+                self.fingerprintObj.convertImage(0x02)
+                # theSame = self.fingerprintObj.searchTemplate()
+                # if(theSame[0] == -1):
+                if(self.fingerprintObj.compareCharacteristics() > 0):
+                    lstFGPfeature = self.fingerprintObj.downloadCharacteristics(0x02)
+                # self.fingerprintObj.storeTemplate()
+                    lstFGPfeatureStrElem = [str(elem) for elem in lstFGPfeature]
+                    FGPfeatureString = ",".join(lstFGPfeatureStrElem)
+                    self.FGPgetCallback(FGPfeatureString)
+                
+                    
+                # else:
+                #     self.SignalFGPputOnIsTheSame.emit()
             else:
                 self.fingerprintObj = PyFingerprint(self.port, self.baudRate, self.address, self.password)
                 self.fingerprintObj.verifyPassword()

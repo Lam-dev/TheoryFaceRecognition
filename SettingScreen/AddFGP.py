@@ -59,6 +59,18 @@ class AddFGP(Ui_Frame_AddFGP, QObject):
         self.label_numberFGPadded.setText(str(self.numberFGPadded))
         self.label_forShowAnoument.setStyleSheet('color: rgb(0, 170, 0);\nfont: 75 bold 14pt "Ubuntu";')
         self.label_forShowAnoument.setText("ĐÃ NHẬN ĐƯỢC VÂN TAY")
+    
+
+    def ListFingerNeedAdd(self, strData):
+        dataObj = json.loads(strData)
+        listKey = list(dataObj.keys())
+        self.ClearAllFingerNeedAddPre()
+        self.lstFingerNeedAdd.clear()
+
+        for key in listKey:
+            if(dataObj[key]):
+                self.lstFingerNeedAdd.append(key)
+                self.ShowFingerNeedAdd(key)
 
     def GetFGPsavePosAndFeature(self):
         try:

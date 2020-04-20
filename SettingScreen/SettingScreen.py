@@ -183,12 +183,12 @@ class SettingScreen(Ui_frame_settingScreen, QObject):
             
             self.content.lineEdit_forInputIP.mousePressEvent = lambda event:self.__OpenKeyboard(self.content.lineEdit_forInputIP)
             self.content.lineEdit_forInputPort.mousePressEvent = lambda event:self.__OpenKeyboard(self.content.lineEdit_forInputPort)
-            self.content.lineEdit_forInputAccount.mousePressEvent = lambda event:self.__OpenKeyboard(self.content.lineEdit_forInputAccount)
-            self.content.lineEdit_forInputPassword.mousePressEvent = lambda event:self.__OpenKeyboard(self.content.lineEdit_forInputPassword)
-            self.content.lineEdit_forInputFTPIP.mousePressEvent = lambda event:self.__OpenKeyboard(self.content.lineEdit_forInputFTPIP)
-            self.content.lineEdit_forInputFTPport.mousePressEvent = lambda event:self.__OpenKeyboard(self.content.lineEdit_forInputFTPport)
-            self.content.lineEdit_forInputFTPaccount.mousePressEvent = lambda event:self.__OpenKeyboard(self.content.lineEdit_forInputFTPaccount)
-            self.content.lineEdit_forInputFPTpassword.mousePressEvent = lambda event:self.__OpenKeyboard(self.content.lineEdit_forInputFPTpassword)
+            # self.content.lineEdit_forInputAccount.mousePressEvent = lambda event:self.__OpenKeyboard(self.content.lineEdit_forInputAccount)
+            # self.content.lineEdit_forInputPassword.mousePressEvent = lambda event:self.__OpenKeyboard(self.content.lineEdit_forInputPassword)
+            # self.content.lineEdit_forInputFTPIP.mousePressEvent = lambda event:self.__OpenKeyboard(self.content.lineEdit_forInputFTPIP)
+            # self.content.lineEdit_forInputFTPport.mousePressEvent = lambda event:self.__OpenKeyboard(self.content.lineEdit_forInputFTPport)
+            # self.content.lineEdit_forInputFTPaccount.mousePressEvent = lambda event:self.__OpenKeyboard(self.content.lineEdit_forInputFTPaccount)
+            # self.content.lineEdit_forInputFPTpassword.mousePressEvent = lambda event:self.__OpenKeyboard(self.content.lineEdit_forInputFPTpassword)
 
             self.content.pushButton_checkUpdate.clicked.connect(self.SignalCheckVersion.emit)
             

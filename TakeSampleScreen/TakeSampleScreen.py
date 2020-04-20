@@ -1,6 +1,6 @@
-from AddFace_DT.AddFaceAction                      import AddFaceScreen
+from AddFace_DT.AddFaceAction                   import AddFaceScreen
 from ShowInfomation.ShowInfomationAction        import ShowInfoScreen
-from AddFGP_DT.AddFGPaction                        import AddFGPscreen 
+from AddFGP_DT.AddFGPaction                     import AddFGPscreen 
 from WriteRFcard.WriteRFcardScreenAction        import WriteRFcardAction
 from PyQt5                                      import QtCore, QtGui
 from PyQt5.QtCore                               import pyqtSlot, pyqtSignal,QTimer, QDateTime, Qt, QObject, QPointF, QPropertyAnimation, pyqtProperty, QSize
@@ -48,8 +48,6 @@ class TakeSampleScreen(QObject):
 
         self.addFaceScreenObj.SignalPictureTaked.connect(self.socketObj.SendTakedImage)
         self.currentStep = 1
-    def Temp(self, aa):
-        pass
 
     
     def GoToWriteRFcardScreen(self, strMessage):

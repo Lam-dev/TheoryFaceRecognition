@@ -141,10 +141,10 @@ class SystemSettingContent(Ui_widget_containSettingContent, QObject):
             "serverPort_DT":self.lineEdit_forInputPort_DT.text(),
             "serverAccount_DT":"",
             "serverPassword_DT" : "",
-            "ftpIP" : self.lineEdit_forInputIP_DT.text(),
-            "ftpPort" : 21,
-            "ftpAccount" : "ELT",
-            "ftpPassword" : "1",
+            "ftpIP_DT" : self.lineEdit_forInputIP_DT.text(),
+            "ftpPort_DT" : 21,
+            "ftpAccount_DT" : "ELT",
+            "ftpPassword_DT" : "1",
 
 
             # "FRthreshold" : self.comboBox_forChooseFRPoint.currentIndex(),

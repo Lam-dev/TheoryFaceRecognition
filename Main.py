@@ -16,7 +16,7 @@ from         SocketConnect.SocketClient         import SocketClient
 import       os
 from         FingerPrintSensor.FingerPrint      import Fingerprint
 from         Sound.OrangePiSound                import Sound
-from         WriteRFcard.ControlRFIDmodule   import ControlRFIDmudule
+from         WriteRFcard.ControlRFIDmodule      import ControlRFIDmudule
 import       json
 
 # from   Sound.Sound              import Sound
@@ -74,7 +74,6 @@ class MainWindow(QMainWindow):
         self.socketObject.SignalServerNotConnect.connect(self.ServerNotConnect)
         self.socketObject.SignalServerConnected.connect(self.ServerConnected)
         self.socketObject.SignalWaitForUpdateDatabase.connect(self.WaitForUpdateDatabase)
-        self.socketObject.SignalUpdateDatabaseSuccess.connect(self.UpdateDatabaseSuccess)
         self.socketObject.SignalNumberStudentParsed.connect(self.NumberStudentParsed)
         self.socketObject.SignalUpdateOrSyncStudentInfo.connect(self.AddStudentInfomation)
         self.socketObject.SignalStopForUpdateData.connect(self.ShowWaitForUpdateDataScreen)

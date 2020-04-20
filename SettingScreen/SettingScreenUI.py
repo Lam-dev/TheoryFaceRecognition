@@ -24,7 +24,7 @@ class Ui_frame_settingScreen(object):
         self.frame_settingMenu.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_settingMenu.setObjectName("frame_settingMenu")
         self.formLayoutWidget = QtWidgets.QWidget(self.frame_settingMenu)
-        self.formLayoutWidget.setGeometry(QtCore.QRect(10, 98, 181, 209))
+        self.formLayoutWidget.setGeometry(QtCore.QRect(10, 98, 181, 261))
         self.formLayoutWidget.setObjectName("formLayoutWidget")
         self.formLayout = QtWidgets.QFormLayout(self.formLayoutWidget)
         self.formLayout.setSizeConstraint(QtWidgets.QLayout.SetDefaultConstraint)

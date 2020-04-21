@@ -316,10 +316,13 @@ class Fingerprint(QObject):
                 # theSame = self.fingerprintObj.searchTemplate()
                 # if(theSame[0] == -1):
                 if(self.fingerprintObj.compareCharacteristics() > 0):
+                    print("2 van tay giong nhau")
                     lstFGPfeature = self.fingerprintObj.downloadCharacteristics(0x02)
+                    print(lstFGPfeature)
                 # self.fingerprintObj.storeTemplate()
                     lstFGPfeatureStrElem = [str(elem) for elem in lstFGPfeature]
                     FGPfeatureString = ",".join(lstFGPfeatureStrElem)
+                    print("aaaaaa = " + FGPfeatureString)
                     self.FGPgetCallback(FGPfeatureString)
                 
                     

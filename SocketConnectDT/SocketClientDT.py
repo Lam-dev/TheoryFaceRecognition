@@ -89,10 +89,9 @@ class SocketClientDT(QObject):
 
     def CloseConnect(self):
         try:
-            self.clientObj = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            self.clientObj.connect(('127.0.0.1', 0))
-            self.clientObj.shutdown(SHUT_RDWR)
+            self.clientObj.shutdown(1)
             self.clientObj.close()
+            
 
 
         except Exception as ex:

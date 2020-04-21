@@ -77,8 +77,10 @@ class TakeSampleScreen(QObject, Ui_Frame):
         self.socketObj.CloseConnect()
         self.socketObj.deleteLater()
         self.writeRFcardObj.StopWriteToCard()
+        self.writeRFcardObj.deleteLater()
         self.addFGPscreenObj.StopAll()
         self.addFaceScreenObj.StopTakePicture()
+        self.addFGPscreenObj.deleteLater()
         self.SignalCloseTakeSampleScreen.emit()
         
 

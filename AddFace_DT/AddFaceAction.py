@@ -7,7 +7,11 @@ from CameraAndFaceRecognition_DT.CameraAndFaceRecognition   import GetImageFromC
 class AddFaceScreen(QObject, Ui_Frame_containAddFaceScreen):
 
     SignalPictureTaked = pyqtSignal(str)
-    
+    SignalStartReadImage = pyqtSignal(object)
+    SignalStopReadImage = pyqtSignal()
+    SignalFaceTracking = pyqtSignal()
+    SignalGetFaceFeature = pyqtSignal(object)
+
     def __init__(self, frameContain):
         QObject.__init__(self)
         Ui_Frame_containAddFaceScreen.__init__(self)
@@ -32,28 +36,38 @@ class AddFaceScreen(QObject, Ui_Frame_containAddFaceScreen):
         if(self.__timeCountdown == 0):
             self.__pictureTaked = True
             self.TimerCountdownTakePictureTime.stop()
-            self.cameraObj.StopReadImage()
-            self.cameraObj.FaceTracking()
-            faceFeatures = self.cameraObj.GetFaceFeature()
-            if(len(faceFeatures) == 1):
-                faceFeatureStrElem = [str(elem) for elem in faceFeatures[0]]
-                faceFeatureStr = ",".join(faceFeatureStrElem)
-            else:
-                faceFeatureStr = ""
-            self.SignalPictureTaked.emit(faceFeatureStr)
+            self.SignalStopReadImage.emit()
+            self.SignalFaceTracking.emit()
+            self.SignalGetFaceFeature.emit(self.SendPictureTaked)
+            # faceFeatures = self.cameraObj.GetFaceFeature()
+            # if(len(faceFeatures) == 1):
+            #     faceFeatureStrElem = [str(elem) for elem in faceFeatures[0]]
+            #     faceFeatureStr = ",".join(faceFeatureStrElem)
+            # else:
+            #     faceFeatureStr = ""
+            # self.SignalPictureTaked.emit(faceFeatureStr)
+
+    def SendPictureTaked(self, feature):
+        if(len(feature) == 1):
+            faceFeatureStrElem = [str(elem) for elem in feature[0]]
+            faceFeatureStr = ",".join(faceFeatureStrElem)
+        else:
+            faceFeatureStr = ""
+        self.SignalPictureTaked.emit(faceFeatureStr)
 
     def RetakePicture(self):
         if(self.__pictureTaked):
             self.__pictureTaked = False
             self.__timeCountdown = 3
-            self.cameraObj.ClearFaceLocation()
-            self.cameraObj.StartReadImage()
+            # self.cameraObj.ClearFaceLocation()
+            # self.cameraObj.StartReadImage()
+            self.SignalStartReadImage.emit(self.label_forShowCamera)
             self.TimerCountdownTakePictureTime.start(1000)
 
         
     def StartCamera(self):
         self.TimerCountdownTakePictureTime.start(1000)
-        self.cameraObj.StartReadImage()
+        self.SignalStartReadImage.emit(self.label_forShowCamera)
     
     def ShowCameraImage(self, pixmap):
         self.label_forShowCamera.setPixmap(pixmap)

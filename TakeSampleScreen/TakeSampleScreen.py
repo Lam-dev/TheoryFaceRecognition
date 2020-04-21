@@ -9,6 +9,11 @@ from SocketConnectDT.SocketClientDT             import SocketClientDT
 
 class TakeSampleScreen(QObject):
     SignalRequestGetFGP = pyqtSignal(object)
+    SignalStartReadImage = pyqtSignal(object)
+    SignalStopReadImage = pyqtSignal()
+    SignalFaceTracking = pyqtSignal()
+    SignalGetFaceFeature = pyqtSignal(object)
+
     def __init__(self, frame):
         QObject.__init__(self)
         self.frameContain = frame
@@ -23,6 +28,10 @@ class TakeSampleScreen(QObject):
         self.frameContainAddFace = QtWidgets.QFrame(self.frameContain)
         self.frameContainAddFace.setGeometry(QtCore.QRect(self.frameContain.width(), 0, 0, 0))
         self.addFaceScreenObj = AddFaceScreen(self.frameContainAddFace)
+        self.addFaceScreenObj.SignalStartReadImage.connect(self.SignalStartReadImage.emit)
+        self.addFaceScreenObj.SignalStopReadImage.connect(self.SignalStopReadImage.emit)
+        self.addFaceScreenObj.SignalFaceTracking.connect(self.SignalFaceTracking.emit)
+        self.addFaceScreenObj.SignalGetFaceFeature.connect(self.SignalGetFaceFeature.emit)
 
         self.frameContainAddFGP = QtWidgets.QFrame(self.frameContain)
         self.frameContainAddFGP.setGeometry(QtCore.QRect(self.frameContain.width(), 0, 0, 0))

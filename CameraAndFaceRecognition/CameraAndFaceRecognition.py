@@ -31,6 +31,70 @@ class GetImageFromCamera(QObject):
         self.labelObject = labelObject
         # self.StartReadImage()
 
+    def ReadCameraForDT(self, labelForShow):
+        self.frameCut = ((0, 480), (0, 640))
+        self.size = (400, 650)
+        self.scale = 0.3
+        self.labelObject = labelForShow
+        self.StartReadImage()
+    
+    def StopReadImageForDT(self):
+        self.StopReadImage()
+
+    def FaceTrackingForDT(self):
+        global frame
+        global FaceLocationInImage
+        global NumberFrameNotFace
+        if(type(frame) is bool):
+            return
+        # frame = cv2.resize(frame, (0, 0), fx = self.scale, fy = self.scale)
+        # localFrame = frame
+        # self.imageDetectFace = localFrame[:, :, ::-1]
+        FaceLocationInImage = self.__DetectFaceInImage(frame)
+        # self.__GetImageFromCamera()
+        NumberFrameNotFace = 0
+        cv2.imwrite("imageToSend.jpg", frame)
+
+    def __DetectFaceInImage(self, image):
+        faceLocInImage = face_recognition.face_locations(image)
+        if(len(faceLocInImage) == 0):
+            return False
+        else:
+            return faceLocInImage
+
+    def GetFaceFeatureForDT(self, callbackSendFeature):
+
+        global frame
+        global FaceLocationInImage
+        lstFaceLoc = []
+        try:
+            for faceLocation in FaceLocationInImage:
+                faceLoc = [(elem * 2) for elem in faceLocation]
+                lstFaceLoc.append(faceLoc)
+        except:
+            pass
+
+        if(type(FaceLocationInImage) is not bool):
+            faceEncodings = face_recognition.face_encodings(frame, lstFaceLoc)
+        else:
+            faceEncodings = []
+        callbackSendFeature(faceEncodings)
+
+
+    def FaceTracking(self):
+        global frame
+        global FaceLocationInImage
+        global NumberFrameNotFace
+        if(type(frame) is bool):
+            return
+        frame = cv2.resize(frame, (0, 0), fx = self.scale, fy = self.scale)
+        localFrame = frame
+        # self.imageDetectFace = localFrame[:, :, ::-1]
+        FaceLocationInImage = self.__DetectFaceInImage(localFrame)
+        self.__GetImageFromCamera()
+        NumberFrameNotFace = 0
+        cv2.imwrite("imageToSend.jpg", frame)
+
     def TakeAphoto(self):
         global frameNoFaceMark
         return frameNoFaceMark
@@ -66,7 +130,7 @@ class GetImageFromCamera(QObject):
                 right = FaceLocationInImage[0][1]*3
                 bottom = FaceLocationInImage[0][2]*3
                 left = FaceLocationInImage[0][3]*3
-                cv2.rectangle(frameToShow, (left, top), (right, bottom), (255, 255, 0), 1)
+                cv2.rectangle(frameToShow, (left, top), (right, bottom), (255, 255, 0), 3)
             
             rgbImage = cv2.cvtColor(frameToShow, cv2.COLOR_BGR2RGB)
             convertToQtFormat = QtGui.QImage(rgbImage.data, rgbImage.shape[1], rgbImage.shape[0],

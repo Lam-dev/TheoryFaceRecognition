@@ -48,6 +48,7 @@ class MainWindow(QMainWindow):
         self.mainScreenObj.SignalDeleteAllData.connect(self.DeleteAllData)
         self.mainScreenObj.SignalRequestGoToTakeSampleScreen.connect(self.GoToTakeSampleScreen)
 
+
         self.khoLichSu = LichSuRepository()
         self.soundObj = Sound()
 
@@ -57,6 +58,11 @@ class MainWindow(QMainWindow):
         self.cameraObj.CanNotConnectCamera.connect(self.mainScreenObj.ShowCanNotConnectCamera)
         self.cameraObj.StartReadImage()
         self.cameraObj.SignalHideCamera.connect(self.__HideCamera)
+
+        self.mainScreenObj.SignalStartReadImage.connect(self.cameraObj.ReadCameraForDT)
+        self.mainScreenObj.SignalStopReadImage.connect(self.cameraObj.StopReadImageForDT)
+        self.mainScreenObj.SignalFaceTracking.connect(self.cameraObj.FaceTrackingForDT)
+        self.mainScreenObj.SignalGetFaceFeature.connect(self.cameraObj.GetFaceFeatureForDT)
 
         self.faceRecognitionObj.StudentRecognized.connect(self.__RecognizedStudent)
         self.faceRecognitionObj.StudentNotRecognized.connect(self.__NotRecognized)

@@ -44,6 +44,11 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
     SignalStopWriteCard = pyqtSignal()
     SignalRequestGoToTakeSampleScreen = pyqtSignal()
     SignalRequestGetFGP = pyqtSignal(object)
+    SignalStartReadImage = pyqtSignal(object)
+
+    SignalStopReadImage = pyqtSignal()
+    SignalFaceTracking = pyqtSignal()
+    SignalGetFaceFeature = pyqtSignal(object)
 
     def __init__(self, MainWindow):
         QObject.__init__(self)
@@ -313,6 +318,12 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         self.frameContainDatabaseScreen.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.takeSampleScreen = TakeSampleScreen(self.frameContainDatabaseScreen)
         self.takeSampleScreen.SignalRequestGetFGP.connect(self.SignalRequestGetFGP.emit)
+        self.takeSampleScreen.SignalStartReadImage.connect(self.SignalStartReadImage.emit)
+
+        self.takeSampleScreen.SignalStopReadImage.connect(self.SignalStopReadImage.emit)
+        self.takeSampleScreen.SignalFaceTracking.connect(self.SignalFaceTracking.emit)
+        self.takeSampleScreen.SignalGetFaceFeature.connect(self.SignalGetFaceFeature.emit)
+
         self.frameContainDatabaseScreen.raise_()
         self.frameContainDatabaseScreen.show()
 

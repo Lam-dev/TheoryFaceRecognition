@@ -330,6 +330,7 @@ class Fingerprint(QObject):
                 self.fingerprintObj.verifyPassword()
 
         except Exception as ex:
+            print(ex)
             self.__FlagLockFGPsensor = False
             # self.fingerprintObj = False
         self.__FlagLockFGPsensor = False

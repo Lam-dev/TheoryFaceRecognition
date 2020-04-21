@@ -9,6 +9,7 @@ class WriteRFcardAction(QObject, Ui_Frame_containWriteIDcardScreen):
     SignalWriteToRFcardSuccessfully = pyqtSignal()
     SignalStartWriteRFcardDT = pyqtSignal(str, object)
     SignalStopWriteRFcardDT = pyqtSignal()
+    SignalWriteCardSuccess = pyqtSignal()
 
     def __init__(self, frameContain):
         QObject.__init__(self)
@@ -42,6 +43,7 @@ class WriteRFcardAction(QObject, Ui_Frame_containWriteIDcardScreen):
             self.label_showNotify.setText("ĐẶT THẺ LÊN THIẾT BỊ")
 
         else:
+            self.SignalWriteCardSuccess.emit()
             self.label_showNotify.setStyleSheet("font: 57 bold 28pt 'Ubuntu';color: rgb(0, 193, 0);")
             self.label_showNotify.setText("GHI THẺ THÀNH CÔNG")
 

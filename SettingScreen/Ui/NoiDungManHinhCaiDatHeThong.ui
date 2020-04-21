@@ -248,21 +248,6 @@ color: rgb(0, 170, 255);</string>
      <string/>
     </property>
    </widget>
-   <zorder>label_ctThongTinCuavv</zorder>
-   <zorder>label_diaChi</zorder>
-   <zorder>lineEdit_forInputIP</zorder>
-   <zorder>label_cong</zorder>
-   <zorder>lineEdit_forInputPort</zorder>
-   <zorder>label_diaChi_2</zorder>
-   <zorder>label_iconCheckServerIP</zorder>
-   <zorder>label_iconCheckServerPort</zorder>
-   <zorder>pushButton_connectNewServer</zorder>
-   <zorder>label_showSocketConnectStatus</zorder>
-   <zorder>label_iconSocketStatus</zorder>
-   <zorder>label_showFTPconnectStatus_2</zorder>
-   <zorder>pushButton_connectNewFTP_2</zorder>
-   <zorder>label_forShowIconFTPstatus</zorder>
-   <zorder>label_showFTPconnectStatus</zorder>
   </widget>
   <widget class="QFrame" name="frame_containMemoryInfomation">
    <property name="geometry">

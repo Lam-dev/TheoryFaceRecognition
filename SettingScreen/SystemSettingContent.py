@@ -5,6 +5,8 @@ from    PyQt5                               import QtGui
 from    GetSettingFromJSON                  import GetSetting, SaveSetting
 from    GetCurrentIP.GetCurrentIP           import GetCurrentIp
 import  json
+import  socket
+import  ftplib
 
 class SystemSettingContent(Ui_widget_containSettingContent, QObject):
     GetTextFromKeyBoard = pyqtSignal(object)
@@ -31,6 +33,8 @@ class SystemSettingContent(Ui_widget_containSettingContent, QObject):
         self.lineEdit_forInputIP.mouseReleaseEvent = lambda event: self.GetTextFromKeyBoard.emit(self.lineEdit_forInputIP)
         # self.lineEdit_forInputPassword.mouseReleaseEvent = lambda event: self.GetTextFromKeyBoard.emit(self.lineEdit_forInputPassword)
         self.lineEdit_forInputPort.mouseReleaseEvent = lambda event: self.GetTextFromKeyBoard.emit(self.lineEdit_forInputPort)
+        self.lineEdit_forInputIP_DT.mouseReleaseEvent = lambda event: self.GetTextFromKeyBoard.emit(self.lineEdit_forInputIP_DT)
+        self.lineEdit_forInputPort_DT.mouseReleaseEvent = lambda event: self.GetTextFromKeyBoard.emit(self.lineEdit_forInputPort_DT)
         # self.GetTextFromKeyBoard.emit(self.lineEdit_forInputAccount)
         # self.comboBox_forChooseFaceMark.currentIndexChanged.connect(self.ChangeFaceYesOrNoFaceMark)
         # self.comboBox_forChooseFRPoint.currentIndexChanged.connect(self.ChangeFRpoint)
@@ -40,6 +44,8 @@ class SystemSettingContent(Ui_widget_containSettingContent, QObject):
         self.label_iconSocketStatus.setPixmap(QtGui.QPixmap("icon/iconConnected.png"))
         self.lineEdit_forInputIP.textChanged.connect(lambda:self.__CheckIPrule(self.lineEdit_forInputIP.text(), self.label_iconCheckServerIP))
         self.lineEdit_forInputPort.textChanged.connect(lambda:self.__CheckPortRule(self.lineEdit_forInputPort.text(), self.label_iconCheckServerPort))
+        self.lineEdit_forInputIP_DT.textChanged.connect(lambda:self.__CheckIPrule(self.lineEdit_forInputIP_DT.text(), self.label_iconCheckServerIP_DT))
+        self.lineEdit_forInputPort_DT.textChanged.connect(lambda:self.__CheckPortRule(self.lineEdit_forInputPort_DT.text(), self.label_iconCheckServerPort_DT))
         # self.lineEdit_forInputAccount.textChanged.connect(lambda:self.__CheckAccount(self.lineEdit_forInputAccount.text(), self.label_iconCheckServerAccount))
         # self.lineEdit_forInputPassword.textChanged.connect(lambda:self.__CheckPassword(self.lineEdit_forInputPassword.text(), self.label_iconCheckServerPassword))
         # self.lineEdit_forInputFTPIP.textChanged.connect(lambda:self.__CheckIPrule(self.lineEdit_forInputFTPIP.text(), self.label_iconCheckFTPip))
@@ -50,8 +56,32 @@ class SystemSettingContent(Ui_widget_containSettingContent, QObject):
         # self.pushButton_connectNewFTP.clicked.connect(self.__ConnectNewFTPserver)
         # self.pushButton_cleanFGPsensor.clicked.connect(self.SignalCleanFGPsensor.emit)
         self.pushButton_deleteAllData.clicked.connect(self.SignalDeleteAllData.emit)
+        self.pushButton_connectNewServer_DT.clicked.connect(self.CheckConnectDTdesktop)
         self.GetAndShowSetting()
         self.__GetAndShowCurrentVersion()
+
+    def CheckConnectDTdesktop(self):
+        try:
+            self.clientObj = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.clientObj.setblocking(1)
+            self.clientObj.settimeout(2)
+            self.clientObj.connect((self.lineEdit_forInputIP_DT.text(), int(self.lineEdit_forInputPort_DT.text())))
+            self.label_showSocketConnectStatus_DT.setText("Máy chủ đang hoạt động")
+            self.clientObj.shutdown(1)
+            self.clientObj.close()
+        except Exception as ex:
+            self.label_showSocketConnectStatus_DT.setText(str(ex.args))
+
+        try:
+            self.ftpObj = ftplib.FTP(host = self.lineEdit_forInputIP_DT.text(), timeout = 1)
+            self.ftpObj.timeout = 1
+            self.ftpObj.login("ELT", "1")
+            self.label_showFTPconnectStatus_DT.setText("Máy chủ FTP đang hoạt động")
+            self.ftpObj.close()
+        except Exception as ex:
+            self.label_showFTPconnectStatus_DT.setText(str(ex.args))
+
+
     def ShowCurentIP(self):
         getCrIpObj = GetCurrentIp()
         crIP = getCrIpObj.GetIP()
@@ -98,6 +128,9 @@ class SystemSettingContent(Ui_widget_containSettingContent, QObject):
             "ftpPassword" : "Ecotek@123"
         }
         self.SignalConnectNewFTPserver.emit(FTPserverDict)
+
+    def __ConnectNewFTPserver(self):
+        pass
 
     def GetAndShowSetting(self):
         

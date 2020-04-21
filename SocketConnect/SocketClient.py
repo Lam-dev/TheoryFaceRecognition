@@ -85,7 +85,7 @@ class SocketClient(QObject):
 
         self.TimerWaitForServerConfirm = QTimer(self)
         self.TimerWaitForServerConfirm.timeout.connect(self.__ThreadCreateConnect)
-        self.TimerWaitForServerConfirm.start(3000)
+        self.TimerWaitForServerConfirm.start(5000)
 
         self.FlagServerConfirmedForConnect = False
         self.FlagServerISconnect = False

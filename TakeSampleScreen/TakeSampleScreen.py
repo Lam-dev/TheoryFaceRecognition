@@ -24,6 +24,11 @@ class TakeSampleScreen(QObject, Ui_Frame):
         QObject.__init__(self)
         Ui_Frame.__init__(self)
         self.setupUi(frame)
+        icon = QtGui.QIcon()
+
+        icon.addPixmap(QtGui.QPixmap("icon/closeIcon50.png"), QtGui.QIcon.Normal, QtGui.QIcon.On)
+
+        self.pushButton_exitexit.setIcon(icon)
         self.frameContain = QtWidgets.QFrame(frame)
         self.frameContain.setGeometry(QtCore.QRect(0, 50, 800, 429))
         self.frameContainShowInfo = QtWidgets.QFrame(self.frameContain)
@@ -64,6 +69,7 @@ class TakeSampleScreen(QObject, Ui_Frame):
         self.writeRFcardObj = WriteRFcardAction(self.frameContainWriteRFcard)
         self.writeRFcardObj.SignalStartWriteRFcardDT.connect(self.SignalStartWriteRFcardDT.emit)
         self.writeRFcardObj.SignalStopWriteRFcardDT.connect(self.SignalStopWriteRFcardDT.emit)
+        self.writeRFcardObj.SignalWriteCardSuccess.connect(self.socketObj.SendNotifyWriteRFcardSuccessfully)
 
         self.addFGPscreenObj.SignalSendImageToServer.connect(self.socketObj.SendFingerImage)
         self.addFGPscreenObj.SignalSendFGPGetToServer.connect(self.socketObj.SendFingerFeature)
@@ -134,6 +140,7 @@ class TakeSampleScreen(QObject, Ui_Frame):
 
         elif(self.currentStep == 4):
             self.addFGPscreenObj.ShowStepStudentInformationAnim(self.frameContainWriteRFcard)
+            self.writeRFcardObj.StopWriteToCard()
             self.addFGPscreenObj.GetFGP()
             self.currentStep = 2
         
@@ -156,7 +163,7 @@ class TakeSampleScreen(QObject, Ui_Frame):
 
         elif(self.currentStep == 4):
             self.addFaceScreenObj.ShowStepStudentInformationAnim(self.frameContainWriteRFcard)
-            # self.writeRFcardObj.StopWriteToCard()
+            self.writeRFcardObj.StopWriteToCard()
             self.currentStep = 3
 
     def GoToShowInfomation(self, inforString):

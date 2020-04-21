@@ -50,6 +50,9 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
     SignalFaceTracking = pyqtSignal()
     SignalGetFaceFeature = pyqtSignal(object)
 
+    SignalStartWriteRFcardDT = pyqtSignal(str, object)
+    SignalStopWriteRFcardDT = pyqtSignal()
+
     def __init__(self, MainWindow):
         QObject.__init__(self)
         Ui_Frame_MainScreen.__init__(self)
@@ -323,6 +326,11 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         self.takeSampleScreen.SignalStopReadImage.connect(self.SignalStopReadImage.emit)
         self.takeSampleScreen.SignalFaceTracking.connect(self.SignalFaceTracking.emit)
         self.takeSampleScreen.SignalGetFaceFeature.connect(self.SignalGetFaceFeature.emit)
+
+        self.takeSampleScreen.SignalStartWriteRFcardDT.connect(self.SignalStartWriteRFcardDT.emit)
+        self.takeSampleScreen.SignalStopWriteRFcardDT.connect(self.SignalStopWriteRFcardDT.emit)
+        
+        
 
         self.frameContainDatabaseScreen.raise_()
         self.frameContainDatabaseScreen.show()

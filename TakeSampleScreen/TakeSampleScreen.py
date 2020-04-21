@@ -14,6 +14,9 @@ class TakeSampleScreen(QObject):
     SignalFaceTracking = pyqtSignal()
     SignalGetFaceFeature = pyqtSignal(object)
 
+    SignalStartWriteRFcardDT = pyqtSignal(str, object)
+    SignalStopWriteRFcardDT = pyqtSignal()
+
     def __init__(self, frame):
         QObject.__init__(self)
         self.frameContain = frame
@@ -41,6 +44,9 @@ class TakeSampleScreen(QObject):
         self.frameContainWriteRFcard = QtWidgets.QFrame(self.frameContain)
         self.frameContainWriteRFcard.setGeometry(QtCore.QRect(self.frameContain.width(), 0, 0, 0))
         self.writeRFcardObj = WriteRFcardAction(self.frameContainWriteRFcard)
+        self.SignalWriteToRFcardSuccessfully = pyqtSignal()
+        self.SignalStartWriteRFcard = pyqtSignal(str, object)
+        self.SignalStopWriteRFcard = pyqtSignal()
 
         self.socketObj = SocketClientDT()
         self.socketObj.processReciptDataObj.SignalGoToAddFGP.connect(self.GoToAddFGPscreen)
@@ -49,7 +55,8 @@ class TakeSampleScreen(QObject):
         self.socketObj.SignalRequestWriteCard.connect(self.GoToWriteRFcardScreen)
 
         self.writeRFcardObj = WriteRFcardAction(self.frameContainWriteRFcard)
-        self.writeRFcardObj.SignalWriteToRFcardSuccessfully.connect(self.socketObj.SendNotifyWriteRFcardSuccessfully)
+        self.writeRFcardObj.SignalStartWriteRFcardDT.connect(self.SignalStartWriteRFcardDT.emit)
+        self.writeRFcardObj.SignalStopWriteRFcardDT.connect(self.SignalStopWriteRFcardDT.emit)
 
         self.addFGPscreenObj.SignalSendImageToServer.connect(self.socketObj.SendFingerImage)
         self.addFGPscreenObj.SignalSendFGPGetToServer.connect(self.socketObj.SendFingerFeature)
@@ -132,7 +139,7 @@ class TakeSampleScreen(QObject):
 
         elif(self.currentStep == 4):
             self.addFaceScreenObj.ShowStepStudentInformationAnim(self.frameContainWriteRFcard)
-            self.writeRFcardObj.StopWriteToCard()
+            # self.writeRFcardObj.StopWriteToCard()
             self.currentStep = 3
 
     def GoToShowInfomation(self, inforString):

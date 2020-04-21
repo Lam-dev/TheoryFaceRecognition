@@ -1,4 +1,4 @@
-from AddFace.AddFaceUI     import Ui_Frame_containAddFaceScreen
+from AddFace_DT.AddFaceUI     import Ui_Frame_containAddFaceScreen
 from PyQt5          import QtCore, QtGui
 from PyQt5.QtCore   import pyqtSlot, pyqtSignal,QTimer, QDateTime, Qt, QObject, QPointF, QPropertyAnimation, pyqtProperty, QSize
 from PyQt5          import QtWidgets

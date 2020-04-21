@@ -100,12 +100,14 @@ class MainWindow(QMainWindow):
         self.FGPobj.LayDanhSachIDvaVanTay()
         self.mainScreenObj.SignalCleanFGPsensor.connect(self.FGPobj.LamSachCamBien)
         self.mainScreenObj.SignalRequestGetFGP.connect(self.FGPobj.GetFGPforDT)
+        
 
         self.rfModuleObj = ControlRFIDmudule()
         self.rfModuleObj.SignalRecognizedStudent.connect(self.RecognizedCard)
         self.rfModuleObj.SignalNotReconizedStudent.connect(self.PlayNotRecognized)
         self.rfModuleObj.lstStudent = self.lstStudent
         
+        self.mainScreenObj.SignalStartWriteRFcardDT.connect(self.rfModuleObj.WriteIDcardNumberForDT)
 
         self.__FlagUpdateScreenIsShow = False
         self.__FlagNeedWaitContinue = False

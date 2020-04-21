@@ -143,7 +143,7 @@ class GetImageFromCamera(QObject):
                 right = FaceLocationInImage[0][1]*3
                 bottom = FaceLocationInImage[0][2]*3
                 left = FaceLocationInImage[0][3]*3
-                cv2.rectangle(frameToShow, (left, top), (right, bottom), (255, 255, 0), 3)
+                cv2.rectangle(frameToShow, (left, top), (right, bottom), (255, 255, 0), 2)
             
             rgbImage = cv2.cvtColor(frameToShow, cv2.COLOR_BGR2RGB)
             convertToQtFormat = QtGui.QImage(rgbImage.data, rgbImage.shape[1], rgbImage.shape[0],

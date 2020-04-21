@@ -90,7 +90,7 @@ class SocketClientDT(QObject):
     def CloseConnect(self):
         try:
             self.clientObj = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            self.clientObj.
+            self.clientObj.connect(('127.0.0.1', 0))
             self.clientObj.shutdown(SHUT_RDWR)
             self.clientObj.close()
 
@@ -235,8 +235,11 @@ class SocketClientDT(QObject):
                     self.__PhanTichKhungNhan(recvData)
             
             except:
-                self.__SignalRecreateConnect.emit()
-                return
+                try:
+                    self.__SignalRecreateConnect.emit()
+                    return
+                except:
+                    pass
                          
     def __PhanTichKhungNhan(self, khungNhan):
         try:

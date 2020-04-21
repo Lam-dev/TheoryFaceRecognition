@@ -6,8 +6,9 @@ from PyQt5                                      import QtCore, QtGui
 from PyQt5.QtCore                               import pyqtSlot, pyqtSignal,QTimer, QDateTime, Qt, QObject, QPointF, QPropertyAnimation, pyqtProperty, QSize
 from PyQt5                                      import QtWidgets
 from SocketConnectDT.SocketClientDT             import SocketClientDT
+from TakeSampleScreen.TakeSampleScreenUI        import Ui_Frame
 
-class TakeSampleScreen(QObject):
+class TakeSampleScreen(QObject, Ui_Frame):
     SignalRequestGetFGP = pyqtSignal(object)
     SignalStartReadImage = pyqtSignal(object)
     SignalStopReadImage = pyqtSignal()
@@ -16,15 +17,20 @@ class TakeSampleScreen(QObject):
 
     SignalStartWriteRFcardDT = pyqtSignal(str, object)
     SignalStopWriteRFcardDT = pyqtSignal()
+    SignalCloseTakeSampleScreen = pyqtSignal()
+    SignalStopGetFGP = pyqtSignal()
 
     def __init__(self, frame):
         QObject.__init__(self)
-        self.frameContain = frame
-
+        Ui_Frame.__init__(self)
+        self.setupUi(frame)
+        self.frameContain = QtWidgets.QFrame(frame)
+        self.frameContain.setGeometry(QtCore.QRect(0, 50, 800, 429))
         self.frameContainShowInfo = QtWidgets.QFrame(self.frameContain)
         self.frameContainShowInfo.setGeometry(QtCore.QRect(0, 0, 0, 0))
         self.showInfoScreenObj = ShowInfoScreen(self.frameContainShowInfo)
 
+        self.pushButton_exitexit.clicked.connect(self.CloseTakeSampleScreen)
         self.currentStep = 1
         self.nameStudentNeedAdd = ""
 
@@ -40,6 +46,7 @@ class TakeSampleScreen(QObject):
         self.frameContainAddFGP.setGeometry(QtCore.QRect(self.frameContain.width(), 0, 0, 0))
         self.addFGPscreenObj = AddFGPscreen(self.frameContainAddFGP)
         self.addFGPscreenObj.SignalRequestGetFGP.connect(self.SignalRequestGetFGP.emit)
+        self.addFGPscreenObj.SignalStopGetFGP.connect(self.SignalStopGetFGP.emit)
 
         self.frameContainWriteRFcard = QtWidgets.QFrame(self.frameContain)
         self.frameContainWriteRFcard.setGeometry(QtCore.QRect(self.frameContain.width(), 0, 0, 0))
@@ -66,6 +73,15 @@ class TakeSampleScreen(QObject):
         self.currentStep = 1
 
     
+    def CloseTakeSampleScreen(self):
+        self.socketObj.CloseConnect()
+        self.socketObj.deleteLater()
+        self.writeRFcardObj.StopWriteToCard()
+        self.addFGPscreenObj.StopAll()
+        self.addFaceScreenObj.StopTakePicture()
+        self.SignalCloseTakeSampleScreen.emit()
+        
+
     def GoToWriteRFcardScreen(self, strMessage):
         try:
             self.writeRFcardObj.label_forShowName.setText(self.showInfoScreenObj.nameStudentNeedAdd)
@@ -117,7 +133,6 @@ class TakeSampleScreen(QObject):
         elif(self.currentStep == 4):
             self.addFGPscreenObj.ShowStepStudentInformationAnim(self.frameContainWriteRFcard)
             self.addFGPscreenObj.GetFGP()
-            self.writeRFcardObj.StopWriteToCard()
             self.currentStep = 2
         
     def GoToAddFaceScreen(self):

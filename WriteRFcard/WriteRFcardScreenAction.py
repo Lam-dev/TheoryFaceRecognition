@@ -8,7 +8,7 @@ from GlobalClass.GlobalClass         import DefineWriteCardNotify
 class WriteRFcardAction(QObject, Ui_Frame_containWriteIDcardScreen):
     SignalWriteToRFcardSuccessfully = pyqtSignal()
     SignalStartWriteRFcardDT = pyqtSignal(str, object)
-    SignalStopWriteRFcardDT = pyqtSignal(str, object)
+    SignalStopWriteRFcardDT = pyqtSignal()
 
     def __init__(self, frameContain):
         QObject.__init__(self)
@@ -19,7 +19,7 @@ class WriteRFcardAction(QObject, Ui_Frame_containWriteIDcardScreen):
         self.label.setPixmap(QtGui.QPixmap("icon/putRFcardIcon400.png"))
 
     def StopWriteToCard(self):
-        self.controlRFmoduleObj.StopWriteIDcardNumberToRFcard()
+        self.SignalStopWriteRFcardDT.emit()
 
     def WriteIDcardNumberToRFcard(self, number):
         self.label_showNotify.setStyleSheet("font: 57 bold 28pt 'Ubuntu';color: rgb(193, 0, 0);")

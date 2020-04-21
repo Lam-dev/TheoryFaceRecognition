@@ -25,6 +25,7 @@ class GetImageFromCamera(QObject):
         self.scale = scale
         self.size = size
         self.time = time
+        self.SaveSettingCameraForMainScreen(frameCut, size, scale, labelObject)
         self.toBeReadImage = False
         self.timerReadImage = QTimer(self)
         self.timerReadImage.timeout.connect(self.__GetImageFromCamera) 
@@ -37,7 +38,19 @@ class GetImageFromCamera(QObject):
         self.scale = 0.3
         self.labelObject = labelForShow
         self.StartReadImage()
-    
+
+    def SaveSettingCameraForMainScreen(self, frameCut, size, scale, labelForShow):
+        self.frameCut_save = frameCut
+        self.size_save = size
+        self.scale_save = scale
+        self.labelObject_save = labelForShow
+
+    def ResetSettingCameraForMainScreen(self):
+        self.frameCut = self.frameCut_save
+        self.size = self.size_save
+        self.scale =  self.scale_save
+        self.labelObject = self.labelObject_save
+
     def StopReadImageForDT(self):
         self.StopReadImage()
 

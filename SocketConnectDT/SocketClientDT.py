@@ -1,4 +1,5 @@
 import socket
+from    socket import SHUT_RDWR
 from    datetime                import datetime
 from    PyQt5.QtCore            import pyqtSlot, pyqtSignal,QTimer, QDateTime,Qt, QObject
 import  threading
@@ -85,6 +86,17 @@ class SocketClientDT(QObject):
         self.callBackShowStatusConnectToSetting = callback
         self.__SignalRecreateConnect.emit()
 
+
+    def CloseConnect(self):
+        try:
+            self.clientObj = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.clientObj.
+            self.clientObj.shutdown(SHUT_RDWR)
+            self.clientObj.close()
+
+
+        except Exception as ex:
+            print(ex)
 
     def SendTakedImage(self, featureStr = ""):
         imageNameToServer = "face"+datetime.now().strftime("%Y%m%d%H%M%S")

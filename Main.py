@@ -63,6 +63,8 @@ class MainWindow(QMainWindow):
         self.mainScreenObj.SignalStopReadImage.connect(self.cameraObj.StopReadImageForDT)
         self.mainScreenObj.SignalFaceTracking.connect(self.cameraObj.FaceTrackingForDT)
         self.mainScreenObj.SignalGetFaceFeature.connect(self.cameraObj.GetFaceFeatureForDT)
+        self.mainScreenObj.SignalCloseTakeSampleScreen.connect(self.CloseTakeSampleScreen)
+
 
         self.faceRecognitionObj.StudentRecognized.connect(self.__RecognizedStudent)
         self.faceRecognitionObj.StudentNotRecognized.connect(self.__NotRecognized)
@@ -100,7 +102,7 @@ class MainWindow(QMainWindow):
         self.FGPobj.LayDanhSachIDvaVanTay()
         self.mainScreenObj.SignalCleanFGPsensor.connect(self.FGPobj.LamSachCamBien)
         self.mainScreenObj.SignalRequestGetFGP.connect(self.FGPobj.GetFGPforDT)
-        
+        self.mainScreenObj.SignalStopGetFGP.connect(self.FGPobj.StopGetFGP)
 
         self.rfModuleObj = ControlRFIDmudule()
         self.rfModuleObj.SignalRecognizedStudent.connect(self.RecognizedCard)
@@ -108,6 +110,8 @@ class MainWindow(QMainWindow):
         self.rfModuleObj.lstStudent = self.lstStudent
         
         self.mainScreenObj.SignalStartWriteRFcardDT.connect(self.rfModuleObj.WriteIDcardNumberForDT)
+        self.mainScreenObj.SignalStopWriteRFcardDT.connect(self.rfModuleObj.StopWriteToCardDT)
+
 
         self.__FlagUpdateScreenIsShow = False
         self.__FlagNeedWaitContinue = False
@@ -116,6 +120,9 @@ class MainWindow(QMainWindow):
 
         self.mainScreenObj.ShowCamera()
     
+    def CloseTakeSampleScreen(self):
+        self.cameraObj.ResetSettingCameraForMainScreen()
+
     def GoToTakeSampleScreen(self):
         pass
 

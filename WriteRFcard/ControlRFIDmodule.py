@@ -34,6 +34,9 @@ class ControlRFIDmudule(QObject):
         self.numberStrToSend = ""
         self.flagStopReadDataInCard = False
 
+    def StopWriteToCardDT(self):
+        self.StopWriteIDcardNumberToRFcard()
+
     def WriteIDcardNumberForDT(self, strNumber, callback):
         self.SetIDcarNumberToWriteToRFcard(strNumber, callback)
         self.StartWriteIDcardNumberToRFcard()

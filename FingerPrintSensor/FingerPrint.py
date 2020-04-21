@@ -309,10 +309,10 @@ class Fingerprint(QObject):
         self.__FlagLockFGPsensor = True
         try:
             if(self.fingerprintObj.readImage()):
-                self.SignalHandPushed.emit()
                 self.fingerprintObj.convertImage(0x01)
                 self.fingerprintObj.readImage()
                 self.fingerprintObj.convertImage(0x02)
+                self.SignalHandPushed.emit()
                 # theSame = self.fingerprintObj.searchTemplate()
                 # if(theSame[0] == -1):
                 if(self.fingerprintObj.compareCharacteristics() > 0):
@@ -329,7 +329,7 @@ class Fingerprint(QObject):
                 self.fingerprintObj = PyFingerprint(self.port, self.baudRate, self.address, self.password)
                 self.fingerprintObj.verifyPassword()
 
-        except:
+        except Exception as ex:
             self.__FlagLockFGPsensor = False
-            self.fingerprintObj = False
+            # self.fingerprintObj = False
         self.__FlagLockFGPsensor = False

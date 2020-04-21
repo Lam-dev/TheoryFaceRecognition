@@ -10,6 +10,7 @@ class AddFGPscreen(QObject, Ui_Frame_ContainAddFGPscreen):
     SignalSendFGPGetToServer = pyqtSignal(str, str)
     SignalPlayBip = pyqtSignal()
     SignalRequestGetFGP = pyqtSignal(object)
+    SignalStopGetFGP = pyqtSignal()
 
     def __init__(self, frameContain):
         QObject.__init__(self)
@@ -96,7 +97,7 @@ class AddFGPscreen(QObject, Ui_Frame_ContainAddFGPscreen):
         self.__FGPgetPercent += 1
         self.label_forShowFGPpercent.setText(str(self.__FGPgetPercent))
         self.__lstFGPofAfinger.append(FGPfeature)
-        if(self.__FGPgetPercent == 2):
+        if(self.__FGPgetPercent == 3):
             self.__FGPgetPercent = 0
             self.label_forShowFGPpercent.setText(str(self.__FGPgetPercent))
             self.StopAll()
@@ -135,6 +136,7 @@ class AddFGPscreen(QObject, Ui_Frame_ContainAddFGPscreen):
 
     def StopAll(self):
         # self.fingerprintObj.StopGetFGP()
+        self.SignalStopGetFGP.emit()
         self.timerFlipFlop.stop()
 
     def GetFGP(self):

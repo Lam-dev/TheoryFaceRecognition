@@ -44,6 +44,8 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
     SignalStopWriteCard = pyqtSignal()
     SignalRequestGoToTakeSampleScreen = pyqtSignal()
     SignalRequestGetFGP = pyqtSignal(object)
+    SignalStopGetFGP = pyqtSignal()
+    SignalCloseTakeSampleScreen = pyqtSignal()
     SignalStartReadImage = pyqtSignal(object)
 
     SignalStopReadImage = pyqtSignal()
@@ -52,6 +54,7 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
 
     SignalStartWriteRFcardDT = pyqtSignal(str, object)
     SignalStopWriteRFcardDT = pyqtSignal()
+    
 
     def __init__(self, MainWindow):
         QObject.__init__(self)
@@ -317,7 +320,7 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
     def __GoToTakeSampleScreen(self):
         self.SignalRequestGoToTakeSampleScreen.emit()
         self.frameContainDatabaseScreen = QtWidgets.QFrame(self.centralWidget)
-        self.frameContainDatabaseScreen.setGeometry(QtCore.QRect(0, 50, 800, 429))
+        self.frameContainDatabaseScreen.setGeometry(QtCore.QRect(0, 0, 800, 480))
         self.frameContainDatabaseScreen.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.takeSampleScreen = TakeSampleScreen(self.frameContainDatabaseScreen)
         self.takeSampleScreen.SignalRequestGetFGP.connect(self.SignalRequestGetFGP.emit)
@@ -329,14 +332,17 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
 
         self.takeSampleScreen.SignalStartWriteRFcardDT.connect(self.SignalStartWriteRFcardDT.emit)
         self.takeSampleScreen.SignalStopWriteRFcardDT.connect(self.SignalStopWriteRFcardDT.emit)
+        self.takeSampleScreen.SignalCloseTakeSampleScreen.connect(self.CloseTakeSampleScreen)
         
-        
+        self.takeSampleScreen.SignalStopGetFGP.connect(self.SignalStopGetFGP.emit)
 
         self.frameContainDatabaseScreen.raise_()
         self.frameContainDatabaseScreen.show()
 
-    def Temp(self):
-        pass
+    def CloseTakeSampleScreen(self):
+        self.SignalCloseTakeSampleScreen.emit()
+        self.takeSampleScreen.deleteLater()
+        self.frameContainDatabaseScreen.deleteLater()
 
     def OpenDatabaseManagerScreen(self):
         self.frameContainDatabaseScreen = QtWidgets.QFrame(self.centralWidget)

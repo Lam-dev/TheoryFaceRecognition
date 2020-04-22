@@ -123,7 +123,6 @@ class Fingerprint(QObject):
                     self.fingerprintObj.convertImage(0x02)
                     if(self.fingerprintObj.compareCharacteristics() > 0):
                         result = self.fingerprintObj.searchTemplate()
-                        
                         dacTrungVanTay = self.fingerprintObj.downloadCharacteristics(0x01)
                         if(result[0] > 0):
                             viTriLuu = result[0]
@@ -335,13 +334,11 @@ class Fingerprint(QObject):
                 self.SignalHandPushed.emit()
                 # theSame = self.fingerprintObj.searchTemplate()
                 # if(theSame[0] == -1):
-                if(self.fingerprintObj.compareCharacteristics() > 0):
-                    lstFGPfeature = self.fingerprintObj.downloadCharacteristics(0x02)
-
-                    # self.fingerprintObj.storeTemplate()
-                    lstFGPfeatureStrElem = [str(elem) for elem in lstFGPfeature]
-                    FGPfeatureString = ",".join(lstFGPfeatureStrElem)
-                    self.FGPgetCallback(FGPfeatureString)
+                lstFGPfeature = self.fingerprintObj.downloadCharacteristics(0x02)
+                # self.fingerprintObj.storeTemplate()
+                lstFGPfeatureStrElem = [str(elem) for elem in lstFGPfeature]
+                FGPfeatureString = ",".join(lstFGPfeatureStrElem)
+                self.FGPgetCallback(FGPfeatureString)
                 
                     
                 # else:

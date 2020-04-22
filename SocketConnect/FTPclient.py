@@ -136,7 +136,7 @@ class FTPclient(QObject):
         try:
             shutil.rmtree(LOCAL_PATH_CONTAIN_DATA_UPDATE)
         except Exception as ex:
-            raise("er >> canot deleteupdatefile")
+            raise Exception("er >> canot deleteupdatefile")
         os.mkdir("DataUpdate")
         try:
             self.ftpObj.cwd(ftpFilePath)

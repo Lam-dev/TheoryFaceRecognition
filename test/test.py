@@ -154,6 +154,15 @@ def ConvertStringToByteArray(string):
 # tz_HCM = pytz.timezone('Asia/Ho_Chi_Minh') 
 # datetime_HCM = datetime.now(tz_HCM)
 # print(datetime_HCM.strftime("%m/%d/%Y \n %H:%M:%S"))
+# def excepti():
+
+#     try:
+#         # raise ConnectionError("loi ket noi")
+
+#         raise ValueError("except2")
+#     except  Exception as e:
+#         print(str(e.args))
+#     print("aaa")
 
 #######################get ip#########################
 # import socket    

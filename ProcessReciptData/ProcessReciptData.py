@@ -47,12 +47,14 @@ class ProcessReciptData(QObject):
     SignalSyncComplete = pyqtSignal()
     SignalDeleteFGPofStudent = pyqtSignal(str)
     __FlagTimeUpdated = False
+    SignalErrorOrSuccess = pyqtSignal(str)
+   
 
     def __init__(self):
         super().__init__()
         self.lstFeatureFileNameForSync = []
 
-        # self.ftpObj = FTPclient()
+        self.ftpObj = FTPclient()
 
     def _json_object_hook(self, d): return namedtuple('X', d.keys())(*d.values())
 
@@ -163,9 +165,9 @@ class ProcessReciptData(QObject):
                 "curseID":objectInfo.courseID,
             }
             self.SignalSendResultDeleteAndCheck.emit(json.dumps(messageSendToSocket), SERVER_REQUEST_DELETE_A_COURSE)
-        
-        except:
-            pass
+            
+        except Exception as ex:
+            self.SignalErrorOrSuccess.emit("er >>delCourseER >>"+ str(ex.args))
 
     
     def DeleteStudent(self, objectInfo):
@@ -224,63 +226,6 @@ class ProcessReciptData(QObject):
                 self.__FlagTimeUpdated = True
             except:
                 pass
-
-    def __ServerRequestUpdateDatabase(self, ftpFileDir):
-#region truong hop khong doc duoc anh tu xml
-        # readFaceEncodingObj = GetFaceEncodingFromImage()
-
-        # lstImageDir = self.ftpObj.GetListStudentImage()
-        # lstStudent = []
-        # for imageDir in lstImageDir:
-        #     if(imageDir.__contains__("/")):
-        #         parts = imageDir.split("/")
-        #         maDK = (parts[len(parts) - 1].split("."))[0]
-        #     else:
-        #         maDK = imageDir.split(".")[0]
-        #     studentObj = ThongTinThiSinh()
-            
-        #     encoding, encodingStr = readFaceEncodingObj.GetFaceEncodingFromImageFile(image)
-
-        #     if(type(encoding) is not bool):
-        #         lstStudent.append(studentObj)
-#endregion
-#region Truong hop lay thong tin thi sinh tu xml
-        try:
-            ftpObj = FTPclient()
-            lstImageAndXMLfile = ftpObj.GetListStudentImage(ftpFileDir)
-            listHocVien = []
-            for imageAndXml in lstImageAndXMLfile:
-                if(imageAndXml.__contains__(".xml") | imageAndXml.__contains__(".XML")):
-                    self.parseXMLobj = ParseXML()
-                    self.parseXMLobj.SignalNumberParsed.connect(self.__NumberStudentParsed)
-                    lstHocVienCongThem = self.parseXMLobj.ReadListStudentFromXML(imageAndXml)
-                    for hocVien in lstHocVienCongThem:
-                        listHocVien.append(hocVien)
-            khoThiSinh = ThiSinhRepository()
-            khoThiSinh.xoaBanGhi( " 1 = 1 ")
-            for hocVien in listHocVien:
-                khoThiSinh.ghiDuLieu(hocVien)
-            global FTP_FILE_PATH_TO_UPLOAD
-            FTP_FILE_PATH_TO_UPLOAD = remoteUpdateDir + "AnhNhanDien/"
-            GetSetting.UpdateServerImageDir(FTP_FILE_PATH_TO_UPLOAD)
-            self.SignalUpdateDataBaseSuccess.emit(listHocVien)
-
-        except:
-
-            pass
-# #endregion 
-        # try:
-        #     ftpObj = FTPclient()
-        #     lstImage = ftpObj.GetListStudentImage(ftpFileDir)
-        #     lstStudent = []
-        #     for image in lstImage:
-        #         student = ThongTinThiSinh()
-        #         fp = open(LOCAL_PATH_CONTAIN_DATA_UPDATE + image + '.jpg', 'rb')
-        #         hocVien.AnhDangKy = fp.read()
-        #         image = Image.open(io.BytesIO(hocVien.AnhDangKy))
-        #         image = image.convert("RGB")
-        #         npArrayImage = numpy.array(image)
-        #         hocVien.NhanDienKhuonMatStr = GetFaceEncodingFromImage().GetFaceEncodingStr(npArrayImage)
 
     def __ServerRequestDatabaseCheck(self, messageObj):
         target = messageObj.target
@@ -380,9 +325,9 @@ class ProcessReciptData(QObject):
             self.__AddStudent(lstStudent, idCourse)
         
         elif(reciptObj.data.action == "sync"):
-            self.SignalWaitForRecitpEnoughSyncData.emit()
-            self.lstFeatureFileNameForSync.insert(0, reciptObj.data.fileName)
-            #self.__UpdateSyncData(reciptObj.data.fileName)
+            # self.SignalWaitForRecitpEnoughSyncData.emit()
+            # self.lstFeatureFileNameForSync.insert(0, reciptObj.data.fileName)
+            self.__UpdateSyncData(reciptObj.data.fileName)
 
         elif(reciptObj.data.action == "newCourse"):
             self.__CreateAndAddNewCourse(reciptObj)
@@ -415,45 +360,56 @@ class ProcessReciptData(QObject):
         try:
             lstFileName = []
             lstFileName.append(fileName)
-            ftpObj = FTPclient()
-            ftpObj.GetListFileFromServer(lstFile = lstFileName, ftpFilePath = FTP_SERVER_SYNC_DIR)
+            
+            result = self.ftpObj.GetListFileFromServer(lstFile = lstFileName, ftpFilePath = FTP_SERVER_SYNC_DIR)
+            if(type(result) is bool):
+                raise Exception("")
             updateFilePath = LOCAL_PATH_CONTAIN_DATA_UPDATE + fileName
             with open(updateFilePath, encoding='utf-8-sig') as json_file:
                 jsonDict = json.load(json_file)
+                self.SignalErrorOrSuccess.emit("war >> read "+fileName)
 
             khoThiSinh = ThiSinhRepository()
-            print("Them cho = %s"%(jsonDict["ID"]))
             khoThiSinh.capNhatTruong(("NhanDienKhuonMatThem", "NhanDienVanTay"),(jsonDict["FaceEncoding"], jsonDict["FGPEncoding"]), " ID = '%s' "%(jsonDict["ID"]))
-            faceEncodingStringArr = jsonDict["FaceEncoding"].split(",")
-            faceEncodingArr = [float(elem) for elem in faceEncodingStringArr]
-            lstMultiFGPfeatureStr = jsonDict["FGPEncoding"].split(";")
-            lstFGP = []
-            for FGPfeatureStr in lstMultiFGPfeatureStr:
-                FGPfeatureStrArr = FGPfeatureStr.split(",")
-                FGPfeatureArr = [int(elem) for elem in FGPfeatureStrArr]
-                lstFGP.append(FGPfeatureArr)
+            try:
+                faceEncodingStringArr = jsonDict["FaceEncoding"].split(",")
+                faceEncodingArr = [float(elem) for elem in faceEncodingStringArr]
+            except:
+                faceEncodingArr = []
+            try:
+                lstMultiFGPfeatureStr = jsonDict["FGPEncoding"].split(";")
+                lstFGP = []
+                for FGPfeatureStr in lstMultiFGPfeatureStr:
+                    FGPfeatureStrArr = FGPfeatureStr.split(",")
+                    FGPfeatureArr = [int(elem) for elem in FGPfeatureStrArr]
+                    lstFGP.append(FGPfeatureArr)
             # FGPencodingStringArr = jsonDict["FGPEncoding"].split(",")
             # FGPencodingArr = [int(elem) for elem in FGPencodingStringArr]
-
+            except:
+                lstFGP = []
             faceInfoDict = {
                 "faceEncodingArr": faceEncodingArr,
                 "FGPencoding":lstFGP,
                 "idStudent" : jsonDict["ID"],
             }
             self.SignalUpdateOrSyncStudentInfo.emit(faceInfoDict)
-        except:
-            pass
+        except Exception as e:
+            self.SignalSendMessage.emit("er >> addRecEr>> IDst = ")
 
     def __CreateAndAddNewCourse(self, dataObj):
-        khoaThi = ThongTinKhoaThi()
-        khoaThi.IDKhoaThi = dataObj.data.CourseInfo.IDKhoaThi
-        khoaThi.TenKhoaThi = dataObj.data.CourseInfo.TenKhoaThi
-        khoaThi.DuongDanLuuAnh = ""
-        khoaThi.NgayTao = dataObj.data.CourseInfo.NgayTao
-        khoKhoaThi = KhoaThiRepository()
-        khoKhoaThi.ghiDuLieu(khoaThi)
+        try:
+            khoaThi = ThongTinKhoaThi()
+            khoaThi.IDKhoaThi = dataObj.data.CourseInfo.IDKhoaThi
+            khoaThi.TenKhoaThi = dataObj.data.CourseInfo.TenKhoaThi
+            khoaThi.DuongDanLuuAnh = ""
+            khoaThi.NgayTao = dataObj.data.CourseInfo.NgayTao
+            khoKhoaThi = KhoaThiRepository()
+            khoKhoaThi.ghiDuLieu(khoaThi)
+            self.SignalErrorOrSuccess.emit("suc >> addedCourse >> "+"ID = "+str(khoaThi.IDKhoaThi)+"T"+str(khoaThi.TenKhoaThi))
+        except Exception as ex:
+            self.SignalErrorOrSuccess.emit("er >> errAddCourse >> "+str(ex.args))
         self.__AddStudent(dataObj.data.CardNumber, khoaThi.IDKhoaThi)
-
+            
     def __ConvertStringToUTF8String(self, string):
         x = []
         for elem in string:
@@ -461,25 +417,31 @@ class ProcessReciptData(QObject):
         return(bytes(x).decode("utf8", "ignore"))
 
     def __AddStudent(self, lstStudentNumber, IDCourse):
-        
+
         lstImage = []
         try:
             for stNumber in lstStudentNumber:
                 imageName = str(stNumber.CardNumber) + ".jpg"
                 lstImage.append(imageName)
-
+                self.SignalErrorOrSuccess.emit("nhan dc danh sach anh >> "+imageName)
         except:
             pass
-        ftpObj = FTPclient()
-        lstImageGrapped = ftpObj.GetListFileFromServer(lstImage)
+        # ftpObj = FTPclient()
+        try:
+            lstImageGrapped = self.ftpObj.GetListFileFromServer(lstImage)
+        except Exception as ex:
+            self.SignalErrorOrSuccess.emit("er > ftpErr>> "+ str(ex.args))
         khoThiSinh = ThiSinhRepository()
         i = 0
         for image in lstImage:
             try:
                 student = ThongTinThiSinh()
-                fp = open(LOCAL_PATH_CONTAIN_DATA_UPDATE + image, 'rb')
-                student.ID = image.split(".")[0]
-                student.AnhDangKy = fp.read()
+                try:
+                    fp = open(LOCAL_PATH_CONTAIN_DATA_UPDATE + image, 'rb')
+                    student.ID = image.split(".")[0]
+                    student.AnhDangKy = fp.read()
+                except:
+                    self.SignalErrorOrSuccess.emit("er > stAddEr>> not image")
                 #imagePil = Image.open(io.BytesIO(student.AnhDangKy))
                 #imagePil = imagePil.convert("RGB")
                 #npArrayImage = numpy.array(imagePil)
@@ -489,16 +451,18 @@ class ProcessReciptData(QObject):
                 student.IDKhoaThi = IDCourse
                 khoThiSinh.ghiDuLieu(student)
                 del student
-            except:
-                pass
+                self.SignalErrorOrSuccess.emit("suc > stAdded>> "+ lstStudentNumber[i].TraineeName)
+            except Exception as ex:
+                self.SignalErrorOrSuccess.emit("er > stAddEr>> "+ lstStudentNumber[i].TraineeName + ">>" + str(ex.args))
     
     def __DeleteStudentByNumber(self, lstStudentNumber):
         khoThiSinh = ThiSinhRepository()
         for stNumber in lstStudentNumber:
             try:
                 khoThiSinh.xoaBanGhi(" ID = %s "%(stNumber))
+                self.SignalErrorOrSuccess.emit("suc > deleted>> "+ stNumber)
             except:
-                pass
+                self.SignalErrorOrSuccess.emit("err > deleteEr>> "+ stNumber)
     
     def __DeleteAllStudent(self):
         khoThiSinh = ThiSinhRepository()

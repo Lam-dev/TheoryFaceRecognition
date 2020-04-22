@@ -54,12 +54,12 @@ class Ui_widget_containSettingContent(object):
         self.label_iconCheckServerIP = QtWidgets.QLabel(self.frame_serverInfomation)
         self.label_iconCheckServerIP.setGeometry(QtCore.QRect(368, 50, 23, 29))
         self.label_iconCheckServerIP.setText("")
-        self.label_iconCheckServerIP.setPixmap(QtGui.QPixmap("../../icon/iconCheckFail.png"))
+        self.label_iconCheckServerIP.setPixmap(QtGui.QPixmap("../../../../../../../../icon/iconCheckFail.png"))
         self.label_iconCheckServerIP.setObjectName("label_iconCheckServerIP")
         self.label_iconCheckServerPort = QtWidgets.QLabel(self.frame_serverInfomation)
         self.label_iconCheckServerPort.setGeometry(QtCore.QRect(368, 90, 25, 25))
         self.label_iconCheckServerPort.setText("")
-        self.label_iconCheckServerPort.setPixmap(QtGui.QPixmap("../../icon/iconCheckFail.png"))
+        self.label_iconCheckServerPort.setPixmap(QtGui.QPixmap("../../../../../../../../icon/iconCheckFail.png"))
         self.label_iconCheckServerPort.setObjectName("label_iconCheckServerPort")
         self.pushButton_connectNewServer = QtWidgets.QPushButton(self.frame_serverInfomation)
         self.pushButton_connectNewServer.setGeometry(QtCore.QRect(310, 170, 101, 41))
@@ -67,7 +67,7 @@ class Ui_widget_containSettingContent(object):
 "border-radius:3px;\n"
 "color: rgb(0, 170, 255);")
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("../../../Downloads/iconConnect.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("../../../../../../../../../Downloads/iconConnect.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.pushButton_connectNewServer.setIcon(icon)
         self.pushButton_connectNewServer.setObjectName("pushButton_connectNewServer")
         self.label_showSocketConnectStatus = QtWidgets.QLabel(self.frame_serverInfomation)
@@ -125,7 +125,7 @@ class Ui_widget_containSettingContent(object):
         self.label_ctBoNhoSuvv.setObjectName("label_ctBoNhoSuvv")
         self.pushButton_deleteAllData = QtWidgets.QPushButton(self.frame_containMemoryInfomation)
         self.pushButton_deleteAllData.setGeometry(QtCore.QRect(22, 66, 65, 31))
-        self.pushButton_deleteAllData.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+        self.pushButton_deleteAllData.setStyleSheet("background-color: rgb(214, 214, 160);\n"
 "border-radius:3px;\n"
 "color: rgb(0, 170, 255);")
         self.pushButton_deleteAllData.setObjectName("pushButton_deleteAllData")
@@ -151,7 +151,7 @@ class Ui_widget_containSettingContent(object):
         self.pushButton_checkUpdate = QtWidgets.QPushButton(self.frame_containFirmwareInformation)
         self.pushButton_checkUpdate.setGeometry(QtCore.QRect(20, 178, 151, 59))
         self.pushButton_checkUpdate.setStyleSheet("margin: 1px; padding: 7px;\n"
-"background-color: rgb(255, 255, 255);\n"
+"background-color: rgb(214, 214, 160);\n"
 "color: rgba(0,190,255,255);\n"
 "border-style: solid;\n"
 "border-radius: 3px;\n"
@@ -199,7 +199,9 @@ class Ui_widget_containSettingContent(object):
         self.label_forShowCopyright.setObjectName("label_forShowCopyright")
         self.verticalLayout_2.addWidget(self.label_forShowCopyright)
         self.line_3 = QtWidgets.QFrame(widget_containSettingContent)
-        self.line_3.setGeometry(QtCore.QRect(20, 50, 371, 16))
+        self.line_3.setGeometry(QtCore.QRect(20, 50, 371, 1))
+        self.line_3.setStyleSheet("background-color: rgb(0, 0, 0);")
+        self.line_3.setLineWidth(1)
         self.line_3.setFrameShape(QtWidgets.QFrame.HLine)
         self.line_3.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line_3.setObjectName("line_3")

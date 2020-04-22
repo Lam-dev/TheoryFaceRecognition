@@ -143,7 +143,7 @@ color: rgb(0, 0, 0);</string>
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>../../icon/iconCheckFail.png</pixmap>
+     <pixmap>../../../../../../../../icon/iconCheckFail.png</pixmap>
     </property>
    </widget>
    <widget class="QLabel" name="label_iconCheckServerPort">
@@ -159,7 +159,7 @@ color: rgb(0, 0, 0);</string>
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>../../icon/iconCheckFail.png</pixmap>
+     <pixmap>../../../../../../../../icon/iconCheckFail.png</pixmap>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_connectNewServer">
@@ -228,6 +228,9 @@ color: rgb(0, 170, 255);</string>
       <height>37</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 0);</string>
+    </property>
     <property name="text">
      <string/>
     </property>
@@ -246,6 +249,28 @@ color: rgb(0, 170, 255);</string>
     </property>
     <property name="text">
      <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_showFTPconnectStatus">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>180</y>
+      <width>231</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 0);</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
     </property>
    </widget>
   </widget>
@@ -406,7 +431,7 @@ color: rgb(0, 0, 0);</string>
     </property>
     <property name="styleSheet">
      <string notr="true">margin: 1px; padding: 7px;
-background-color: rgb(255, 255, 255);
+background-color: rgb(214, 214, 160);
 color: rgba(0,190,255,255);
 border-style: solid;
 border-radius: 3px;
@@ -515,11 +540,11 @@ border-color: rgba(0,140,255,255);
      <x>20</x>
      <y>50</y>
      <width>371</width>
-     <height>16</height>
+     <height>1</height>
     </rect>
    </property>
-   <property name="orientation">
-    <enum>Qt::Horizontal</enum>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(0, 0, 0);</string>
    </property>
   </widget>
   <widget class="Line" name="line_4">
@@ -535,13 +560,13 @@ border-color: rgba(0,140,255,255);
     <enum>Qt::Horizontal</enum>
    </property>
   </widget>
-  <widget class="Line" name="line_5">
+  <widget class="Line" name="line_4">
    <property name="geometry">
     <rect>
      <x>20</x>
      <y>560</y>
      <width>371</width>
-     <height>16</height>
+     <height>1</height>
     </rect>
    </property>
    <property name="orientation">

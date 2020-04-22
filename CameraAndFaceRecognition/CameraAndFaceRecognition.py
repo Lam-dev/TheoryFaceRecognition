@@ -5,6 +5,7 @@ from   PyQt5.QtCore     import pyqtSlot, pyqtSignal,QTimer, QDateTime,Qt, QObjec
 from   PyQt5.QtGui      import QPixmap,QColor
 from   PyQt5            import QtCore, QtGui
 import time
+from   GetSettingFromJSON    import GetSetting
 
 Camera_Number = 0
 Camera_Object = cv2.VideoCapture(Camera_Number)
@@ -12,6 +13,12 @@ frame = False
 frameNoFaceMark = False
 FaceLocationInImage = False
 NumberFrameNotFace = 0
+
+# SETTING_DICT  = GetSetting.LoadSettingFromFile()
+# try:
+#     FR_THRESHOLD = SETTING_DICT["FRthreshold"]
+# except:
+FR_THRESHOLD = 0.5
 
 class GetImageFromCamera(QObject):
     CanNotConnectCamera = pyqtSignal()
@@ -128,7 +135,7 @@ class GetImageFromCamera(QObject):
         #     return
         if(not ret):
             self.CanNotConnectCamera.emit()
-            time.sleep(1000)
+            time.sleep(1)
         else:
             frame = frameFullSize[self.frameCut[1][0]:self.frameCut[1][1], self.frameCut[0][0]:self.frameCut[0][1]]
             frame = cv2.flip(frame, 1)
@@ -176,13 +183,14 @@ class FaceRecognition(QObject):
     StudentRecognized = pyqtSignal(object, object)
     StudentNotRecognized = pyqtSignal(object, object)
     def __init__(self ,lstStudent = ""):
+        global FR_THRESHOLD
         self.lstStudent = lstStudent
         super().__init__()
         self.cameraObj = Camera_Object 
         self.timerForFaceRecognition = QTimer(self)
         self.timerForFaceRecognition.timeout.connect(self.__StartThreadFaceRecognize)
         self.imageDetectFace = ""
-        self.FRthreshold = 0.4
+        self.FRthreshold = FR_THRESHOLD
         self.timerFaceTracking = QTimer(self)
         self.timerFaceTracking.timeout.connect(self.__StartThreadFaceTracking)
         self.numberFaceRecognize = 0

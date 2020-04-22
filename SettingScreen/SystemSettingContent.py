@@ -17,6 +17,7 @@ class SystemSettingContent(Ui_widget_containSettingContent, QObject):
     SignalConnectNewFTPserver = pyqtSignal(dict)
     SignalCleanFGPsensor = pyqtSignal()
     SignalDeleteAllData = pyqtSignal()
+    SignalModifyFGPsecurityLevel = pyqtSignal(int)
     
 
     def __init__(self):
@@ -118,6 +119,8 @@ class SystemSettingContent(Ui_widget_containSettingContent, QObject):
             "serverPassword" : ""
         }
         self.SignalConnectNewServer.emit(serverInfoDict)
+
+        self.__ConnectNewFTPserver()
 
     def __ConnectNewFTPserver(self):
         
@@ -272,5 +275,20 @@ class SystemSettingContent(Ui_widget_containSettingContent, QObject):
         elif(text == "6"):
             self.SignalModifyFRpoint.emit(0.4)
     
+    def ChangeSecurityLevel(self):
+        text = self.comboBox_forChoseFGPscuLevel.currentText()
+        if(text == "1"):
+            self.SignalModifyFGPsecurityLevel.emit(1)
+        elif(text == "2"):
+            self.SignalModifyFGPsecurityLevel.emit(2)
+        elif(text == "3"):
+            self.SignalModifyFGPsecurityLevel.emit(3)
+        elif(text == "4"):
+            self.SignalModifyFGPsecurityLevel.emit(4)
+        elif(text == "5"):
+            self.SignalModifyFGPsecurityLevel.emit(5)
+        elif(text == "6"):
+            self.SignalModifyFGPsecurityLevel.emit(5)
+
     def GetWidgetContent(self):
         return self.scrollAreaContent

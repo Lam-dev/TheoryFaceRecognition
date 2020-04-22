@@ -32,10 +32,14 @@
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: rgb(170, 170, 255);</string>
+    <string notr="true">background-color: rgb(170, 170, 255);
+color: rgb(197, 0, 0);</string>
    </property>
    <property name="text">
     <string/>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
    </property>
   </widget>
   <widget class="QLabel" name="label_forShowNameStudent">
@@ -200,8 +204,8 @@ font: 75 bold 16pt &quot;Ubuntu&quot;;</string>
   <widget class="QLabel" name="label_forShowNumberFGPadded">
    <property name="geometry">
     <rect>
-     <x>270</x>
-     <y>300</y>
+     <x>250</x>
+     <y>280</y>
      <width>149</width>
      <height>29</height>
     </rect>

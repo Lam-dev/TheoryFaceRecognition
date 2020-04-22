@@ -170,10 +170,10 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
 
     def ShowFTPserverConnectAvailabel(self, connectAvailable):
         try:
-            if(connectAvailable):
-                self.settingScreenObj.ShowConnectFTPserverStatusToSettingScreen("Máy chủ đang hoạt động", True)
+            if(type(connectAvailable) is bool):
+                self.settingScreenObj.ShowConnectFTPserverStatusToSettingScreen("Máy chủ FTP đang hoạt động", True)
             else:
-                self.settingScreenObj.ShowConnectFTPserverStatusToSettingScreen("Máy chủ không hoạt động", False)
+                self.settingScreenObj.ShowConnectFTPserverStatusToSettingScreen("Lỗi " + connectAvailable , False)
         except:
             pass
 
@@ -188,21 +188,21 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
 
     def ShowStudentInfomation(self, student):
         try:
-            image = Image.open(io.BytesIO(student.AnhDangKy))
+            if(not (student.AnhDangKy == None)):
+                image = Image.open(io.BytesIO(student.AnhDangKy))
             # im_data = ImageQt._toqclass_helper(image)
             # pixmap = QPixmap(im_data['im'].size[0], im_data['im'].size[1])
             # resizeImage = pixmap.scaled(150, 250, QtCore.Qt.KeepAspectRatio)
             # self.label_regisImage.setPixmap(resizeImage)
             # self.label_forShowName.setText(student.HoVaTen)
             #self.label_forShowNumberCard.setText(student.SBD)
-            qim = ImageQt.ImageQt(image)
-            pix = QtGui.QPixmap.fromImage(qim)
-            resizePixmap = pix.scaled(150, 200, QtCore.Qt.KeepAspectRatio)
-            self.SetGeometryForLabelShowRegisImage(resizePixmap.width(), resizePixmap.height())
-            self.label_regisImage.setPixmap(resizePixmap)
+                qim = ImageQt.ImageQt(image)
+                pix = QtGui.QPixmap.fromImage(qim)
+                resizePixmap = pix.scaled(150, 200, QtCore.Qt.KeepAspectRatio)
+                self.SetGeometryForLabelShowRegisImage(resizePixmap.width(), resizePixmap.height())
+                self.label_regisImage.setPixmap(resizePixmap)
         except:
             pass
-        
         self.label_forShowName.setText(student.HoVaTen.upper())
         self.label_forShowNumberCard.setText(student.SoCMTND)
         self.label_dateOfBird.setText(student.NgaySinh)
@@ -267,7 +267,8 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         self.settingScreenObj = SettingScreen(self.frameContainUpdateScreen)
         self.settingScreenObj.SignalModifyFaceMark.connect(self.__ModifyFaceMark)
         self.settingScreenObj.SignalModifyFRthreshold.connect(self.__ModifyFRthreadhold)
-        self.settingScreenObj.SignalModifyImageQuality.connect(self.__SignalModifyImageQuality)
+        # self.settingScreenObj.SignalModifyFGPsecurityLevel.connect(self.SignalModifyFGPsecurityLevel.emit)
+        # self.settingScreenObj.SignalModifyImageQuality.connect(self.__SignalModifyImageQuality)
         self.settingScreenObj.RequestOpenKeyBoard.connect(self.__ShowKeyBoard)
         self.settingScreenObj.SignalConnectNewFTPserver.connect(self.SignalConnectNewFTPserver.emit)
         self.settingScreenObj.SignalConnectNewServer.connect(self.SignalConnectNewServer.emit)

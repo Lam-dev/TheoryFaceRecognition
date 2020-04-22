@@ -26,8 +26,8 @@ class LayDuLieuTrongDataBase:
             #print("sql = ", sql)
             cursor.execute(sql)
             self.CSDL.commit()
-        except:
-            pass
+        except Exception as ex:
+            raise Exception(ex.args)
     """
     Lay du lieu o mot hoac mot so truong
     """
@@ -197,8 +197,9 @@ class LayDuLieuTrongDataBase:
                 cursor.execute(sql)
                 self.CSDL.commit()
             
-        except sqlite3.Error as e:
-            print(e)
+        except sqlite3.Error as ex:
+            raise Exception(ex.args)
+
     
     def xoaBanGhi(self, dieuKien):
         try:

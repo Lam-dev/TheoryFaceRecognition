@@ -11,6 +11,9 @@ class AddFGPscreen(QObject, Ui_Frame_ContainAddFGPscreen):
     SignalPlayBip = pyqtSignal()
     SignalRequestGetFGP = pyqtSignal(object)
     SignalStopGetFGP = pyqtSignal()
+    __SignalRequestStopAll = pyqtSignal()
+    __SignalRequestGetFGP = pyqtSignal()
+
 
     def __init__(self, frameContain):
         QObject.__init__(self)
@@ -19,7 +22,8 @@ class AddFGPscreen(QObject, Ui_Frame_ContainAddFGPscreen):
         self.frameContainCurrentStep.show()
         self.setupUi(frameContain)
         
-        
+        self.__SignalRequestStopAll.connect(self.StopAll)
+        self.__SignalRequestGetFGP.connect(self.GetFGP)
 
         self.__pixmapUtTraiTrang = QtGui.QPixmap("icon/finger/utTraiTrang.png")
         self.__pixmapNhanTraiTrang = QtGui.QPixmap("icon/finger/nhanTraiTrang.png")
@@ -100,11 +104,12 @@ class AddFGPscreen(QObject, Ui_Frame_ContainAddFGPscreen):
         if(self.__FGPgetPercent == 3):
             self.__FGPgetPercent = 0
             self.label_forShowFGPpercent.setText(str(self.__FGPgetPercent))
-            self.StopAll()
+            self.__SignalRequestStopAll.emit()
             __lstFGPofAfingerStr = ";".join(self.__lstFGPofAfinger)
             self.SignalSendFGPGetToServer.emit(__lstFGPofAfingerStr, self.__nameOfFingerAdding)
             self.__lstFGPofAfinger = []
-            self.GetFGP()
+            self.__SignalRequestGetFGP.emit()
+            # self.GetFGP()
         
 
     def ShowFGPisTheSameWithPre(self):
@@ -139,16 +144,18 @@ class AddFGPscreen(QObject, Ui_Frame_ContainAddFGPscreen):
         self.SignalStopGetFGP.emit()
         self.timerFlipFlop.stop()
 
+
     def GetFGP(self):
         # self.fingerprintObj.ClearFGPfeatureSaveOnSensor()
         if(self.lstFingerNeedAdd.__len__() == 0):
             self.StopAll()
             return
         self.__nameOfFingerAdding = self.lstFingerNeedAdd.pop()
+        self.timerFlipFlop.start(500)
         self.ShowFingerPutNotify(self.__nameOfFingerAdding)
         # self.fingerprintObj.StartGetFGP()
         self.SignalRequestGetFGP.emit(self.FGPget)
-        self.timerFlipFlop.start(500)
+        
     
     def ClearAllFingerNeedAddPre(self):
         self.label_utTrai.setPixmap(self.__pixmapUtTraiTrang)

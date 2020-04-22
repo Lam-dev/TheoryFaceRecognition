@@ -11,6 +11,4 @@ class AddDataResult():
         self.numberFGPadded = int
         self.cardWritten = bool
 
-
-
         

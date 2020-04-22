@@ -1,3 +1,4 @@
+
 import ftplib
 from    PyQt5.QtCore            import pyqtSlot, pyqtSignal,QTimer, QDateTime,Qt, QObject
 import  os
@@ -47,6 +48,7 @@ class FTPclient(QObject):
     SignalFTPnotConnect = pyqtSignal()
     SignalFolderNotExist = pyqtSignal()
     SignalWaitForDeleteFile = pyqtSignal()
+    SignalError = pyqtSignal(str)
     def __init__(self):
         super().__init__()
         self.__CreateConnect()
@@ -55,12 +57,12 @@ class FTPclient(QObject):
         # self.timerDeleteLocalFile.timeout.connect(self.__DeleteLocalImageFile)
     def __CreateConnect(self):
         try:
-            self.ftpObj = ftplib.FTP(host = FTP_IP, timeout = 3)
+            self.ftpObj = ftplib.FTP(host = FTP_IP, timeout = 4)
             self.ftpObj.login(FTP_ACCOUNT, FTP_PASSWORD)
             return True
 
-        except:
-            return False
+        except Exception as ex:
+            return str(ex.args)
 
     def DeleteLocalImageFile(self):
         try:
@@ -79,6 +81,7 @@ class FTPclient(QObject):
 
 
     def GetListStudentImage(self, fileDir):
+        self.SignalError.emit("war >>  " + fileDir)
         for i in range(0, 3):
             try:
                 self.ftpObj.cwd(fileDir)
@@ -90,7 +93,8 @@ class FTPclient(QObject):
                         lstImage.append(f)
                 self.GetListFileFromServer(lstImage)
                 return lstImage
-            except:
+            except Exception as ex:
+                self.SignalError.emit("er >>getIm>> "+ str(ex.args))
                 self.__CreateConnect()
     
     def SendImageToFTPserver(self, localfile, remotefile):
@@ -104,7 +108,8 @@ class FTPclient(QObject):
             self.__CreateConnect()
             self.ftpObj.storbinary('STOR %s' % remotefile, fp, 1024)
             self.SignalWaitForDeleteFile.emit()
-        except:
+        except Exception as ex:
+            self.SignalError.emit("er >>sendIm_ftp> "+ str(ex.args))
             try:
                 #print("remotefile not exist error caught" + remotefile)
                 path,filename = os.path.split(remotefile)
@@ -123,29 +128,42 @@ class FTPclient(QObject):
         fp.close()
                     
     def GetListFileFromServer(self, lstFile, ftpFilePath = FTP_SERVER_DOWLOAD_IMAGE_FILE_PATH):
+        
         numberFileGraped = 0
         lstImageGraped = []
         # os.removedirs(LOCAL_PATH_CONTAIN_DATA_UPDATE)
         # os.makedirs(LOCAL_PATH_CONTAIN_DATA_UPDATE)
         try:
             shutil.rmtree(LOCAL_PATH_CONTAIN_DATA_UPDATE)
-        except:
-            pass
+        except Exception as ex:
+            raise("er >> canot deleteupdatefile")
         os.mkdir("DataUpdate")
         try:
             self.ftpObj.cwd(ftpFilePath)
+        except:
+            try:
+                self.__CreateConnect()
+                self.ftpObj.cwd(ftpFilePath)
+            except Exception as ex:
+                raise ConnectionError("er>>>ftpNotConnect>>  "+str(ex.args))
+        try:
+            
             for f in lstFile:
+                self.SignalError.emit("war >> ftp" + f)
                 if((not f.__contains__(".jpg")) & (not f.__contains__(".json"))):
                     continue
                 try:
                     self.ftpObj.retrbinary("RETR " + f ,open(LOCAL_PATH_CONTAIN_DATA_UPDATE + f, 'wb').write)
                     numberFileGraped += 1
                     lstImageGraped.append(f)
-                except:
-                    pass
+                    self.SignalError.emit(">>> da lay anh >> " + f)
+                except Exception as ex:
+                    raise Exception("er >>ftp_getf> "+ str(ex.args))
+
             return lstImageGraped
-        except:
-            return
+        except Exception as ex:
+            raise Exception("er >>ftp_getf> "+ str(ex.args))
+
 
 
 # x = FTPclient()

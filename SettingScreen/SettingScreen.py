@@ -173,13 +173,14 @@ class SettingScreen(Ui_frame_settingScreen, QObject):
             widgetContent = self.content.GetWidgetContent()
             self.ScrollArea.SetContent(widgetContent)
             
-            self.content.SignalModifyFRpoint.connect(self.__ChangedFRpoint)
-            self.content.SignalModifyFaceMark.connect(self.__ChangeImageFaceMark)
-            self.content.SignalModifyImageQuality.connect(self.__ChangeImageQuality)
+            # self.content.SignalModifyFRpoint.connect(self.__ChangedFRpoint)
+            # self.content.SignalModifyFaceMark.connect(self.__ChangeImageFaceMark)
+            # self.content.SignalModifyImageQuality.connect(self.__ChangeImageQuality)
             self.content.SignalConnectNewServer.connect(self.SignalConnectNewServer.emit)
             self.content.SignalConnectNewFTPserver.connect(self.SignalConnectNewFTPserver.emit)
-            self.content.SignalCleanFGPsensor.connect(self.SignalCleanFGPsensor.emit)
+            # self.content.SignalCleanFGPsensor.connect(self.SignalCleanFGPsensor.emit)
             self.content.SignalDeleteAllData.connect(self.SignalDeleteAllData.emit)
+            # self.content.SignalModifyFGPsecurityLevel.connect(self.SignalModifyFGPsecurityLevel.emit)
             
             self.content.lineEdit_forInputIP.mousePressEvent = lambda event:self.__OpenKeyboard(self.content.lineEdit_forInputIP)
             self.content.lineEdit_forInputPort.mousePressEvent = lambda event:self.__OpenKeyboard(self.content.lineEdit_forInputPort)

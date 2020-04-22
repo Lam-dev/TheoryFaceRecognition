@@ -3,6 +3,9 @@ import time
 import simpleaudio as sa
 import wave
 from    PyQt5.QtCore   import QTimer, QObject
+import os
+from    GetSettingFromJSON    import GetSetting
+
 fileXinCamOnPath = 'Sound/AudioFile/xinCamOn.wav'
 fileVuiLongThuLaiPath = 'Sound/AudioFile/vuiLongThuLai.wav'
 fileTemp = 'Sound/AudioFile/temp.wav'
@@ -20,10 +23,22 @@ class Sound(QObject):
         self.timerPlayTemp = QTimer(self)
         self.timerPlayTemp.start(240000)
         self.timerPlayTemp.timeout.connect(self.ThreadPlayTemp)
+        self.__SetSound()
+
+    def __SetSound(self):
+        try:
+            SETTING_DICT  = GetSetting.GetSoundSetting()
+            volume = SETTING_DICT["volume"]
+            stringSet = "amixer -D pulse sset Master " + str(volume) + "%"
+            os.system(stringSet)
+        except:
+            pass
+        
+
 
     def __PlayBip(self):
         playSound = self.waveBip.play()
-        #playSound.wait_done()
+        playSound.wait_done()
 
     def ThreadPlayBip(self):
         thread = threading.Thread(target=self.__PlayBip, args=(), daemon=True)

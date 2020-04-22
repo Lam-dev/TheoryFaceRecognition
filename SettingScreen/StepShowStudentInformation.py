@@ -36,13 +36,17 @@ class StepShowStudentInformation(QObject, Ui_Frame):
         self.pushButton_deleteFGPadded.clicked.connect(self.SignalRequestDeleteFGPadded.emit)
         
     def ShowStudentInformation(self, student):
+        try:
+            self.label_forShowStudentImage.clear()
+            image = Image.open(io.BytesIO(student.AnhDangKy))
+            qim = ImageQt.ImageQt(image)
+            pix = QtGui.QPixmap.fromImage(qim)
+            resizePixmap = pix.scaled(150, 200, QtCore.Qt.KeepAspectRatio)
+            # self.SetGeometryForLabelShowRegisImage(resizePixmap.width(), resizePixmap.height())
+            self.label_forShowStudentImage.setPixmap(resizePixmap)
+        except:
+            self.label_forShowStudentImage.setText("KHÔNG CÓ ẢNH")
 
-        image = Image.open(io.BytesIO(student.AnhDangKy))
-        qim = ImageQt.ImageQt(image)
-        pix = QtGui.QPixmap.fromImage(qim)
-        resizePixmap = pix.scaled(150, 200, QtCore.Qt.KeepAspectRatio)
-        # self.SetGeometryForLabelShowRegisImage(resizePixmap.width(), resizePixmap.height())
-        self.label_forShowStudentImage.setPixmap(resizePixmap)
         self.label_nameOfStudent.setText(student.HoVaTen.upper())
         self.label_forShowIDnumber.setText(student.SoCMTND)
         # self.label_forShowDateOfBird.setText(student.SoCMTND)

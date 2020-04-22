@@ -20,6 +20,7 @@ from         WriteRFcard.ControlRFIDmodule      import ControlRFIDmudule
 import       json
 
 # from   Sound.Sound              import Sound
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -55,7 +56,7 @@ class MainWindow(QMainWindow):
 #region   dieu khien signal tu camera
 
         self.cameraObj.PixmapFromCamera.connect(self.__ShowImageFromCamera)
-        self.cameraObj.CanNotConnectCamera.connect(self.mainScreenObj.ShowCanNotConnectCamera)
+        self.cameraObj.CanNotConnectCamera.connect(self.__NoCameraMode)
         self.cameraObj.StartReadImage()
         self.cameraObj.SignalHideCamera.connect(self.__HideCamera)
 
@@ -92,7 +93,7 @@ class MainWindow(QMainWindow):
         self.timerReopenReadCam.timeout.connect(self.__ReopenReadCamera)
 
         self.timerWaitForUpdateData = QTimer(self)
-        self.timerWaitForUpdateData.timeout.connect(self.HideWaitForUpdateDataScreen)
+        self.timerWaitForUpdateData.timeout.connect(self.HideWaitForUpdateDataScreen)   
 
         self.FGPobj = Fingerprint()
         self.FGPobj.SignalRecognizedFGP.connect(self.RecognizedFGP)
@@ -115,6 +116,7 @@ class MainWindow(QMainWindow):
 
         self.__FlagUpdateScreenIsShow = False
         self.__FlagNeedWaitContinue = False
+        self.__FlagNoCameraMode = False
         # self.socketServerForRFIDobj = SocketServerForRFID()
         # self.socketServerForRFIDobj.SignalRFIDputOn.connect(self.RFIDputOn)
 
@@ -125,6 +127,16 @@ class MainWindow(QMainWindow):
 
     def GoToTakeSampleScreen(self):
         pass
+
+    def PlayBip(self):
+        self.soundObj.ThreadPlayBip()
+
+    def __NoCameraMode(self):
+        self.__FlagNoCameraMode = True
+        self.mainScreenObj.ShowCanNotConnectCamera()
+        self.mainScreenObj.ShowCanNotConnectCamera()
+        self.faceRecognitionObj.StopFaceRecognize()
+        self.cameraObj.StopReadImage()
 
     def PlayBip(self):
         self.soundObj.ThreadPlayBip()
@@ -189,16 +201,23 @@ class MainWindow(QMainWindow):
         self.ThemKhuonMatVaoDanhSachDaLay(infoDict["idStudent"], infoDict["faceEncodingArr"])
         self.faceRecognitionObj.SetListStudent(self.lstStudent)
         khoIDvaVanTay = IDvaVanTayRepository()
-        for FGPfeature in infoDict["FGPencoding"]:
-            try:
-                viTri = self.FGPobj.NapVanTayTuThietBiVaoCamBien(FGPfeature)
-            except:
-                pass
-            idVaVanTay = AnhXaIDvaVanTay()
-            idVaVanTay.IDThiSinh = infoDict["idStudent"]
-            idVaVanTay.ViTriVanTay = viTri
-            khoIDvaVanTay.ghiDuLieu(idVaVanTay)
-            self.FGPobj.ThemIDvaVanTayVaoDanhSachDaLay(infoDict["idStudent"], viTri)
+        if(len(infoDict["FGPencoding"]) == 0):
+            self.__AddSuccessOrError("er >>noFGP>> ID = " + infoDict["idStudent"])
+        else:
+            khoIDvaVanTay.xoaBanGhi(" IDThiSinh = %s "%(infoDict["idStudent"]))
+            for FGPfeature in infoDict["FGPencoding"]:
+                try:
+                    viTri = self.FGPobj.NapVanTayTuThietBiVaoCamBien(FGPfeature)
+                    idVaVanTay = AnhXaIDvaVanTay()
+                    idVaVanTay.IDThiSinh = infoDict["idStudent"]
+                    idVaVanTay.ViTriVanTay = viTri
+                    
+                    khoIDvaVanTay.ghiDuLieu(idVaVanTay)
+                    self.FGPobj.ThemIDvaVanTayVaoDanhSachDaLay(infoDict["idStudent"], viTri)
+                    self.__AddSuccessOrError("er >>fgpAdded>>" + "ID = " + infoDict["idStudent"])
+                except Exception as ex:
+                    self.__AddSuccessOrError("er >>fgpAddEr>>+"+str(ex.args)+ "ID = " + infoDict["idStudent"])
+
     
     def RecognizedCard(self, student):
         self.__OffCameraTemporary(recBy= "card")
@@ -254,10 +273,17 @@ class MainWindow(QMainWindow):
 
     
     def ThemKhuonMatVaoDanhSachDaLay(self, idStudent, faceEncoding):
+        
         for student in self.lstStudent:
             if(student.ID == idStudent):
                 student.NhanDienKhuonMatThem.append(faceEncoding)
+                if(len(faceEncoding) == 0):
+                    self.__AddSuccessOrError("er >> notFace >> ID = "+ student.ID)
+                    
+                else:
+                    self.__AddSuccessOrError("suc >> addFace >> ID = "+ student.ID)
                 return
+        self.__AddSuccessOrError("er >> stNotMatch >> ID = "+ student.ID)
 
     def __DeleteFaceAdded(self, idStudent):
         for student in self.lstStudent:
@@ -265,22 +291,27 @@ class MainWindow(QMainWindow):
                 student.NhanDienKhuonMatThem = ""
                 return
 
+    def __AddSuccessOrError(self, errStr):
+        self.socketObject.SendLogError(errStr)
+
     def __DeleteFGPadded(self):
         self.FGPobj.LayDanhSachIDvaVanTay()
    
     def __SettingScreenHiden(self):
-        self.cameraObj.StartReadImage()
-        # self.faceRecognitionObj.StartFaceTracking()
-        self.faceRecognitionObj.StartFaceRecognize()
+        if(not self.__FlagNoCameraMode):
+            self.cameraObj.StartReadImage()
+            # self.faceRecognitionObj.StartFaceTracking()
+            self.faceRecognitionObj.StartFaceRecognize()
         self.FGPobj.BatLayVanTayDangNhap()
 
     def __ReopenReadCamera(self):
         if(self.__FlagUpdateScreenIsShow):
             return
-        self.mainScreenObj.ShowCamera()
+        if(not self.__FlagNoCameraMode):
+            self.cameraObj.StartReadImage()
+            self.mainScreenObj.ShowCamera()
+            self.faceRecognitionObj.StartFaceRecognize()
         self.mainScreenObj.ClearStudentRecognizedInfomation()
-        self.cameraObj.StartReadImage()
-        self.faceRecognitionObj.StartFaceRecognize()
         # self.faceRecognitionObj.StartFaceTracking()
         self.FGPobj.BatLayVanTayDangNhap()
         self.timerReopenReadCam.stop()
@@ -307,9 +338,11 @@ class MainWindow(QMainWindow):
     def UpdateDatabaseSuccess(self, listStudents):
         self.lstStudent.clear()
         self.lstStudent.extend(listStudents)
-        self.faceRecognitionObj.StartFaceRecognize()
-        self.cameraObj.StartReadImage()
-        self.mainScreenObj.fateScreen()
+        if(not self.__FlagNoCameraMode):
+            self.cameraObj.StartReadImage()
+            self.faceRecognitionObj.StartFaceRecognize()
+            
+        # self.mainScreenObj.fateScreen()
 
     def WaitForUpdateDatabase(self, filePath):
         self.faceRecognitionObj.StopFaceRecognize()
@@ -349,6 +382,7 @@ class MainWindow(QMainWindow):
                 self.faceRecognitionObj.StartFaceRecognize()
                 return
                 
+
     def __RecognizedStudent(self, studentObj, faceImageJpgData):
         if(studentObj.ID.__contains__("EC_9999")):
             self.SearchStudentAndCheck(studentObj)

@@ -6,6 +6,13 @@ from    PIL import Image
 import  _thread
 from    DatabaseAccess.DatabaseAccess     import *
 import  threading
+from    GetSettingFromJSON    import GetSetting
+
+# SETTING_DICT  = GetSetting.LoadSettingFromFile()
+# try:
+#     SCURITY_LEVEL = SETTING_DICT["FGPscuLevel"]
+# except:
+SCURITY_LEVEL = 1
 
 class Fingerprint(QObject):
     SignalNewFGPadded = pyqtSignal(int, list)
@@ -26,7 +33,9 @@ class Fingerprint(QObject):
         self.address = address
         self.password = password
         try:
+            global SCURITY_LEVEL
             self.fingerprintObj = PyFingerprint(port, baudRate, address, password)
+            self.fingerprintObj.setSecurityLevel(SCURITY_LEVEL)
             # self.fingerprintObj.verifyPassword()
             self.fingerprintObj.setSecurityLevel(1)
         except:
@@ -48,6 +57,11 @@ class Fingerprint(QObject):
 
         self.FGPgetCallback = object
     
+    def setSecurityLevel(self, level):
+        global SCURITY_LEVEL
+        SCURITY_LEVEL = level
+        self.fingerprintObj.setSecurityLevel(SCURITY_LEVEL)
+
     def XoaVanTayTrongCamBien(self, viTri):
         try:
             self.fingerprintObj.deleteTemplate(viTri)
@@ -99,6 +113,7 @@ class Fingerprint(QObject):
             pass
 
     def ThemVanTay(self):
+        
         try:
             if(type(self.fingerprintObj) is not bool):
                 if(self.fingerprintObj.readImage()):
@@ -108,6 +123,7 @@ class Fingerprint(QObject):
                     self.fingerprintObj.convertImage(0x02)
                     if(self.fingerprintObj.compareCharacteristics() > 0):
                         result = self.fingerprintObj.searchTemplate()
+                        
                         dacTrungVanTay = self.fingerprintObj.downloadCharacteristics(0x01)
                         if(result[0] > 0):
                             viTriLuu = result[0]
@@ -116,8 +132,9 @@ class Fingerprint(QObject):
                         self.fingerprintObj.storeTemplate(viTriLuu, 0x01)
                         self.SignalNewFGPadded.emit(viTriLuu, dacTrungVanTay)
             else:
+                global SCURITY_LEVEL
                 self.fingerprintObj = PyFingerprint(self.port, self.baudRate, self.address, self.password)
-                self.fingerprintObj.setSecurityLevel(1)
+                self.fingerprintObj.setSecurityLevel(SCURITY_LEVEL)
                 self.fingerprintObj.verifyPassword()
         except:
             self.fingerprintObj = False
@@ -132,8 +149,8 @@ class Fingerprint(QObject):
                 viTriLuu = self.TimKhoangTrong()
             self.fingerprintObj.storeTemplate(viTriLuu, 0x01)
             return viTriLuu
-        except:
-            pass
+        except Exception as ex:
+            raise Exception(ex.args)
 
     def TimViTriLuu(self):
         for i in range(0,4):
@@ -191,6 +208,7 @@ class Fingerprint(QObject):
                 self.fingerprintObj.convertImage(0x01)
                 
                 ketqua = self.fingerprintObj.searchTemplate()
+                print(ketqua)
                 print("ket qua = %s"%(ketqua[0]))
                 if(len(ketqua) == 2):
                     for idVaVanTay in self.lstIDvaVanTay:
@@ -201,8 +219,10 @@ class Fingerprint(QObject):
                 self.SignalFGPnotFind.emit()
 
         except:
-            self.fingerprintObj = PyFingerprint(self.port, self.baudRate, self.address, self.password)
-            pass
+            try:
+                self.fingerprintObj = PyFingerprint(self.port, self.baudRate, self.address, self.password)
+            except:
+                pass
         self.FlagFGPfree = True
 
     def NapLaiDuLieuChoCamBienVanTay(self):
@@ -316,13 +336,11 @@ class Fingerprint(QObject):
                 # theSame = self.fingerprintObj.searchTemplate()
                 # if(theSame[0] == -1):
                 if(self.fingerprintObj.compareCharacteristics() > 0):
-                    print("2 van tay giong nhau")
                     lstFGPfeature = self.fingerprintObj.downloadCharacteristics(0x02)
-                    print(lstFGPfeature)
-                # self.fingerprintObj.storeTemplate()
+
+                    # self.fingerprintObj.storeTemplate()
                     lstFGPfeatureStrElem = [str(elem) for elem in lstFGPfeature]
                     FGPfeatureString = ",".join(lstFGPfeatureStrElem)
-                    print("aaaaaa = " + FGPfeatureString)
                     self.FGPgetCallback(FGPfeatureString)
                 
                     

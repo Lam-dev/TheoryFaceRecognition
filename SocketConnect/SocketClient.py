@@ -24,6 +24,7 @@ CODE_SEND_PING_PONG                         = 1
 CODE_RESULT_RECOGNITION                     = 2
 CODE_STUDENT_FEATURE_FILE                   = 4
 CODE_SEND_RESULT_DATA_BASE_CHECK            = 6
+CODE_SEND_ERROR                             = 20
 
 MAC_ADDRESS                                         = getmac.get_mac_address()
 IMAGE_TO_SEND_SERVER_PATH                           = "/StudentRecognize/SocketConnect/"
@@ -58,6 +59,7 @@ class SocketClient(QObject):
         self.timerDeleteFTPsendedFile.timeout.connect(self.DeleteFTPsendedFile)
 
         self.ftpObj.SignalWaitForDeleteFile.connect(lambda:self.timerDeleteFTPsendedFile.start(2100))
+        self.ftpObj.SignalError.connect(self.SendLogError)
 
         self.timerWaitForReciptEnoughSyncData = QTimer(self)# cho nhan du du lieu dac trung,\
         self.timerSyncData = QTimer(self)
@@ -66,7 +68,9 @@ class SocketClient(QObject):
 
         self.__SignalConnected.connect(self.__ServerConnected)
 
+
         self.processReciptDataObj = ProcessReciptData()
+        self.processReciptDataObj.SignalErrorOrSuccess.connect(self.SendLogError)
         self.processReciptDataObj.ShowStudentForConfirm.connect(self.__ShowStudentForConfirmSlot)
         self.processReciptDataObj.ServerConfirmedConnect.connect(self.__ServerConfirmedConnect)
         self.processReciptDataObj.ResponseRequestUpdataFromServer.connect(self.__ResponseResquestUpdateDatabaseFromServer)
@@ -101,9 +105,15 @@ class SocketClient(QObject):
         self.__DataWaitForProcess = b''
         self.__FlagNeedProcessData = False
         self.__DataProcessing = b'';
-
         self.__SignalReciptEnounghData.connect(self.__ThreadTachVaPhanTichKhungNhan)
     
+
+    def SendLogError(self, strErr):
+        # for logLine in self.log.ReadLog():
+        self.__SendDataViaSocket(self.__DungKhungGiaoTiep(strErr, CODE_SEND_ERROR))
+        #pass
+
+
     def GetCurrentIP(self):
         gw = os.popen("ip -4 route show default").read().split()
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -157,11 +167,14 @@ class SocketClient(QObject):
             self.TimerWaitForServerConfirm.start(2000)
 
     def ConnectNewServer(self, serverInfoDict):
-        global SERVER_IP, SERVER_PORT
-        SERVER_IP = serverInfoDict["serverIP"]
-        SERVER_PORT = int(serverInfoDict["serverPort"])
-        self.FlagServerISconnect = False
-        self.CreateConnect()
+        try:
+            global SERVER_IP, SERVER_PORT
+            SERVER_IP = serverInfoDict["serverIP"]
+            SERVER_PORT = int(serverInfoDict["serverPort"])
+            self.FlagServerISconnect = False
+            self.CreateConnect()
+        except:
+            pass
 
     def __SendPingPong(self):
         if(self.__FlagSendPingPong):
@@ -303,8 +316,8 @@ class SocketClient(QObject):
         try:
             if(not self.FlagServerISconnect):
                 self.clientObj = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                self.clientObj.setblocking(0)
-                self.clientObj.settimeout(2)
+                # self.clientObj.setblocking(0)
+                # self.clientObj.settimeout(2)
                 self.clientObj.connect((SERVER_IP, SERVER_PORT))
                 self.__SendPingPong()
                 self.SignalServerConnected.emit()

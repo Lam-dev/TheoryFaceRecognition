@@ -40,6 +40,7 @@ class ControlRFIDmudule(QObject):
     def WriteIDcardNumberForDT(self, strNumber, callback):
         self.SetIDcarNumberToWriteToRFcard(strNumber, callback)
         self.StartWriteIDcardNumberToRFcard()
+        
 
     def WriteIDcardNumberToRFcard(self, strNumber, callback):
 
@@ -56,7 +57,8 @@ class ControlRFIDmudule(QObject):
         self.callbackWriteNotify = callback
 
     def StartWriteIDcardNumberToRFcard(self):
-        self.timerWriteToCard.start(1000)
+        
+        self.timerWriteToCard.start(700)
 
     def StopWriteIDcardNumberToRFcard(self):
         self.timerWriteToCard.stop()

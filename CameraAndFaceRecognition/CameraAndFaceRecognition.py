@@ -87,18 +87,19 @@ class GetImageFromCamera(QObject):
         global frame
         global FaceLocationInImage
         lstFaceLoc = []
-        try:
-            for faceLocation in FaceLocationInImage:
-                faceLoc = [(elem * 2) for elem in faceLocation]
-                lstFaceLoc.append(faceLoc)
-        except:
-            pass
+        # try:
+        #     for faceLocation in FaceLocationInImage:
+        #         faceLoc = [(elem * 2) for elem in faceLocation]
+        #         lstFaceLoc.append(faceLoc)
+        # except:
+        #     pass
 
         if(type(FaceLocationInImage) is not bool):
-            faceEncodings = face_recognition.face_encodings(frame, lstFaceLoc)
+            faceEncodings = face_recognition.face_encodings(frame, FaceLocationInImage)
         else:
             faceEncodings = []
         callbackSendFeature(faceEncodings)
+        # FaceLocationInImage = False
 
 
     def FaceTracking(self):

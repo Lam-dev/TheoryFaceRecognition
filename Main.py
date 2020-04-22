@@ -303,6 +303,7 @@ class MainWindow(QMainWindow):
             # self.faceRecognitionObj.StartFaceTracking()
             self.faceRecognitionObj.StartFaceRecognize()
         self.FGPobj.BatLayVanTayDangNhap()
+        self.rfModuleObj.StartReadDataInCard()
 
     def __ReopenReadCamera(self):
         if(self.__FlagUpdateScreenIsShow):
@@ -354,6 +355,7 @@ class MainWindow(QMainWindow):
         # self.faceRecognitionObj.StopFaceTracking()
         self.FGPobj.TatLayVanTayDangNhap()
         self.cameraObj.StopReadImage()
+        self.rfModuleObj.StopReadDataInCard()
         self.mainScreenObj.ShowSettingScreen()
 
     def ServerNotConnect(self):

@@ -123,6 +123,7 @@ class Fingerprint(QObject):
                     self.fingerprintObj.convertImage(0x02)
                     if(self.fingerprintObj.compareCharacteristics() > 0):
                         result = self.fingerprintObj.searchTemplate()
+                        
                         dacTrungVanTay = self.fingerprintObj.downloadCharacteristics(0x01)
                         if(result[0] > 0):
                             viTriLuu = result[0]
@@ -246,8 +247,10 @@ class Fingerprint(QObject):
             pass
     
     def ThreadGetFGPfeature(self):
-        thread = threading.Thread(target = self.GetFGPfeature_DT)
-        thread.start()
+        if(self.FlagFGPfree):
+            self.FlagFGPfree = False
+            thread = threading.Thread(target = self.GetFGPfeature_DT)
+            thread.start()
     
     def StartGetFGP(self):
         self.timerGetFGPfeature.start(700)
@@ -323,9 +326,6 @@ class Fingerprint(QObject):
         self.StartGetFGP()
 
     def GetFGPfeature_DT(self):
-        if(self.__FlagLockFGPsensor):
-            return
-        self.__FlagLockFGPsensor = True
         try:
             if(self.fingerprintObj.readImage()):
                 self.fingerprintObj.convertImage(0x01)
@@ -334,11 +334,12 @@ class Fingerprint(QObject):
                 self.SignalHandPushed.emit()
                 # theSame = self.fingerprintObj.searchTemplate()
                 # if(theSame[0] == -1):
-                lstFGPfeature = self.fingerprintObj.downloadCharacteristics(0x02)
-                # self.fingerprintObj.storeTemplate()
-                lstFGPfeatureStrElem = [str(elem) for elem in lstFGPfeature]
-                FGPfeatureString = ",".join(lstFGPfeatureStrElem)
-                self.FGPgetCallback(FGPfeatureString)
+                if(self.fingerprintObj.compareCharacteristics() > 0):
+                    lstFGPfeature = self.fingerprintObj.downloadCharacteristics(0x02)
+                    # self.fingerprintObj.storeTemplate()
+                    lstFGPfeatureStrElem = [str(elem) for elem in lstFGPfeature]
+                    FGPfeatureString = ",".join(lstFGPfeatureStrElem)
+                    self.FGPgetCallback(FGPfeatureString)
                 
                     
                 # else:
@@ -348,7 +349,6 @@ class Fingerprint(QObject):
                 self.fingerprintObj.verifyPassword()
 
         except Exception as ex:
-            print(ex)
-            self.__FlagLockFGPsensor = False
+            self.FlagFGPfree = True
             # self.fingerprintObj = False
-        self.__FlagLockFGPsensor = False
+        self.FlagFGPfree = True

@@ -341,7 +341,6 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         self.frameContainDatabaseScreen.show()
 
     def CloseTakeSampleScreen(self):
-        self.takeSampleScreen.CloseTakeSampleScreen()
         self.takeSampleScreen.deleteLater()
         self.frameContainDatabaseScreen.deleteLater()
         self.SignalCloseTakeSampleScreen.emit()

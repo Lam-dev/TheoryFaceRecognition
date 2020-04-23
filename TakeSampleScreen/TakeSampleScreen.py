@@ -14,10 +14,11 @@ class TakeSampleScreen(QObject, Ui_Frame):
     SignalStopReadImage = pyqtSignal()
     SignalFaceTracking = pyqtSignal()
     SignalGetFaceFeature = pyqtSignal(object)
+    SignalCloseTakeSampleScreen = pyqtSignal()
 
     SignalStartWriteRFcardDT = pyqtSignal(str, object)
     SignalStopWriteRFcardDT = pyqtSignal()
-    SignalCloseTakeSampleScreen = pyqtSignal()
+    CloseTakeSampleScreen = pyqtSignal()
     SignalStopGetFGP = pyqtSignal()
 
     def __init__(self, frame):

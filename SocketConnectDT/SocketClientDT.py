@@ -104,9 +104,8 @@ class SocketClientDT(QObject):
         try:
             self.clientObj.shutdown(1)
             self.clientObj.close()
-            
-
-
+            self.ftpObj.disconnect()
+            self.ftpObj.deleteLater()
         except Exception as ex:
             print(ex)
 

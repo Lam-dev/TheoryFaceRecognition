@@ -341,9 +341,13 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         self.frameContainDatabaseScreen.show()
 
     def CloseTakeSampleScreen(self):
-        self.SignalCloseTakeSampleScreen.emit()
+        self.takeSampleScreen.CloseTakeSampleScreen()
         self.takeSampleScreen.deleteLater()
         self.frameContainDatabaseScreen.deleteLater()
+        self.SignalCloseTakeSampleScreen.emit()
+
+        
+
 
     def OpenDatabaseManagerScreen(self):
         self.frameContainDatabaseScreen = QtWidgets.QFrame(self.centralWidget)

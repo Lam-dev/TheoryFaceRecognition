@@ -117,6 +117,7 @@ class MainWindow(QMainWindow):
         self.__FlagUpdateScreenIsShow = False
         self.__FlagNeedWaitContinue = False
         self.__FlagNoCameraMode = False
+        self.__FlagSettingScreenShow = False
         # self.socketServerForRFIDobj = SocketServerForRFID()
         # self.socketServerForRFIDobj.SignalRFIDputOn.connect(self.RFIDputOn)
 
@@ -195,29 +196,33 @@ class MainWindow(QMainWindow):
             self.timerWaitForUpdateData.stop()
             self.mainScreenObj.HideWaitForUpdateScreen()
             self.__FlagUpdateScreenIsShow = False
-            self.__ReopenReadCamera()
+            if(not self.__FlagSettingScreenShow):
+                self.__ReopenReadCamera()
+            
 
     def AddStudentInfomation(self, infoDict):
-        self.ThemKhuonMatVaoDanhSachDaLay(infoDict["idStudent"], infoDict["faceEncodingArr"])
-        self.faceRecognitionObj.SetListStudent(self.lstStudent)
-        khoIDvaVanTay = IDvaVanTayRepository()
-        if(len(infoDict["FGPencoding"]) == 0):
-            self.__AddSuccessOrError("er >>noFGP>> ID = " + infoDict["idStudent"])
-        else:
-            khoIDvaVanTay.xoaBanGhi(" IDThiSinh = %s "%(infoDict["idStudent"]))
-            for FGPfeature in infoDict["FGPencoding"]:
-                try:
-                    viTri = self.FGPobj.NapVanTayTuThietBiVaoCamBien(FGPfeature)
-                    idVaVanTay = AnhXaIDvaVanTay()
-                    idVaVanTay.IDThiSinh = infoDict["idStudent"]
-                    idVaVanTay.ViTriVanTay = viTri
-                    
-                    khoIDvaVanTay.ghiDuLieu(idVaVanTay)
-                    self.FGPobj.ThemIDvaVanTayVaoDanhSachDaLay(infoDict["idStudent"], viTri)
-                    self.__AddSuccessOrError("er >>fgpAdded>>" + "ID = " + infoDict["idStudent"])
-                except Exception as ex:
-                    self.__AddSuccessOrError("er >>fgpAddEr>>+"+str(ex.args)+ "ID = " + infoDict["idStudent"])
-
+        try:
+            self.ThemKhuonMatVaoDanhSachDaLay(infoDict["idStudent"], infoDict["faceEncodingArr"])
+            self.faceRecognitionObj.SetListStudent(self.lstStudent)
+            khoIDvaVanTay = IDvaVanTayRepository()
+            if(len(infoDict["FGPencoding"]) == 0):
+                self.__AddSuccessOrError("er >>noFGP>> ID = " + infoDict["idStudent"])
+            else:
+                khoIDvaVanTay.xoaBanGhi(" IDThiSinh = %s "%(infoDict["idStudent"]))
+                for FGPfeature in infoDict["FGPencoding"]:
+                    try:
+                        viTri = self.FGPobj.NapVanTayTuThietBiVaoCamBien(FGPfeature)
+                        idVaVanTay = AnhXaIDvaVanTay()
+                        idVaVanTay.IDThiSinh = infoDict["idStudent"]
+                        idVaVanTay.ViTriVanTay = viTri
+                        
+                        khoIDvaVanTay.ghiDuLieu(idVaVanTay)
+                        self.FGPobj.ThemIDvaVanTayVaoDanhSachDaLay(infoDict["idStudent"], viTri)
+                        self.__AddSuccessOrError("er >>fgpAdded>>" + "ID = " + infoDict["idStudent"])
+                    except Exception as ex:
+                        self.__AddSuccessOrError("er >>fgpAddEr>>+"+str(ex.args)+ "ID = " + infoDict["idStudent"])
+        except:
+            pass
     
     def RecognizedCard(self, student):
         self.__OffCameraTemporary(recBy= "card")
@@ -283,7 +288,7 @@ class MainWindow(QMainWindow):
                 else:
                     self.__AddSuccessOrError("suc >> addFace >> ID = "+ student.ID)
                 return
-        self.__AddSuccessOrError("er >> stNotMatch >> ID = "+ student.ID)
+        self.__AddSuccessOrError("er >> stNotMatch >> ID = "+ idStudent)
 
     def __DeleteFaceAdded(self, idStudent):
         for student in self.lstStudent:
@@ -298,12 +303,15 @@ class MainWindow(QMainWindow):
         self.FGPobj.LayDanhSachIDvaVanTay()
    
     def __SettingScreenHiden(self):
-        if(not self.__FlagNoCameraMode):
-            self.cameraObj.StartReadImage()
-            # self.faceRecognitionObj.StartFaceTracking()
-            self.faceRecognitionObj.StartFaceRecognize()
-        self.FGPobj.BatLayVanTayDangNhap()
-        self.rfModuleObj.StartReadDataInCard()
+        
+        # if(not self.__FlagNoCameraMode):
+        #     self.cameraObj.StartReadImage()
+        #     # self.faceRecognitionObj.StartFaceTracking()
+        #     self.faceRecognitionObj.StartFaceRecognize()
+        # self.FGPobj.BatLayVanTayDangNhap()
+        # self.rfModuleObj.StartReadDataInCard()
+        self.__FlagSettingScreenShow = False
+        self.__ReopenReadCamera()
 
     def __ReopenReadCamera(self):
         if(self.__FlagUpdateScreenIsShow):
@@ -316,6 +324,7 @@ class MainWindow(QMainWindow):
         # self.faceRecognitionObj.StartFaceTracking()
         self.FGPobj.BatLayVanTayDangNhap()
         self.timerReopenReadCam.stop()
+        self.rfModuleObj.StartReadDataInCard()
     
     def __ConnectNewFTPserver(self, ftpServerDict):
         connectAvailabel = self.socketObject.ftpObj.ConnectNewFTPserver(ftpServerDict)
@@ -349,10 +358,12 @@ class MainWindow(QMainWindow):
         self.faceRecognitionObj.StopFaceRecognize()
         self.cameraObj.StopReadImage()
         self.mainScreenObj.ShowUpdateScreen(filePath)
+        self.rfModuleObj.StopReadDataInCard()
 
     def __ShowSettingScreen(self):
+        self.__FlagSettingScreenShow = True
         self.faceRecognitionObj.StopFaceRecognize()
-        # self.faceRecognitionObj.StopFaceTracking()
+        # self.faceRecognitionObjfaceRecognitionObj.StopFaceTracking()
         self.FGPobj.TatLayVanTayDangNhap()
         self.cameraObj.StopReadImage()
         self.rfModuleObj.StopReadDataInCard()
@@ -363,7 +374,7 @@ class MainWindow(QMainWindow):
         self.mainScreenObj.ShowNotConnect()
 
     def ServerConnected(self):
-        self.cameraObj.StartReadImage()
+        # self.cameraObj.StartReadImage()
         self.mainScreenObj.ShowConnected()
 
     def __NotRecognized(self, student, jpegData):

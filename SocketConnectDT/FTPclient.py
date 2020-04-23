@@ -47,8 +47,9 @@ class FTPclient(QObject):
     SignalFolderNotExist = pyqtSignal()
     def __init__(self):
         super().__init__()
+        self.__ReloadSetting()
         self.__CreateConnect()
-
+        
 
     def __CreateConnect(self):
         try:
@@ -59,6 +60,22 @@ class FTPclient(QObject):
         
         except Exception as ex:
             return str(ex.args)
+    
+    def __ReloadSetting(self):
+
+        global FTP_IP, FTP_PORT, FTP_ACCOUNT, FTP_PASSWORD
+        try:
+            SETTING_DICT = GetSetting.LoadSettingFromFile()
+            FTP_IP       =  SETTING_DICT["ftpIP_DT"]
+            FTP_PORT     =  SETTING_DICT["ftpPort_DT"]
+            FTP_ACCOUNT  =  SETTING_DICT["ftpAccount_DT"]
+            FTP_PASSWORD =  SETTING_DICT["ftpPassword_DT"]
+        except Exception as e:
+            print(str(e.args))
+            FTP_IP       =  "0.0.0.0"
+            FTP_PORT     =  1
+            FTP_ACCOUNT  =  ""
+            FTP_PASSWORD =  ""
 
     def ConnectNewFTPserver(self, inforDict):
         global FTP_IP, FTP_PORT, FTP_ACCOUNT, FTP_PASSWORD

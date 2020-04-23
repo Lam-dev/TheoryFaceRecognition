@@ -44,10 +44,11 @@ class SocketClientDT(QObject):
 
     def __init__(self):
         super().__init__()
+        
         self.ftpObj = FTPclient()
         # self.timerPingPong = QTimer(self)
         # self.timerPingPong.timeout.connect(self.__PingPong)
-
+        self.__ReloadSetting()
         self.__SignalConnected.connect(self.__ServerConnected)
 
         self.callBackShowStatusConnectToSetting = object
@@ -71,6 +72,18 @@ class SocketClientDT(QObject):
         self.__SignalRecreateConnect.connect(self.__RecreateConnect)
         self.__FlagSendPingPong = True
         self.waitingForConnect = False
+
+    def __ReloadSetting(self):
+
+        global SERVER_IP, SERVER_PORT
+        try:
+            SETTING_DICT                        = GetSetting.LoadSettingFromFile()
+            SERVER_IP                           = SETTING_DICT["serverIP_DT"]
+            SERVER_PORT                         = int(SETTING_DICT["serverPort_DT"])
+        except:
+            SERVER_IP = "0.0.0.0"
+            SERVER_PORT = 0
+
 
     def SendNotifyWriteRFcardSuccessfully(self):
         self.__SendDataViaSocket(self.__DungKhungGiaoTiepUART("", CODE_SEND_NOTIFY_WRITE_CARD_SUCCESS)[0])

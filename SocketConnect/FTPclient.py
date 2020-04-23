@@ -51,18 +51,21 @@ class FTPclient(QObject):
     SignalError = pyqtSignal(str)
     def __init__(self):
         super().__init__()
-        self.__CreateConnect()
+        try:
+            self.__CreateConnect()
+        except:
+            pass
         self.localImageFile = ""
         # self.timerDeleteLocalFile = QTimer(self)
         # self.timerDeleteLocalFile.timeout.connect(self.__DeleteLocalImageFile)
     def __CreateConnect(self):
         try:
-            self.ftpObj = ftplib.FTP(host = FTP_IP, timeout = 4)
+            self.ftpObj = ftplib.FTP(host = FTP_IP, timeout = 3)
             self.ftpObj.login(FTP_ACCOUNT, FTP_PASSWORD)
             return True
 
         except Exception as ex:
-            return str(ex.args)
+            raise Exception(str(ex.args))
 
     def DeleteLocalImageFile(self):
         try:

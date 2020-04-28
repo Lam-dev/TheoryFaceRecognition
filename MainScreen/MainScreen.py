@@ -320,10 +320,10 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
 
     def __GoToTakeSampleScreen(self):
         self.SignalRequestGoToTakeSampleScreen.emit()
-        self.frameContainDatabaseScreen = QtWidgets.QFrame(self.centralWidget)
-        self.frameContainDatabaseScreen.setGeometry(QtCore.QRect(0, 0, 800, 480))
-        self.frameContainDatabaseScreen.setStyleSheet("background-color: rgb(255, 255, 255);")
-        self.takeSampleScreen = TakeSampleScreen(self.frameContainDatabaseScreen)
+        self.frameContainTakeSampleScreen = QtWidgets.QFrame(self.centralWidget)
+        self.frameContainTakeSampleScreen.setGeometry(QtCore.QRect(0, 0, 800, 480))
+        self.frameContainTakeSampleScreen.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.takeSampleScreen = TakeSampleScreen(self.frameContainTakeSampleScreen)
         self.takeSampleScreen.SignalRequestGetFGP.connect(self.SignalRequestGetFGP.emit)
         self.takeSampleScreen.SignalStartReadImage.connect(self.SignalStartReadImage.emit)
 
@@ -337,12 +337,12 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         
         self.takeSampleScreen.SignalStopGetFGP.connect(self.SignalStopGetFGP.emit)
 
-        self.frameContainDatabaseScreen.raise_()
-        self.frameContainDatabaseScreen.show()
+        self.frameContainTakeSampleScreen.raise_()
+        self.frameContainTakeSampleScreen.show()
 
     def CloseTakeSampleScreen(self):
         self.takeSampleScreen.deleteLater()
-        self.frameContainDatabaseScreen.deleteLater()
+        self.frameContainTakeSampleScreen.deleteLater()
         self.SignalCloseTakeSampleScreen.emit()
 
         

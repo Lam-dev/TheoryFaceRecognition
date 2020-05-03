@@ -56,7 +56,7 @@ class FTPclient(QObject):
         # self.timerDeleteLocalFile.timeout.connect(self.__DeleteLocalImageFile)
     def __CreateConnect(self):
         try:
-            self.ftpObj = ftplib.FTP(host = FTP_IP, timeout = 6)
+            self.ftpObj = ftplib.FTP(host = FTP_IP, timeout = 3)
             self.ftpObj.login(FTP_ACCOUNT, FTP_PASSWORD)
             return True
 
@@ -131,7 +131,7 @@ class FTPclient(QObject):
         try:
             shutil.rmtree(LOCAL_PATH_CONTAIN_DATA_UPDATE)
         except Exception as ex:
-            raise("er >> canot deleteupdatefile")
+            raise Exception("er >> canot deleteupdatefile")
         os.mkdir("DataUpdate")
         try:
             self.ftpObj.cwd(ftpFilePath)

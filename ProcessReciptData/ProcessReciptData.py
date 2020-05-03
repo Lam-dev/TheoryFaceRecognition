@@ -22,6 +22,8 @@ SERVER_REQUEST_GET_LIST_STUDENT                     = 8
 SERVER_REQUEST_DELETE_A_COURSE                      = 9
 SERVER_REQUEST_DELETE_A_STUDENT                     = 10
 SERVER_REQUEST_GET_LIST_HISTORY                     = 11
+SERVER_REQUEST_ADD_TEACHER                          = 20
+SERVER_REQUEST_ADD_TEACHER_STUDENT                  = 21    
 
 LOCAL_PATH_CONTAIN_DATA_UPDATE                      = "DataUpdate/"
 FTP_FILE_PATH_TO_UPLOAD                             = GetSetting.GetSetting("--ServerImageDir")
@@ -88,11 +90,39 @@ class ProcessReciptData(QObject):
                 self.DeleteStudent(reciptObj)
             
             elif(code == SERVER_REQUEST_GET_LIST_HISTORY):
-                self.GetListHistory(reciptObj)    
-        except:
+                self.GetListHistory(reciptObj)
 
+            elif(code == SERVER_REQUEST_ADD_TEACHER):
+                self.__AddTeacher(reciptObj)
+
+            elif(code == SERVER_REQUEST_ADD_TEACHER_STUDENT):
+                self.__AddTeacherStudent(reciptObj)
+        except:
             pass
     
+    def __AddTeacher(self, teacherInfo):
+        try:
+            teacher = ThongTinThiSinh()
+            thisinhRepo = ThiSinhRepository()
+            teacher.ID = "ELT_" + str(teacherInfo.ID)
+            teacher.HoVaTen = teacherInfo.TaiKhoan
+            teacher.IDKhoaThi = 0
+            teacher.AnhDangKy = b''
+            teacher.NhanDienVanTay = teacherInfo.DacTrungVanTay
+            teacher.NhanDienKhuonMatThem = teacherInfo.DacTrungKhuonMat
+            thisinhRepo.ghiDuLieu(teacher)
+            thisinhRepo.capNhatTruong(("NhanDienKhuonMatThem", "NhanDienVanTay"),(teacherInfo.DacTrungKhuonMat, teacherInfo.DacTrungVanTay), " ID = '%s' "%(teacher.ID))
+        except Exception as ex:
+            print(ex.args)
+        
+    def __AddTeacherStudent(self, teacherStudentInfo):
+        teacherStudent = HocVienTuongUngTaiKhoanQuanLy()
+        teacherStudentRepo = DanhSachThiSinhTuongUngTaiKhoanRepository()
+        teacherStudent.IDtaiKhoan = teacherStudentInfo.IDteacher
+        teacherStudent.IDthiSinh = teacherStudentInfo.RegisNumber
+        teacherStudentRepo.ghiDuLieu(teacherStudent)
+
+
     def SendListCourse(self):
         courseRepo = KhoaThiRepository()
         lstCourse = courseRepo.layDanhSach(" 1 = 1 ")

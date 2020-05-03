@@ -14,6 +14,7 @@ from         datetime                           import datetime
 # from         Sound.OrangePiSound                import Sound
 from         SocketConnect.SocketClient         import SocketClient
 import       os
+from        os                                  import path
 from         FingerPrintSensor.FingerPrint      import Fingerprint
 from         Sound.OrangePiSound                import Sound
 from         WriteRFcard.ControlRFIDmodule   import ControlRFIDmudule
@@ -107,6 +108,17 @@ class MainWindow(QMainWindow):
         # self.socketServerForRFIDobj.SignalRFIDputOn.connect(self.RFIDputOn)
 
         self.mainScreenObj.ShowCamera()
+
+    def __DisableLogo(self):
+        if(not path.exists("../Setting/dlogo.json")):
+            os.system("sh DisableLogo/disLogo.sh")
+            with open('../Setting/dlogo.json', 'w') as json_file:
+                dict = {
+                    "disable":"1",
+                }
+                json.dump(dict, json_file)
+
+
 
     def __NoCameraMode(self):
         self.__FlagNoCameraMode = True
@@ -349,7 +361,7 @@ class MainWindow(QMainWindow):
                 
 
     def __RecognizedStudent(self, studentObj, faceImageJpgData):
-        if(studentObj.ID.__contains__("EC_9999")):
+        if(studentObj.ID.__contains__("ELT")):
             self.SearchStudentAndCheck(studentObj)
         self.__OffCameraTemporary(recBy= "face")
         self.soundObj.ThreadPlayXinCamOn()
@@ -382,7 +394,14 @@ class MainWindow(QMainWindow):
         self.khoLichSu.ghiDuLieu(lichSu)
 
     def SearchStudentAndCheck(self, teacher):
-        pass
+        try:
+            teacherID = int(teacher.ID.split("_")[1])
+            teacherStudentRepo = DanhSachThiSinhTuongUngTaiKhoanRepository()
+            lstTeacherStudent = teacherStudentRepo.layDanhSach(" IDTaiKhoanQuanLy = %s "%(teacherID))
+            for teacherStudent in lstTeacherStudent:
+                self.socketObject.SendResultsFGPrecognition(teacherStudent.IDthiSinh)
+        except Exception as ex:
+            print(ex)
 
 def main():
     app = QApplication(sys.argv)

@@ -191,14 +191,17 @@ class SocketClient(QObject):
             self.TimerWaitForServerConfirm.start(5000)
 
     def __SendDataViaSocket(self, data):
+        thread = threading.Thread(target = self.__SendDataViaSocketAction, args=(data,), daemon= True)
+        thread.start()
+
+    def __SendDataViaSocketAction(self, data):
         try:
-            
             self.clientObj.send(data)
             self.__FlagSendPingPong = False
         except:
             self.FlagServerISconnect
             self.__SignalRecreateConnect.emit()
-
+    
     def __ShowStudentForConfirmSlot(self, maDK):
         self.ShowStudentForConfirm.emit(maDK)
 
@@ -306,8 +309,8 @@ class SocketClient(QObject):
         try:
             if(not self.FlagServerISconnect):
                 self.clientObj = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                self.clientObj.setblocking(1)
-                self.clientObj.settimeout(1000)
+                # self.clientObj.setblocking(1)
+                # self.clientObj.settimeout(200)
                 self.clientObj.connect((SERVER_IP, SERVER_PORT))
                 self.__SendPingPong()
                 self.SignalServerConnected.emit()
@@ -343,7 +346,9 @@ class SocketClient(QObject):
             "data":dictData
         }
         return json.dumps(dictToSend)
-        
+    
+
+
     def __BuildResultToSend(self, studentNumberCard, imageFileName, RecBy):
         tz_HCM = pytz.timezone('Asia/Ho_Chi_Minh') 
         datetime_HCM = datetime.now(tz_HCM)
@@ -364,7 +369,9 @@ class SocketClient(QObject):
             "data":dictData
         }
         return json.dumps(dictToSend)
-        
+
+    def __BuildResultToSendRandomTime(self, studentNumberCard, imageFileName, RecBy):
+        pass
     
     def __ConvertJsonStringToByteArr(self, jsonString):
         jsonCharArr = []
@@ -410,7 +417,7 @@ class SocketClient(QObject):
         self.__SendDataViaSocket(bytes(resultFrame))
         thread = threading.Thread(target = self.ftpObj.SendImageToFTPserver, args = (nameOfPhotoTaked, imageFileName), daemon= True)
         thread.start()
-        self.ftpObj.SendImageToFTPserver(nameOfPhotoTaked, FTP_FILE_PATH_TO_UPLOAD +"/"+ datetime.now().strftime("%Y%m%d") + '/' + str(ID)+"_"+datetime.now().strftime("%H%M%S")+ ".jpg")
+        # self.ftpObj.SendImageToFTPserver(nameOfPhotoTaked, FTP_FILE_PATH_TO_UPLOAD +"/"+ datetime.now().strftime("%Y%m%d") + '/' + str(ID)+"_"+datetime.now().strftime("%H%M%S")+ ".jpg")
 
 
     def SendResultsFGPrecognition(self, ID):

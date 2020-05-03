@@ -144,7 +144,7 @@ class LayDuLieuTrongDataBase:
                 hocVienVaTaiKhoanQuanLy.IDthiSinh = results[i][0]
                 hocVienVaTaiKhoanQuanLy.IDtaiKhoan = results[i][1]
                 lstHocVienTuongUngTaiKhoan.append(hocVienVaTaiKhoanQuanLy)
-                del lstHocVienTuongUngTaiKhoan
+                del hocVienVaTaiKhoanQuanLy
             return lstHocVienTuongUngTaiKhoan
 
     def ghiDuLieu(self, thongTin):

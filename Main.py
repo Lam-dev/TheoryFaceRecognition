@@ -186,25 +186,28 @@ class MainWindow(QMainWindow):
             self.__ReopenReadCamera()
 
     def AddStudentInfomation(self, infoDict):
-        self.ThemKhuonMatVaoDanhSachDaLay(infoDict["idStudent"], infoDict["faceEncodingArr"])
-        self.faceRecognitionObj.SetListStudent(self.lstStudent)
-        khoIDvaVanTay = IDvaVanTayRepository()
-        if(len(infoDict["FGPencoding"]) == 0):
-            self.__AddSuccessOrError("er >>noFGP>> ID = " + infoDict["idStudent"])
-        else:
-            khoIDvaVanTay.xoaBanGhi(" IDThiSinh = %s "%(infoDict["idStudent"]))
-            for FGPfeature in infoDict["FGPencoding"]:
-                try:
-                    viTri = self.FGPobj.NapVanTayTuThietBiVaoCamBien(FGPfeature)
-                    idVaVanTay = AnhXaIDvaVanTay()
-                    idVaVanTay.IDThiSinh = infoDict["idStudent"]
-                    idVaVanTay.ViTriVanTay = viTri
-                    
-                    khoIDvaVanTay.ghiDuLieu(idVaVanTay)
-                    self.FGPobj.ThemIDvaVanTayVaoDanhSachDaLay(infoDict["idStudent"], viTri)
-                    self.__AddSuccessOrError("er >>fgpAdded>>" + "ID = " + infoDict["idStudent"])
-                except Exception as ex:
-                    self.__AddSuccessOrError("er >>fgpAddEr>>+"+str(ex.args)+ "ID = " + infoDict["idStudent"])
+        try:
+            self.ThemKhuonMatVaoDanhSachDaLay(infoDict["idStudent"], infoDict["faceEncodingArr"])
+            self.faceRecognitionObj.SetListStudent(self.lstStudent)
+            khoIDvaVanTay = IDvaVanTayRepository()
+            if(len(infoDict["FGPencoding"]) == 0):
+                self.__AddSuccessOrError("er >>noFGP>> ID = " + infoDict["idStudent"])
+            else:
+                khoIDvaVanTay.xoaBanGhi(" IDThiSinh = %s "%(infoDict["idStudent"]))
+                for FGPfeature in infoDict["FGPencoding"]:
+                    try:
+                        viTri = self.FGPobj.NapVanTayTuThietBiVaoCamBien(FGPfeature)
+                        idVaVanTay = AnhXaIDvaVanTay()
+                        idVaVanTay.IDThiSinh = infoDict["idStudent"]
+                        idVaVanTay.ViTriVanTay = viTri
+                        
+                        khoIDvaVanTay.ghiDuLieu(idVaVanTay)
+                        self.FGPobj.ThemIDvaVanTayVaoDanhSachDaLay(infoDict["idStudent"], viTri)
+                        self.__AddSuccessOrError("er >>fgpAdded>>" + "ID = " + infoDict["idStudent"])
+                    except Exception as ex:
+                        self.__AddSuccessOrError("er >>fgpAddEr>>+"+str(ex.args)+ "ID = " + infoDict["idStudent"])
+        except:
+            pass
 
     
     def RecognizedCard(self, student):
@@ -225,7 +228,7 @@ class MainWindow(QMainWindow):
         self.soundObj.ThreadPlayXinCamOn()
         
     def __AddFaceEncodingAndFGP(self, faceDict, FGPdict):
-
+    
         khoThiSinh = ThiSinhRepository()
         khoThiSinh.capNhatTruong(("NhanDienKhuonMatThem", ), (faceDict["faceEncodingStr"], ), 'ID = "%s"'%(str(faceDict["student"].ID)))
         
@@ -250,17 +253,19 @@ class MainWindow(QMainWindow):
         self.socketObject.SendAddFaceAndFGP(sendDict)
     
     def ThemKhuonMatVaoDanhSachDaLay(self, idStudent, faceEncoding):
-        
-        for student in self.lstStudent:
-            if(student.ID == idStudent):
-                student.NhanDienKhuonMatThem.append(faceEncoding)
-                if(len(faceEncoding) == 0):
-                    self.__AddSuccessOrError("er >> notFace >> ID = "+ student.ID)
-                    
-                else:
-                    self.__AddSuccessOrError("suc >> addFace >> ID = "+ student.ID)
-                return
-        self.__AddSuccessOrError("er >> stNotMatch >> ID = "+ student.ID)
+        try:
+            for student in self.lstStudent:
+                if(student.ID == idStudent):
+                    student.NhanDienKhuonMatThem.append(faceEncoding)
+                    if(len(faceEncoding) == 0):
+                        self.__AddSuccessOrError("er >> notFace >> ID = "+ student.ID)
+                        
+                    else:
+                        self.__AddSuccessOrError("suc >> addFace >> ID = "+ student.ID)
+                    return
+            self.__AddSuccessOrError("er >> stNotMatch >> ID = "+ student.ID)
+        except:
+            pass
 
     def __DeleteFaceAdded(self, idStudent):
         for student in self.lstStudent:

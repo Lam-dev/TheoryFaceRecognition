@@ -51,7 +51,7 @@ class MainWindow(QMainWindow):
 
         self.khoLichSu = LichSuRepository()
         self.soundObj = Sound()
-
+        # self.__DisableLogo()
 #region   dieu khien signal tu camera
 
         self.cameraObj.PixmapFromCamera.connect(self.__ShowImageFromCamera)
@@ -106,7 +106,7 @@ class MainWindow(QMainWindow):
         self.__FlagNoCameraMode = False
         # self.socketServerForRFIDobj = SocketServerForRFID()
         # self.socketServerForRFIDobj.SignalRFIDputOn.connect(self.RFIDputOn)
-
+        
         self.mainScreenObj.ShowCamera()
 
     def __DisableLogo(self):

@@ -56,7 +56,7 @@ class FTPclient(QObject):
         # self.timerDeleteLocalFile.timeout.connect(self.__DeleteLocalImageFile)
     def __CreateConnect(self):
         try:
-            self.ftpObj = ftplib.FTP(host = FTP_IP, timeout = 3)
+            self.ftpObj = ftplib.FTP(host = FTP_IP, timeout = 4)
             self.ftpObj.login(FTP_ACCOUNT, FTP_PASSWORD)
             return True
 

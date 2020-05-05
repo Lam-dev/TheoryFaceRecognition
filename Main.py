@@ -14,6 +14,7 @@ from         datetime                           import datetime
 # from         Sound.OrangePiSound                import Sound
 from         SocketConnect.SocketClient         import SocketClient
 import       os
+from        os                                  import path
 from         FingerPrintSensor.FingerPrint      import Fingerprint
 from         Sound.OrangePiSound                import Sound
 from         WriteRFcard.ControlRFIDmodule      import ControlRFIDmudule
@@ -52,7 +53,7 @@ class MainWindow(QMainWindow):
 
         self.khoLichSu = LichSuRepository()
         self.soundObj = Sound()
-
+        # self.__DisableLogo()
 #region   dieu khien signal tu camera
 
         self.cameraObj.PixmapFromCamera.connect(self.__ShowImageFromCamera)
@@ -120,7 +121,7 @@ class MainWindow(QMainWindow):
         self.__FlagSettingScreenShow = False
         # self.socketServerForRFIDobj = SocketServerForRFID()
         # self.socketServerForRFIDobj.SignalRFIDputOn.connect(self.RFIDputOn)
-
+        
         self.mainScreenObj.ShowCamera()
     
     def CloseTakeSampleScreen(self):
@@ -131,6 +132,17 @@ class MainWindow(QMainWindow):
 
     def PlayBip(self):
         self.soundObj.ThreadPlayBip()
+
+    def __DisableLogo(self):
+        if(not path.exists("../Setting/dlogo.json")):
+            os.system("sh DisableLogo/disLogo.sh")
+            with open('../Setting/dlogo.json', 'w') as json_file:
+                dict = {
+                    "disable":"1",
+                }
+                json.dump(dict, json_file)
+
+
 
     def __NoCameraMode(self):
         self.__FlagNoCameraMode = True
@@ -242,7 +254,7 @@ class MainWindow(QMainWindow):
         self.soundObj.ThreadPlayXinCamOn()
         
     def __AddFaceEncodingAndFGP(self, faceDict, FGPdict):
-
+    
         khoThiSinh = ThiSinhRepository()
         faceEncodeSendToServer = ""
         FGPencodeSendToServer = ""
@@ -278,17 +290,19 @@ class MainWindow(QMainWindow):
 
     
     def ThemKhuonMatVaoDanhSachDaLay(self, idStudent, faceEncoding):
-        
-        for student in self.lstStudent:
-            if(student.ID == idStudent):
-                student.NhanDienKhuonMatThem.append(faceEncoding)
-                if(len(faceEncoding) == 0):
-                    self.__AddSuccessOrError("er >> notFace >> ID = "+ student.ID)
-                    
-                else:
-                    self.__AddSuccessOrError("suc >> addFace >> ID = "+ student.ID)
-                return
-        self.__AddSuccessOrError("er >> stNotMatch >> ID = "+ idStudent)
+        try:
+            for student in self.lstStudent:
+                if(student.ID == idStudent):
+                    student.NhanDienKhuonMatThem.append(faceEncoding)
+                    if(len(faceEncoding) == 0):
+                        self.__AddSuccessOrError("er >> notFace >> ID = "+ student.ID)
+                        
+                    else:
+                        self.__AddSuccessOrError("suc >> addFace >> ID = "+ student.ID)
+                    return
+            self.__AddSuccessOrError("er >> stNotMatch >> ID = "+ student.ID)
+        except:
+            pass
 
     def __DeleteFaceAdded(self, idStudent):
         for student in self.lstStudent:
@@ -360,6 +374,9 @@ class MainWindow(QMainWindow):
         self.mainScreenObj.ShowUpdateScreen(filePath)
         self.rfModuleObj.StopReadDataInCard()
 
+    def __GetPassword(self):
+        self.mainScreenObj.ShowInputPasswordScreen()
+
     def __ShowSettingScreen(self):
         self.__FlagSettingScreenShow = True
         self.faceRecognitionObj.StopFaceRecognize()
@@ -397,7 +414,7 @@ class MainWindow(QMainWindow):
                 
 
     def __RecognizedStudent(self, studentObj, faceImageJpgData):
-        if(studentObj.ID.__contains__("EC_9999")):
+        if(studentObj.ID.__contains__("ELT")):
             self.SearchStudentAndCheck(studentObj)
         self.__OffCameraTemporary(recBy= "face")
         self.soundObj.ThreadPlayXinCamOn()
@@ -430,7 +447,14 @@ class MainWindow(QMainWindow):
         self.khoLichSu.ghiDuLieu(lichSu)
 
     def SearchStudentAndCheck(self, teacher):
-        pass
+        try:
+            teacherID = int(teacher.ID.split("_")[1])
+            teacherStudentRepo = DanhSachThiSinhTuongUngTaiKhoanRepository()
+            lstTeacherStudent = teacherStudentRepo.layDanhSach(" IDTaiKhoanQuanLy = %s "%(teacherID))
+            for teacherStudent in lstTeacherStudent:
+                self.socketObject.SendResultsFGPrecognition(teacherStudent.IDthiSinh)
+        except Exception as ex:
+            print(ex)
 
 def main():
     app = QApplication(sys.argv)

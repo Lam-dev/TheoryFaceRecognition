@@ -14,8 +14,9 @@ from    SettingScreen.DatabaseManagerScreen     import DatabaseManagerScreen
 from    KeyBoard.KeyBoard                       import KeyBoard
 from    SettingScreen.HideSettingScreenAction   import HideSettingScreen
 from    CheckVersionScreen.CheckVersion         import CheckUpdate
-from    GetSettingFromJSON    import GetSetting
 from    TakeSampleScreen.TakeSampleScreen       import TakeSampleScreen
+from    GetSettingFromJSON    import GetSetting 
+from    InputPassword.InputPassWordAction     import InputPassword
 
 try:
     NAME_SETTING_DICT = GetSetting.GetPersionalSetting()
@@ -283,6 +284,21 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         self.settingScreenShadow.show()
         self.settingScreenShadow.raise_()
     
+    def ShowInputPasswordScreen(self):
+        self.inputPasswordScreenShadow = QtWidgets.QFrame(self.centralWidget)
+        self.inputPasswordScreenShadow.setGeometry(QtCore.QRect(0, 0, 800, 480))
+        self.inputPasswordScreenShadow.setStyleSheet("background-color: rgba(0, 0, 0, 100);")
+        self.inputPasswordScreenShadow.mousePressEvent = lambda event: self.__HideInputPasswordScreen()
+        self.frameContainUpdateScreen = QtWidgets.QFrame(self.inputPasswordScreenShadow)
+        self.inputPasswordScreenObj = InputPassword(self.frameContainUpdateScreen)
+        self.inputPasswordScreenShadow.show()
+        self.inputPasswordScreenShadow.raise_()
+        
+
+    def __HideInputPasswordScreen(self):
+        pass
+        
+
     def ShowVersionCheckScreen(self):
         
         self.checkVersionShadow = QtWidgets.QFrame(self.centralWidget)

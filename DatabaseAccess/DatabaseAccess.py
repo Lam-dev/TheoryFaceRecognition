@@ -158,7 +158,7 @@ class LayDuLieuTrongDataBase:
                 hocVienVaTaiKhoanQuanLy.IDThiSinh = results[i][1]
                 hocVienVaTaiKhoanQuanLy.IDtaiKhoanQuanLy = results[i][2]
                 lstHocVienTuongUngTaiKhoan.append(hocVienVaTaiKhoanQuanLy)
-                del lstHocVienTuongUngTaiKhoan
+                del hocVienVaTaiKhoanQuanLy
             return lstHocVienTuongUngTaiKhoan
         elif(self.tenBang == ""):
             pass

@@ -1,5 +1,5 @@
 import cv2
-import face_recognition
+import  face_recognition
 import threading
 from   PyQt5.QtCore     import pyqtSlot, pyqtSignal,QTimer, QDateTime,Qt, QObject
 from   PyQt5.QtGui      import QPixmap,QColor
@@ -18,7 +18,7 @@ NumberFrameNotFace = 0
 # try:
 #     FR_THRESHOLD = SETTING_DICT["FRthreshold"]
 # except:
-FR_THRESHOLD = 0.48
+FR_THRESHOLD = 0.41
 
 class GetImageFromCamera(QObject):
     CanNotConnectCamera = pyqtSignal()
@@ -265,16 +265,17 @@ class FaceRecognition(QObject):
             i = i + 1
             for encoding in faceEncodings:
                 try:
-                    match = face_recognition.compare_faces(student.NhanDienKhuonMat, encoding, self.FRthreshold)
+                    match = face_recognition.compare_faces(student.NhanDienKhuonMat, encoding, FR_THRESHOLD)
                     
-                except:
-                    pass
-
+                except Exception as ex:
+                    print(ex)
                 try:
-                    match.extend(face_recognition.compare_faces(student.NhanDienKhuonMatThem, encoding, self.FRthreshold))
+                    match.extend(face_recognition.compare_faces(student.NhanDienKhuonMatThem, encoding, FR_THRESHOLD))
 
-                except:
+                except Exception as ex:
+                    print(ex)
                     pass
+                print(match)
                 if True in match:
                     ret, jpgData = cv2.imencode(".jpg", image)
                     jpgData = jpgData.tobytes()

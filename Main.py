@@ -331,6 +331,9 @@ class MainWindow(QMainWindow):
         self.cameraObj.StopReadImage()
         self.mainScreenObj.ShowUpdateScreen(filePath)
 
+    def __GetPassword(self):
+        self.mainScreenObj.ShowInputPasswordScreen()
+
     def __ShowSettingScreen(self):
         self.faceRecognitionObj.StopFaceRecognize()
         # self.faceRecognitionObj.StopFaceTracking()

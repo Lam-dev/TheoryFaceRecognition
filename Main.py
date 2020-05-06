@@ -175,7 +175,7 @@ class MainWindow(QMainWindow):
         lstIDvaVanTay = IDvaVanTayRepository().layDanhSach(" IDThiSinh = '%s' "%(ID))
         for IDvaVanTay in lstIDvaVanTay:
             self.FGPobj.XoaVanTayTrongCamBien(IDvaVanTay.ViTriVanTay)
-
+ 
     def GoToDesktop(self):
         desktop = {
             'destop':1,

@@ -17,7 +17,7 @@ class GetImageFromCamera(QObject):
     PixmapFromCamera = pyqtSignal(QPixmap)
     SignalHideCamera = pyqtSignal()
 
-    def __init__(self, frameCut = ((0, 480), (0, 640)), size = (400, 650), scale = 0.5, time = 50, labelObject = ""):
+    def __init__(self, frameCut = ((0, 480), (0, 640)), size = (400, 650), scale = 1, time = 50, labelObject = ""):
         super().__init__()
         self.cameraObj = Camera_Object
         self.frameCut = frameCut
@@ -55,10 +55,10 @@ class GetImageFromCamera(QObject):
             # frame = cv2.resize(frame, (0, 0), fx = self.scale, fy = self.scale)
             if(type(FaceLocationInImage) is not bool):
                 # for (top, right, bottom, left) in FaceLocationInImage[0]:
-                top = FaceLocationInImage[0][0] * 2
-                right = FaceLocationInImage[0][1] * 2
-                bottom = FaceLocationInImage[0][2] * 2
-                left = FaceLocationInImage[0][3] * 2
+                top = FaceLocationInImage[0][0]
+                right = FaceLocationInImage[0][1]
+                bottom = FaceLocationInImage[0][2]
+                left = FaceLocationInImage[0][3]
                 cv2.rectangle(frame, (left, top), (right, bottom), (255, 255, 0), 3)
             
             rgbImage = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
@@ -85,7 +85,6 @@ class GetImageFromCamera(QObject):
         global NumberFrameNotFace
         if(type(frame) is bool):
             return
-        frame = cv2.resize(frame, (0, 0), fx = self.scale, fy = self.scale)
         localFrame = frame
         # self.imageDetectFace = localFrame[:, :, ::-1]
         FaceLocationInImage = self.__DetectFaceInImage(localFrame)
@@ -94,23 +93,13 @@ class GetImageFromCamera(QObject):
         cv2.imwrite("imageToSend.jpg", frame)
     
     def GetFaceFeature(self):
-
-            global frame
-            global FaceLocationInImage
-            lstFaceLoc = []
-            try:
-                for faceLocation in FaceLocationInImage:
-                    faceLoc = [(elem * 2) for elem in faceLocation]
-                    lstFaceLoc.append(faceLoc)
-            except:
-                pass
-
-            if(type(FaceLocationInImage) is not bool):
-                faceEncodings = face_recognition.face_encodings(frame, lstFaceLoc)
-            else:
-                faceEncodings = []
-            return faceEncodings
-
+        global frame
+        global FaceLocationInImage
+        if(type(FaceLocationInImage) is not bool):
+            faceEncodings = face_recognition.face_encodings(frame, FaceLocationInImage)
+        else:
+            faceEncodings = []
+        return faceEncodings
 
 
     def StopReadImage(self):
@@ -190,7 +179,7 @@ class FaceRecognition(QObject):
         localFrame = frame
         # self.imageDetectFace = localFrame[:, :, ::-1]
         FaceLocationInImage = self.__DetectFaceInImage(localFrame)
-        # self.__GetImageFromCamera()
+        self.__GetImageFromCamera()
         NumberFrameNotFace = 0
         
         # self.FaceRecognition()

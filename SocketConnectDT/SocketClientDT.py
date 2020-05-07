@@ -255,12 +255,15 @@ class SocketClientDT(QObject):
                 else: 
                     self.__FlagSendPingPong = False
                     self.__PhanTichKhungNhan(recvData)
-            
-            except:
+                
+            except Exception as ex:
+                print("loi lang nghe:" + str(ex.args))
                 try:
                     self.__SignalRecreateConnect.emit()
                     return
-                except:
+                except Exception as ex:
+                    return
+                    print("loi lang nghe 2:" + str(ex.args))
                     pass
                          
     def __PhanTichKhungNhan(self, khungNhan):

@@ -145,7 +145,6 @@ class MainWindow(QMainWindow):
         self.__FlagNoCameraMode = True
         self.mainScreenObj.flagNoCameraMode = True
         self.mainScreenObj.ShowCanNotConnectCamera()
-        self.mainScreenObj.ShowCanNotConnectCamera()
         self.faceRecognitionObj.StopFaceRecognize()
         self.cameraObj.StopReadImage()
 
@@ -175,12 +174,7 @@ class MainWindow(QMainWindow):
             self.FGPobj.XoaVanTayTrongCamBien(IDvaVanTay.ViTriVanTay)
  
     def GoToDesktop(self):
-        desktop = {
-            'destop':1,
-        }
-        with open("desktop.json", 'w') as fp:
-            json.dump(desktop,fp)
-        self.close()
+        return
         
     def Shutdown(self):
         os.system("shutdown now")
@@ -332,6 +326,9 @@ class MainWindow(QMainWindow):
             self.cameraObj.StartReadImage()
             self.mainScreenObj.ShowCamera()
             self.faceRecognitionObj.StartFaceRecognize()
+        else:
+            self.mainScreenObj.ShowCamera()
+            self.mainScreenObj.ShowCanNotConnectCamera()
         self.mainScreenObj.ClearStudentRecognizedInfomation()
         # self.faceRecognitionObj.StartFaceTracking()
         self.FGPobj.BatLayVanTayDangNhap()

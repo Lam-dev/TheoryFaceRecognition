@@ -26,7 +26,7 @@ class Fingerprint(QObject):
     
     
 
-    def __init__(self, port = '/dev/ttyACM0', baudRate = 57600, address = 0xFFFFFFFF, password = 0xFFFFFFFF):
+    def __init__(self, port = '/dev/ttyS3', baudRate = 57600, address = 0xFFFFFFFF, password = 0xFFFFFFFF):
         super().__init__()
         self.port = port
         self.baudRate = baudRate
@@ -37,7 +37,6 @@ class Fingerprint(QObject):
             self.fingerprintObj = PyFingerprint(port, baudRate, address, password)
             self.fingerprintObj.setSecurityLevel(SCURITY_LEVEL)
             # self.fingerprintObj.verifyPassword()
-            self.fingerprintObj.setSecurityLevel(1)
         except:
             self.fingerprintObj = False
         
@@ -204,10 +203,10 @@ class Fingerprint(QObject):
         
         try:
             if(self.fingerprintObj.readImage()):
-                self.SignalHandPushed.emit()
                 self.fingerprintObj.convertImage(0x01)
                 
                 ketqua = self.fingerprintObj.searchTemplate()
+                self.SignalHandPushed.emit()
                 print(ketqua)
                 print("ket qua = %s"%(ketqua[0]))
                 if(len(ketqua) == 2):

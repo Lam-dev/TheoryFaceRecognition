@@ -50,10 +50,9 @@ class MainWindow(QMainWindow):
         self.mainScreenObj.SignalDeleteAllData.connect(self.DeleteAllData)
         self.mainScreenObj.SignalRequestGoToTakeSampleScreen.connect(self.GoToTakeSampleScreen)
 
-
         self.khoLichSu = LichSuRepository()
         self.soundObj = Sound()
-        # self.__DisableLogo()
+        self.__DisableLogo()
 #region   dieu khien signal tu camera
 
         self.cameraObj.PixmapFromCamera.connect(self.__ShowImageFromCamera)
@@ -124,15 +123,6 @@ class MainWindow(QMainWindow):
         
         self.mainScreenObj.ShowCamera()
     
-    def CloseTakeSampleScreen(self):
-        self.cameraObj.ResetSettingCameraForMainScreen()
-
-    def GoToTakeSampleScreen(self):
-        pass
-
-    def PlayBip(self):
-        self.soundObj.ThreadPlayBip()
-
     def __DisableLogo(self):
         if(not path.exists("../Setting/dlogo.json")):
             os.system("sh DisableLogo/disLogo.sh")
@@ -142,7 +132,14 @@ class MainWindow(QMainWindow):
                 }
                 json.dump(dict, json_file)
 
+    def CloseTakeSampleScreen(self):
+        self.cameraObj.ResetSettingCameraForMainScreen()
 
+    def GoToTakeSampleScreen(self):
+        pass
+
+    def PlayBip(self):
+        self.soundObj.ThreadPlayBip()
 
     def __NoCameraMode(self):
         self.__FlagNoCameraMode = True

@@ -146,6 +146,7 @@ class MainWindow(QMainWindow):
 
     def __NoCameraMode(self):
         self.__FlagNoCameraMode = True
+        self.mainScreenObj.flagNoCameraMode = True
         self.mainScreenObj.ShowCanNotConnectCamera()
         self.mainScreenObj.ShowCanNotConnectCamera()
         self.faceRecognitionObj.StopFaceRecognize()

@@ -95,7 +95,7 @@ class GetImageFromCamera(QObject):
         #     pass
 
         if(type(FaceLocationInImage) is not bool):
-            faceEncodings = face_recognition.face_encodings(frame, FaceLocationInImage, num_jitters = 1)
+            faceEncodings = face_recognition.face_encodings(frame, FaceLocationInImage)
         else:
             faceEncodings = []
         callbackSendFeature(faceEncodings)

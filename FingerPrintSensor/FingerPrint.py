@@ -12,7 +12,7 @@ from    GetSettingFromJSON    import GetSetting
 # try:
 #     SCURITY_LEVEL = SETTING_DICT["FGPscuLevel"]
 # except:
-SCURITY_LEVEL = 2
+SCURITY_LEVEL = 1
 
 class Fingerprint(QObject):
     SignalNewFGPadded = pyqtSignal(int, list)

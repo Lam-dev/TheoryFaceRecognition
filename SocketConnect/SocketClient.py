@@ -88,7 +88,7 @@ class SocketClient(QObject):
         self.timerSyncData.timeout.connect(self.processReciptDataObj.TimerUpdateDataTimeout)
 
         self.TimerWaitForServerConfirm = QTimer(self)
-        self.TimerWaitForServerConfirm.timeout.connect(self.__ThreadCreateConnect)
+        self.TimerWaitForServerConfirm.timeout.connect(self.CreateConnect)
         self.TimerWaitForServerConfirm.start(5000)
 
         self.FlagServerConfirmedForConnect = False
@@ -164,9 +164,14 @@ class SocketClient(QObject):
     def __RecreateConnect(self):
         self.FlagServerISconnect = False
         if(not self.TimerWaitForServerConfirm.isActive()):
-            self.TimerWaitForServerConfirm.start(2000)
+            self.TimerWaitForServerConfirm.start(4000)
 
     def ConnectNewServer(self, serverInfoDict):
+        try:
+            self.clientObj.shutdown(1)
+            self.clientObj.close()
+        except:
+            pass
         try:
             global SERVER_IP, SERVER_PORT
             SERVER_IP = serverInfoDict["serverIP"]
@@ -314,24 +319,27 @@ class SocketClient(QObject):
         return lstKhungDL
 
     def CreateConnect(self):
+        if(not self.waitingForConnect):
+            self.waitingForConnect = True
+            thread = threading.Thread(target= self.__CreateConnectThread, args=(), daemon= True)
+            thread.start()
+
+    def __CreateConnectThread(self):
         global SERVER_IP, SERVER_PORT
-        self.waitingForConnect = True
         try:
             if(not self.FlagServerISconnect):
                 self.clientObj = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                # self.clientObj.setblocking(1)
-                # self.clientObj.settimeout(200)
                 self.clientObj.connect((SERVER_IP, SERVER_PORT))
                 self.__SendPingPong()
                 self.SignalServerConnected.emit()
                 self.__SignalConnected.emit()
 
-        except:
+        except Exception as ex:
+            print(ex)
             self.SignalServerNotConnect.emit()
-            print("khong the ket noi") #test
             self.FlagServerISconnect = False
         self.waitingForConnect = False
-
+    
     def __ServerConfirmedConnect(self):
         self.FlagServerConfirmedForConnect = True
         self.TimerWaitForServerConfirm.stop()

@@ -15,7 +15,7 @@ class TakeSampleScreen(QObject, Ui_Frame):
     SignalFaceTracking = pyqtSignal()
     SignalGetFaceFeature = pyqtSignal(object)
     SignalCloseTakeSampleScreen = pyqtSignal()
-
+    
     SignalStartWriteRFcardDT = pyqtSignal(str, object)
     SignalStopWriteRFcardDT = pyqtSignal()
     CloseTakeSampleScreen = pyqtSignal()
@@ -78,6 +78,7 @@ class TakeSampleScreen(QObject, Ui_Frame):
 
         self.addFaceScreenObj.SignalPictureTaked.connect(self.socketObj.SendTakedImage)
         self.currentStep = 1
+        self.flagNoCameraMode = False
 
     
     def CloseTakeSampleScreen(self):
@@ -148,6 +149,8 @@ class TakeSampleScreen(QObject, Ui_Frame):
             self.currentStep = 2
         
     def GoToAddFaceScreen(self):
+        if(self.flagNoCameraMode == True):
+            return
         try:
             self.addFaceScreenObj.label_forShowName.setText(self.showInfoScreenObj.nameStudentNeedAdd)
         except:

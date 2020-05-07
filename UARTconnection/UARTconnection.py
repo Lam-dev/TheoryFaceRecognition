@@ -71,8 +71,8 @@ class UART(QObject):
                 return
             print("Khung Nhan = ", data)
             self.SignalReciptedData.emit(data)
-        except:
-            print("khong duoc")
+        except Exception as ex:
+            print("uart not connect")
             self.serObj = self.__UARTinit()
 
 

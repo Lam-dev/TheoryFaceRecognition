@@ -161,6 +161,7 @@ class FTPclient(QObject):
                     lstImageGraped.append(f)
                     self.SignalError.emit(">>> da lay anh >> " + f)
                 except Exception as ex:
+                    
                     raise Exception("er >>ftp_getf> "+ str(ex.args))
 
             return lstImageGraped

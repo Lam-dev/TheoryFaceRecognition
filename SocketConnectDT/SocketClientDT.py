@@ -184,20 +184,32 @@ class SocketClientDT(QObject):
             self.TimerWaitForServerConfirm.start(2000)
 
     def ConnectNewServer(self, serverInfoDict):
-        global SERVER_IP, SERVER_PORT
-        SERVER_IP = serverInfoDict["serverIP"]
-        SERVER_PORT = int(serverInfoDict["serverPort"])
-        self.FlagServerISconnect = False
-        self.CreateConnect()
+        try:
+            self.clientObj.shutdown(1)
+            self.clientObj.close()
+        except:
+            pass
+        try:
+            global SERVER_IP, SERVER_PORT
+            SERVER_IP = serverInfoDict["serverIP"]
+            SERVER_PORT = int(serverInfoDict["serverPort"])
+            self.FlagServerISconnect = False
+            self.CreateConnect()
+        except:
+            pass
 
     def CreateConnect(self):
+        if(not self.waitingForConnect):
+            self.waitingForConnect = True
+            thread = threading.Thread(target= self.__CreateConnectThread, args=(), daemon= True)
+            thread.start()
+
+    def __CreateConnectThread(self):
         self.waitingForConnect = True
         global SERVER_IP, SERVER_PORT
         try:
             if(not self.FlagServerISconnect):
                 self.clientObj = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                self.clientObj.settimeout(0.5)
-                self.clientObj.setblocking(1)
                 self.clientObj.connect((SERVER_IP, SERVER_PORT))
                 # self.clientObj.send(self.__DungKhungGiaoTiep(MAC_ADDRESS, CLIENT_REQUEST_CONNECT)[0])
                 self.SignalServerConnected.emit()

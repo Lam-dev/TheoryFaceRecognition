@@ -18,7 +18,7 @@ NumberFrameNotFace = 0
 # try:
 #     FR_THRESHOLD = SETTING_DICT["FRthreshold"]
 # except:
-FR_THRESHOLD = 0.5
+FR_THRESHOLD = 0.415
 
 class GetImageFromCamera(QObject):
     CanNotConnectCamera = pyqtSignal()
@@ -180,31 +180,54 @@ class FaceRecognition(QObject):
         #     jpgData = jpgData.tobytes()
         #     self.StudentNotRecognized.emit(self.lstStudent[0], jpgData)
         faceEncodings = face_recognition.face_encodings(image, FaceLocationInImage)
+        if(len(faceEncodings) == 0):
+            return
         i = 0
         match = []
         for student in self.lstStudent:
-            i = i + 1
-            for encoding in faceEncodings:
-                try:
-                    match = face_recognition.compare_faces(student.NhanDienKhuonMat, encoding)
-                    
-                except Exception as ex:
-                    print(ex)
-                try:
-                    match.extend(face_recognition.compare_faces(student.NhanDienKhuonMatThem, encoding))
 
-                except Exception as ex:
-                    print(ex)
-                    pass
-                print(match)
-                if True in match:
-                    ret, jpgData = cv2.imencode(".jpg", image)
-                    jpgData = jpgData.tobytes()
-                    self.StudentRecognized.emit(student, jpgData)
-                    return True
+            
+                # try:
+                #     match = face_recognition.compare_faces(student.NhanDienKhuonMat, encoding)
+                    
+                # except Exception as ex:
+                #     print(ex)
+            
+            try:
+                score = face_recognition.compare_faces_return_score(student.NhanDienKhuonMatThem, faceEncodings[0])
+                if(len(score) == 0):
+                    match.append(1)
+                else:
+                    match.extend(score)
+
+            except Exception as ex:
+                print(ex)
+                pass
+        st = self.FindAstudentInArray(match)
+        if(type(st) is not bool):
+            ret, jpgData = cv2.imencode(".jpg", image)
+            jpgData = jpgData.tobytes()
+            self.StudentRecognized.emit(st, jpgData)
+            return True     
+        #student = self.FindAstudentInArray(match)
+                # if True in match:
+                #     ret, jpgData = cv2.imencode(".jpg", image)
+                #     jpgData = jpgData.tobytes()
+                #     self.StudentRecognized.emit(student, jpgData)
+                #     return True
         
         return False
-        
+
+    def FindAstudentInArray(self, array):
+        student = False
+        min = 1
+        for i in range(0, len(array)):
+            if(array[i] < min):
+                min = array[i]
+                if(min <= FR_THRESHOLD):
+                    student = self.lstStudent[i]
+        return student
+
     def FaceRecognition(self):
         global frame
         localFrame = frame

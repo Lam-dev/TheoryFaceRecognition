@@ -51,7 +51,7 @@ class MainWindow(QMainWindow):
 
         self.khoLichSu = LichSuRepository()
         self.soundObj = Sound()
-        # self.__DisableLogo()
+        self.__DisableLogo()
 #region   dieu khien signal tu camera
 
         self.cameraObj.PixmapFromCamera.connect(self.__ShowImageFromCamera)
@@ -152,12 +152,13 @@ class MainWindow(QMainWindow):
             self.FGPobj.XoaVanTayTrongCamBien(IDvaVanTay.ViTriVanTay)
 
     def GoToDesktop(self):
-        desktop = {
-            'destop':1,
-        }
-        with open("desktop.json", 'w') as fp:
-            json.dump(desktop,fp)
-        self.close()
+        # desktop = {
+        #     'destop':1,
+        # }
+        # with open("desktop.json", 'w') as fp:
+        #     json.dump(desktop,fp)
+        # self.close()
+        pass
         
     def Shutdown(self):
         os.system("shutdown now")
@@ -191,7 +192,7 @@ class MainWindow(QMainWindow):
             self.faceRecognitionObj.SetListStudent(self.lstStudent)
             khoIDvaVanTay = IDvaVanTayRepository()
             if(len(infoDict["FGPencoding"]) == 0):
-                self.__AddSuccessOrError("er >>noFGP>> ID = " + infoDict["idStudent"])
+                self.__AddSuccessOrError("CB >>KHONG VAN TAY>> ID = " + infoDict["idStudent"])
             else:
                 khoIDvaVanTay.xoaBanGhi(" IDThiSinh = %s "%(infoDict["idStudent"]))
                 for FGPfeature in infoDict["FGPencoding"]:
@@ -200,12 +201,12 @@ class MainWindow(QMainWindow):
                         idVaVanTay = AnhXaIDvaVanTay()
                         idVaVanTay.IDThiSinh = infoDict["idStudent"]
                         idVaVanTay.ViTriVanTay = viTri
-                        
+                        khoIDvaVanTay.xoaBanGhi("IDThiSinh = "+ infoDict["idStudent"])
                         khoIDvaVanTay.ghiDuLieu(idVaVanTay)
                         self.FGPobj.ThemIDvaVanTayVaoDanhSachDaLay(infoDict["idStudent"], viTri)
-                        self.__AddSuccessOrError("er >>fgpAdded>>" + "ID = " + infoDict["idStudent"])
+                        self.__AddSuccessOrError("TC >>THEM VT>>" + "ID = " + infoDict["idStudent"])
                     except Exception as ex:
-                        self.__AddSuccessOrError("er >>fgpAddEr>>+"+str(ex.args)+ "ID = " + infoDict["idStudent"])
+                        self.__AddSuccessOrError("LOI >>THEM VT>>+"+str(ex.args)+ "ID = " + infoDict["idStudent"])
         except:
             pass
 
@@ -258,12 +259,12 @@ class MainWindow(QMainWindow):
                 if(student.ID == idStudent):
                     student.NhanDienKhuonMatThem.append(faceEncoding)
                     if(len(faceEncoding) == 0):
-                        self.__AddSuccessOrError("er >> notFace >> ID = "+ student.ID)
+                        self.__AddSuccessOrError("CB >> KHONG KHUON MAT >> ID = "+ student.ID)
                         
                     else:
-                        self.__AddSuccessOrError("suc >> addFace >> ID = "+ student.ID)
+                        self.__AddSuccessOrError("TC >> THEM KM >> ID = "+ student.ID)
                     return
-            self.__AddSuccessOrError("er >> stNotMatch >> ID = "+ student.ID)
+            self.__AddSuccessOrError("LOI >> CHUA CO HV >> ID = "+ student.ID)
         except:
             pass
 

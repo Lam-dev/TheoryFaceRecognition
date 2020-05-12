@@ -412,8 +412,8 @@ class ProcessReciptData(QObject):
                 "idStudent" : jsonDict["ID"],
             }
             self.SignalUpdateOrSyncStudentInfo.emit(faceInfoDict)
-        except Exception as e:
-            self.SignalSendMessage.emit("er >> addRecEr>> IDst = ")
+        except Exception as ex:
+            self.SignalSendMessage.emit("LOI >> PHAN TICH VT+KM"+str(ex.args))
 
     def __CreateAndAddNewCourse(self, dataObj):
         try:
@@ -470,9 +470,17 @@ class ProcessReciptData(QObject):
                 student.IDKhoaThi = IDCourse
                 khoThiSinh.ghiDuLieu(student)
                 del student
-                self.SignalErrorOrSuccess.emit("suc > stAdded>> "+ lstStudentNumber[i].TraineeName)
+                self.SignalErrorOrSuccess.emit("TC > THEM HV: >> "+ lstStudentNumber[i].TraineeName)
             except Exception as ex:
-                self.SignalErrorOrSuccess.emit("er > stAddEr>> "+ lstStudentNumber[i].TraineeName + ">>" + str(ex.args))
+                try:
+                    if(str(ex.args).__contains__("UNIQUE")):
+                        khoThiSinh.xoaBanGhi("ID = " + student.ID)
+                        khoThiSinh.ghiDuLieu(student)
+                        self.SignalErrorOrSuccess.emit("TC > CAP NHAT HV: >> "+ lstStudentNumber[i].TraineeName)
+                    else:
+                        self.SignalErrorOrSuccess.emit("LOI > CAP NHAT HV: >> "+ lstStudentNumber[i].TraineeName + ">>" + str(ex.args))
+                except Exception as ex:
+                        self.SignalErrorOrSuccess.emit("LOI > CAP NHAT HV: >> "+ lstStudentNumber[i].TraineeName + ">>" + str(ex.args))
     
     def __DeleteStudentByNumber(self, lstStudentNumber):
         khoThiSinh = ThiSinhRepository()

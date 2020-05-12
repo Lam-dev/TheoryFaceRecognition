@@ -12,7 +12,7 @@ from    GetSettingFromJSON    import GetSetting
 # try:
 #     SCURITY_LEVEL = SETTING_DICT["FGPscuLevel"]
 # except:
-SCURITY_LEVEL = 1
+SCURITY_LEVEL = 3
 
 class Fingerprint(QObject):
     SignalNewFGPadded = pyqtSignal(int, list)
@@ -191,7 +191,7 @@ class Fingerprint(QObject):
         
         try:
             if(self.fingerprintObj.readImage()):
-                self.SignalHandPushed.emit()
+                # self.SignalHandPushed.emit()
                 self.fingerprintObj.convertImage(0x01)
                 
                 ketqua = self.fingerprintObj.searchTemplate()

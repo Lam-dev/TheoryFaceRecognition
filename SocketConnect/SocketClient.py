@@ -304,6 +304,10 @@ class SocketClient(QObject):
         return lstKhungDL
 
     def CreateConnect(self):
+        thread = threading.Thread(target = self.CreateConnectThread, args=(), daemon= True)
+        thread.start()
+
+    def CreateConnectThread(self):
         global SERVER_IP, SERVER_PORT
         self.waitingForConnect = True
         try:

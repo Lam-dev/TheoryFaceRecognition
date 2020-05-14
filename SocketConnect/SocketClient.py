@@ -159,6 +159,11 @@ class SocketClient(QObject):
 
     def ConnectNewServer(self, serverInfoDict):
         try:
+            self.clientObj.shutdown(1)
+            self.clientObj.close()
+        except:
+            pass
+        try:
             global SERVER_IP, SERVER_PORT
             SERVER_IP = serverInfoDict["serverIP"]
             SERVER_PORT = int(serverInfoDict["serverPort"])

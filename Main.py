@@ -236,7 +236,11 @@ class MainWindow(QMainWindow):
         self.__OffCameraTemporary(recBy= "fgp")
         for student in self.lstStudent:
             if(student.ID == studentID):
-                self.mainScreenObj.ShowStudentInfomation(student) 
+                self.mainScreenObj.ShowStudentInfomation(student)
+                if(student.ID.__contains__("ELT")):
+                    self.SearchStudentAndCheck(student)
+                    self.soundObj.ThreadPlayXinCamOn()
+                    return  
                 self.socketObject.SendResultsFGPrecognition(studentID)
                 break
         self.__SaveHistory("FGP", studentID)

@@ -101,9 +101,19 @@ class ProcessReciptData(QObject):
             pass
     
     def __AddTeacher(self, teacherInfo):
+        thisinhRepo = ThiSinhRepository()
+        teacherStudentRepo = DanhSachThiSinhTuongUngTaiKhoanRepository()
         try:
+            if(type(teacherInfo.DelAll) is bool):
+                thisinhRepo.xoaBanGhi("IDKhoaThi = 0")
+                teacherStudentRepo.xoaBanGhi(" 1=1 ")
+                return
+        except:
+            pass
+        try:
+            self.SignalStopForUpdateData.emit()
             teacher = ThongTinThiSinh()
-            thisinhRepo = ThiSinhRepository()
+            
             teacher.ID = "ELT_" + str(teacherInfo.ID)
             teacher.HoVaTen = teacherInfo.TaiKhoan
             teacher.IDKhoaThi = 0
@@ -112,12 +122,20 @@ class ProcessReciptData(QObject):
             teacher.NhanDienKhuonMatThem = teacherInfo.DacTrungKhuonMat
             thisinhRepo.ghiDuLieu(teacher)
             thisinhRepo.capNhatTruong(("NhanDienKhuonMatThem", "NhanDienVanTay"),(teacherInfo.DacTrungKhuonMat, teacherInfo.DacTrungVanTay), " ID = '%s' "%(teacher.ID))
+            faceInfoDict = {
+                "FaceEncoding": teacherInfo.DacTrungKhuonMat,
+                "FGPEncoding":teacherInfo.DacTrungVanTay,
+                "ID" : teacher.ID,
+            }
+            self.__AddRecogntionAtRuntime(faceInfoDict)
         except Exception as ex:
             print(ex.args)
         
     def __AddTeacherStudent(self, teacherStudentInfo):
-        teacherStudent = HocVienTuongUngTaiKhoanQuanLy()
+        self.SignalStopForUpdateData.emit()
         teacherStudentRepo = DanhSachThiSinhTuongUngTaiKhoanRepository()
+        teacherStudent = HocVienTuongUngTaiKhoanQuanLy()
+       
         teacherStudent.IDtaiKhoan = teacherStudentInfo.IDteacher
         teacherStudent.IDthiSinh = teacherStudentInfo.RegisNumber
         teacherStudentRepo.ghiDuLieu(teacherStudent)
@@ -390,30 +408,34 @@ class ProcessReciptData(QObject):
 
             khoThiSinh = ThiSinhRepository()
             khoThiSinh.capNhatTruong(("NhanDienKhuonMatThem", "NhanDienVanTay"),(jsonDict["FaceEncoding"], jsonDict["FGPEncoding"]), " ID = '%s' "%(jsonDict["ID"]))
-            try:
-                faceEncodingStringArr = jsonDict["FaceEncoding"].split(",")
-                faceEncodingArr = [float(elem) for elem in faceEncodingStringArr]
-            except:
-                faceEncodingArr = []
-            try:
-                lstMultiFGPfeatureStr = jsonDict["FGPEncoding"].split(";")
-                lstFGP = []
-                for FGPfeatureStr in lstMultiFGPfeatureStr:
-                    FGPfeatureStrArr = FGPfeatureStr.split(",")
-                    FGPfeatureArr = [int(elem) for elem in FGPfeatureStrArr]
-                    lstFGP.append(FGPfeatureArr)
-            # FGPencodingStringArr = jsonDict["FGPEncoding"].split(",")
-            # FGPencodingArr = [int(elem) for elem in FGPencodingStringArr]
-            except:
-                lstFGP = []
-            faceInfoDict = {
-                "faceEncodingArr": faceEncodingArr,
-                "FGPencoding":lstFGP,
-                "idStudent" : jsonDict["ID"],
-            }
-            self.SignalUpdateOrSyncStudentInfo.emit(faceInfoDict)
+            self.__AddRecogntionAtRuntime(jsonDict)
         except Exception as ex:
             self.SignalSendMessage.emit("LOI >> PHAN TICH VT+KM"+str(ex.args))
+    
+    def __AddRecogntionAtRuntime(self, jsonDict):
+        try:
+            faceEncodingStringArr = jsonDict["FaceEncoding"].split(",")
+            faceEncodingArr = [float(elem) for elem in faceEncodingStringArr]
+        except:
+            faceEncodingArr = []
+        try:
+            lstMultiFGPfeatureStr = jsonDict["FGPEncoding"].split(";")
+            lstFGP = []
+            for FGPfeatureStr in lstMultiFGPfeatureStr:
+                FGPfeatureStrArr = FGPfeatureStr.split(",")
+                FGPfeatureArr = [int(elem) for elem in FGPfeatureStrArr]
+                lstFGP.append(FGPfeatureArr)
+        # FGPencodingStringArr = jsonDict["FGPEncoding"].split(",")
+        # FGPencodingArr = [int(elem) for elem in FGPencodingStringArr]
+        except Exception as ex:
+            print(ex.args)
+            lstFGP = []
+        faceInfoDict = {
+            "faceEncodingArr": faceEncodingArr,
+            "FGPencoding":lstFGP,
+            "idStudent" : jsonDict["ID"],
+        }
+        self.SignalUpdateOrSyncStudentInfo.emit(faceInfoDict)
 
     def __CreateAndAddNewCourse(self, dataObj):
         try:
@@ -436,7 +458,7 @@ class ProcessReciptData(QObject):
         return(bytes(x).decode("utf8", "ignore"))
 
     def __AddStudent(self, lstStudentNumber, IDCourse):
-
+        self.SignalStopForUpdateData.emit()
         lstImage = []
         try:
             for stNumber in lstStudentNumber:
@@ -474,7 +496,7 @@ class ProcessReciptData(QObject):
             except Exception as ex:
                 try:
                     if(str(ex.args).__contains__("UNIQUE")):
-                        khoThiSinh.xoaBanGhi("ID = " + student.ID)
+                        khoThiSinh.xoaBanGhi(" ID = '%s'"%(student.ID))
                         khoThiSinh.ghiDuLieu(student)
                         self.SignalErrorOrSuccess.emit("TC > CAP NHAT HV: >> "+ lstStudentNumber[i].TraineeName)
                     else:

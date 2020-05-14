@@ -1,5 +1,5 @@
 import socket
-from    datetime                import datetime
+import datetime
 from    PyQt5.QtCore            import pyqtSlot, pyqtSignal,QTimer, QDateTime,Qt, QObject
 import  threading
 from    ProcessReciptData.ProcessReciptData       import ProcessReciptData
@@ -11,6 +11,7 @@ import json
 import  os
 import getmac
 import      pytz
+import random
 
 SETTING_DICT                                        = GetSetting.LoadSettingFromFile()
 try:
@@ -350,12 +351,56 @@ class SocketClient(QObject):
             "data":dictData
         }
         return json.dumps(dictToSend)
-    
 
-
-    def __BuildResultToSend(self, studentNumberCard, imageFileName, RecBy):
+    def __BuildResultToSendRandomTime(self, studentNumberCard, imageFileName, RecBy):
         tz_HCM = pytz.timezone('Asia/Ho_Chi_Minh') 
-        datetime_HCM = datetime.now(tz_HCM)
+        timeDelta = datetime.timedelta(minutes= 15)
+        datetime_HCM = datetime.datetime.now(tz_HCM)
+        startDate = (datetime_HCM - timeDelta).strftime("%d/%m/%Y %H:%M:%S")
+        endData = (datetime_HCM + timeDelta).strftime("%d/%m/%Y %H:%M:%S")
+        time_string = self.random_date(startDate,endData, random.random())
+        dictData = {
+            "cardNumber":studentNumberCard,
+            "time":time_string,
+            "imageLength":0,
+            "imageDir": imageFileName,
+            "recBy": RecBy
+        }
+        dictToSend = {
+            "mac":MAC_ADDRESS,
+            "success":"true",
+            "code":2,
+            "massage":"",
+            "checksum":len(json.dumps(dictData)),
+            "data":dictData
+        }
+        return json.dumps(dictToSend)
+        
+
+    def str_time_prop(self, start, end, format, prop):
+        """Get a time at a proportion of a range of two formatted times.
+
+        start and end should be strings specifying times formated in the
+        given format (strftime-style), giving an interval [start, end].
+        prop specifies how a proportion of the interval to be taken after
+        start.  The returned time will be in the specified format.
+        """
+
+        stime = time.mktime(time.strptime(start, format))
+        etime = time.mktime(time.strptime(end, format))
+
+        ptime = stime + prop * (etime - stime)
+
+        return time.strftime(format, time.localtime(ptime))
+
+
+    def random_date(self, start, end, prop):
+        return self.str_time_prop(start, end, '%d/%m/%Y %H:%M:%S', prop)
+
+
+    def __BuildResultToSend(self, studentNumberCard, imageFileName, RecBy): #dung khong thong bao diem danh
+        tz_HCM = pytz.timezone('Asia/Ho_Chi_Minh') 
+        datetime_HCM = datetime.datetime.now(tz_HCM)
         time_string = datetime_HCM.strftime("%d/%m/%Y %H:%M:%S")
         dictData = {
             "cardNumber":studentNumberCard,
@@ -374,8 +419,6 @@ class SocketClient(QObject):
         }
         return json.dumps(dictToSend)
 
-    def __BuildResultToSendRandomTime(self, studentNumberCard, imageFileName, RecBy):
-        pass
     
     def __ConvertJsonStringToByteArr(self, jsonString):
         jsonCharArr = []
@@ -416,13 +459,15 @@ class SocketClient(QObject):
 #region nhom ham gui thong tin cho server
 
     def SendResultsFaceRecognize(self, ID ,confirmTrueOrFalse, nameOfPhotoTaked):
-        imageFileName = FTP_FILE_PATH_TO_UPLOAD +"/"+ datetime.now().strftime("%Y%m%d") + '/' + str(ID)+"_"+datetime.now().strftime("%H%M%S")+ ".jpg"
+        imageFileName = FTP_FILE_PATH_TO_UPLOAD +"/"+ datetime.datetime.now().strftime("%Y%m%d") + '/' + str(ID)+"_"+datetime.datetime.now().strftime("%H%M%S")+ ".jpg"
         resultFrame = self.__DungKhungGiaoTiep(self.__BuildResultToSend(ID, imageFileName, "Face"), CODE_RESULT_RECOGNITION)
         self.__SendDataViaSocket(bytes(resultFrame))
         thread = threading.Thread(target = self.ftpObj.SendImageToFTPserver, args = (nameOfPhotoTaked, imageFileName), daemon= True)
         thread.start()
         # self.ftpObj.SendImageToFTPserver(nameOfPhotoTaked, FTP_FILE_PATH_TO_UPLOAD +"/"+ datetime.now().strftime("%Y%m%d") + '/' + str(ID)+"_"+datetime.now().strftime("%H%M%S")+ ".jpg")
-
+    def ResultRecognitionRandomTime(self, ID):
+        resultFrame = self.__DungKhungGiaoTiep(self.__BuildResultToSendRandomTime(ID, "", "FGP"), CODE_RESULT_RECOGNITION)
+        self.__SendDataViaSocket(bytes(resultFrame))
 
     def SendResultsFGPrecognition(self, ID):
         resultFrame = self.__DungKhungGiaoTiep(self.__BuildResultToSend(ID, "", "FGP"), CODE_RESULT_RECOGNITION)
@@ -435,7 +480,7 @@ class SocketClient(QObject):
 #endregion
     
     def SendAddFaceAndFGP(self, info):
-        fileName = "TTND_" + datetime.now().strftime("%Y_%m_%d_%H_%M_%S") + ".json"
+        fileName = "TTND_" + datetime.datetime.now().strftime("%Y_%m_%d_%H_%M_%S") + ".json"
         with open(fileName, 'w') as outfile:
             json.dump(info, outfile)
 

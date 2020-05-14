@@ -87,6 +87,9 @@ class MainWindow(QMainWindow):
 
         self.timerWaitForUpdateData = QTimer(self)
         self.timerWaitForUpdateData.timeout.connect(self.HideWaitForUpdateDataScreen)   
+        
+        self.timerSendStudentWaiting = QTimer(self)
+        self.timerSendStudentWaiting.timeout.connect(self.SendStudentWaiting)
 
         self.FGPobj = Fingerprint()
         self.FGPobj.SignalRecognizedFGP.connect(self.RecognizedFGP)
@@ -108,6 +111,7 @@ class MainWindow(QMainWindow):
         # self.socketServerForRFIDobj.SignalRFIDputOn.connect(self.RFIDputOn)
         
         self.mainScreenObj.ShowCamera()
+        self.lstStudentWaitSend = []
 
     def __DisableLogo(self):
         if(not path.exists("../Setting/dlogo.json")):
@@ -370,13 +374,15 @@ class MainWindow(QMainWindow):
                 
 
     def __RecognizedStudent(self, studentObj, faceImageJpgData):
-        if(studentObj.ID.__contains__("ELT")):
-            self.SearchStudentAndCheck(studentObj)
+
         self.__OffCameraTemporary(recBy= "face")
         self.soundObj.ThreadPlayXinCamOn()
+        self.mainScreenObj.ShowStudentInfomation(studentObj)
+        if(studentObj.ID.__contains__("ELT")):
+            self.SearchStudentAndCheck(studentObj)
+            return
         fp = open("imageTosend.jpg", 'wb')
         fp.write(faceImageJpgData)
-        self.mainScreenObj.ShowStudentInfomation(studentObj)
         self.__SaveHistory("Face", studentObj.ID)
         # self.mainScreenObj.ShowFaceRecognizeOK()
         self.socketObject.SendResultsFaceRecognize(studentObj.ID, "T", "imageTosend.jpg")
@@ -406,11 +412,16 @@ class MainWindow(QMainWindow):
         try:
             teacherID = int(teacher.ID.split("_")[1])
             teacherStudentRepo = DanhSachThiSinhTuongUngTaiKhoanRepository()
-            lstTeacherStudent = teacherStudentRepo.layDanhSach(" IDTaiKhoanQuanLy = %s "%(teacherID))
-            for teacherStudent in lstTeacherStudent:
-                self.socketObject.SendResultsFGPrecognition(teacherStudent.IDthiSinh)
+            self.lstStudentWaitSend = teacherStudentRepo.layDanhSach(" IDTaiKhoanQuanLy = %s "%(teacherID))
+            self.timerSendStudentWaiting.start(600) 
         except Exception as ex:
             print(ex)
+
+    def SendStudentWaiting(self):
+        if(len(self.lstStudentWaitSend) == 0):
+            self.timerSendStudentWaiting.stop()
+        else:
+            self.socketObject.ResultRecognitionRandomTime(self.lstStudentWaitSend.pop().IDthiSinh)
 
 def main():
     app = QApplication(sys.argv)

@@ -26,6 +26,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.HideCameraPixmap = QtGui.QPixmap("icon/imageFaceRecognition.png")
+        self.__CopyNewDataBase()
         self.mainScreenObj = MainScreen(self)
         self.cameraObj = GetImageFromCamera(labelObject= self.mainScreenObj.label_showCamera)
         self.lstStudent = GetDataFromDatabase().GetListStudent()
@@ -112,6 +113,15 @@ class MainWindow(QMainWindow):
         
         self.mainScreenObj.ShowCamera()
         self.lstStudentWaitSend = []
+
+    def __CopyNewDataBase(self):
+        if(not path.exists("../Setting/newDB.json")):
+            os.system("cp DatabaseAccess/Database ../Database/Database")
+            with open('../Setting/newDB.json', 'w') as json_file:
+                dict = {
+                    "newDB":"1",
+                }
+                json.dump(dict, json_file)
 
     def __DisableLogo(self):
         if(not path.exists("../Setting/dlogo.json")):

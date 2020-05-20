@@ -11,6 +11,8 @@ class CheckUpdate(QObject, Ui_Frame):
     SignalRequestCloseScreen = pyqtSignal()
     SignalUpdateVersion = pyqtSignal()
     SignalServerSettingForDevice = pyqtSignal(dict)
+    SignalReciptedNewVersionInfo = pyqtSignal(str)
+    SignalNotNewVersion = pyqtSignal()
 
     def __init__(self, Frame):
         QObject.__init__(self)
@@ -27,12 +29,16 @@ class CheckUpdate(QObject, Ui_Frame):
         self.currentVersion = self.GetCurrentVersion()
         self.currentSettingVersion = self.GetSettingVersion()
         self.newVersionInfo = object
+        self.flagGetNewVersion = False
 
 #region hien thi cac man hinh
     def ShowConnectNotify(self):
         self.frameNotNewVersion.hide()
         self.frame_containConnectingNotify.show()
         self.frameDetectNewVersion.hide()
+
+    def UpdateNewVersion(self):
+        self.UpdateNewVersion()
 
     def ShowNotNewVersion(self):
         self.frameNotNewVersion.show()
@@ -44,6 +50,7 @@ class CheckUpdate(QObject, Ui_Frame):
         self.frameNotNewVersion.hide()
         self.frame_containConnectingNotify.hide()
         self.frameDetectNewVersion.show()
+        
 #endregion
     
     def UpdateNewVersion(self):
@@ -88,11 +95,18 @@ class CheckUpdate(QObject, Ui_Frame):
             return ""
 
     def ReciptVersionInfoFromServer(self, dataObj):
-        if(dataObj.ver != self.currentVersion):
-            self.ShowNewVersion(dataObj.ver)
-            self.newVersionInfo = dataObj
-        else:
-            self.ShowNotNewVersion()
+        try:
+            if(dataObj.ver != self.currentVersion):
+                self.ShowNewVersion(dataObj.ver)
+                self.newVersionInfo = dataObj
+                self.SignalReciptedNewVersionInfo.emit(dataObj.ver)
+                self.flagGetNewVersion = True
+            else:
+                self.ShowNotNewVersion()
+                self.SignalNotNewVersion.emit()
+                self.flagGetNewVersion = False
+        except:
+            pass
 
 
     def ShowNewVersionReady(self):

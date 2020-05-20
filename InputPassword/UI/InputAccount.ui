@@ -239,22 +239,36 @@ font: 75 bold 26pt &quot;Ubuntu&quot;;</string>
     <string>DEL</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_forShowNumber">
+  <widget class="QLineEdit" name="label_forShowNumber">
    <property name="geometry">
     <rect>
-     <x>14</x>
-     <y>14</y>
-     <width>339</width>
-     <height>65</height>
+     <x>10</x>
+     <y>10</y>
+     <width>351</width>
+     <height>71</height>
     </rect>
    </property>
-   <property name="styleSheet">
-    <string notr="true">color: rgb(0, 170, 127);
-font: 57 bold 26pt &quot;Ubuntu&quot;;
-background-color: rgb(255, 255, 255);</string>
+   <property name="font">
+    <font>
+     <family>Ubuntu</family>
+     <pointsize>40</pointsize>
+     <weight>7</weight>
+     <italic>true</italic>
+     <bold>false</bold>
+    </font>
    </property>
-   <property name="text">
-    <string/>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(255, 255, 255);
+font: 57 italic 40pt &quot;Ubuntu&quot;;</string>
+   </property>
+   <property name="inputMask">
+    <string comment="*"/>
+   </property>
+   <property name="maxLength">
+    <number>6</number>
+   </property>
+   <property name="echoMode">
+    <enum>QLineEdit::Password</enum>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>

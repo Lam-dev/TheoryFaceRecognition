@@ -58,7 +58,7 @@ class SocketClient(QObject):
     def SendRequestCloneData(self):
 
         self.__ThreadCreateConnect()
-        self.timerCreateConnect.start(5000)
+        self.timerCreateConnect.start(4000)
 
     def BuildMessageSendCurrentVersion(self):
         with open('version.json') as json_file:

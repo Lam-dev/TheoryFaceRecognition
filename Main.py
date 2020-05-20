@@ -25,6 +25,7 @@ import       json
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
+        self.__CheckEnv()
         self.HideCameraPixmap = QtGui.QPixmap("icon/imageFaceRecognition.png")
         self.__CopyNewDataBase()
         self.mainScreenObj = MainScreen(self)
@@ -34,7 +35,7 @@ class MainWindow(QMainWindow):
         self.socketObject = SocketClient() #comment test came
         self.mainScreenObj.SetGeometryForLabelShowCamera(273,381)
         # self.mainScree-nObj.pushButton_shutdown.clicked.connect(lambda:os.system('sudo shutdown now'))\
-        self.mainScreenObj.pushButton_shutdown.clicked.connect(self.__ShowSettingScreen)
+        self.mainScreenObj.pushButton_shutdown.clicked.connect(self.__GetPassword)
         # self.mainScreenObj.ShowNotStudentInformation()
         self.mainScreenObj.SignalGoToDesktop.connect(self.GoToDesktop)
         self.mainScreenObj.SignalModifyImageQuality.connect(self.__ModifyImageQuality)
@@ -49,7 +50,10 @@ class MainWindow(QMainWindow):
         self.mainScreenObj.SignalShutdown.connect(self.Shutdown)
         self.mainScreenObj.SignalCloseELT.connect(self.close)
         self.mainScreenObj.SignalDeleteAllData.connect(self.DeleteAllData)
-
+        self.mainScreenObj.SignalReciptedNewVersionInfo.connect(self.__SendNotifyGetNewVersionToServer)
+        self.mainScreenObj.SignalNotNewVersion.connect(self.__SendNotifyNotNewVersion)
+        self.mainScreenObj.SignalPasswordIsTrue.connect(self.__ShowSettingScreen)
+        self.mainScreenObj.SignalCloseInputPassword.connect(self.__CloseInputPassword)
         self.khoLichSu = LichSuRepository()
         self.soundObj = Sound()
         self.__DisableLogo()
@@ -81,6 +85,8 @@ class MainWindow(QMainWindow):
         self.socketObject.SignalUpdateOrSyncStudentInfo.connect(self.AddStudentInfomation)
         self.socketObject.SignalStopForUpdateData.connect(self.ShowWaitForUpdateDataScreen)
         self.socketObject.SignalDeleteFGPofStudent.connect(self.DeleteFGPofStudentInSensor)
+        self.socketObject.SignalRequestDelAllData.connect(self.DeleteAllData)
+        self.socketObject.SignalRequestUpdate.connect(self.mainScreenObj.ShowCheckVersionAndStartTimerAutoClose)
 
 #endregion
         self.timerReopenReadCam = QTimer(self)
@@ -113,6 +119,22 @@ class MainWindow(QMainWindow):
         
         self.mainScreenObj.ShowCamera()
         self.lstStudentWaitSend = []
+        self.lstStudentAddFGPerror = []
+
+    def __CheckEnv(self):
+        f = open("/boot/armbianEnv.txt", "r")
+        fileContent = f.read(1000)
+        if(fileContent.__contains__("verbosity") & (fileContent.__contains__("overlays"))):
+            return
+        else:
+            os.system("sh ReloadEnv/reloadEnv.sh")
+            
+
+    def __SendNotifyNotNewVersion(self):
+        self.__AddSuccessOrError("KO PHIEN BAN MOI >>")
+
+    def __SendNotifyGetNewVersionToServer(self, version):
+        self.__AddSuccessOrError("PHIEN BAN MOI >>" + version)
 
     def __CopyNewDataBase(self):
         if(not path.exists("../Setting/newDB.json")):
@@ -156,6 +178,8 @@ class MainWindow(QMainWindow):
             self.lstStudent = []
             self.faceRecognitionObj.SetListStudent(self.lstStudent)
             self.FGPobj.lstIDvaVanTay = []
+            self.__AddSuccessOrError("TC >>DA XOA HET DU LIEU")
+            
         except:
             pass
 
@@ -221,6 +245,7 @@ class MainWindow(QMainWindow):
                         self.__AddSuccessOrError("TC >>THEM VT>>" + "ID = " + infoDict["idStudent"])
                     except Exception as ex:
                         self.__AddSuccessOrError("LOI >>THEM VT>>+"+str(ex.args)+ "ID = " + infoDict["idStudent"])
+                        
         except:
             pass
 
@@ -351,7 +376,15 @@ class MainWindow(QMainWindow):
         self.mainScreenObj.ShowUpdateScreen(filePath)
 
     def __GetPassword(self):
+        self.faceRecognitionObj.StopFaceRecognize()
+        # self.faceRecognitionObj.StopFaceTracking()
+        self.FGPobj.TatLayVanTayDangNhap()
+        self.cameraObj.StopReadImage()
         self.mainScreenObj.ShowInputPasswordScreen()
+
+    def __CloseInputPassword(self):
+        self.mainScreenObj.CloseInputPassword()
+        self.__SettingScreenHiden()
 
     def __ShowSettingScreen(self):
         self.faceRecognitionObj.StopFaceRecognize()
@@ -359,6 +392,7 @@ class MainWindow(QMainWindow):
         self.FGPobj.TatLayVanTayDangNhap()
         self.cameraObj.StopReadImage()
         self.mainScreenObj.ShowSettingScreen()
+        self.mainScreenObj.CloseInputPassword()
 
     def ServerNotConnect(self):
         # self.cameraObj.StopReadImage()

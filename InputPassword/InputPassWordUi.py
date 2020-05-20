@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'InputAccount.ui'
 #
-# Created by: PyQt5 UI code generator 5.13.0
+# Created by: PyQt5 UI code generator 5.14.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -90,12 +90,20 @@ class Ui_Frame(object):
 "color: rgb(0, 170, 127);\n"
 "font: 75 bold 26pt \"Ubuntu\";")
         self.pushButton_del.setObjectName("pushButton_del")
-        self.label_forShowNumber = QtWidgets.QLabel(Frame)
-        self.label_forShowNumber.setGeometry(QtCore.QRect(14, 14, 339, 65))
-        self.label_forShowNumber.setStyleSheet("color: rgb(0, 170, 127);\n"
-"font: 57 bold 26pt \"Ubuntu\";\n"
-"background-color: rgb(255, 255, 255);")
-        self.label_forShowNumber.setText("")
+        self.label_forShowNumber = QtWidgets.QLineEdit(Frame)
+        self.label_forShowNumber.setGeometry(QtCore.QRect(10, 10, 351, 71))
+        font = QtGui.QFont()
+        font.setFamily("Ubuntu")
+        font.setPointSize(40)
+        font.setBold(False)
+        font.setItalic(True)
+        font.setWeight(7)
+        self.label_forShowNumber.setFont(font)
+        self.label_forShowNumber.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+"font: 57 italic 40pt \"Ubuntu\";")
+        self.label_forShowNumber.setInputMask("")
+        self.label_forShowNumber.setMaxLength(6)
+        self.label_forShowNumber.setEchoMode(QtWidgets.QLineEdit.Password)
         self.label_forShowNumber.setAlignment(QtCore.Qt.AlignCenter)
         self.label_forShowNumber.setObjectName("label_forShowNumber")
 

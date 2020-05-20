@@ -12,6 +12,7 @@ from    datetime    import datetime
 import  io
 import  os
 import getmac
+from   GlobalClass.GlobalClass   import  RequestFromTakeSample
 
 CODE_RECIPT_DATA_FROM_SERVER = 3
 CODE_UPLOAD_DATA_TO_SERVER = "2"
@@ -46,8 +47,10 @@ class ProcessReciptData(QObject):
     SignalWaitForRecitpEnoughSyncData = pyqtSignal()
     SignalSyncComplete = pyqtSignal()
     SignalDeleteFGPofStudent = pyqtSignal(str)
+    SignalRequestUpdate = pyqtSignal()
     __FlagTimeUpdated = False
     SignalErrorOrSuccess = pyqtSignal(str)
+    SignalRequestDelAllData = pyqtSignal()
    
 
     def __init__(self):
@@ -104,11 +107,35 @@ class ProcessReciptData(QObject):
         thisinhRepo = ThiSinhRepository()
         teacherStudentRepo = DanhSachThiSinhTuongUngTaiKhoanRepository()
         try:
-            if(type(teacherInfo.DelAll) is bool):
+            if(teacherInfo.code == RequestFromTakeSample.DelAllTeacher.value):
                 thisinhRepo.xoaBanGhi("IDKhoaThi = 0")
                 teacherStudentRepo.xoaBanGhi(" 1=1 ")
                 return
-        except:
+
+            elif(teacherInfo.code == RequestFromTakeSample.Reset.value):
+                os.system("reboot")
+                return
+            elif(teacherInfo.code == RequestFromTakeSample.Shutdown.value):
+                os.system("shutdown now")
+                return
+            elif(teacherInfo.code == RequestFromTakeSample.Restore.value):
+                self.SignalRequestDelAllData.emit()
+                return
+            elif(teacherInfo.code == RequestFromTakeSample.CheckVersion.value):
+                try:
+                    macString = self.SendVersionInfo()
+                    version = self.GetCurrentVersion()
+                    self.SignalErrorOrSuccess.emit("SERI+VERSION >> "+ macString +"___"+ version)
+                except Exception as ex:
+                    print("Lay Mac"+ str(ex.args))
+                    pass
+                return
+            elif(teacherInfo.code == RequestFromTakeSample.UpdateFW.value):
+                self.SignalRequestUpdate.emit()
+                return
+
+        except Exception as ex:
+            print(ex.args)
             pass
         try:
             self.SignalStopForUpdateData.emit()
@@ -130,7 +157,38 @@ class ProcessReciptData(QObject):
             self.__AddRecogntionAtRuntime(faceInfoDict)
         except Exception as ex:
             print(ex.args)
-        
+
+    def SendVersionInfo(self):
+        try:
+            macString = getmac.get_mac_address()
+            if(len(macString) < 2):
+                self.SignalErrorOrSuccess.emit("LOI >> CHUA CAM MANG DE LAY MAC")
+            lstByteStrType = macString.split(":")
+            lstByteMacIntType = [int(elem, 16) for elem in lstByteStrType]
+            seriString = ""
+            for i in range(3, 6):
+                seriElem = lstByteMacIntType[i] ^ 69
+                seriString += self.__ToHex8bit(seriElem)
+            return seriString
+        except Exception as ex:
+            print("Loi lay mac"+str(ex.args))
+            raise Exception("error")
+
+    def __ToHex8bit(self, number):
+        hexStr = hex(number)[2:]
+        if(len(hexStr) == 1):
+            return "0"+ hexStr
+        else:
+            return hexStr
+
+    def GetCurrentVersion(self):
+        try:
+            with open('version.json') as json_file:
+                return json.load(json_file)["crVer"]
+        except:
+            return ""
+
+
     def __AddTeacherStudent(self, teacherStudentInfo):
         self.SignalStopForUpdateData.emit()
         teacherStudentRepo = DanhSachThiSinhTuongUngTaiKhoanRepository()
@@ -410,7 +468,7 @@ class ProcessReciptData(QObject):
             khoThiSinh.capNhatTruong(("NhanDienKhuonMatThem", "NhanDienVanTay"),(jsonDict["FaceEncoding"], jsonDict["FGPEncoding"]), " ID = '%s' "%(jsonDict["ID"]))
             self.__AddRecogntionAtRuntime(jsonDict)
         except Exception as ex:
-            self.SignalSendMessage.emit("LOI >> PHAN TICH VT+KM"+str(ex.args))
+            self.SignalErrorOrSuccess.emit("LOI >> PHAN TICH VT+KM"+str(ex.args))
     
     def __AddRecogntionAtRuntime(self, jsonDict):
         try:

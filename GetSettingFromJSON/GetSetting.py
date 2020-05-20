@@ -26,6 +26,23 @@ def LoadSettingFromFile():
     except:
         return 0
 
+def LoadPasswordSetting():
+    try:
+        with open('../Setting/settingPassword.json') as json_file:
+            data = json.load(json_file)
+        return data["password"]
+    except Exception as ex:
+        print(ex.args)
+        try:
+            with open('../Setting/settingPassword.json', 'w') as json_file:
+                dict = {
+                    "password":"12345",
+                }
+                json.dump(dict, json_file)
+            return "12345"
+        except:
+            pass
+
 def UpdateServerImageDir(dir):
     with open('GetSettingFromJSON/setting.json') as json_file:
         setting = json.load(json_file)

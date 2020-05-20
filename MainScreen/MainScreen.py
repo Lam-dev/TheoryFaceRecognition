@@ -41,6 +41,10 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
     SignalCloseELT = pyqtSignal()
     SignalDeleteAllData = pyqtSignal()
     SignalModifyFGPsecurityLevel = pyqtSignal(int)
+    SignalReciptedNewVersionInfo = pyqtSignal(str)
+    SignalNotNewVersion  = pyqtSignal()
+    SignalPasswordIsTrue = pyqtSignal()
+    SignalCloseInputPassword = pyqtSignal()
 
     def __init__(self, MainWindow):
         QObject.__init__(self)
@@ -57,6 +61,7 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
 
         self.centralFrame = QtWidgets.QFrame(self.centralWidget)
         self.__keyBoardOpened = False
+        self.__flagCheckVersionScreenShow = False
         
         self.setupUi(self.centralFrame)
         # self.label_logoEcotek.setPixmap(QtGui.QPixmap("icon/logo_.png"))
@@ -79,6 +84,8 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         self.iconCardRecognized = QtGui.QPixmap("icon/cardIcon100.png")
         self.label_cty.setText(self.__ConvertStringToUTF8String(NAME_CENTER))
         self.label_cty_2.setText(self.__ConvertStringToUTF8String(NAME_DEVICE))
+        self.timerAutoCloseCheckVersion = QTimer(self)
+        self.timerAutoCloseCheckVersion.timeout.connect(self.AutoCloseCheckVersion)
 
     def HideCamera(self, faceRecognized = "face"):
         self.label_showCamera.hide()
@@ -274,16 +281,47 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         self.inputPasswordScreenShadow.mousePressEvent = lambda event: self.__HideInputPasswordScreen()
         self.frameContainUpdateScreen = QtWidgets.QFrame(self.inputPasswordScreenShadow)
         self.inputPasswordScreenObj = InputPassword(self.frameContainUpdateScreen)
+        self.inputPasswordScreenObj.SignalPasswordIsTrue.connect(self.SignalPasswordIsTrue.emit)
+        self.inputPasswordScreenObj.SignalCloseInputPassword.connect(self.SignalCloseInputPassword.emit)
         self.inputPasswordScreenShadow.show()
         self.inputPasswordScreenShadow.raise_()
-        
 
+    def CloseInputPassword(self):
+        try:
+            self.inputPasswordScreenObj.CloseScreen()
+            self.inputPasswordScreenObj.deleteLater()
+            self.inputPasswordScreenShadow.deleteLater()
+        except:
+            pass
+    
     def __HideInputPasswordScreen(self):
         pass
         
+    def ShowCheckVersionAndStartTimerAutoClose(self):
+        try:
+            if(self.__flagCheckVersionScreenShow):
+                if(self.checkVersionScreenObj.flagGetNewVersion):
+                    self.checkVersionScreenObj.UpdateNewVersion()
+            else:
+                self.ShowVersionCheckScreen()
+                self.timerAutoCloseCheckVersion.start(40000)
+        except:
+            pass
+
+    def AutoCloseCheckVersion(self):
+        try:
+            
+            self.checkVersionScreenObj.socketObj.CloseSocket()
+            self.CloseCheckVersionScreen()
+            
+        except Exception as ex:
+            print(ex.args)
+            pass
+        self.timerAutoCloseCheckVersion.stop()
+
 
     def ShowVersionCheckScreen(self):
-        
+        self.__flagCheckVersionScreenShow = True
         self.checkVersionShadow = QtWidgets.QFrame(self.centralWidget)
         self.checkVersionShadow.setGeometry(QtCore.QRect(0, 0, 800, 480))
         self.checkVersionShadow.setStyleSheet("background-color: rgba(0, 0, 0, 100);")
@@ -292,6 +330,8 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         self.checkVersionScreenObj.SignalUpdateVersion.connect(self.SignalCloseELT.emit)
         self.checkVersionScreenObj.SignalRequestCloseScreen.connect(self.CloseCheckVersionScreen)
         self.checkVersionScreenObj.SignalServerSettingForDevice.connect(self.SaveAndChangeSetting)
+        self.checkVersionScreenObj.SignalReciptedNewVersionInfo.connect(self.SignalReciptedNewVersionInfo.emit)
+        self.checkVersionScreenObj.SignalNotNewVersion.connect(self.SignalNotNewVersion.emit)
         self.checkVersionShadow.raise_()
         self.checkVersionShadow.show()
 
@@ -308,6 +348,7 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
     def CloseCheckVersionScreen(self):
         self.checkVersionShadow.hide()
         self.checkVersionShadow.deleteLater()
+        self.__flagCheckVersionScreenShow = False
     
     def OpenHideSettingScreen(self):
 

@@ -48,6 +48,8 @@ class SocketClient(QObject):
     __SignalReciptEnounghData = pyqtSignal(bytes)
     SignalStopForUpdateData = pyqtSignal()
     SignalDeleteFGPofStudent = pyqtSignal(str)
+    SignalRequestDelAllData = pyqtSignal()
+    SignalRequestUpdate = pyqtSignal()
     
 
     def __init__(self):
@@ -84,6 +86,9 @@ class SocketClient(QObject):
         self.processReciptDataObj.SignalSendResultDeleteAndCheck.connect(self.SendMessageDatabaseCheck)
         self.processReciptDataObj.SignalSyncComplete.connect(self.StopSyncData)
         self.processReciptDataObj.SignalDeleteFGPofStudent.connect(self.SignalDeleteFGPofStudent.emit)
+        self.processReciptDataObj.SignalRequestDelAllData.connect(self.SignalRequestDelAllData.emit)
+        self.processReciptDataObj.SignalRequestUpdate.connect(self.SignalRequestUpdate.emit)
+        
         self.chuaXuLy = b''
 
         self.timerSyncData.timeout.connect(self.processReciptDataObj.TimerUpdateDataTimeout)

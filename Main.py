@@ -204,10 +204,10 @@ class MainWindow(QMainWindow):
         os.system("shutdown now")
     
     def ShowWaitForUpdateDataScreen(self):
-        if(self.__FlagUpdateScreenIsShow):
-            self.__FlagNeedWaitContinue = True
+        if(self.timerWaitForUpdateData.isActive):
+            self.timerWaitForUpdateData.stop()
+            self.timerWaitForUpdateData.start(5000)
             return
-        self.__FlagUpdateScreenIsShow = True    
         self.__OffCameraTemporary(autoReopen= False)
         self.timerWaitForUpdateData.start(6000)
         self.mainScreenObj.ShowWaitForUpdateScreen()
@@ -216,10 +216,7 @@ class MainWindow(QMainWindow):
         if(self.lstAddFGPerr.__len__() != 0):
             thread = threading.Thread(target= self.ReAddFGPerr, args=(), daemon= True)
             thread.start()
-
-        if(self.__FlagNeedWaitContinue):
-            #self.timerWaitForUpdateData.start(10000)
-            self.__FlagNeedWaitContinue = False
+            return
         else:
             self.lstStudent = GetDataFromDatabase().GetListStudent()
             self.faceRecognitionObj.SetListStudent(self.lstStudent)

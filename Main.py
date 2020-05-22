@@ -19,6 +19,7 @@ from         FingerPrintSensor.FingerPrint      import Fingerprint
 from         Sound.OrangePiSound                import Sound
 from         WriteRFcard.ControlRFIDmodule   import ControlRFIDmudule
 import       json
+import       threading
 
 # from   Sound.Sound              import Sound
 
@@ -55,6 +56,7 @@ class MainWindow(QMainWindow):
         self.mainScreenObj.SignalPasswordIsTrue.connect(self.__ShowSettingScreen)
         self.mainScreenObj.SignalCloseInputPassword.connect(self.__CloseInputPassword)
         self.khoLichSu = LichSuRepository()
+        self.lstAddFGPerr = []
         self.soundObj = Sound()
         self.__DisableLogo()
 #region   dieu khien signal tu camera
@@ -211,6 +213,10 @@ class MainWindow(QMainWindow):
         self.mainScreenObj.ShowWaitForUpdateScreen()
 
     def HideWaitForUpdateDataScreen(self):
+        if(self.lstAddFGPerr.__len__() != 0):
+            thread = threading.Thread(target= self.ReAddFGPerr, args=(), daemon= True)
+            thread.start()
+
         if(self.__FlagNeedWaitContinue):
             #self.timerWaitForUpdateData.start(10000)
             self.__FlagNeedWaitContinue = False
@@ -221,30 +227,44 @@ class MainWindow(QMainWindow):
             self.FGPobj.LayDanhSachIDvaVanTay()
             self.timerWaitForUpdateData.stop()
             self.mainScreenObj.HideWaitForUpdateScreen()
-            self.__FlagUpdateScreenIsShow = False
             self.__ReopenReadCamera()
 
+    
+    def ReAddFGPerr(self):                 # nạp lại các vân tay lỗi
+        lstFGPerr = self.lstAddFGPerr
+        for fgpAndIdStudent in lstFGPerr:
+            self.ShowWaitForUpdateDataScreen()
+            self.AddFGP(fgpAndIdStudent[0],fgpAndIdStudent[1])
+            
+            
     def AddStudentInfomation(self, infoDict):
+        self.ThemKhuonMatVaoDanhSachDaLay(infoDict["idStudent"], infoDict["faceEncodingArr"])
+        self.faceRecognitionObj.SetListStudent(self.lstStudent)
+        self.AddFGP(infoDict["FGPencoding"], infoDict["idStudent"])
+
+    def AddFGP(self, lstFGPFeature, IDstudent):
+        khoIDvaVanTay = IDvaVanTayRepository()
         try:
-            self.ThemKhuonMatVaoDanhSachDaLay(infoDict["idStudent"], infoDict["faceEncodingArr"])
-            self.faceRecognitionObj.SetListStudent(self.lstStudent)
-            khoIDvaVanTay = IDvaVanTayRepository()
-            if(len(infoDict["FGPencoding"]) == 0):
+            if(len(lstFGPFeature) == 0):
                 self.__AddSuccessOrError("CB >>KHONG VAN TAY>> ID = " + infoDict["idStudent"])
             else:
-                khoIDvaVanTay.xoaBanGhi(" IDThiSinh = %s "%(infoDict["idStudent"]))
-                for FGPfeature in infoDict["FGPencoding"]:
+                khoIDvaVanTay.xoaBanGhi(" IDThiSinh = %s "%(IDstudent))
+                for FGPfeature in lstFGPFeature:
                     try:
                         viTri = self.FGPobj.NapVanTayTuThietBiVaoCamBien(FGPfeature)
                         idVaVanTay = AnhXaIDvaVanTay()
-                        idVaVanTay.IDThiSinh = infoDict["idStudent"]
+                        idVaVanTay.IDThiSinh = IDstudent
                         idVaVanTay.ViTriVanTay = viTri
-                        khoIDvaVanTay.xoaBanGhi("IDThiSinh = "+ infoDict["idStudent"])
+                        khoIDvaVanTay.xoaBanGhi("IDThiSinh = "+ IDstudent)
                         khoIDvaVanTay.ghiDuLieu(idVaVanTay)
-                        self.FGPobj.ThemIDvaVanTayVaoDanhSachDaLay(infoDict["idStudent"], viTri)
-                        self.__AddSuccessOrError("TC >>THEM VT>>" + "ID = " + infoDict["idStudent"])
+                        self.FGPobj.ThemIDvaVanTayVaoDanhSachDaLay(IDstudent, viTri)
+                        self.__AddSuccessOrError("TC >>THEM VT>>" + "ID = " + IDstudent)
                     except Exception as ex:
-                        self.__AddSuccessOrError("LOI >>THEM VT>>+"+str(ex.args)+ "ID = " + infoDict["idStudent"])
+                        if(str(ex.args).__contains__("Nonetype")):
+                            self.lstAddFGPerr.append((lstFGPFeature, IDstudent))
+                            self.__AddSuccessOrError("CB >> THEM SAU >> ID = "+ IDstudent)
+                        else:
+                            self.__AddSuccessOrError("LOI >>THEM VT>>+"+str(ex.args)+ "ID = " + IDstudent)
                         
         except:
             pass
@@ -303,7 +323,6 @@ class MainWindow(QMainWindow):
                     student.NhanDienKhuonMatThem.append(faceEncoding)
                     if(len(faceEncoding) == 0):
                         self.__AddSuccessOrError("CB >> KHONG KHUON MAT >> ID = "+ student.ID)
-                        
                     else:
                         self.__AddSuccessOrError("TC >> THEM KM >> ID = "+ student.ID)
                     return

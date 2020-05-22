@@ -23,7 +23,8 @@ import       threading
 
 # from   Sound.Sound              import Sound
 
-class MainWindow(QMainWindow):
+class MainWindow(QMainWindow, QObject):
+    __SignalWaitForUpdateScreen = pyqtSignal()
     def __init__(self):
         super().__init__()
         self.__CheckEnv()
@@ -112,6 +113,7 @@ class MainWindow(QMainWindow):
         self.rfModuleObj.SignalNotReconizedStudent.connect(self.PlayNotRecognized)
         self.rfModuleObj.lstStudent = self.lstStudent
         
+        self.__SignalWaitForUpdateScreen.connect(self.ShowWaitForUpdateDataScreen)
 
         self.__FlagUpdateScreenIsShow = False
         self.__FlagNeedWaitContinue = False
@@ -204,19 +206,17 @@ class MainWindow(QMainWindow):
         os.system("shutdown now")
     
     def ShowWaitForUpdateDataScreen(self):
-        if(self.timerWaitForUpdateData.isActive):
+        if(self.timerWaitForUpdateData.isActive()):
             self.timerWaitForUpdateData.stop()
             self.timerWaitForUpdateData.start(5000)
             return
         self.__OffCameraTemporary(autoReopen= False)
-        self.timerWaitForUpdateData.start(6000)
+        self.timerWaitForUpdateData.start(5000)
         self.mainScreenObj.ShowWaitForUpdateScreen()
 
     def HideWaitForUpdateDataScreen(self):
         if(self.lstAddFGPerr.__len__() != 0):
-            thread = threading.Thread(target= self.ReAddFGPerr, args=(), daemon= True)
-            thread.start()
-            return
+            self.ReAddFGPerr()
         else:
             self.lstStudent = GetDataFromDatabase().GetListStudent()
             self.faceRecognitionObj.SetListStudent(self.lstStudent)
@@ -228,9 +228,10 @@ class MainWindow(QMainWindow):
 
     
     def ReAddFGPerr(self):                 # nạp lại các vân tay lỗi
-        lstFGPerr = self.lstAddFGPerr
+        lstFGPerr = self.lstAddFGPerr.copy()
+        self.lstAddFGPerr.clear()
         for fgpAndIdStudent in lstFGPerr:
-            self.ShowWaitForUpdateDataScreen()
+            self.__SignalWaitForUpdateScreen.emit()
             self.AddFGP(fgpAndIdStudent[0],fgpAndIdStudent[1])
             
     def AddStudentInfomation(self, infoDict):
@@ -256,7 +257,8 @@ class MainWindow(QMainWindow):
                         self.FGPobj.ThemIDvaVanTayVaoDanhSachDaLay(IDstudent, viTri)
                         self.__AddSuccessOrError("TC >>THEM VT>>" + "ID = " + IDstudent)
                     except Exception as ex:
-                        if(str(ex.args).__contains__("Nonetype")):
+                        errStr = str(ex.args)
+                        if((errStr.__contains__("NoneType")) | (errStr.__contains__("flash"))):
                             self.lstAddFGPerr.append((lstFGPFeature, IDstudent))
                             self.__AddSuccessOrError("CB >> THEM SAU >> ID = "+ IDstudent)
                         else:

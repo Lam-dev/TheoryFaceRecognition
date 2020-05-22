@@ -177,9 +177,13 @@ class Fingerprint(QObject):
         # return len(dsIDvaVanTay)
         self.lstIDvaVanTay = self.IDvaVanTayRepo.layDanhSach(" 1 = 1 ")
         self.lstIDvaVanTay.sort(key = lambda idVaVanTay: idVaVanTay.ViTriVanTay)
+        if(len(self.lstIDvaVanTay) == 0):
+            return 0
         for i in range(0, len(self.lstIDvaVanTay)):
             if(self.lstIDvaVanTay[i].ViTriVanTay != i):
-                return i    
+                return i
+        return len(self.lstIDvaVanTay)
+          
 
     # def TimViTriTrongTrongDatabase(self):
     #     lstIDvaVanTay = DatabaseAccecss.LayDSIDvaVanTay()

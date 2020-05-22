@@ -43,6 +43,7 @@ class Fingerprint(QObject):
         self.viTriDaChonChuaLuu = []
         self.LayDanhSachIDvaVanTay()
         self.FlagFGPfree = True
+        self.IDvaVanTayRepo = IDvaVanTayRepository()
     
     def setSecurityLevel(self, level):
         global SCURITY_LEVEL
@@ -129,11 +130,11 @@ class Fingerprint(QObject):
     def NapVanTayTuThietBiVaoCamBien(self, FGPencoding):
         try:
             self.fingerprintObj.uploadCharacteristics(characteristicsData= FGPencoding)
-            result = self.fingerprintObj.searchTemplate()
-            if(result[0] >= 0):
-                viTriLuu = result[0]
-            else:
-                viTriLuu = self.TimKhoangTrong()
+            # result = self.fingerprintObj.searchTemplate()
+            # if(result[0] >= 0):
+            #     viTriLuu = result[0]
+            # else:
+            viTriLuu = self.TimKhoangTrong()
             self.fingerprintObj.storeTemplate(viTriLuu, 0x01)
             return viTriLuu
         except Exception as ex:
@@ -155,26 +156,30 @@ class Fingerprint(QObject):
     #     self.ViTriDaTimDen = len(self.lstIDvaVanTay) + 1
     #     return len(self.ViTriDaTimDen)
     def TimKhoangTrong(self):
-        dsIDvaVanTay = self.lstIDvaVanTay
-        dsIDvaVanTay.sort(key = lambda idVaVanTay: idVaVanTay.ViTriVanTay)
-        if((len(dsIDvaVanTay) == 0) & (len(self.viTriDaChonChuaLuu) == 0)):
-            self.viTriDaChonChuaLuu.append(0)
-            return 0
-        for i in range(0, len(dsIDvaVanTay)):
-            if((dsIDvaVanTay[i].ViTriVanTay != i) & (not self.viTriDaChonChuaLuu.__contains__(i))):
-                self.viTriDaChonChuaLuu.append(i)
-                return i
-        if(len(dsIDvaVanTay) == 0):
-            viTriTiepTheo = len(self.viTriDaChonChuaLuu)
-            self.viTriDaChonChuaLuu.append(viTriTiepTheo)
-            return viTriTiepTheo
-        else:
-            viTriTiepTheo = dsIDvaVanTay[len(dsIDvaVanTay)-1].ViTriVanTay + 1 + len(self.viTriDaChonChuaLuu)
-            self.viTriDaChonChuaLuu.append(viTriTiepTheo)
-            return viTriTiepTheo
+        # dsIDvaVanTay = self.lstIDvaVanTay
+        # dsIDvaVanTay.sort(key = lambda idVaVanTay: idVaVanTay.ViTriVanTay)
+        # if((len(dsIDvaVanTay) == 0) & (len(self.viTriDaChonChuaLuu) == 0)):
+        #     self.viTriDaChonChuaLuu.append(0)
+        #     return 0
+        # for i in range(0, len(dsIDvaVanTay)):
+        #     if((dsIDvaVanTay[i].ViTriVanTay != i) & (not self.viTriDaChonChuaLuu.__contains__(i))):
+        #         self.viTriDaChonChuaLuu.append(i)
+        #         return i
+        # if(len(dsIDvaVanTay) == 0):
+        #     viTriTiepTheo = len(self.viTriDaChonChuaLuu)
+        #     self.viTriDaChonChuaLuu.append(viTriTiepTheo)
+        #     return viTriTiepTheo
+        # else:
+        #     viTriTiepTheo = dsIDvaVanTay[len(dsIDvaVanTay)-1].ViTriVanTay + 1 + len(self.viTriDaChonChuaLuu)
+        #     self.viTriDaChonChuaLuu.append(viTriTiepTheo)
+        #     return viTriTiepTheo
         # self.viTriDaChonChuaLuu.append(len(dsIDvaVanTay))
         # return len(dsIDvaVanTay)
-            
+        self.lstIDvaVanTay = self.IDvaVanTayRepo.layDanhSach(" 1 = 1 ")
+        self.lstIDvaVanTay.sort(key = lambda idVaVanTay: idVaVanTay.ViTriVanTay)
+        for i in range(0, len(self.lstIDvaVanTay)):
+            if(self.lstIDvaVanTay[i].ViTriVanTay != i):
+                return i    
 
     # def TimViTriTrongTrongDatabase(self):
     #     lstIDvaVanTay = DatabaseAccecss.LayDSIDvaVanTay()

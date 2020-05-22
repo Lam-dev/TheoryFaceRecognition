@@ -233,8 +233,8 @@ class MainWindow(QMainWindow):
             self.ShowWaitForUpdateDataScreen()
             self.AddFGP(fgpAndIdStudent[0],fgpAndIdStudent[1])
             
-            
     def AddStudentInfomation(self, infoDict):
+
         self.ThemKhuonMatVaoDanhSachDaLay(infoDict["idStudent"], infoDict["faceEncodingArr"])
         self.faceRecognitionObj.SetListStudent(self.lstStudent)
         self.AddFGP(infoDict["FGPencoding"], infoDict["idStudent"])
@@ -245,14 +245,13 @@ class MainWindow(QMainWindow):
             if(len(lstFGPFeature) == 0):
                 self.__AddSuccessOrError("CB >>KHONG VAN TAY>> ID = " + infoDict["idStudent"])
             else:
-                khoIDvaVanTay.xoaBanGhi(" IDThiSinh = %s "%(IDstudent))
+                khoIDvaVanTay.xoaBanGhi(" IDThiSinh = '%s' "%(IDstudent))
                 for FGPfeature in lstFGPFeature:
                     try:
                         viTri = self.FGPobj.NapVanTayTuThietBiVaoCamBien(FGPfeature)
                         idVaVanTay = AnhXaIDvaVanTay()
                         idVaVanTay.IDThiSinh = IDstudent
                         idVaVanTay.ViTriVanTay = viTri
-                        khoIDvaVanTay.xoaBanGhi("IDThiSinh = "+ IDstudent)
                         khoIDvaVanTay.ghiDuLieu(idVaVanTay)
                         self.FGPobj.ThemIDvaVanTayVaoDanhSachDaLay(IDstudent, viTri)
                         self.__AddSuccessOrError("TC >>THEM VT>>" + "ID = " + IDstudent)

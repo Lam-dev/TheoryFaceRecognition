@@ -51,12 +51,12 @@ class ProcessReciptData(QObject):
     __FlagTimeUpdated = False
     SignalErrorOrSuccess = pyqtSignal(str)
     SignalRequestDelAllData = pyqtSignal()
-   
+    
 
     def __init__(self):
         super().__init__()
         self.lstFeatureFileNameForSync = []
-
+        self.lstStudentAddErr = []
         self.ftpObj = FTPclient()
 
     def _json_object_hook(self, d): return namedtuple('X', d.keys())(*d.values())
@@ -518,17 +518,15 @@ class ProcessReciptData(QObject):
     def __AddStudent(self, lstStudentNumber, IDCourse):
         self.SignalStopForUpdateData.emit()
         lstImage = []
-        try:
-            for stNumber in lstStudentNumber:
-                imageName = str(stNumber.CardNumber) + ".jpg"
-                lstImage.append(imageName)
-                self.SignalErrorOrSuccess.emit("nhan dc danh sach anh >> "+imageName)
-        except:
-            pass
-        # ftpObj = FTPclient()
+
+        for stNumber in lstStudentNumber:
+            imageName = str(stNumber.CardNumber) + ".jpg"
+            lstImage.append(imageName)
+
         try:
             lstImageGrapped = self.ftpObj.GetListFileFromServer(lstImage)
         except Exception as ex:
+            
             self.SignalErrorOrSuccess.emit("er > ftpErr>> "+ str(ex.args))
         khoThiSinh = ThiSinhRepository()
         i = 0
@@ -541,9 +539,6 @@ class ProcessReciptData(QObject):
                     student.AnhDangKy = fp.read()
                 except:
                     self.SignalErrorOrSuccess.emit("er > stAddEr>> not image")
-                #imagePil = Image.open(io.BytesIO(student.AnhDangKy))
-                #imagePil = imagePil.convert("RGB")
-                #npArrayImage = numpy.array(imagePil)
                 student.NhanDienKhuonMatStr = ""#GetFaceEncodingFromImage().GetFaceEncodingStr(npArrayImage)[0]
                 student.HoVaTen = self.__ConvertStringToUTF8String(lstStudentNumber[i].TraineeName)
                 student.SoCMTND = lstStudentNumber[i].SoCMT

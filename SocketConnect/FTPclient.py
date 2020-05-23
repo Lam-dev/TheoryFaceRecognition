@@ -141,23 +141,20 @@ class FTPclient(QObject):
                 self.ftpObj.cwd(ftpFilePath)
             except Exception as ex:
                 raise ConnectionError("er>>>ftpNotConnect>>  "+str(ex.args))
-        try:
-            
-            for f in lstFile:
-                self.SignalError.emit("war >> ftp" + f)
-                if((not f.__contains__(".jpg")) & (not f.__contains__(".json"))):
-                    continue
-                try:
-                    self.ftpObj.retrbinary("RETR " + f ,open(LOCAL_PATH_CONTAIN_DATA_UPDATE + f, 'wb').write)
-                    numberFileGraped += 1
-                    lstImageGraped.append(f)
-                    self.SignalError.emit(">>> da lay anh >> " + f)
-                except Exception as ex:
-                    raise Exception("er >>ftp_getf> "+ str(ex.args))
 
-            return lstImageGraped
-        except Exception as ex:
-            raise Exception("er >>ftp_getf> "+ str(ex.args))
+        for f in lstFile:
+            self.SignalError.emit("war >> ftp" + f)
+            if((not f.__contains__(".jpg")) & (not f.__contains__(".json"))):
+                continue
+            try:
+                self.ftpObj.retrbinary("RETR " + f ,open(LOCAL_PATH_CONTAIN_DATA_UPDATE + f, 'wb').write)
+                numberFileGraped += 1
+                lstImageGraped.append(f)
+                self.SignalError.emit(">>> da lay anh >> " + f)
+            except Exception as ex:
+                raise Exception("LOI >>FTP>>"+ str(ex.args))
+        return lstImageGraped
+
 
 
 

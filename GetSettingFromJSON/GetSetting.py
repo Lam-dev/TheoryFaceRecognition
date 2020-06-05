@@ -18,6 +18,27 @@ def GetSetting(arg):
     if(arg == "--SocketServerPort"):
         return setting["SocketServerPort"]
 
+def GetHeadPoseCalibValue():
+    try:
+        with open('../Setting/poseCalibValue.json') as json_file:
+            return json.load(json_file)
+    except:
+        try:
+            with open('../Setting/poseCalibValue.json', 'w') as json_file:
+                dict = {
+                    "ySmallest":-8,
+                    "yBiggest":5,
+                    "xSmallest":-11,
+                    "xBiggest":1,
+                    "distance":55,
+                    "eye":40
+                }
+                json.dump(dict, json_file)
+            with open('../Setting/poseCalibValue.json') as json_file:
+                return json.load(json_file)
+        except:
+            return 0
+
 def LoadSettingFromFile():
     try:
         with open('../Setting/systemSetting.json') as json_file:

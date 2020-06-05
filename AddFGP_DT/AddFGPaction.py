@@ -3,17 +3,14 @@ from PyQt5          import QtCore, QtGui
 from PyQt5.QtCore   import pyqtSlot, pyqtSignal,QTimer, QDateTime, Qt, QObject, QPointF, QPropertyAnimation, pyqtProperty, QSize
 from PyQt5          import QtWidgets
 import json
-from FingerPrintSensor.FingerPrint   import Fingerprint
+from FingerPrintSensor_DT.FingerPrint   import Fingerprint, AddFingerNotify
+import time
+
 
 class AddFGPscreen(QObject, Ui_Frame_ContainAddFGPscreen):
     SignalSendImageToServer = pyqtSignal(str, str)
     SignalSendFGPGetToServer = pyqtSignal(str, str)
     SignalPlayBip = pyqtSignal()
-    SignalRequestGetFGP = pyqtSignal(object)
-    SignalStopGetFGP = pyqtSignal()
-    __SignalRequestStopAll = pyqtSignal()
-    __SignalRequestGetFGP = pyqtSignal()
-
 
     def __init__(self, frameContain):
         QObject.__init__(self)
@@ -21,10 +18,6 @@ class AddFGPscreen(QObject, Ui_Frame_ContainAddFGPscreen):
         self.frameContainCurrentStep = frameContain
         self.frameContainCurrentStep.show()
         self.setupUi(frameContain)
-        
-        self.__SignalRequestStopAll.connect(self.StopAll)
-        self.__SignalRequestGetFGP.connect(self.GetFGP)
-
         self.__pixmapUtTraiTrang = QtGui.QPixmap("icon/finger/utTraiTrang.png")
         self.__pixmapNhanTraiTrang = QtGui.QPixmap("icon/finger/nhanTraiTrang.png")
         self.__pixmapGiuaTraiTrang = QtGui.QPixmap("icon/finger/giuaTraiTrang.png")
@@ -57,59 +50,126 @@ class AddFGPscreen(QObject, Ui_Frame_ContainAddFGPscreen):
         self.label_caiPhai.setPixmap(self.__pixmapCaiPhaiTrang)
         self.label_utPhai.setPixmap(self.__pixmapUtPhaiTrang)
         self.label_nhanPhai.setPixmap(self.__pixmapNhanPhaiTrang)
+        self.__lstfFGPimage = list()
+        self.__lstfFGPimage.append(QtGui.QPixmap("icon/fingerprint/0.png"))
+        self.__lstfFGPimage.append(QtGui.QPixmap("icon/fingerprint/1.png"))
+        self.__lstfFGPimage.append(QtGui.QPixmap("icon/fingerprint/2.png"))
+        self.__lstfFGPimage.append(QtGui.QPixmap("icon/fingerprint/3.png"))
+        self.__lstfFGPimage.append(QtGui.QPixmap("icon/fingerprint/4.png"))
+        self.__lstfFGPimage.append(QtGui.QPixmap("icon/fingerprint/5.png"))
+        self.__lstfFGPimage.append(QtGui.QPixmap("icon/fingerprint/6.png"))
+        self.__lstfFGPimage.append(QtGui.QPixmap("icon/fingerprint/7.png"))
+        self.__lstfFGPimage.append(QtGui.QPixmap("icon/fingerprint/8.png"))
+        self.__lstfFGPimage.append(QtGui.QPixmap("icon/fingerprint/9.png"))
+        self.__lstfFGPimage.append(QtGui.QPixmap("icon/fingerprint/10.png"))
+        self.__lstfFGPimage.append(QtGui.QPixmap("icon/fingerprint/11.png"))
+        self.__lstfFGPimage.append(QtGui.QPixmap("icon/fingerprint/12.png"))
+        self.__lstfFGPimage.append(QtGui.QPixmap("icon/fingerprint/13.png"))
+        self.__pixmapPutOn = QtGui.QPixmap("icon/put55.png")
+        self.__pixmapPutOff = QtGui.QPixmap("icon/notPut55.png")
+        self.__pixmapOk = QtGui.QPixmap("icon/ok55.png")
+        self.__pixmapWarning = QtGui.QPixmap("icon/warning55.png")
+        self.__textNotifyForFinger = ""
+        self.label.setPixmap(QtGui.QPixmap("icon/hd150_200.png"))
+
+        self.fingerprintObj = Fingerprint()
+        self.fingerprintObj.SignalFGPputOnIsTheSame.connect(self.ShowFGPisTheSameWithPre)
+        self.fingerprintObj.SignalFGPget.connect(self.FGPget)
+        self.fingerprintObj.SignalPlayBip.connect(self.SignalPlayBip.emit)
+        self.fingerprintObj.SignalStepSuccess.connect(self.AstepSuccess)
+        self.fingerprintObj.SignalNotify.connect(self.ControlNotifyAddFGP)
+        
         
         self.lstFingerNeedAdd = []
         self.timerGetFGP = QTimer(self)
         self.timerGetFGP.timeout.connect(self.GetFGP)
-
-
-        # self.fingerprintObj = Fingerprint()
-        # self.fingerprintObj.SignalFGPputOnIsTheSame.connect(self.ShowFGPisTheSameWithPre)
-        # self.fingerprintObj.SignalFGPget.connect(self.FGPget)
-        # self.fingerprintObj.SignalPlayBip.connect(self.SignalPlayBip.emit)
+        
 
         self.imageObjNeedFlipFlop = False
 
         self.timerFlipFlop = QTimer(self)
         self.timerFlipFlop.timeout.connect(self.FlipFlopImage)
 
+        self.timerAstepSuccess = QTimer(self)
+        self.timerAstepSuccess.timeout.connect(self.ShowFGPstepImage)
 
+        self.__numberFGPimageShow = 0
+        self.__stepAddFGP = 0
 
         self.fingerNeedingAddIsWhite = False
         self.__nameFingerGetting = ""
         self.__strNameFingerNeedAdd = ""
         self.__fingerNeedAddWhite = ""
         self.__fingerNeedAddGreen = ""
-        self.__FGPgetPercent = 0
         self.__lstFGPofAfinger = []
         self.__lstFGPofAfingerStr = ""
         self.__nameOfFingerAdding = ""
-        
-    def FGPget(self, FGPfeature):
-        # self.__FGPgetPercent += 25
-        # self.label_forShowFGPpercent.setText(str(self.__FGPgetPercent) + "%")
-        # self.__lstFGPofAfinger.append(FGPfeature)
-        # if(self.__FGPgetPercent == 100):
-        #     self.__FGPgetPercent = 0
-        #     self.label_forShowFGPpercent.setText(str(self.__FGPgetPercent) + "%")
-        #     self.StopAll()
-        #     __lstFGPofAfingerStr = ";".join(self.__lstFGPofAfinger)
-        #     self.SignalSendFGPGetToServer.emit(__lstFGPofAfingerStr, self.__nameOfFingerAdding)
-        #     self.GetFGP()
 
+    def ControlNotifyAddFGP(self, content):
+        if(content == AddFingerNotify.PushOn):
+            self.label_iconNotify.setPixmap(self.__pixmapPutOn)
+            self.label_forShowNotify.setStyleSheet('font: 75 bold 18pt "Ubuntu";color: rgb(0, 0, 127);')
+            self.label_forShowNotify.setText("TIẾP TỤC "+ self.__textNotifyForFinger)
+        elif(content == AddFingerNotify.PushOff):
+            self.label_forShowNotify.setStyleSheet('font: 75 bold 18pt "Ubuntu";color: rgb(0, 0, 127);')
+            self.label_iconNotify.setPixmap(self.__pixmapPutOff)
+            self.label_forShowNotify.setText("NHẤC TAY RA KHỎI CẢM BIẾN")
+        elif(content == AddFingerNotify.WrongPose):
+            self.label_iconNotify.setPixmap(self.__pixmapWarning)
+            self.label_forShowNotify.setStyleSheet('font: 75 bold 18pt "Ubuntu";color: rgb(198, 0, 0);')
+            self.label_forShowNotify.setText("KHÔNG THAY ĐỔI VỊ TRÍ NGÓN TAY, NHẤC TAY ĐẶT LẠI")
+        elif(content == AddFingerNotify.Ok):
+            if(len(self.lstFingerNeedAdd) == 0):
+                self.label_iconNotify.setPixmap(self.__pixmapOk)
+                self.label_forShowNotify.setStyleSheet('font: 75 bold 18pt "Ubuntu";color: rgb(0, 198, 0);')
+                self.label_forShowNotify.setText("ĐÃ LẤY VÂN TAY THÀNH CÔNG. XIN CẢM ƠN !")
+            else:
+                # self.label_iconNotify.setPixmap(self.__pixmapOk)
+                # self.label_forShowNotify.setStyleSheet('font: 75 bold 18pt "Ubuntu";color: rgb(0, 198, 0);')
+                # self.label_forShowNotify.setText("TIẾP TỤC LẤY NGÓN TIẾP THEO ")
+                pass
+
+    def AstepSuccess(self, step):
+        self.__stepAddFGP = step
+        self.timerAstepSuccess.start(100)
+
+    def ShowFGPstepImage(self):
+        if(self.__stepAddFGP == 1):
+            if(self.__numberFGPimageShow > 4):
+                self.__numberFGPimageShow = 0
+            elif(self.__numberFGPimageShow == 4):
+                self.timerAstepSuccess.stop()
+            else:
+                self.label_showFingerAddStep.setPixmap(self.__lstfFGPimage[self.__numberFGPimageShow + 1])
+                self.__numberFGPimageShow += 1
         
-        self.__FGPgetPercent += 1
-        self.label_forShowFGPpercent.setText(str(self.__FGPgetPercent))
+        elif(self.__stepAddFGP == 2):
+            if(self.__numberFGPimageShow > 9):
+                self.__numberFGPimageShow = 4
+            if(self.__numberFGPimageShow == 9):
+                self.timerAstepSuccess.stop()
+            else:
+                self.label_showFingerAddStep.setPixmap(self.__lstfFGPimage[self.__numberFGPimageShow + 1])
+                self.__numberFGPimageShow += 1
+
+        elif(self.__stepAddFGP == 3):
+            if(self.__numberFGPimageShow > 13):
+                self.__numberFGPimageShow = 9
+            if(self.__numberFGPimageShow == 13):
+                self.timerAstepSuccess.stop()
+            else:
+                self.label_showFingerAddStep.setPixmap(self.__lstfFGPimage[self.__numberFGPimageShow + 1])
+                self.__numberFGPimageShow += 1
+
+
+    def FGPget(self, FGPfeature):
         self.__lstFGPofAfinger.append(FGPfeature)
-        if(self.__FGPgetPercent == 3):
-            self.__FGPgetPercent = 0
-            self.label_forShowFGPpercent.setText(str(self.__FGPgetPercent))
-            self.__SignalRequestStopAll.emit()
-            __lstFGPofAfingerStr = ";".join(self.__lstFGPofAfinger)
-            self.SignalSendFGPGetToServer.emit(__lstFGPofAfingerStr, self.__nameOfFingerAdding)
-            self.__lstFGPofAfinger = []
-            self.__SignalRequestGetFGP.emit()
-            # self.GetFGP()
+        self.StopAll()
+        __lstFGPofAfingerStr = ";".join(self.__lstFGPofAfinger)
+        self.SignalSendFGPGetToServer.emit(__lstFGPofAfingerStr, self.__nameOfFingerAdding)
+        self.__lstFGPofAfinger = []
+        self.GetFGP()
+        time.sleep(1.5)
         
 
     def ShowFGPisTheSameWithPre(self):
@@ -140,22 +200,19 @@ class AddFGPscreen(QObject, Ui_Frame_ContainAddFGPscreen):
             self.fingerNeedingAddIsWhite = True
 
     def StopAll(self):
-        # self.fingerprintObj.StopGetFGP()
-        self.SignalStopGetFGP.emit()
+        self.fingerprintObj.StopGetFGP()
         self.timerFlipFlop.stop()
 
-
     def GetFGP(self):
-        # self.fingerprintObj.ClearFGPfeatureSaveOnSensor()
+        self.fingerprintObj.ClearFGPfeatureSaveOnSensor()
+        self.label_showFingerAddStep.setPixmap(self.__lstfFGPimage[0])
         if(self.lstFingerNeedAdd.__len__() == 0):
             self.StopAll()
             return
         self.__nameOfFingerAdding = self.lstFingerNeedAdd.pop()
-        self.timerFlipFlop.start(500)
         self.ShowFingerPutNotify(self.__nameOfFingerAdding)
-        # self.fingerprintObj.StartGetFGP()
-        self.SignalRequestGetFGP.emit(self.FGPget)
-        
+        self.fingerprintObj.StartGetFGP() 
+        self.timerFlipFlop.start(300)
     
     def ClearAllFingerNeedAddPre(self):
         self.label_utTrai.setPixmap(self.__pixmapUtTraiTrang)
@@ -195,6 +252,7 @@ class AddFGPscreen(QObject, Ui_Frame_ContainAddFGPscreen):
         if(fingerStr == "utTrai"):
             
             self.label_forShowNotify.setText("ĐẶT NGÓN ÚT TRÁI LÊN CẢM BIẾN")
+            self.__textNotifyForFinger = "ĐẶT NGÓN ÚT TRÁI LÊN CẢM BIẾN"
             self.imageObjNeedFlipFlop = self.label_utTrai
             self.__fingerNeedAddWhite = self.__pixmapUtTraiTrang
             self.__fingerNeedAddGreen = self.__pixmapUtTraiXanh
@@ -202,6 +260,7 @@ class AddFGPscreen(QObject, Ui_Frame_ContainAddFGPscreen):
 
         elif(fingerStr == "nhanTrai"):
             self.label_forShowNotify.setText("ĐẶT NGÓN NHẪN TRÁI LÊN CẢM BIẾN")
+            self.__textNotifyForFinger = "ĐẶT NGÓN NHẪN TRÁI LÊN CẢM BIẾN"
             self.imageObjNeedFlipFlop = self.label_nhanTrai
             self.__fingerNeedAddWhite = self.__pixmapNhanTraiTrang
             self.__fingerNeedAddGreen = self.__pixmapNhanTraiXanh
@@ -209,6 +268,7 @@ class AddFGPscreen(QObject, Ui_Frame_ContainAddFGPscreen):
 
         elif(fingerStr == "giuaTrai"):
             self.label_forShowNotify.setText("ĐẶT NGÓN GIỮA TRÁI LÊN CẢM BIẾN")
+            self.__textNotifyForFinger = "ĐẶT NGÓN GIỮA TRÁI LÊN CẢM BIẾN"
             self.imageObjNeedFlipFlop = self.label_giuaTrai
             self.__fingerNeedAddWhite = self.__pixmapGiuaTraiTrang
             self.__fingerNeedAddGreen = self.__pixmapGiuaTraiXanh
@@ -216,6 +276,7 @@ class AddFGPscreen(QObject, Ui_Frame_ContainAddFGPscreen):
 
         elif(fingerStr == "troTrai"):
             self.label_forShowNotify.setText("ĐẶT NGÓN TRỎ TRÁI LÊN CẢM BIẾN")
+            self.__textNotifyForFinger = "ĐẶT NGÓN TRỎ TRÁI LÊN CẢM BIẾN"
             self.imageObjNeedFlipFlop = self.label_troTrai
             self.__fingerNeedAddWhite = self.__pixmapTroTraiTrang
             self.__fingerNeedAddGreen = self.__pixmapTroTraiXanh
@@ -223,6 +284,7 @@ class AddFGPscreen(QObject, Ui_Frame_ContainAddFGPscreen):
 
         elif(fingerStr == "caiTrai"):
             self.label_forShowNotify.setText("ĐẶT NGÓN CÁI TRÁI LÊN CẢM BIẾN")
+            self.__textNotifyForFinger = "ĐẶT NGÓN CÁI TRÁI LÊN CẢM BIẾN"
             self.imageObjNeedFlipFlop = self.label_caiTrai
             self.__fingerNeedAddWhite = self.__pixmapCaiTraiTrang
             self.__fingerNeedAddGreen = self.__pixmapCaiTraiXanh
@@ -230,6 +292,7 @@ class AddFGPscreen(QObject, Ui_Frame_ContainAddFGPscreen):
 
         elif(fingerStr == "caiPhai"):
             self.label_forShowNotify.setText("ĐẶT NGÓN CÁI PHẢI LÊN CẢM BIẾN")
+            self.__textNotifyForFinger = "ĐẶT NGÓN CÁI PHẢI LÊN CẢM BIẾN"
             self.imageObjNeedFlipFlop = self.label_caiPhai
             self.__fingerNeedAddWhite = self.__pixmapCaiPhaiTrang
             self.__fingerNeedAddGreen = self.__pixmapCaiPhaiXanh
@@ -237,6 +300,7 @@ class AddFGPscreen(QObject, Ui_Frame_ContainAddFGPscreen):
 
         elif(fingerStr == "troPhai"):
             self.label_forShowNotify.setText("ĐẶT NGÓN TRỎ PHẢI LÊN CẢM BIẾN")
+            self.__textNotifyForFinger = "ĐẶT NGÓN TRỎ PHẢI LÊN CẢM BIẾN"
             self.imageObjNeedFlipFlop = self.label_troPhai
             self.__fingerNeedAddWhite = self.__pixmapTroPhaiTrang
             self.__fingerNeedAddGreen = self.__pixmapTroPhaiXanh
@@ -244,6 +308,7 @@ class AddFGPscreen(QObject, Ui_Frame_ContainAddFGPscreen):
 
         elif(fingerStr == "giuaPhai"):
             self.label_forShowNotify.setText("ĐẶT NGÓN GIỮA PHẢI LÊN CẢM BIẾN")
+            self.__textNotifyForFinger = "ĐẶT NGÓN GIỮA PHẢI LÊN CẢM BIẾN"
             self.imageObjNeedFlipFlop = self.label_giuaPhai
             self.__fingerNeedAddWhite = self.__pixmapGiuaPhaiTrang
             self.__fingerNeedAddGreen = self.__pixmapGiuaPhaiXanh
@@ -251,6 +316,7 @@ class AddFGPscreen(QObject, Ui_Frame_ContainAddFGPscreen):
 
         elif(fingerStr == "nhanPhai"):
             self.label_forShowNotify.setText("ĐẶT NGÓN NHẪN PHẢI LÊN CẢM BIẾN")
+            self.__textNotifyForFinger = "ĐẶT NGÓN NHẪN PHẢI LÊN CẢM BIẾN"
             self.imageObjNeedFlipFlop = self.label_nhanPhai
             self.__fingerNeedAddWhite = self.__pixmapNhanPhaiTrang
             self.__fingerNeedAddGreen = self.__pixmapNhanPhaiXanh
@@ -258,6 +324,7 @@ class AddFGPscreen(QObject, Ui_Frame_ContainAddFGPscreen):
             
         elif(fingerStr == "utPhai"):
             self.label_forShowNotify.setText("ĐẶT NGÓN ÚT PHẢI LÊN CẢM BIẾN")
+            self.__textNotifyForFinger = "ĐẶT NGÓN ÚT PHẢI LÊN CẢM BIẾN"
             self.imageObjNeedFlipFlop = self.label_utPhai
             self.__fingerNeedAddWhite = self.__pixmapUtPhaiTrang
             self.__fingerNeedAddGreen = self.__pixmapUtPhaiXanh

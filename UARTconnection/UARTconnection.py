@@ -25,8 +25,8 @@ class UART(QObject):
         self.__UARTinit()
 
     def StartTimerReadUARTdata(self):
-        self.timerReadUARTdata.start(2000)
-
+        # self.timerReadUARTdata.start(2000)
+        pass
     def __UARTinit(self):
         try:
             return serial.Serial(

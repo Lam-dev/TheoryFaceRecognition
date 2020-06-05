@@ -1,11 +1,10 @@
 import cv2
-import  face_recognition
+import face_recognition
 import threading
 from   PyQt5.QtCore     import pyqtSlot, pyqtSignal,QTimer, QDateTime,Qt, QObject
 from   PyQt5.QtGui      import QPixmap,QColor
 from   PyQt5            import QtCore, QtGui
 import time
-from   GetSettingFromJSON    import GetSetting
 
 Camera_Number = 0
 Camera_Object = cv2.VideoCapture(Camera_Number)
@@ -13,12 +12,6 @@ frame = False
 frameNoFaceMark = False
 FaceLocationInImage = False
 NumberFrameNotFace = 0
-
-# SETTING_DICT  = GetSetting.LoadSettingFromFile()
-# try:
-#     FR_THRESHOLD = SETTING_DICT["FRthreshold"]
-# except:
-FR_THRESHOLD = 0.41
 
 class GetImageFromCamera(QObject):
     CanNotConnectCamera = pyqtSignal()
@@ -32,89 +25,11 @@ class GetImageFromCamera(QObject):
         self.scale = scale
         self.size = size
         self.time = time
-        self.SaveSettingCameraForMainScreen(frameCut, size, scale, labelObject)
         self.toBeReadImage = False
         self.timerReadImage = QTimer(self)
-        self.timerReadImage.timeout.connect(self.__GetImageFromCamera) 
+        self.timerReadImage.timeout.connect(self.__GetImageFromCamera)
         self.labelObject = labelObject
         # self.StartReadImage()
-
-    def ReadCameraForDT(self, labelForShow):
-        self.frameCut = ((0, 480), (0, 640))
-        self.size = (400, 650)
-        self.scale = 0.3
-        self.labelObject = labelForShow
-        self.StartReadImage()
-
-    def SaveSettingCameraForMainScreen(self, frameCut, size, scale, labelForShow):
-        self.frameCut_save = frameCut
-        self.size_save = size
-        self.scale_save = scale
-        self.labelObject_save = labelForShow
-
-    def ResetSettingCameraForMainScreen(self):
-        self.frameCut = self.frameCut_save
-        self.size = self.size_save
-        self.scale =  self.scale_save
-        self.labelObject = self.labelObject_save
-
-    def StopReadImageForDT(self):
-        self.StopReadImage()
-
-    def FaceTrackingForDT(self):
-        global frame
-        global FaceLocationInImage
-        global NumberFrameNotFace
-        if(type(frame) is bool):
-            return
-        # frame = cv2.resize(frame, (0, 0), fx = self.scale, fy = self.scale)
-        # localFrame = frame
-        # self.imageDetectFace = localFrame[:, :, ::-1]
-        FaceLocationInImage = self.__DetectFaceInImage(frame)
-        # self.__GetImageFromCamera()
-        NumberFrameNotFace = 0
-        cv2.imwrite("imageToSend.jpg", frame)
-
-    def __DetectFaceInImage(self, image):
-        faceLocInImage = face_recognition.face_locations(image)
-        if(len(faceLocInImage) == 0):
-            return False
-        else:
-            return faceLocInImage
-
-    def GetFaceFeatureForDT(self, callbackSendFeature):
-
-        global frame
-        global FaceLocationInImage
-        lstFaceLoc = []
-        # try:
-        #     for faceLocation in FaceLocationInImage:
-        #         faceLoc = [(elem * 2) for elem in faceLocation]
-        #         lstFaceLoc.append(faceLoc)
-        # except:
-        #     pass
-
-        if(type(FaceLocationInImage) is not bool):
-            faceEncodings = face_recognition.face_encodings(frame, FaceLocationInImage)
-        else:
-            faceEncodings = []
-        callbackSendFeature(faceEncodings)
-        # FaceLocationInImage = False
-
-
-    def FaceTracking(self):
-        global frame
-        global FaceLocationInImage
-        global NumberFrameNotFace
-        if(type(frame) is bool):
-            return
-        frame = cv2.resize(frame, (0, 0), fx = self.scale, fy = self.scale)
-        localFrame = frame
-        # self.imageDetectFace = localFrame[:, :, ::-1]
-        FaceLocationInImage = self.__DetectFaceInImage(localFrame)
-        self.__GetImageFromCamera()
-        NumberFrameNotFace = 0
-        cv2.imwrite("imageToSend.jpg", frame)
 
     def TakeAphoto(self):
         global frameNoFaceMark
@@ -123,8 +38,7 @@ class GetImageFromCamera(QObject):
     def __ThreadReadCamera(self):
         threadReadCam = threading.Thread(target= self.__GetImageFromCamera, args=(), daemon=True)
         threadReadCam.start()
-        threadReadCam.join()
-
+    
     def __GetImageFromCamera(self):
 
         global frame, frameNoFaceMark
@@ -137,7 +51,7 @@ class GetImageFromCamera(QObject):
         #     return
         if(not ret):
             self.CanNotConnectCamera.emit()
-            time.sleep(1)
+            time.sleep(1000)
         else:
             frame = frameFullSize[self.frameCut[1][0]:self.frameCut[1][1], self.frameCut[0][0]:self.frameCut[0][1]]
             frame = cv2.flip(frame, 1)
@@ -152,7 +66,7 @@ class GetImageFromCamera(QObject):
                 right = FaceLocationInImage[0][1]*3
                 bottom = FaceLocationInImage[0][2]*3
                 left = FaceLocationInImage[0][3]*3
-                cv2.rectangle(frameToShow, (left, top), (right, bottom), (255, 255, 0), 2)
+                cv2.rectangle(frameToShow, (left, top), (right, bottom), (255, 255, 0), 1)
             
             rgbImage = cv2.cvtColor(frameToShow, cv2.COLOR_BGR2RGB)
             convertToQtFormat = QtGui.QImage(rgbImage.data, rgbImage.shape[1], rgbImage.shape[0],
@@ -166,8 +80,7 @@ class GetImageFromCamera(QObject):
             #     return
             self.labelObject.setPixmap(resizeImage)
 
-    
-          
+            
     def StopReadImage(self):
         self.timerReadImage.stop()
 
@@ -185,14 +98,13 @@ class FaceRecognition(QObject):
     StudentRecognized = pyqtSignal(object, object)
     StudentNotRecognized = pyqtSignal(object, object)
     def __init__(self ,lstStudent = ""):
-        global FR_THRESHOLD
         self.lstStudent = lstStudent
         super().__init__()
         self.cameraObj = Camera_Object 
         self.timerForFaceRecognition = QTimer(self)
         self.timerForFaceRecognition.timeout.connect(self.__StartThreadFaceRecognize)
         self.imageDetectFace = ""
-        self.FRthreshold = FR_THRESHOLD
+        self.FRthreshold = 0.44
         self.timerFaceTracking = QTimer(self)
         self.timerFaceTracking.timeout.connect(self.__StartThreadFaceTracking)
         self.numberFaceRecognize = 0
@@ -266,17 +178,16 @@ class FaceRecognition(QObject):
             i = i + 1
             for encoding in faceEncodings:
                 try:
-                    match = face_recognition.compare_faces(student.NhanDienKhuonMat, encoding, FR_THRESHOLD)
+                    match = face_recognition.compare_faces(student.NhanDienKhuonMat, encoding, self.FRthreshold)
                     
-                except Exception as ex:
-                    print(ex)
-                try:
-                    match.extend(face_recognition.compare_faces(student.NhanDienKhuonMatThem, encoding, FR_THRESHOLD))
-
-                except Exception as ex:
-                    print(ex)
+                except:
                     pass
-                print(match)
+
+                try:
+                    match.extend(face_recognition.compare_faces(student.NhanDienKhuonMatThem, encoding, self.FRthreshold))
+
+                except:
+                    pass
                 if True in match:
                     ret, jpgData = cv2.imencode(".jpg", image)
                     jpgData = jpgData.tobytes()

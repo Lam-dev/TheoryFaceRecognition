@@ -1,5 +1,5 @@
 import cv2
-from CameraAndFaceRecognition_DT import face_recognition
+from CameraAndFaceRecognition import face_recognition
 import threading
 from   PyQt5.QtCore     import pyqtSlot, pyqtSignal,QTimer, QDateTime,Qt, QObject
 from   PyQt5.QtGui      import QPixmap,QColor
@@ -9,6 +9,8 @@ import math
 from    GetSettingFromJSON    import GetSetting
 import enum
 
+Camera_Number = 0
+Camera_Object = cv2.VideoCapture(Camera_Number)
 frame = False
 FaceLocationInImage = False
 NumberFrameNotFace = 0
@@ -20,9 +22,9 @@ class GetImageFromCamera(QObject):
     SignalHideCamera = pyqtSignal()
     SignalFaceQuality = pyqtSignal(object)
 
-    def __init__(self, frameCut = ((140, 500), (0, 480)), size = (300, 400), scale = 0.4, time = 50, labelObject = "", cameraObj = object):
+    def __init__(self, frameCut = ((140, 500), (0, 480)), size = (300, 400), scale = 0.4, time = 50, labelObject = ""):
         super().__init__()
-        self.cameraObj = cameraObj
+        self.cameraObj = Camera_Object
         self.frameCut = frameCut
         self.scale = scale
         self.time = time

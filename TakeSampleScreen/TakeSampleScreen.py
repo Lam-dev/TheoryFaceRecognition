@@ -21,7 +21,7 @@ class TakeSampleScreen(QObject, Ui_Frame):
     CloseTakeSampleScreen = pyqtSignal()
     SignalStopGetFGP = pyqtSignal()
 
-    def __init__(self, frame):
+    def __init__(self, frame, cameraObj):
         QObject.__init__(self)
         Ui_Frame.__init__(self)
         self.setupUi(frame)
@@ -42,17 +42,17 @@ class TakeSampleScreen(QObject, Ui_Frame):
 
         self.frameContainAddFace = QtWidgets.QFrame(self.frameContain)
         self.frameContainAddFace.setGeometry(QtCore.QRect(self.frameContain.width(), 0, 0, 0))
-        self.addFaceScreenObj = AddFaceScreen(self.frameContainAddFace)
-        self.addFaceScreenObj.SignalStartReadImage.connect(self.SignalStartReadImage.emit)
-        self.addFaceScreenObj.SignalStopReadImage.connect(self.SignalStopReadImage.emit)
-        self.addFaceScreenObj.SignalFaceTracking.connect(self.SignalFaceTracking.emit)
-        self.addFaceScreenObj.SignalGetFaceFeature.connect(self.SignalGetFaceFeature.emit)
+        self.addFaceScreenObj = AddFaceScreen(self.frameContainAddFace, cameraObj)
+        # self.addFaceScreenObj.SignalStartReadImage.connect(self.SignalStartReadImage.emit)
+        # self.addFaceScreenObj.SignalStopReadImage.connect(self.SignalStopReadImage.emit)
+        # self.addFaceScreenObj.SignalFaceTracking.connect(self.SignalFaceTracking.emit)
+        # self.addFaceScreenObj.SignalGetFaceFeature.connect(self.SignalGetFaceFeature.emit)
 
         self.frameContainAddFGP = QtWidgets.QFrame(self.frameContain)
         self.frameContainAddFGP.setGeometry(QtCore.QRect(self.frameContain.width(), 0, 0, 0))
         self.addFGPscreenObj = AddFGPscreen(self.frameContainAddFGP)
-        self.addFGPscreenObj.SignalRequestGetFGP.connect(self.SignalRequestGetFGP.emit)
-        self.addFGPscreenObj.SignalStopGetFGP.connect(self.SignalStopGetFGP.emit)
+        # self.addFGPscreenObj.SignalRequestGetFGP.connect(self.SignalRequestGetFGP.emit)
+        # self.addFGPscreenObj.SignalStopGetFGP.connect(self.SignalStopGetFGP.emit)
 
         self.frameContainWriteRFcard = QtWidgets.QFrame(self.frameContain)
         self.frameContainWriteRFcard.setGeometry(QtCore.QRect(self.frameContain.width(), 0, 0, 0))
@@ -68,8 +68,8 @@ class TakeSampleScreen(QObject, Ui_Frame):
         self.socketObj.SignalRequestWriteCard.connect(self.GoToWriteRFcardScreen)
 
         self.writeRFcardObj = WriteRFcardAction(self.frameContainWriteRFcard)
-        self.writeRFcardObj.SignalStartWriteRFcardDT.connect(self.SignalStartWriteRFcardDT.emit)
-        self.writeRFcardObj.SignalStopWriteRFcardDT.connect(self.SignalStopWriteRFcardDT.emit)
+        # self.writeRFcardObj.SignalStartWriteRFcardDT.connect(self.SignalStartWriteRFcardDT.emit)
+        # self.writeRFcardObj.SignalStopWriteRFcardDT.connect(self.SignalStopWriteRFcardDT.emit)
         self.writeRFcardObj.SignalWriteCardSuccess.connect(self.socketObj.SendNotifyWriteRFcardSuccessfully)
 
         self.addFGPscreenObj.SignalSendImageToServer.connect(self.socketObj.SendFingerImage)

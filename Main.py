@@ -49,7 +49,7 @@ class MainWindow(QMainWindow):
         self.mainScreenObj.SignalCloseELT.connect(self.close)
         self.mainScreenObj.SignalDeleteAllData.connect(self.DeleteAllData)
         self.mainScreenObj.SignalRequestGoToTakeSampleScreen.connect(self.GoToTakeSampleScreen)
-
+        self.mainScreenObj.cameraObject = self.cameraObj.cameraObj
         self.khoLichSu = LichSuRepository()
         self.soundObj = Sound()
         self.__DisableLogo()
@@ -60,10 +60,10 @@ class MainWindow(QMainWindow):
         self.cameraObj.StartReadImage()
         self.cameraObj.SignalHideCamera.connect(self.__HideCamera)
 
-        self.mainScreenObj.SignalStartReadImage.connect(self.cameraObj.ReadCameraForDT)
-        self.mainScreenObj.SignalStopReadImage.connect(self.cameraObj.StopReadImageForDT)
-        self.mainScreenObj.SignalFaceTracking.connect(self.cameraObj.FaceTrackingForDT)
-        self.mainScreenObj.SignalGetFaceFeature.connect(self.cameraObj.GetFaceFeatureForDT)
+        # self.mainScreenObj.SignalStartReadImage.connect(self.cameraObj.ReadCameraForDT)
+        # self.mainScreenObj.SignalStopReadImage.connect(self.cameraObj.StopReadImageForDT)
+        # self.mainScreenObj.SignalFaceTracking.connect(self.cameraObj.FaceTrackingForDT)
+        # self.mainScreenObj.SignalGetFaceFeature.connect(self.cameraObj.GetFaceFeatureForDT)
         self.mainScreenObj.SignalCloseTakeSampleScreen.connect(self.CloseTakeSampleScreen)
 
 
@@ -133,7 +133,8 @@ class MainWindow(QMainWindow):
                 json.dump(dict, json_file)
 
     def CloseTakeSampleScreen(self):
-        self.cameraObj.ResetSettingCameraForMainScreen()
+        pass
+        # self.cameraObj.ResetSettingCameraForMainScreen()
 
     def GoToTakeSampleScreen(self):
         pass

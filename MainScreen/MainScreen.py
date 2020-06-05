@@ -95,6 +95,7 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         self.label_cty.setText(self.__ConvertStringToUTF8String(NAME_CENTER))
         self.label_cty_2.setText(self.__ConvertStringToUTF8String(NAME_DEVICE))
         self.flagNoCameraMode  = False
+        self.cameraObject = object
     def HideCamera(self, faceRecognized = "face"):
         self.label_showCamera.hide()
         if(faceRecognized == "face"):
@@ -339,14 +340,14 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         self.frameContainTakeSampleScreen = QtWidgets.QFrame(self.centralWidget)
         self.frameContainTakeSampleScreen.setGeometry(QtCore.QRect(0, 0, 800, 480))
         self.frameContainTakeSampleScreen.setStyleSheet("background-color: rgb(255, 255, 255);")
-        self.takeSampleScreen = TakeSampleScreen(self.frameContainTakeSampleScreen)
+        self.takeSampleScreen = TakeSampleScreen(self.frameContainTakeSampleScreen, self.cameraObject)
         self.takeSampleScreen.flagNoCameraMode = self.flagNoCameraMode
-        self.takeSampleScreen.SignalRequestGetFGP.connect(self.SignalRequestGetFGP.emit)
-        self.takeSampleScreen.SignalStartReadImage.connect(self.SignalStartReadImage.emit)
+        # self.takeSampleScreen.SignalRequestGetFGP.connect(self.SignalRequestGetFGP.emit)
+        # self.takeSampleScreen.SignalStartReadImage.connect(self.SignalStartReadImage.emit)
 
-        self.takeSampleScreen.SignalStopReadImage.connect(self.SignalStopReadImage.emit)
-        self.takeSampleScreen.SignalFaceTracking.connect(self.SignalFaceTracking.emit)
-        self.takeSampleScreen.SignalGetFaceFeature.connect(self.SignalGetFaceFeature.emit)
+        # self.takeSampleScreen.SignalStopReadImage.connect(self.SignalStopReadImage.emit)
+        # self.takeSampleScreen.SignalFaceTracking.connect(self.SignalFaceTracking.emit)
+        # self.takeSampleScreen.SignalGetFaceFeature.connect(self.SignalGetFaceFeature.emit)
 
         self.takeSampleScreen.SignalStartWriteRFcardDT.connect(self.SignalStartWriteRFcardDT.emit)
         self.takeSampleScreen.SignalStopWriteRFcardDT.connect(self.SignalStopWriteRFcardDT.emit)

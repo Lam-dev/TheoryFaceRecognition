@@ -297,7 +297,7 @@ class ProcessReciptData(QObject):
             lstHistoryInfo.append(dictInfo)
         jsonToFile = {
             "MAC":MAC,
-            "courseID":objectInfo.courseID,
+            "courseID":objectInfo.data.courseID,
             "his":lstHistoryInfo
         }
         fileName  = "HIS_" + datetime.now().strftime("%Y_%m_%d_%H_%M_%S")+".json"

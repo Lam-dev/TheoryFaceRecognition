@@ -89,7 +89,7 @@ class Fingerprint(QObject):
 
     def ClearFGPfeatureSaveOnSensor(self):
         try:
-            self.fingerprintObj.clearDatabase()
+            # self.fingerprintObj.clearDatabase()
             self.__addFGPstep = 1
         except:
             pass

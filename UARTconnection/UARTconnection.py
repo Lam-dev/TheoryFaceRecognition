@@ -5,7 +5,6 @@ import threading
 from      PyQt5.QtCore   import pyqtSlot, pyqtSignal,QTimer, QDateTime,Qt, QObject
 from GetSettingFromJSON    import GetSetting
 
-uartSettingDict = GetSetting.GetUARTsetting()
 try:    
     UART_PORT = uartSettingDict["UARTport"]
     UART_SPEED = uartSettingDict["baudrate"]

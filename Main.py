@@ -104,6 +104,7 @@ class MainWindow(QMainWindow):
         self.mainScreenObj.SignalCleanFGPsensor.connect(self.FGPobj.LamSachCamBien)
         self.mainScreenObj.SignalRequestGetFGP.connect(self.FGPobj.GetFGPforDT)
         self.mainScreenObj.SignalStopGetFGP.connect(self.FGPobj.StopGetFGP)
+        self.mainScreenObj.SignalAddDataForStudent.connect(self.AddStudentInfomation)
 
         self.rfModuleObj = ControlRFIDmudule()
         self.rfModuleObj.SignalRecognizedStudent.connect(self.RecognizedCard)

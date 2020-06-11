@@ -19,6 +19,7 @@ class Sound(QObject):
         self.waveVuiLongThuLai = sa.WaveObject.from_wave_file(fileVuiLongThuLaiPath)
         self.waveTemp = sa.WaveObject.from_wave_file(fileTemp)
         self.waveBip = sa.WaveObject.from_wave_file(fileBip)
+
         self.ThreadPlayTemp()
         self.timerPlayTemp = QTimer(self)
         self.timerPlayTemp.start(240000)

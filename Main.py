@@ -171,7 +171,6 @@ class MainWindow(QMainWindow, QObject):
 
     def PlayNotRecognized(self):
         self.soundObj.ThreadPlayVuiLongThuLai()
-
     def DeleteAllData(self):
         try:
             KhoaThiRepository().xoaBanGhi(" 1 = 1 ")

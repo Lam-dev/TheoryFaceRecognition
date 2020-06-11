@@ -205,7 +205,8 @@ class ProcessReciptData(QObject):
         lstCourseInfo = []
         for course in lstCourse:
             courseInfor = {
-                "courseID": course.IDKhoaThi,
+                "ID": course.IDKhoaThi,
+                "N":course.TenKhoaThi,
                 "numStudent": 0,
             }
             lstCourseInfo.append(courseInfor)
@@ -235,7 +236,14 @@ class ProcessReciptData(QObject):
     def Send10Student(self,lstStudent, courseID, frameNum):
         lstStudentID = []
         for student in lstStudent:
-            lstStudentID.append(student.ID)
+            studentInfoDict = {
+                'IDK':student.IDKhoaThi,
+                'ID':student.ID,
+                'N':student.HoVaTen,
+                'VT': True if len(student.NhanDienVanTay)!=0 else False,
+                'KM': True if len(student.NhanDienKhuonMatThem)!=0 else False
+            }
+            lstStudentID.append(studentInfoDict)
         messageSendToSocket = {
             "MAC":MAC,
             "courseID":courseID,

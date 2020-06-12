@@ -26,6 +26,7 @@ class SettingScreen(Ui_frame_settingScreen, QObject):
     SignalShutdown = pyqtSignal()
     SignalDeleteAllData = pyqtSignal()
     SignalModifyFGPsecurityLevel = pyqtSignal(int)
+    SignalChangeVolume = pyqtSignal(int)
     
     def __init__(self, Frame):
         
@@ -157,6 +158,7 @@ class SettingScreen(Ui_frame_settingScreen, QObject):
             self.content = SoundSettingContent()
             widgetContent = self.content.GetWidgetContent()
             self.ScrollArea.SetContent(widgetContent)
+            self.content.SignalChangeVolume.connect(self.SignalChangeVolume.emit)
             
         elif(settingNumber == 3):
             self.lb_textSystemSetting.setFont(self.boldFont)

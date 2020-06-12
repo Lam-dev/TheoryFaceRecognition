@@ -56,6 +56,7 @@ class MainWindow(QMainWindow, QObject):
         self.mainScreenObj.SignalNotNewVersion.connect(self.__SendNotifyNotNewVersion)
         self.mainScreenObj.SignalPasswordIsTrue.connect(self.__ShowSettingScreen)
         self.mainScreenObj.SignalCloseInputPassword.connect(self.__CloseInputPassword)
+        self.mainScreenObj.SignalChangeVolume.connect(self.__ChangeVolume)
         self.khoLichSu = LichSuRepository()
         self.lstAddFGPerr = []
         self.soundObj = Sound()
@@ -124,6 +125,9 @@ class MainWindow(QMainWindow, QObject):
         self.mainScreenObj.ShowCamera()
         self.lstStudentWaitSend = []
         self.lstStudentAddFGPerror = []
+
+    def __ChangeVolume(self, volume):
+        self.soundObj.ReadAudioFile(volume)
 
     def __CheckEnv(self):
         f = open("/boot/armbianEnv.txt", "r")

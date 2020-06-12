@@ -45,6 +45,7 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
     SignalNotNewVersion  = pyqtSignal()
     SignalPasswordIsTrue = pyqtSignal()
     SignalCloseInputPassword = pyqtSignal()
+    SignalChangeVolume = pyqtSignal(int)
 
     def __init__(self, MainWindow):
         QObject.__init__(self)
@@ -269,6 +270,7 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         self.settingScreenObj.SignalCheckVersion.connect(self.ShowVersionCheckScreen)
         self.settingScreenObj.SignalShutdown.connect(self.SignalShutdown.emit)
         self.settingScreenObj.SignalDeleteAllData.connect(self.SignalDeleteAllData.emit)
+        self.settingScreenObj.SignalChangeVolume.connect(self.SignalChangeVolume.emit)
         
 
         self.settingScreenShadow.show()

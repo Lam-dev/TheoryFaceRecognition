@@ -15,8 +15,9 @@ class Sound(QObject):
 
     def __init__(self):
         QObject.__init__(self)
-        self.waveXinCamOn = sa.WaveObject.from_wave_file(fileXinCamOnPath)
-        self.waveVuiLongThuLai = sa.WaveObject.from_wave_file(fileVuiLongThuLaiPath)
+        # self.waveXinCamOn = sa.WaveObject.from_wave_file(fileXinCamOnPath)
+        # self.waveVuiLongThuLai = sa.WaveObject.from_wave_file(fileVuiLongThuLaiPath)
+        self.ReadConfigAndReadAudioFile()
         self.waveTemp = sa.WaveObject.from_wave_file(fileTemp)
         self.waveBip = sa.WaveObject.from_wave_file(fileBip)
 
@@ -24,7 +25,33 @@ class Sound(QObject):
         self.timerPlayTemp = QTimer(self)
         self.timerPlayTemp.start(240000)
         self.timerPlayTemp.timeout.connect(self.ThreadPlayTemp)
-        self.__SetSound()
+
+    def ReadConfigAndReadAudioFile(self):
+        try:
+            SETTING_DICT  = GetSetting.GetSoundSetting()
+            volume = SETTING_DICT["volume"]
+            self.ReadAudioFile(volume)
+        except:
+            pass
+
+    def ReadAudioFile(self, volume):
+        try:
+
+            if(volume < 30):
+                self.waveXinCamOn = sa.WaveObject.from_wave_file('Sound/AudioFile/xinCamOn1.wav')
+                self.waveVuiLongThuLai = sa.WaveObject.from_wave_file('Sound/AudioFile/vuiLongThuLai1.wav')
+            elif(volume < 70):
+                self.waveXinCamOn = sa.WaveObject.from_wave_file('Sound/AudioFile/xinCamOn2.wav')
+                self.waveVuiLongThuLai = sa.WaveObject.from_wave_file('Sound/AudioFile/vuiLongThuLai2.wav')
+            else:
+                self.waveXinCamOn = sa.WaveObject.from_wave_file('Sound/AudioFile/xinCamOn3.wav')
+                self.waveVuiLongThuLai = sa.WaveObject.from_wave_file('Sound/AudioFile/vuiLongThuLai3.wav')
+            # stringSet = "amixer -D pulse sset Master " + str(volume) + "%"
+            # os.system(stringSet)
+        except:
+            pass
+        
+
 
     def __SetSound(self):
         try:

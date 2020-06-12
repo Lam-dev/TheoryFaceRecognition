@@ -5,6 +5,7 @@ from GetSettingFromJSON   import GetSetting, SaveSetting
 import os
 
 class SoundSettingContent(Ui_Widget_ContainSoundSettingContent, QObject):
+    SignalChangeVolume = pyqtSignal(int)
     def __init__(self):
         QObject.__init__(self)
         Ui_Widget_ContainSoundSettingContent.__init__(self)
@@ -13,10 +14,13 @@ class SoundSettingContent(Ui_Widget_ContainSoundSettingContent, QObject):
         self.label_iconVolume.setPixmap(QtGui.QPixmap("icon/iconVolume.png"))
         self.horizontalSlider_ForChangeVolume.mouseReleaseEvent = lambda event: self.VolumeChange()
         self.GetAndShowSetting()
+
     def VolumeChange(self):
         volume = self.horizontalSlider_ForChangeVolume.value()
-        stringSet = "amixer -D pulse sset Master " + str(volume) + "%"
-        os.system(stringSet)
+        self.SaveSetting()
+        # stringSet = "amixer -D pulse sset Master " + str(volume) + "%"
+        # os.system(stringSet)
+        self.SignalChangeVolume.emit(volume)
 
     def GetWidgetContent(self):
         return self.scrollAreaContent

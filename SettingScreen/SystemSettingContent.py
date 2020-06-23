@@ -4,6 +4,7 @@ from PyQt5 import QtWidgets
 from PyQt5 import QtGui
 from GetSettingFromJSON   import GetSetting, SaveSetting
 import json
+from GetCurrentIP.GetCurrentIP         import GetCurrentIp
 
 class SystemSettingContent(Ui_widget_containSettingContent, QObject):
     GetTextFromKeyBoard = pyqtSignal(object)
@@ -15,6 +16,7 @@ class SystemSettingContent(Ui_widget_containSettingContent, QObject):
     SignalCleanFGPsensor = pyqtSignal()
     SignalDeleteAllData = pyqtSignal()
     SignalModifyFGPsecurityLevel = pyqtSignal(int)
+    SignalSetupStaticIP = pyqtSignal()
     
 
     def __init__(self):
@@ -33,13 +35,34 @@ class SystemSettingContent(Ui_widget_containSettingContent, QObject):
         self.label_iconSocketStatus.setPixmap(QtGui.QPixmap("icon/iconConnected.png"))
         self.lineEdit_forInputIP.textChanged.connect(lambda:self.__CheckIPrule(self.lineEdit_forInputIP.text(), self.label_iconCheckServerIP))
         self.lineEdit_forInputPort.textChanged.connect(lambda:self.__CheckPortRule(self.lineEdit_forInputPort.text(), self.label_iconCheckServerPort))
+        self.comboBox_choseIpMethod.currentIndexChanged.connect(self.__ChangeGetIPmethod)
 
         self.pushButton_connectNewServer.clicked.connect(self.__ConnectNewServer)
 
 
         self.pushButton_deleteAllData.clicked.connect(self.SignalDeleteAllData.emit)
+        self.pushButton_setManualIP.clicked.connect(self.SignalSetupStaticIP.emit)
+        self.pushButton_setManualIP.hide()
+
         self.GetAndShowSetting()
         self.__GetAndShowCurrentVersion()
+        self.__GetAndShowCurrentIP()
+
+    def __ChangeGetIPmethod(self):
+        if(self.comboBox_choseIpMethod.currentIndex() == 0):
+            self.pushButton_setManualIP.hide()
+        else:
+            self.pushButton_setManualIP.show()
+
+    def __GetAndShowCurrentIP(self):
+        try:
+            ip = GetCurrentIp().GetIP()
+            self.label_currentIP.setText(ip['privateIP'])
+            self.label_subnetMask.setText(ip['subnetMask'])
+            self.label_gateway.setText(ip['gateway'])
+        except:
+            pass
+            
 
     def __GetAndShowCurrentVersion(self):
         try:

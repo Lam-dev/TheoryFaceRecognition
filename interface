@@ -1,0 +1,7 @@
+auto eth0
+allow-hotplug eth0
+iface eth0 inet static
+address 
+netmask 
+gateway
+dns-nameServers  

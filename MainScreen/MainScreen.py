@@ -15,7 +15,8 @@ from    KeyBoard.KeyBoard                       import KeyBoard
 from    SettingScreen.HideSettingScreenAction   import HideSettingScreen
 from    CheckVersionScreen.CheckVersion         import CheckUpdate
 from    GetSettingFromJSON    import GetSetting 
-from    InputPassword.InputPassWordAction     import InputPassword
+from    InputPassword.InputPassWordAction       import InputPassword
+from    SetupStaticIP.SetupCurrentIP            import SetupStaticIP
 
 try:
     NAME_SETTING_DICT = GetSetting.GetPersionalSetting()
@@ -271,11 +272,21 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         self.settingScreenObj.SignalShutdown.connect(self.SignalShutdown.emit)
         self.settingScreenObj.SignalDeleteAllData.connect(self.SignalDeleteAllData.emit)
         self.settingScreenObj.SignalChangeVolume.connect(self.SignalChangeVolume.emit)
-        
+        self.settingScreenObj.SignalSetupStaticIP.connect(self.__ShowGetStaticIP)
+
 
         self.settingScreenShadow.show()
         self.settingScreenShadow.raise_()
     
+    def __ShowGetStaticIP(self):
+        self.setStaticIPshadow = QtWidgets.QFrame(self.centralWidget)
+        self.setStaticIPshadow.setGeometry(QtCore.QRect(0, 0, 800, 480))
+        self.setStaticIPshadow.setStyleSheet("background-color: rgba(0, 0, 0, 100);")
+        self.setStaticIPframe = QtWidgets.QFrame(self.setStaticIPshadow)
+        self.setStaticIpObj = SetupStaticIP(self.setStaticIPframe)
+        self.setStaticIpObj.SignalShowKeyBoard.connect(self.__ShowKeyBoard)
+        self.setStaticIPshadow.show()
+
     def ShowInputPasswordScreen(self):
         self.inputPasswordScreenShadow = QtWidgets.QFrame(self.centralWidget)
         self.inputPasswordScreenShadow.setGeometry(QtCore.QRect(0, 0, 800, 480))
@@ -401,6 +412,7 @@ class MainScreen(QObject, Ui_Frame_MainScreen):
         self.settingScreenShadow.deleteLater()
         self.settingScreenObj.deleteLater()
         self.SignalSettingScreenHiden.emit()
+        
 
     def __ModifyFaceMark(self, mark):
         self.SignalModifyFaceMark.emit(mark)

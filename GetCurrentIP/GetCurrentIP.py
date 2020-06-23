@@ -3,6 +3,7 @@ class GetCurrentIp():
 
     def __init__(self):
         pass
+
     def GetIP(self):
         lstInterface = netifaces.interfaces()
         privateIP = False
@@ -25,7 +26,7 @@ class GetCurrentIp():
             "gateway":gateway,
             "subnetMask":subnetMask,
         }
-        print(dict)
+        return dict
 
 
     def GetGateway(self):
@@ -74,4 +75,6 @@ class GetCurrentIp():
         except:
             return False
 
-crIp = GetCurrentIp()
+
+        
+
